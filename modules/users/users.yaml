@@ -2,10 +2,9 @@ code			: 16000
 name			: Member
 description		: Member
 folder_name		: users
-global_model	: Users
-version			: 1.2.0
+version			: 0.1.0
 created_date	: 2012-08-30 14:03
-author			: Putra Sudaryanto
+author			: Putra Sudaryanto [putra@sudaryanto.id]
 
 db_table_name	: 
  - ommu_user_block
