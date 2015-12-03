@@ -1,7 +1,6 @@
 <?php
 /**
- * UserHistoryBlock
- * @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
+ * ViewUsers * @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
  * @copyright Copyright (c) 2014 Ommu Platform (ommu.co)
  * @link http://company.ommu.co
  * @contact (+62)856-299-4114
@@ -17,19 +16,14 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "ommu_user_history_block".
+ * This is the model class for table "_view_users".
  *
- * The followings are the available columns in table 'ommu_user_history_block':
- * @property string $id
- * @property integer $type
+ * The followings are the available columns in table '_view_users':
  * @property string $user_id
- * @property string $block_id
- * @property string $creation_date
- *
- * The followings are the available model relations:
- * @property OmmuUsers $user
+ * @property string $token_key
+ * @property string $token_oauth
  */
-class UserHistoryBlock extends CActiveRecord
+class ViewUsers extends CActiveRecord
 {
 	public $defaultColumns = array();
 	
@@ -40,7 +34,7 @@ class UserHistoryBlock extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return UserHistoryBlock the static model class
+	 * @return ViewUsers the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -52,7 +46,7 @@ class UserHistoryBlock extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_user_history_block';
+		return '_view_users';
 	}
 
 	/**
@@ -63,13 +57,11 @@ class UserHistoryBlock extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('type, user_id, block_id', 'required'),
-			array('type', 'numerical', 'integerOnly'=>true),
-			array('user_id, block_id', 'length', 'max'=>11),
-			array('creation_date', 'safe'),
+			array('user_id', 'length', 'max'=>11),
+			array('token_key, token_oauth', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, type, user_id, block_id, creation_date,
+			array('user_id, token_key, token_oauth,
 				user_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -82,7 +74,7 @@ class UserHistoryBlock extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
+			'user_relation' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
 	}
 
@@ -92,12 +84,10 @@ class UserHistoryBlock extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'type' => 'Type',
-			'user_id' => Phrase::trans(16001,1),
-			'block_id' => Phrase::trans(16181,1),
-			'creation_date' => 'Creation Date',
-			'user_search' => Phrase::trans(16001,1),
+			'user_id' => 'User',
+			'token_key' => 'Token Key',
+			'token_oauth' => 'Token Oauth',
+			'user_search' => 'User',
 		);
 	}
 
@@ -119,28 +109,25 @@ class UserHistoryBlock extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.id',$this->id,true);
-		$criteria->compare('t.type',$this->type);
 		if(isset($_GET['user'])) {
 			$criteria->compare('t.user_id',$_GET['user']);
 		} else {
 			$criteria->compare('t.user_id',$this->user_id);
 		}
-		$criteria->compare('t.block_id',$this->block_id,true);
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		$criteria->compare('t.token_key',$this->token_key,true);
+		$criteria->compare('t.token_oauth',$this->token_oauth,true);
 		
 		// Custom Search
 		$criteria->with = array(
-			'user' => array(
-				'alias'=>'user',
+			'user_relation' => array(
+				'alias'=>'user_relation',
 				'select'=>'displayname'
 			),
 		);
-		$criteria->compare('user.displayname',strtolower($this->user_search), true);
+		$criteria->compare('user_relation.displayname',strtolower($this->user_search), true);
 
-		if(!isset($_GET['UserHistoryBlock_sort']))
-			$criteria->order = 'id DESC';
+		if(!isset($_GET['ViewUsers_sort']))
+			$criteria->order = 'user_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -168,11 +155,9 @@ class UserHistoryBlock extends CActiveRecord
 				$this->defaultColumns[] = $val;
 			}
 		} else {
-			//$this->defaultColumns[] = 'id';
-			$this->defaultColumns[] = 'type';
 			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'block_id';
-			$this->defaultColumns[] = 'creation_date';
+			$this->defaultColumns[] = 'token_key';
+			$this->defaultColumns[] = 'token_oauth';
 		}
 
 		return $this->defaultColumns;
@@ -187,51 +172,12 @@ class UserHistoryBlock extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['type'])) {
-				$this->defaultColumns[] = array(
-					'name' => 'type',
-					'value' => '$data->type == 1 ? Phrase::trans(16181,1) : Phrase::trans(16248,1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Phrase::trans(16181,1),
-						0=>Phrase::trans(16248,1),
-					),
-					'type' => 'raw',
-				);
-			}
 			$this->defaultColumns[] = array(
 				'name' => 'user_search',
 				'value' => '$data->user->displayname',
 			);
-			$this->defaultColumns[] = 'block_id';
-			$this->defaultColumns[] = array(
-				'name' => 'creation_date',
-				'value' => 'Utility::dateFormat($data->creation_date, true)',
-				'htmlOptions' => array(
-					//'class' => 'center',
-				),
-				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'creation_date',
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'creation_date_filter',
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
-			);
+			$this->defaultColumns[] = 'token_key';
+			$this->defaultColumns[] = 'token_oauth';
 		}
 		parent::afterConstruct();
 	}
@@ -252,5 +198,4 @@ class UserHistoryBlock extends CActiveRecord
 			return $model;			
 		}
 	}
-
 }

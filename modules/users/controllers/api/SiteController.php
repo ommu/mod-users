@@ -58,7 +58,7 @@ class SiteController extends Controller
 	{
 		if(Yii::app()->request->isPostRequest) {
 			if(isset($_POST['token']))
-				$userToken = UserOption::model()->findByAttributes(array('secret_key'=>$_POST['token']));
+				$userToken = ViewUsers::model()->findByAttributes(array('secret_key'=>$_POST['token']));
 			
 			$email = isset($_POST['token']) ? $userToken->user->email : $_POST['email'];
 			$password = isset($_POST['token']) ? null : $_POST['password'];
