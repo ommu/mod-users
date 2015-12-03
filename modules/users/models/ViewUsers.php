@@ -20,15 +20,15 @@
  *
  * The followings are the available columns in table '_view_users':
  * @property string $user_id
+ * @property integer $level_id
+ * @property string $email
+ * @property string $salt
  * @property string $token_key
  * @property string $token_oauth
  */
 class ViewUsers extends CActiveRecord
 {
 	public $defaultColumns = array();
-	
-	// Variable Search
-	public $user_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -57,12 +57,13 @@ class ViewUsers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('level_id, email, salt', 'required'),
+			array('level_id', 'numerical', 'integerOnly'=>true),
 			array('user_id', 'length', 'max'=>11),
-			array('token_key, token_oauth', 'length', 'max'=>32),
+			array('email, salt, token_key, token_oauth', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, token_key, token_oauth,
-				user_search', 'safe', 'on'=>'search'),
+			array('user_id, level_id, email, salt, token_key, token_oauth', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,7 +75,6 @@ class ViewUsers extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user_relation' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
 	}
 
@@ -85,9 +85,11 @@ class ViewUsers extends CActiveRecord
 	{
 		return array(
 			'user_id' => 'User',
+			'level_id' => 'Level',
+			'email' => 'Email',
+			'salt' => 'Salt',
 			'token_key' => 'Token Key',
 			'token_oauth' => 'Token Oauth',
-			'user_search' => 'User',
 		);
 	}
 
@@ -108,23 +110,12 @@ class ViewUsers extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		if(isset($_GET['user'])) {
-			$criteria->compare('t.user_id',$_GET['user']);
-		} else {
-			$criteria->compare('t.user_id',$this->user_id);
-		}
+		$criteria->compare('t.user_id',$this->user_id);
+		$criteria->compare('t.level_id',$this->level_id);
+		$criteria->compare('t.email',$this->email,true);
+		$criteria->compare('t.salt',$this->salt,true);
 		$criteria->compare('t.token_key',$this->token_key,true);
 		$criteria->compare('t.token_oauth',$this->token_oauth,true);
-		
-		// Custom Search
-		$criteria->with = array(
-			'user_relation' => array(
-				'alias'=>'user_relation',
-				'select'=>'displayname'
-			),
-		);
-		$criteria->compare('user_relation.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['ViewUsers_sort']))
 			$criteria->order = 'user_id DESC';
@@ -156,6 +147,9 @@ class ViewUsers extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'user_id';
+			$this->defaultColumns[] = 'level_id';
+			$this->defaultColumns[] = 'email';
+			$this->defaultColumns[] = 'salt';
 			$this->defaultColumns[] = 'token_key';
 			$this->defaultColumns[] = 'token_oauth';
 		}
@@ -172,10 +166,10 @@ class ViewUsers extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = array(
-				'name' => 'user_search',
-				'value' => '$data->user->displayname',
-			);
+			$this->defaultColumns[] = 'user_id';
+			$this->defaultColumns[] = 'level_id';
+			$this->defaultColumns[] = 'email';
+			$this->defaultColumns[] = 'salt';
 			$this->defaultColumns[] = 'token_key';
 			$this->defaultColumns[] = 'token_oauth';
 		}
@@ -198,4 +192,5 @@ class ViewUsers extends CActiveRecord
 			return $model;			
 		}
 	}
+
 }
