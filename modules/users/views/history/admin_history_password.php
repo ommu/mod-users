@@ -1,10 +1,13 @@
 <?php
 /**
- * User History Logins (user-history-login)
- * @var $this HistoryController * @var $model UserHistoryLogin *
+ * User History Password (user-history-password)
+ * @var $this HistoryController
+ * @var $model UserHistoryPassword
+ * @var $form CActiveForm
+ *
  * @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
- * @copyright Copyright (c) 2014 Ommu Platform (ommu.co)
- * @link http://company.ommu.co
+ * @copyright Copyright (c) 2015 Ommu Platform (ommu.co)
+ * @link https://github.com/oMMu/Ommu-Users
  * @contect (+62)856-299-4114
  *
  */
