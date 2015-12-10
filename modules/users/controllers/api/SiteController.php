@@ -3,7 +3,7 @@
 * SiteController
 * Handle SiteController
 * Copyright (c) 2014, Ommu Platform (ommu.co). All rights reserved.
-* version: 2.0.0
+* version: 0.0.1
 * Reference start
 *
 * TOC :
@@ -60,7 +60,7 @@ class SiteController extends Controller
 			if(isset($_POST['token']))
 				$userToken = ViewUsers::model()->findByAttributes(array('token_oauth'=>$_POST['token']));
 			
-			$email = isset($_POST['token']) ? $userToken->email : $_POST['email'];
+			$email = isset($_POST['token']) ? $userToken->user_relation->email : $_POST['email'];
 			$password = isset($_POST['token']) ? null : $_POST['password'];
 			
 			if(preg_match('/@/',$email)) //$this->username can filled by username or email 
@@ -91,7 +91,7 @@ class SiteController extends Controller
 					$return['email'] = $record->email;
 					$return['displayname'] = $record->displayname;
 					$return['userlevel_id'] = $record->level->level_id;
-					$return['userlevel'] = Phrase::trans($record->level->name,2);
+					$return['userlevel'] = $record->view_relation->level_name;
 					$return['lastlogin_date'] = $logindate;
 					$return['password'] = md5(md5($record->salt.$record->password).$logindate);
 					$return['enabled'] = $record->enabled;

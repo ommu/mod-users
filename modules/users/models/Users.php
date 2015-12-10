@@ -136,6 +136,7 @@ class Users extends CActiveRecord
 			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
 			'photo' => array(self::BELONGS_TO, 'UserPhoto', 'photo_id'),
 			'option' => array(self::BELONGS_TO, 'UserOption', 'user_id'),
+			'view_relation' => array(self::BELONGS_TO, 'ViewUsers', 'user_id'),
 		);
 	}
 
