@@ -133,10 +133,11 @@ class Users extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
+			'level_relation' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
 			'photo' => array(self::BELONGS_TO, 'UserPhoto', 'photo_id'),
 			'option' => array(self::BELONGS_TO, 'UserOption', 'user_id'),
-			'view_relation' => array(self::BELONGS_TO, 'ViewUsers', 'user_id'),
+			'view_user' => array(self::BELONGS_TO, 'ViewUsers', 'user_id'),
+			'view_level' => array(self::BELONGS_TO, 'ViewUserLevel', 'level_id'),
 		);
 	}
 
@@ -338,7 +339,7 @@ class Users extends CActiveRecord
 			if(!in_array($controller, array('admin'))) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_id',
-					'value' => 'Phrase::trans($data->level->name,2)',
+					'value' => '$data->view_level->level_name',
 					'htmlOptions' => array(
 						//'class' => 'center',
 					),

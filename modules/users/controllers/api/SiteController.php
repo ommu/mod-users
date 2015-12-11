@@ -90,8 +90,8 @@ class SiteController extends Controller
 					$return['username'] = $record->username;
 					$return['email'] = $record->email;
 					$return['displayname'] = $record->displayname;
-					$return['userlevel_id'] = $record->level->level_id;
-					$return['userlevel'] = $record->view_relation->level_name;
+					$return['userlevel_id'] = $record->level_id;
+					$return['userlevel'] = $record->view_user->level_name;
 					$return['lastlogin_date'] = $logindate;
 					$return['password'] = md5(md5($record->salt.$record->password).$logindate);
 					$return['enabled'] = $record->enabled;

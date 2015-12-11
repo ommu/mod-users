@@ -103,6 +103,7 @@ class UserLevel extends CActiveRecord
 		return array(
 			'title' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'name'),
 			'description' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
+			'view_level' => array(self::BELONGS_TO, 'ViewUserLevel', 'level_id'),
 		);
 	}
 
@@ -180,17 +181,13 @@ class UserLevel extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
-			'title' => array(
-				'alias'=>'title',
-				'select'=>'en'
-			),
-			'description' => array(
-				'alias'=>'description',
-				'select'=>'en'
+			'view_level' => array(
+				'alias'=>'view_level',
+				'select'=>'level_name, level_desc'
 			),
 		);
-		$criteria->compare('title.en',strtolower($this->title), true);
-		$criteria->compare('description.en',strtolower($this->description), true);
+		$criteria->compare('view_level.level_name',strtolower($this->title), true);
+		$criteria->compare('view_level.level_desc',strtolower($this->description), true);
 		
 		if(!isset($_GET['UserLevel_sort']))
 			$criteria->order = 't.level_id DESC';
@@ -261,11 +258,11 @@ class UserLevel extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'title',
-				'value' => 'Phrase::trans($data->name, 2)',
+				'value' => '$data->view_level->level_name',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'description',
-				'value' => 'Phrase::trans($data->desc, 2)',
+				'value' => '$data->view_level->level_desc',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'users',
@@ -312,7 +309,7 @@ class UserLevel extends CActiveRecord
 		$items = array();
 		if($model != null) {
 			foreach($model as $key => $val) {
-				$items[$val->level_id] = Phrase::trans($val->name, 2);
+				$items[$val->level_id] = $val->view_level->level_name;
 			}
 			return $items;
 		}else {
