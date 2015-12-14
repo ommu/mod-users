@@ -44,12 +44,19 @@
  * @property integer $photo_height
  * @property string $photo_exts
  * @property string $creation_date
+ * @property string $creation_id
+ * @property string $modified_date
+ * @property string $modified_id
  */
 class UserLevel extends CActiveRecord
 {
 	public $defaultColumns = array();
 	public $title;
 	public $description;
+	
+	// Variable Search
+	public $creation_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -89,7 +96,7 @@ class UserLevel extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('level_id, name, desc, defaults, signup, message_allow, message_inbox, message_outbox, profile_block, profile_search, profile_privacy, profile_comments, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow, photo_width, photo_height, photo_exts, creation_date,
-				title, description', 'safe', 'on'=>'search'),
+				title, description, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -103,6 +110,8 @@ class UserLevel extends CActiveRecord
 		return array(
 			'title' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'name'),
 			'description' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
+			'creation_relation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
+			'modified_relation' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'view_level' => array(self::BELONGS_TO, 'ViewUserLevel', 'level_id'),
 		);
 	}
@@ -137,8 +146,13 @@ class UserLevel extends CActiveRecord
 			'photo_height' => Phrase::trans(16139,1),
 			'photo_exts' => Phrase::trans(16140,1),
 			'creation_date' => Phrase::trans(365,0),
+			'creation_id' => 'Creation',
+			'modified_date' => 'Modified Date',
+			'modified_id' => 'Modified',
 			'title' => Phrase::trans(16014,1),
 			'description' => Phrase::trans(16015,1),
+			'creation_search' => 'Creation',
+			'modified_search' => 'Modified',
 		);
 	}
 	
@@ -178,6 +192,10 @@ class UserLevel extends CActiveRecord
 		$criteria->compare('photo_exts',$this->photo_exts,true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		$criteria->compare('t.creation_id',$this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+		$criteria->compare('t.modified_id',$this->modified_id);
 		
 		// Custom Search
 		$criteria->with = array(
@@ -185,9 +203,19 @@ class UserLevel extends CActiveRecord
 				'alias'=>'view_level',
 				'select'=>'level_name, level_desc'
 			),
+			'creation_relation' => array(
+				'alias'=>'creation_relation',
+				'select'=>'displayname',
+			),
+			'modified_relation' => array(
+				'alias'=>'modified_relation',
+				'select'=>'displayname',
+			),
 		);
 		$criteria->compare('view_level.level_name',strtolower($this->title), true);
 		$criteria->compare('view_level.level_desc',strtolower($this->description), true);
+		$criteria->compare('creation_relation.displayname',strtolower($this->creation_search), true);
+		$criteria->compare('modified_relation.displayname',strtolower($this->modified_search), true);
 		
 		if(!isset($_GET['UserLevel_sort']))
 			$criteria->order = 't.level_id DESC';
@@ -242,6 +270,9 @@ class UserLevel extends CActiveRecord
 			$this->defaultColumns[] = 'photo_height';
 			$this->defaultColumns[] = 'photo_exts';
 			$this->defaultColumns[] = 'creation_date';
+			$this->defaultColumns[] = 'creation_id';
+			$this->defaultColumns[] = 'modified_date';
+			$this->defaultColumns[] = 'modified_id';
 		}
 
 		return $this->defaultColumns;
@@ -258,11 +289,11 @@ class UserLevel extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'title',
-				'value' => '$data->view_level->level_name',
+				'value' => 'Phrase::trans($data->name, 2)',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'description',
-				'value' => '$data->view_level->level_desc',
+				'value' => 'Phrase::trans($data->desc, 2)',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'users',
@@ -271,6 +302,36 @@ class UserLevel extends CActiveRecord
 					'class' => 'center',
 				),
 				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'creation_search',
+				'value' => '$data->creation_relation->displayname',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'creation_date',
+				'value' => 'Utility::dateFormat($data->creation_date)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'creation_date',
+					'language' => 'ja',
+					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'creation_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'defaults',
@@ -309,7 +370,7 @@ class UserLevel extends CActiveRecord
 		$items = array();
 		if($model != null) {
 			foreach($model as $key => $val) {
-				$items[$val->level_id] = $val->view_level->level_name;
+				$items[$val->level_id] = Phrase::trans($val->name, 2);
 			}
 			return $items;
 		}else {
@@ -338,6 +399,9 @@ class UserLevel extends CActiveRecord
 				if($desc->save()) {
 					$this->desc = $desc->phrase_id;
 				}
+				
+				$this->creation_id = Yii::app()->user->id;	
+				
 			}else {
 				if($action == 'edit') {
 					$title = OmmuSystemPhrase::model()->findByPk($this->name);
@@ -356,6 +420,8 @@ class UserLevel extends CActiveRecord
 					));
 					$this->defaults = 1;
 				}
+				
+				$this->modified_id = Yii::app()->user->id;
 			}
 		}
 		return true;

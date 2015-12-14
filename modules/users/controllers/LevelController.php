@@ -231,7 +231,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Phrase::trans(16011,1).': '.$model->view_level->level_name;
+			$this->pageTitle = Phrase::trans(16011,1).': '.Phrase::trans($model->name,2);
 			$this->pageDescription = Phrase::trans(16012,1);
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
@@ -286,7 +286,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Phrase::trans(16011,1).': '.$model->view_level->level_name;
+			$this->pageTitle = Phrase::trans(16011,1).': '.Phrase::trans($model->name,2);
 			$this->pageDescription = Phrase::trans(16012,1);
 			$this->pageMeta = '';
 			$this->render('admin_user',array(
@@ -341,7 +341,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Phrase::trans(16011,1).': '.$model->view_level->level_name;
+			$this->pageTitle = Phrase::trans(16011,1).': '.Phrase::trans($model->name,2);
 			$this->pageDescription = Phrase::trans(16012,1);
 			$this->pageMeta = '';
 			$this->render('admin_message',array(
