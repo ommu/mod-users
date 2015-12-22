@@ -1,11 +1,12 @@
 <?php
 /**
- * @var $this QueueController
+ * User Invite Queue (user-invite-queue)
+ * @var $this InviteController
  * @var $model UserInviteQueue
  *
  * @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
- * @copyright Copyright (c) 2014 Ommu Platform (ommu.co)
- * @link http://company.ommu.co
+ * @copyright Copyright (c) 2012 Ommu Platform (ommu.co)
+ * @link https://github.com/oMMu/Ommu-Users
  * @contact (+62)856-299-4114
  *
  */
