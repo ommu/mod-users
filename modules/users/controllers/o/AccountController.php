@@ -1,15 +1,14 @@
 <?php
 /**
- * PhotoController
- * @var $this PhotoController
- * @var $model UserPhoto
+ * AccountController
+ * @var $this AccountController
+ * @var $model Users
  * @var $form CActiveForm
  * version: 0.0.1
  * Reference start
  *
  * TOC :
  *	Index
- *	AjaxAdd
  *
  *	LoadModel
  *	performAjaxValidation
@@ -22,7 +21,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class PhotoController extends Controller
+class AccountController extends /*SBaseController*/ Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -36,10 +35,18 @@ class PhotoController extends Controller
 	 */
 	public function init() 
 	{
-		$arrThemes = Utility::getCurrentTemplate('public');
-		Yii::app()->theme = $arrThemes['folder'];
-		$this->layout = $arrThemes['layout'];
-	}
+		if(!Yii::app()->user->isGuest) {
+			if(in_array(Yii::app()->user->level, array(1,2))) {
+				$arrThemes = Utility::getCurrentTemplate('admin');
+				Yii::app()->theme = $arrThemes['folder'];
+				$this->layout = $arrThemes['layout'];
+			} else {
+				$this->redirect(Yii::app()->createUrl('site/login'));
+			}
+		} else {
+			$this->redirect(Yii::app()->createUrl('site/login'));
+		}
+	}	
 
 	/**
 	 * @return array action filters
@@ -65,10 +72,14 @@ class PhotoController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('ajaxadd'),
+				'actions'=>array(),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level)',
-				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
+			),
+			array('allow', // allow authenticated user to perform 'create' and 'update' actions
+				'actions'=>array(),
+				'users'=>array('@'),
+				'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level == 1)',
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array(),
@@ -85,44 +96,7 @@ class PhotoController extends Controller
 	 */
 	public function actionIndex() 
 	{
-		$this->redirect(Yii::app()->createUrl('site/index'));
-	}
-
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionAjaxAdd() 
-	{
-		if(!Yii::app()->user->isGuest)
-			$id = Yii::app()->user->id;
-		else
-			$id = Yii::app()->user->id;
-			
-		$userPhoto = CUploadedFile::getInstanceByName('namaFile');
-		$user_path = "public/users/".$id;
-		$fileName	= time().'_'.$id.'.'.$userPhoto->extensionName;
-		if($userPhoto->saveAs($user_path.'/'.$fileName)) {
-			$model = new UserPhoto;
-			$model->user_id = $id;
-			$model->cover = '1';
-			$model->photo = $fileName;			
-			if($model->save()) {
-				if(isset($_GET['type']) && $_GET['type'] == 'admin') {
-					$images = Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/users/'.$model->user_id.'/'.$model->photo, 82, 82, 1);
-					$path = 'div.account a.photo img';
-				} else {
-					$images = Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/users/'.$model->user_id.'/'.$model->photo, 200, 200, 1);
-					$path = 'div.account a.photo img';
-				}
-					
-				echo CJSON::encode(array(
-					'id' => $path,
-					'image' => $images,
-				));
-			}
-		}
+		$this->redirect(Yii::app()->createUrl('admin/index'));
 	}
 
 	/**
@@ -132,9 +106,9 @@ class PhotoController extends Controller
 	 */
 	public function loadModel($id) 
 	{
-		$model = UserPhoto::model()->findByPk($id);
+		$model = Users::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404, Phrase::trans(193,0));
+			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
 	}
 
@@ -144,7 +118,7 @@ class PhotoController extends Controller
 	 */
 	protected function performAjaxValidation($model) 
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='user-photo-form') {
+		if(isset($_POST['ajax']) && $_POST['ajax']==='users-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}

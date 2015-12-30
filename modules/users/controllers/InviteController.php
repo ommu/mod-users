@@ -38,19 +38,9 @@ class InviteController extends Controller
 	 */
 	public function init() 
 	{
-		if(!Yii::app()->user->isGuest) {
-			if(in_array(Yii::app()->user->level, array(1,2))) {
-				$arrThemes = Utility::getCurrentTemplate('admin');
-				Yii::app()->theme = $arrThemes['folder'];
-				$this->layout = $arrThemes['layout'];
-			} else {
-				$this->redirect(Yii::app()->createUrl('site/login'));
-			}
-		} else {
-			$arrThemes = Utility::getCurrentTemplate('public');
-			Yii::app()->theme = $arrThemes['folder'];
-			$this->layout = $arrThemes['layout'];
-		}
+		$arrThemes = Utility::getCurrentTemplate('public');
+		Yii::app()->theme = $arrThemes['folder'];
+		$this->layout = $arrThemes['layout'];
 	}
 
 	/**
@@ -82,11 +72,6 @@ class InviteController extends Controller
 				'expression'=>'isset(Yii::app()->user->level)',
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','delete','queuemanage','queuedelete'),
-				'users'=>array('@'),
-				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
-			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array(),
 				'users'=>array('admin'),
@@ -103,178 +88,6 @@ class InviteController extends Controller
 	public function actionIndex() 
 	{
 		$this->redirect(array('manage'));
-	}
-
-	/**
-	 * Manages all models.
-	 */
-	public function actionManage() 
-	{
-		$model=new UserInvites('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['UserInvites'])) {
-			$model->attributes=$_GET['UserInvites'];
-		}
-
-		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
-					$columnTemp[] = $key;
-				}
-			}
-		}
-		$columns = $model->getGridColumn($columnTemp);
-
-		$this->pageTitle = Phrase::trans(16206,1);
-		$this->pageDescription = '';
-		$this->pageMeta = '';
-		$this->render('admin_manage',array(
-			'model'=>$model,
-			'columns' => $columns,
-		));
-	}
-	
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionAdd() 
-	{
-		$model=new UserInvites;
-
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
-
-		if(isset($_POST['UserInvites'])) {
-			$model->attributes=$_POST['UserInvites'];
-			
-			$jsonError = CActiveForm::validate($model);
-			if(strlen($jsonError) > 2) {
-				echo $jsonError;
-
-			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
-					if($model->save()) {
-						echo CJSON::encode(array(
-							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-user-invite',
-							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16210,1).'</strong></div>',
-						));
-					} else {
-						print_r($model->getErrors());
-					}
-				}
-			}
-			Yii::app()->end();
-			
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 500;
-			
-			$this->pageTitle = Phrase::trans(16209,1);
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_add',array(
-				'model'=>$model,
-			));		
-		}
-	}
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
-	public function actionDelete($id) 
-	{
-		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			if(isset($id)) {
-				$this->loadModel($id)->delete();
-
-				echo CJSON::encode(array(
-					'type' => 5,
-					'get' => Yii::app()->controller->createUrl('manage'),
-					'id' => 'partial-user-invite',
-					'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16208,1).'</strong></div>',
-				));
-			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Phrase::trans(16207,1);
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
-		}
-	}
-
-	/**
-	 * Manages all models.
-	 */
-	public function actionQueuemanage() 
-	{
-		$model=new UserInviteQueue('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['UserInviteQueue'])) {
-			$model->attributes=$_GET['UserInviteQueue'];
-		}
-
-		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
-					$columnTemp[] = $key;
-				}
-			}
-		}
-		$columns = $model->getGridColumn($columnTemp);
-
-		$this->pageTitle = Phrase::trans(16217,1);
-		$this->pageDescription = '';
-		$this->pageMeta = '';
-		$this->render('admin_queue_manage',array(
-			'model'=>$model,
-			'columns' => $columns,
-		));
-	}
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
-	public function actionQueuedelete($id) 
-	{
-		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			if(isset($id)) {
-				UserInviteQueue::model()->findByPk($id)->delete();
-
-				echo CJSON::encode(array(
-					'type' => 5,
-					'get' => Yii::app()->controller->createUrl('queuemanage'),
-					'id' => 'partial-user-invite-queue',
-					'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16219,1).'</strong></div>',
-				));
-			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('queuemanage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Phrase::trans(16218,1);
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_queue_delete');
-		}
 	}
 
 	/**
