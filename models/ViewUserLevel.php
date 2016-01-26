@@ -52,7 +52,7 @@ class ViewUserLevel extends CActiveRecord
 	 */
 	public function primaryKey()
 	{
-		return ['level_id'];
+		return 'level_id';
 	}
 
 	/**

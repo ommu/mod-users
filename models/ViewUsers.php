@@ -54,7 +54,7 @@ class ViewUsers extends CActiveRecord
 	 */
 	public function primaryKey()
 	{
-		return ['user_id'];
+		return 'user_id';
 	}
 
 	/**

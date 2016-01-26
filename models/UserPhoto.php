@@ -277,7 +277,8 @@ class UserPhoto extends CActiveRecord
 		parent::afterDelete();
 		//delete user photo
 		$user_path = "public/users/".$this->user_id;
-		rename($user_path.'/'.$this->photo, 'public/users/verwijderen/'.$this->user_id.'_'.$this->photo);
+		if($this->photo != '' && file_exists($user_path.'/'.$this->photo))
+			rename($user_path.'/'.$this->photo, 'public/users/verwijderen/'.$this->user_id.'_'.$this->photo);
 
 		$data = self::getPhoto($this->user_id);
 

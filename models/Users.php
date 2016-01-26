@@ -642,7 +642,7 @@ class Users extends CActiveRecord
 			$user_photo = UserPhoto::getPhoto($this->user_id);
 			$user_path = "public/users/".$this->user_id;
 			foreach($user_photo as $val) {
-				if($val->photo != '') {
+				if($val->photo != '' && file_exists($user_path.'/'.$val->photo)) {
 					rename($user_path.'/'.$val->photo, 'public/users/verwijderen/'.$val->user_id.'_'.$val->photo);
 				}
 			}
