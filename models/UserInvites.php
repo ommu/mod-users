@@ -151,7 +151,7 @@ class UserInvites extends CActiveRecord
 		$criteria->compare('inviter.displayname',strtolower($this->inviter_search), true);
 
 		if(!isset($_GET['UserInvites_sort']))
-			$criteria->order = 'invite_id DESC';
+			$criteria->order = 't.invite_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

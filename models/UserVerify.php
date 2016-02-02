@@ -122,7 +122,7 @@ class UserVerify extends CActiveRecord
 		$criteria->compare('t.verify_ip',$this->verify_ip,true);
 
 		if(!isset($_GET['UserVerify_sort']))
-			$criteria->order = 'verify_id DESC';
+			$criteria->order = 't.verify_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

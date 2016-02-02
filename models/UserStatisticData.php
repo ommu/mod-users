@@ -114,7 +114,7 @@ class UserStatisticData extends CActiveRecord
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 
 		if(!isset($_GET['UserStatisticData_sort']))
-			$criteria->order = 'id DESC';
+			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

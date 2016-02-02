@@ -125,7 +125,7 @@ class ViewUsers extends CActiveRecord
 		$criteria->compare('t.photos',strtolower($this->photos),true);
 
 		if(!isset($_GET['ViewUsers_sort']))
-			$criteria->order = 'user_id DESC';
+			$criteria->order = 't.user_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

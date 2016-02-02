@@ -243,7 +243,7 @@ class Users extends CActiveRecord
 		$criteria->compare('t.timezone_id',$this->timezone_id);
 
 		if(!isset($_GET['Users_sort']))
-			$criteria->order = 'user_id DESC';
+			$criteria->order = 't.user_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -124,7 +124,7 @@ class UserForgot extends CActiveRecord
 		$criteria->compare('t.forgot_from',$this->forgot_from,true);
 
 		if(!isset($_GET['UserForgot_sort']))
-			$criteria->order = 'forgot_id DESC';
+			$criteria->order = 't.forgot_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

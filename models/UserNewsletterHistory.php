@@ -142,8 +142,8 @@ class UserNewsletterHistory extends CActiveRecord
 		$criteria->compare('users.displayname',strtolower($this->user_search), true);
 		$criteria->compare('newsletter.email',strtolower($this->email_search), true);
 
-		//if(!isset($_GET['UserNewsletterHistory_sort']))
-		//	$criteria->order = 'id DESC';
+		if(!isset($_GET['UserNewsletterHistory_sort']))
+			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -106,7 +106,7 @@ class UserOption extends CActiveRecord
 		$criteria->compare('t.ommu_status',$this->ommu_status);
 
 		if(!isset($_GET['UserOption_sort']))
-			$criteria->order = 'option_id DESC';
+			$criteria->order = 't.option_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -137,9 +137,8 @@ class UserNewsletter extends CActiveRecord
 		);
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 		
-		if(!isset($_GET['UserNewsletter_sort'])) {
-			$criteria->order = 'id DESC';
-		}
+		if(!isset($_GET['UserNewsletter_sort']))
+			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

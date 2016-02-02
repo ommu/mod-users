@@ -117,7 +117,7 @@ class ViewUserLevel extends CActiveRecord
 		$criteria->compare('t.level_desc',strtolower($this->level_desc),true);
 
 		if(!isset($_GET['ViewUserLevel_sort']))
-			$criteria->order = 'level_id DESC';
+			$criteria->order = 't.level_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

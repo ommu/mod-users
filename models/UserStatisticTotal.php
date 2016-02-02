@@ -114,7 +114,7 @@ class UserStatisticTotal extends CActiveRecord
 		$criteria->compare('t.note',$this->note,true);
 
 		if(!isset($_GET['UserStatisticTotal_sort']))
-			$criteria->order = 'flag ASC';
+			$criteria->order = 't.flag ASC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

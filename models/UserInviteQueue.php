@@ -138,7 +138,7 @@ class UserInviteQueue extends CActiveRecord
 		$criteria->compare('reference.displayname',strtolower($this->reference_search), true);
 		
 		if(!isset($_GET['UserInviteQueue_sort']))
-			$criteria->order = 'queue_id DESC';
+			$criteria->order = 't.queue_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

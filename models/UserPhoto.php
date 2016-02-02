@@ -115,7 +115,7 @@ class UserPhoto extends CActiveRecord
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 			
 		if(!isset($_GET['UserPhoto_sort']))
-			$criteria->order = 'photo_id DESC';
+			$criteria->order = 't.photo_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

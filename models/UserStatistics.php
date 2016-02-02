@@ -152,7 +152,7 @@ class UserStatistics extends CActiveRecord
 		$criteria->compare('t.newsletter_signup_success',$this->newsletter_signup_success);
 
 		if(!isset($_GET['UserStatistics_sort']))
-			$criteria->order = 'date_key DESC';
+			$criteria->order = 't.date_key DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
