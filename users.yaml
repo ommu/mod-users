@@ -18,3 +18,69 @@ db_table_name	:
  - ommu_users
  
 db_sql_filename	: 
+
+content_menu	:
+# controller o/level
+	- urlTitle: Add User Level
+		urlRules: {users, o/level, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+		
+	# urlTitle: Add User Level
+	#	urlRules: {users, o/level, manage, siteType: 0,1, userLevel: 1,2}
+	#	urlPath: {url: add, attr: -, icon: -}
+		
+	- urlTitle: Level Settings
+		urlRules: {users, o/level, edit,user,message, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: edit, attr: id=$_GET*id, icon: -}
+		
+	- urlTitle: User Settings
+		urlRules: {users, o/level, edit,user,message, siteType: 1, userLevel: 1,2}
+		urlPath: {url: user, attr: id=$_GET*id, icon: -}
+		
+	- urlTitle: Message Settings
+		urlRules: {users, o/level, edit,user,message, siteType: 1, userLevel: 1,2}
+		urlPath: {url: message, attr: id=$_GET*id, icon: -}
+		
+	- urlTitle: Back to Manage
+		urlRules: {users, o/level, edit,user,message, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: manage, attr: -, icon: -}
+		
+# controller o/level
+
+	- urlTitle: Add Administrator
+		urlRules: {users, o/admin, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+
+	- urlTitle: Back to Manage
+		urlRules: {users, o/admin, view, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: manage, attr: -, icon: -}
+		
+# controller o/member
+
+	- urlTitle: Add User
+		urlRules: {users, o/member, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+		
+	- urlTitle: Back to Manage
+		urlRules: {users, o/member, view, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: manage, attr: -, icon: -}
+		
+# controller o/invite
+		
+	- urlTitle: Invite User
+		urlRules: {users, o/invite, manage,queuemanage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+		
+	- urlTitle: View Invites
+		urlRules: {users, o/invite, manage,queuemanage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: manage, attr: -, icon: -}
+		
+	- urlTitle: Queue Invites
+		urlRules: {users, o/invite, manage,queuemanage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: queuemanage, attr: -, icon: -}
+		
+# controller o/newsletter
+
+	- urlTitle: Add Subscribe
+		urlRules: {users, o/newsletter, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
