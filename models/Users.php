@@ -200,12 +200,13 @@ class Users extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.user_id',$this->user_id,true);
-		if($controller == 'member') {
-			$criteria->addNotInCondition('level_id',array(1));
+		if($controller == 'o/member') {
+			$criteria->addNotInCondition('t.level_id',array(1));
 			$criteria->compare('t.level_id',$this->level_id);
-		} else if($controller == 'admin') {
+		} else if($controller == 'o/admin') {
 			$criteria->compare('t.level_id',1);
 		}
+		$criteria->addNotInCondition('t.user_id',array(1,2,3,4));	
 		$criteria->compare('t.profile_id',$this->profile_id);
 		$criteria->compare('t.language_id',$this->language_id);
 		$criteria->compare('t.email',strtolower($this->email),true);
