@@ -1,6 +1,6 @@
 <?php
 /**
- * ViewUserOauth
+ * ViewUsers
  * @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
  * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
  * @created date 24 February 2016, 17:59 WIB
@@ -24,7 +24,7 @@
  * @property string $user_id
  * @property string $level_name
  */
-class ViewUserOauth extends CActiveRecord
+class ViewUsers extends CActiveRecord
 {
 	public $defaultColumns = array();
 
@@ -32,7 +32,7 @@ class ViewUserOauth extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ViewUserOauth the static model class
+	 * @return ViewUsers the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -117,7 +117,7 @@ class ViewUserOauth extends CActiveRecord
 			$criteria->compare('t.user_id',$this->user_id);
 		$criteria->compare('t.level_name',strtolower($this->level_name),true);
 
-		if(!isset($_GET['ViewUserOauth_sort']))
+		if(!isset($_GET['ViewUsers_sort']))
 			$criteria->order = 't.user_id DESC';
 
 		return new CActiveDataProvider($this, array(

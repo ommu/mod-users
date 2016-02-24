@@ -1,9 +1,9 @@
 <?php
 /**
- * ViewUserOauthLevel
+ * UserLevel
  * @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
  * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
- * @created date 24 February 2016, 18:00 WIB
+ * @created date 24 February 2016, 17:59 WIB
  * @link http://company.ommu.co
  * @contact (+62)856-299-4114
  *
@@ -18,15 +18,22 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "_view_user_oauth_level".
+ * This is the model class for table "ommu_user_oauth_level".
  *
- * The followings are the available columns in table '_view_user_oauth_level':
+ * The followings are the available columns in table 'ommu_user_oauth_level':
  * @property integer $level_id
- * @property string $level_name
- * @property string $level_desc
- * @property string $oauths
+ * @property string $name
+ * @property string $desc
+ * @property integer $defaults
+ * @property string $creation_date
+ * @property string $creation_id
+ * @property string $modified_date
+ * @property string $modified_id
+ *
+ * The followings are the available model relations:
+ * @property OmmuUsers[] $ommuUsers
  */
-class ViewUserOauthLevel extends CActiveRecord
+class UserLevel extends CActiveRecord
 {
 	public $defaultColumns = array();
 
@@ -34,7 +41,7 @@ class ViewUserOauthLevel extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ViewUserOauthLevel the static model class
+	 * @return UserLevel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -46,15 +53,7 @@ class ViewUserOauthLevel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_user_oauth_level';
-	}
-
-	/**
-	 * @return string the primarykey column
-	 */
-	public function primaryKey()
-	{
-		return 'level_id';
+		return 'ommu_user_oauth_level';
 	}
 
 	/**
@@ -65,12 +64,13 @@ class ViewUserOauthLevel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('level_id', 'numerical', 'integerOnly'=>true),
-			array('oauths', 'length', 'max'=>21),
-			array('level_name, level_desc', 'safe'),
+			array('name, desc, creation_date, creation_id, modified_id', 'required'),
+			array('defaults', 'numerical', 'integerOnly'=>true),
+			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
+			array('modified_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('level_id, level_name, level_desc, oauths', 'safe', 'on'=>'search'),
+			array('level_id, name, desc, defaults, creation_date, creation_id, modified_date, modified_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,6 +82,7 @@ class ViewUserOauthLevel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'ommuUsers_relation' => array(self::HAS_MANY, 'OmmuUsers', 'level_id'),
 		);
 	}
 
@@ -92,9 +93,13 @@ class ViewUserOauthLevel extends CActiveRecord
 	{
 		return array(
 			'level_id' => 'Level',
-			'level_name' => 'Level Name',
-			'level_desc' => 'Level Desc',
-			'oauths' => 'Oauths',
+			'name' => 'Name',
+			'desc' => 'Desc',
+			'defaults' => 'Defaults',
+			'creation_date' => 'Creation Date',
+			'creation_id' => 'Creation',
+			'modified_date' => 'Modified Date',
+			'modified_id' => 'Modified',
 		);
 	}
 
@@ -117,11 +122,23 @@ class ViewUserOauthLevel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.level_id',$this->level_id);
-		$criteria->compare('t.level_name',strtolower($this->level_name),true);
-		$criteria->compare('t.level_desc',strtolower($this->level_desc),true);
-		$criteria->compare('t.oauths',strtolower($this->oauths),true);
+		$criteria->compare('t.name',strtolower($this->name),true);
+		$criteria->compare('t.desc',strtolower($this->desc),true);
+		$criteria->compare('t.defaults',$this->defaults);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		if(isset($_GET['creation']))
+			$criteria->compare('t.creation_id',$_GET['creation']);
+		else
+			$criteria->compare('t.creation_id',$this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+		if(isset($_GET['modified']))
+			$criteria->compare('t.modified_id',$_GET['modified']);
+		else
+			$criteria->compare('t.modified_id',$this->modified_id);
 
-		if(!isset($_GET['ViewUserOauthLevel_sort']))
+		if(!isset($_GET['UserLevel_sort']))
 			$criteria->order = 't.level_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -150,10 +167,14 @@ class ViewUserOauthLevel extends CActiveRecord
 				$this->defaultColumns[] = $val;
 			}
 		} else {
-			$this->defaultColumns[] = 'level_id';
-			$this->defaultColumns[] = 'level_name';
-			$this->defaultColumns[] = 'level_desc';
-			$this->defaultColumns[] = 'oauths';
+			//$this->defaultColumns[] = 'level_id';
+			$this->defaultColumns[] = 'name';
+			$this->defaultColumns[] = 'desc';
+			$this->defaultColumns[] = 'defaults';
+			$this->defaultColumns[] = 'creation_date';
+			$this->defaultColumns[] = 'creation_id';
+			$this->defaultColumns[] = 'modified_date';
+			$this->defaultColumns[] = 'modified_id';
 		}
 
 		return $this->defaultColumns;
@@ -176,10 +197,76 @@ class ViewUserOauthLevel extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'level_id';
-			$this->defaultColumns[] = 'level_name';
-			$this->defaultColumns[] = 'level_desc';
-			$this->defaultColumns[] = 'oauths';
+			$this->defaultColumns[] = 'name';
+			$this->defaultColumns[] = 'desc';
+			if(!isset($_GET['type'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'defaults',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("defaults",array("id"=>$data->level_id)), $data->defaults, 1)',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Phrase::trans(588,0),
+						0=>Phrase::trans(589,0),
+					),
+					'type' => 'raw',
+				);
+			}
+			$this->defaultColumns[] = array(
+				'name' => 'creation_date',
+				'value' => 'Utility::dateFormat($data->creation_date)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'creation_date',
+					'language' => 'ja',
+					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'creation_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
+			);
+			$this->defaultColumns[] = 'creation_id';
+			$this->defaultColumns[] = array(
+				'name' => 'modified_date',
+				'value' => 'Utility::dateFormat($data->modified_date)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'modified_date',
+					'language' => 'ja',
+					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'modified_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
+			);
+			$this->defaultColumns[] = 'modified_id';
 		}
 		parent::afterConstruct();
 	}

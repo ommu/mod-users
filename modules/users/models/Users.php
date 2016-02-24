@@ -1,6 +1,6 @@
 <?php
 /**
- * UserOauth
+ * Users
  * @author Putra Sudaryanto <putra.sudaryanto@gmail.com>
  * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
  * @created date 24 February 2016, 17:58 WIB
@@ -38,9 +38,9 @@
  * @property string $lastlogin_from
  *
  * The followings are the available model relations:
- * @property OmmuUserOauthLevel $level
+ * @property OmmuUserLevel $level
  */
-class UserOauth extends CActiveRecord
+class Users extends CActiveRecord
 {
 	public $defaultColumns = array();
 
@@ -48,7 +48,7 @@ class UserOauth extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return UserOauth the static model class
+	 * @return Users the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -92,7 +92,7 @@ class UserOauth extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'level_relation' => array(self::BELONGS_TO, 'OmmuUserOauthLevel', 'level_id'),
+			'level_relation' => array(self::BELONGS_TO, 'OmmuUserLevel', 'level_id'),
 		);
 	}
 
@@ -162,7 +162,7 @@ class UserOauth extends CActiveRecord
 		$criteria->compare('t.lastlogin_ip',strtolower($this->lastlogin_ip),true);
 		$criteria->compare('t.lastlogin_from',strtolower($this->lastlogin_from),true);
 
-		if(!isset($_GET['UserOauth_sort']))
+		if(!isset($_GET['Users_sort']))
 			$criteria->order = 't.user_id DESC';
 
 		return new CActiveDataProvider($this, array(
