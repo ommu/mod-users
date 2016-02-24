@@ -1,7 +1,7 @@
 <?php
 /**
- * AccountController
- * @var $this AccountController
+ * AdminController
+ * @var $this AdminController
  * @var $model Users
  * @var $form CActiveForm
  * version: 0.0.1
@@ -22,7 +22,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class AccountController extends /*SBaseController*/ Controller
+class AdminController extends /*SBaseController*/ Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -36,7 +36,7 @@ class AccountController extends /*SBaseController*/ Controller
 	 */
 	public function init() 
 	{
-		$arrThemes = Utility::getCurrentTemplate('public');
+		$arrThemes = Utility::getCurrentTemplate('admin');
 		Yii::app()->theme = $arrThemes['folder'];
 		$this->layout = $arrThemes['layout'];
 	}	
@@ -93,10 +93,10 @@ class AccountController extends /*SBaseController*/ Controller
 	public function actionLogin()
 	{
 		if(!Yii::app()->user->isGuest) {
-			$this->redirect(array('site/index'));
+			$this->redirect(array('admin/index'));
 
 		} else {				
-			$model=new LoginForm;
+			$model=new LoginFormAdmin;
 
 			// if it is ajax validation request
 			if(isset($_POST['ajax']) && $_POST['ajax']==='login-form') {
@@ -105,13 +105,9 @@ class AccountController extends /*SBaseController*/ Controller
 			}
 
 			// collect user input data
-			if(isset($_POST['LoginForm']))
+			if(isset($_POST['LoginFormAdmin']))
 			{
-				$model->attributes=$_POST['LoginForm'];
-				if(!isset($_GET['email']))
-					$model->scenario = 'loginemail';
-				else
-					$model->scenario = 'loginpassword';
+				$model->attributes=$_POST['LoginFormAdmin'];
 
 				$jsonError = CActiveForm::validate($model);
 				if(strlen($jsonError) > 2) {
@@ -119,30 +115,25 @@ class AccountController extends /*SBaseController*/ Controller
 
 				} else {
 					if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
-						if(!isset($_GET['email'])) {
-							if($model->validate()) {
+						// validate user input and redirect to the previous page if valid
+						if($model->validate() && $model->login()) {
+							Users::model()->updateByPk(Yii::app()->user->id, array(
+								'lastlogin_date'=>date('Y-m-d H:i:s'), 
+								'lastlogin_ip'=>$_SERVER['REMOTE_ADDR'],
+								'lastlogin_from'=>Yii::app()->params['product_access_system'],
+							));
+							if(isset($_GET['type'])) {
 								echo CJSON::encode(array(
-									'type' => 5,
-									'get' => Yii::app()->controller->createUrl('login', array('email'=>$model->email)),
+									'type' => 6,
 								));
 							} else {
-								print_r($model->getErrors());
-							}
-						} else {
-							// validate user input and redirect to the previous page if valid
-							if($model->validate() && $model->login()) {
-								Users::model()->updateByPk(Yii::app()->user->id, array(
-									'lastlogin_date'=>date('Y-m-d H:i:s'), 
-									'lastlogin_ip'=>$_SERVER['REMOTE_ADDR'],
-									'lastlogin_from'=>Yii::app()->params['product_access_system'],
-								));
-								
 								echo CJSON::encode(array(
 									'redirect' => in_array(Yii::app()->user->level, array(1,2)) ? Yii::app()->createUrl('admin/index') : Yii::app()->user->returnUrl,
 								));
-							} else {
-								print_r($model->getErrors());
 							}
+							//$this->redirect(Yii::app()->user->returnUrl);
+						} else {
+							print_r($model->getErrors());
 						}
 					}
 				}
@@ -152,25 +143,14 @@ class AccountController extends /*SBaseController*/ Controller
 			
 			// display the login form
 			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->createUrl('site/index');
-
-			$this->dialogFixed = true;
-			if(!isset($_GET['email'])) {
-				$this->dialogFixedClosed=array(
-					Phrase::trans(596,0)=>Yii::app()->createUrl('users/signup/index'),
-				);
-			} else {
-				$this->dialogFixedClosed=array(
-					Phrase::trans(597,0)=>Yii::app()->createUrl('users/forgot/get'),
-				);
-			}		
+			$this->dialogWidth = 600;
 			
 			$this->pageTitle = Phrase::trans(411,0);
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('front_login',array(
+			$this->render('admin_login',array(
 				'model'=>$model,
-			));
+			));			
 		}
 	}
 

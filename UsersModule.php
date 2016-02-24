@@ -23,6 +23,7 @@ class UsersModule extends CWebModule
 			//list public controller in this module
 			$publicControllers = array(
 				'account',
+				'admin',
 				'forgot',
 				'invite',
 				'newsletter',
