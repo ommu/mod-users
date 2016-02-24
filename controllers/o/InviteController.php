@@ -12,6 +12,8 @@
  *	Manage
  *	Add
  *	Delete
+ *	Queuemanage
+ *	Queuedelete
  *
  *	LoadModel
  *	performAjaxValidation
