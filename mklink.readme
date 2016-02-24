@@ -1,0 +1,25 @@
+-------
+components
+=======
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\components" "D:\htdocs\_project_ommu_module_users\modules\users_manage\components\oauth"
+
+-------
+controllers
+=======
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\InviteController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\InviteController.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\NewsletterController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\NewsletterController.php"
+
+-------
+models
+=======
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserHistoryLogin.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserHistoryLogin.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserInviteQueue.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserInviteQueue.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserInvites.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserInvites.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserNewsletter.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserNewsletter.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserNewsletterHistory.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserNewsletterHistory.php"
+
+-------
+views
+=======
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\o\invite" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\invite"
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\o\newsletter" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\newsletter"
