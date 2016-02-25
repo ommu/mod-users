@@ -93,7 +93,7 @@ class AccountController extends /*SBaseController*/ Controller
 	public function actionLogin()
 	{
 		if(!Yii::app()->user->isGuest) {
-			$this->redirect(array('site/index'));
+			$this->redirect(Yii::app()->createUrl('site/index'));
 
 		} else {				
 			$model=new LoginForm;

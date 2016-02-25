@@ -17,6 +17,7 @@ class LoginFormAdmin extends CFormModel
 	public $password;
 	public $rememberMe;
 	private $_identity;
+	public $token;
 
 	/**
 	 * Declares the validation rules.
@@ -32,7 +33,7 @@ class LoginFormAdmin extends CFormModel
 			//array('email', 'email'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
-            array('email', 'length', 'max'=>32),
+            array('token', 'length', 'max'=>32),
 			// password needs to be authenticated
 			array('password', 'authenticate'),
 			array('email, password', 'safe'),
@@ -86,7 +87,10 @@ class LoginFormAdmin extends CFormModel
 	{
 		if($this->_identity===null)
 		{
-			$this->_identity=new UserIdentity($this->email,$this->password);
+			if($this->token !== null)
+				$this->_identity=new UserIdentity($this->email,$this->password, $this->token);
+			else 			
+				$this->_identity=new UserIdentity($this->email,$this->password);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)

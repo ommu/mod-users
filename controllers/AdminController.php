@@ -93,7 +93,7 @@ class AdminController extends /*SBaseController*/ Controller
 	public function actionLogin()
 	{
 		if(!Yii::app()->user->isGuest) {
-			$this->redirect(array('admin/index'));
+			$this->redirect(Yii::app()->createUrl('admin/index'));
 
 		} else {				
 			$model=new LoginFormAdmin;
