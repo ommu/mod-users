@@ -13,7 +13,6 @@
  *	Email
  *	Password
  *	Forgot
- *	Block
  *	Username
  *	Subscribe
  *
