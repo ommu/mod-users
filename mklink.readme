@@ -9,17 +9,27 @@ controllers
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\InviteController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\InviteController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\NewsletterController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\NewsletterController.php"
 
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\InviteController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\InviteController.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\NewsletterController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\NewsletterController.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\VerifyController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\VerifyController.php"
+
 -------
 models
 =======
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\LoginFormOauth.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\LoginFormOauth.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserHistoryLogin.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserHistoryLogin.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserInviteQueue.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserInviteQueue.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserInvites.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserInvites.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserNewsletter.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserNewsletter.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserNewsletterHistory.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserNewsletterHistory.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserVerify.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserVerify.php"
 
 -------
 views
 =======
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\o\invite" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\invite"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\o\newsletter" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\newsletter"
+
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\invite" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\invite"
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\newsletter" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\newsletter"
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\verify" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\verify"

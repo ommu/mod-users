@@ -71,13 +71,13 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('source_id, level_id, profile_id, language_id, email, displayname, photos, creation_date, creation_ip, lastlogin_ip, lastlogin_from', 'required'),
+			array('email, displayname', 'required'),
 			array('level_id, profile_id, language_id, enabled, verified', 'numerical', 'integerOnly'=>true),
 			array('source_id', 'length', 'max'=>11),
 			array('email, lastlogin_from', 'length', 'max'=>32),
 			array('displayname', 'length', 'max'=>64),
 			array('creation_ip, lastlogin_ip', 'length', 'max'=>20),
-			array('lastlogin_date', 'safe'),
+			array('source_id, level_id, profile_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('user_id, source_id, level_id, profile_id, language_id, email, displayname, photos, enabled, verified, creation_date, creation_ip, lastlogin_date, lastlogin_ip, lastlogin_from', 'safe', 'on'=>'search'),
@@ -342,69 +342,65 @@ class Users extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->isNewRecord) {
+				$setting = OmmuSettings::model()->findByPk(1, array(
+					'select' => 'signup_approve, signup_verifyemail',
+				));
+				
+				$this->level_id = UserLevel::getDefault();
+				$this->profile_id = 1;
+				$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
+				$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
+				$this->creation_ip = $_SERVER['REMOTE_ADDR'];				
+			}
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
-	
-	/**
-	 * before save attributes
-	 */
-	/*
-	protected function beforeSave() {
-		if(parent::beforeSave()) {
-			//$this->lastlogin_date = date('Y-m-d', strtotime($this->lastlogin_date));
-		}
-		return true;	
-	}
-	*/
 	
 	/**
 	 * After save attributes
 	 */
-	/*
 	protected function afterSave() {
 		parent::afterSave();
-		// Create action
-	}
-	*/
 
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
+		// Generate Verification Code
+		if ($this->verified == 0) {
+			$verify = new UserVerify;
+			$verify->user_id = $this->user_id;
+			$verify->save();
 		}
-		return true;
-	}
-	*/
+		
+		if($this->isNewRecord) {
+			$setting = OmmuSettings::model()->findByPk(1, array(
+				'select' => 'site_type, signup_welcome, signup_adminemail',
+			));
+				
+			// Send Welcome Email
+			if($setting->signup_welcome == 1) {
+				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Welcome', 'Selamat bergabung dengan Nirwasita Hijab and Dress Corner', 1);
+			}
 
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
+			// Send Account Information
+			if($this->enabled == 1) {
+				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Account Information', 'your account information', 1);
+			}
+
+			// Send New Account to Email Administrator
+			if($setting->signup_adminemail == 1) {
+				SupportMailSetting::sendEmail($this->email, $this->displayname, 'New Member', 'informasi member terbaru', 0);
+			}
+			
+		} else {
+			// Send Account Information
+			if($this->enabled == 1) {
+				if($controller == 'verify') {
+					SupportMailSetting::sendEmail($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success', 1);					
+				}
+			}
+			
+		}	
 	}
-	*/
 
 }

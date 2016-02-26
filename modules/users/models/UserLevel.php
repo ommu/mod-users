@@ -288,6 +288,12 @@ class UserLevel extends CActiveRecord
 		}
 	}
 
+	//get Default
+	public static function getDefault(){
+		$model = self::model()->findByAttributes(array('defaults' => 1));
+		return $model->level_id;
+	}
+
 	/**
 	 * before validate attributes
 	 */
