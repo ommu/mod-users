@@ -201,7 +201,7 @@ class UserLevel extends CActiveRecord
 		$criteria->with = array(
 			'view_level' => array(
 				'alias'=>'view_level',
-				'select'=>'level_name, level_desc, oauths, users'
+				'select'=>'level_name, level_desc, users'
 			),
 			'creation_relation' => array(
 				'alias'=>'creation_relation',
