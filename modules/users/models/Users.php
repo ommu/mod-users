@@ -76,15 +76,14 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('level_id, profile_id, email, displayname, enabled, verified', 'required', 'on'=>'add, edit'),
-			array('language_id, locale_id, timezone_id', 'required', 'on'=>'edit'),
-			array('source_id, level_id, profile_id, language_id, email, displayname, photos, creation_date, creation_ip, modified_id, lastlogin_ip, update_date, update_ip', 'required'),
+			array('email, displayname', 'required'),
+			array('level_id, profile_id, language_id, enabled, verified, locale_id, timezone_id', 'required', 'on'=>'edit'),
 			array('level_id, profile_id, language_id, enabled, verified, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
 			array('source_id, modified_id', 'length', 'max'=>11),
 			array('email', 'length', 'max'=>32),
 			array('displayname', 'length', 'max'=>64),
 			array('creation_ip, lastlogin_ip, update_ip', 'length', 'max'=>20),
-			array('photos', 'safe'),
+			array('source_id, photos', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('user_id, source_id, level_id, profile_id, language_id, email, displayname, photos, enabled, verified, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
