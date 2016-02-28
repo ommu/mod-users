@@ -147,13 +147,17 @@ class Users extends CActiveRecord
 	public function search()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
+		$controller = strtolower(Yii::app()->controller->id);
 
 		$criteria=new CDbCriteria;
 
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
-		else
-			$criteria->compare('t.user_id',$this->user_id);
+		$criteria->compare('t.user_id',$this->user_id,true);
+		if($controller == 'o/member') {
+			$criteria->addNotInCondition('t.level_id',array(1));
+			$criteria->compare('t.level_id',$this->level_id);
+		} else if($controller == 'o/admin') {
+			$criteria->compare('t.level_id',1);
+		}
 		$criteria->compare('t.source_id',strtolower($this->source_id),true);
 		if(isset($_GET['level']))
 			$criteria->compare('t.level_id',$_GET['level']);

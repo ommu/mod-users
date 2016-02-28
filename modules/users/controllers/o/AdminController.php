@@ -150,6 +150,7 @@ class AdminController extends Controller
 
 		if(isset($_POST['Users'])) {
 			$model->attributes=$_POST['Users'];
+			$model->scenario = 'edit';
 			
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
