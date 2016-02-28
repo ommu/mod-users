@@ -89,11 +89,6 @@
 			<?php echo $form->textField($model,'lastlogin_ip',array('size'=>20,'maxlength'=>20)); ?>
 		</li>
 
-		<li>
-			<?php echo $model->getAttributeLabel('lastlogin_from'); ?><br/>
-			<?php echo $form->textField($model,'lastlogin_from',array('size'=>32,'maxlength'=>32)); ?>
-		</li>
-
 		<li class="submit">
 			<?php echo CHtml::submitButton(Phrase::trans(3,0)); ?>
 		</li>
