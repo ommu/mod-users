@@ -36,6 +36,12 @@
 class UserLevel extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $title;
+	public $description;
+	
+	// Variable Search
+	public $creation_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -64,13 +70,17 @@ class UserLevel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, desc, creation_date, creation_id, modified_id', 'required'),
+			array('
+				title, description', 'required'),
 			array('defaults', 'numerical', 'integerOnly'=>true),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
+			array('
+				title', 'length', 'max'=>32),
 			array('modified_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('level_id, name, desc, defaults, creation_date, creation_id, modified_date, modified_id', 'safe', 'on'=>'search'),
+			array('level_id, name, desc, defaults, creation_date, creation_id, modified_date, modified_id,
+				title, description, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,7 +92,12 @@ class UserLevel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'ommuUsers_relation' => array(self::HAS_MANY, 'OmmuUsers', 'level_id'),
+			'title' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'name'),
+			'description' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
+			'creation_TO' => array(self::BELONGS_TO, 'Users', 'creation_id'),
+			'modified_TO' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'view_level' => array(self::BELONGS_TO, 'ViewUserLevel', 'level_id'),
+			//'ommuUsers_relation' => array(self::HAS_MANY, 'OmmuUsers', 'level_id'),
 		);
 	}
 
@@ -100,6 +115,10 @@ class UserLevel extends CActiveRecord
 			'creation_id' => 'Creation',
 			'modified_date' => 'Modified Date',
 			'modified_id' => 'Modified',
+			'title' => 'Title',
+			'description' => 'Description',
+			'creation_search' => 'Creation',
+			'modified_search' => 'Modified',
 		);
 	}
 
@@ -137,6 +156,26 @@ class UserLevel extends CActiveRecord
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
+		
+		// Custom Search
+		$criteria->with = array(
+			'view_level' => array(
+				'alias'=>'view_level',
+				'select'=>'level_name, level_desc, oauths'
+			),
+			'creation_TO' => array(
+				'alias'=>'creation_TO',
+				'select'=>'displayname',
+			),
+			'modified_TO' => array(
+				'alias'=>'modified_TO',
+				'select'=>'displayname',
+			),
+		);
+		$criteria->compare('view_level.level_name',strtolower($this->title), true);
+		$criteria->compare('view_level.level_desc',strtolower($this->description), true);
+		$criteria->compare('creation_TO.displayname',strtolower($this->creation_search), true);
+		$criteria->compare('modified_TO.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['UserLevel_sort']))
 			$criteria->order = 't.level_id DESC';
@@ -185,34 +224,26 @@ class UserLevel extends CActiveRecord
 	 */
 	protected function afterConstruct() {
 		if(count($this->defaultColumns) == 0) {
-			/*
-			$this->defaultColumns[] = array(
-				'class' => 'CCheckBoxColumn',
-				'name' => 'id',
-				'selectableRows' => 2,
-				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-			);
-			*/
 			$this->defaultColumns[] = array(
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'name';
-			$this->defaultColumns[] = 'desc';
-			if(!isset($_GET['type'])) {
-				$this->defaultColumns[] = array(
-					'name' => 'defaults',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("defaults",array("id"=>$data->level_id)), $data->defaults, 1)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Phrase::trans(588,0),
-						0=>Phrase::trans(589,0),
-					),
-					'type' => 'raw',
-				);
-			}
+			$this->defaultColumns[] = array(
+				'name' => 'title',
+				'value' => 'Phrase::trans($data->name, 2)',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'description',
+				'value' => 'Phrase::trans($data->desc, 2)',
+			);
+			$this->defaultColumns[] = array(
+				'header' => 'Users',
+				'value' => '$data->level_id != 1 ? CHtml::link($data->view_level->oauths." ".Phrase::trans(16001, 1), Yii::app()->controller->createUrl("o/member/manage",array("level"=>$data->level_id))) : CHtml::link($data->view_level->oauths." ".Phrase::trans(16001, 1), Yii::app()->controller->createUrl("o/admin/manage",array("level"=>$data->level_id)))',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -239,34 +270,24 @@ class UserLevel extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = array(
-				'name' => 'modified_date',
-				'value' => 'Utility::dateFormat($data->modified_date)',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
-					'model'=>$this,
-					'attribute'=>'modified_date',
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
-					//'mode'=>'datetime',
-					'htmlOptions' => array(
-						'id' => 'modified_date_filter',
-					),
-					'options'=>array(
-						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
-						'showOtherMonths' => true,
-						'selectOtherMonths' => true,
-						'changeMonth' => true,
-						'changeYear' => true,
-						'showButtonPanel' => true,
-					),
-				), true),
+				'name' => 'creation_search',
+				'value' => '$data->creation_TO->displayname',
 			);
-			$this->defaultColumns[] = 'modified_id';
+			if(!isset($_GET['type'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'defaults',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("default",array("id"=>$data->level_id)), $data->defaults, 6)',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Phrase::trans(588,0),
+						0=>Phrase::trans(589,0),
+					),
+					'type' => 'raw',
+				);
+			}
 		}
 		parent::afterConstruct();
 	}
@@ -294,71 +315,85 @@ class UserLevel extends CActiveRecord
 		return $model->level_id;
 	}
 
+	//get Type Member (Except administrator)
+	public static function getTypeMember($type=null){
+		if($type == null) {
+			$model = self::model()->findAll(array(
+				'condition'=>'level_id != :level',
+				'params' => array(
+					':level' => 1,
+				),
+			));
+		} else {
+			$model = self::model()->findAll();
+		}
+		$items = array();
+		if($model != null) {
+			foreach($model as $key => $val) {
+				$items[$val->level_id] = Phrase::trans($val->name, 2);
+			}
+			return $items;
+		}else {
+			return false;
+		}
+	}
+
 	/**
 	 * before validate attributes
 	 */
-	/*
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			// Create action
+			if($this->isNewRecord)
+				$this->creation_id = Yii::app()->user->id;
+			else
+				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * after validate attributes
-	 */
-	/*
-	protected function afterValidate()
-	{
-		parent::afterValidate();
-			// Create action
-		return true;
-	}
-	*/
 	
 	/**
 	 * before save attributes
 	 */
-	/*
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
-		}
-		return true;	
-	}
-	*/
-	
-	/**
-	 * After save attributes
-	 */
-	/*
-	protected function afterSave() {
-		parent::afterSave();
-		// Create action
-	}
-	*/
+			$action = strtolower(Yii::app()->controller->action->id);
+			if($this->isNewRecord) {
+				$currentAction = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
+				$title=new OmmuSystemPhrase;
+				$title->location = $currentAction;
+				$title->en = $this->title;
+				if($title->save()) {
+					$this->name = $title->phrase_id;
+				}
 
-	/**
-	 * Before delete attributes
-	 */
-	/*
-	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			// Create action
+				$desc=new OmmuSystemPhrase;
+				$desc->location = $currentAction;
+				$desc->en = $this->description;
+				if($desc->save()) {
+					$this->desc = $desc->phrase_id;
+				}
+				
+			}else {
+				if($action == 'edit') {
+					$title = OmmuSystemPhrase::model()->findByPk($this->name);
+					$title->en = $this->title;
+					$title->save();
+
+					$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
+					$desc->en = $this->description;
+					$desc->save();
+				}
+
+				// set to default modules
+				if($this->defaults == 1) {
+					self::model()->updateAll(array(
+						'defaults' => 0,	
+					));
+					$this->defaults = 1;
+				}
+			}
 		}
 		return true;
 	}
-	*/
-
-	/**
-	 * After delete attributes
-	 */
-	/*
-	protected function afterDelete() {
-		parent::afterDelete();
-		// Create action
-	}
-	*/
 
 }
