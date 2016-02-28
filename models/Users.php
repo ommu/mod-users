@@ -337,7 +337,7 @@ class Users extends CActiveRecord
 			);
 			$this->defaultColumns[] = 'displayname';
 			$this->defaultColumns[] = 'email';
-			if(!in_array($controller, array('admin'))) {
+			if(!in_array($controller, array('o/admin'))) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_id',
 					'value' => 'Phrase::trans($data->level_relation->name,2)',
@@ -348,32 +348,6 @@ class Users extends CActiveRecord
 					'type' => 'raw',
 				);
 			}
-			if($controller != 'admin') {
-				$this->defaultColumns[] = array(
-					'name' => 'verified',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("verify",array("id"=>$data->user_id)), $data->verified, 7)',
-					'htmlOptions' => array(
-						'class' => 'center',
-					),
-					'filter'=>array(
-						1=>Phrase::trans(588,0),
-						0=>Phrase::trans(589,0),
-					),
-					'type' => 'raw',
-				);
-			}
-			$this->defaultColumns[] = array(
-				'name' => 'enabled',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("enabled",array("id"=>$data->user_id)), $data->enabled, 3)',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter'=>array(
-					1=>Phrase::trans(588,0),
-					0=>Phrase::trans(589,0),
-				),
-				'type' => 'raw',
-			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -399,6 +373,32 @@ class Users extends CActiveRecord
 						'showButtonPanel' => true,
 					),
 				), true),
+			);
+			if($controller != 'o/admin') {
+				$this->defaultColumns[] = array(
+					'name' => 'verified',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("verify",array("id"=>$data->user_id)), $data->verified, 7)',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Phrase::trans(588,0),
+						0=>Phrase::trans(589,0),
+					),
+					'type' => 'raw',
+				);
+			}
+			$this->defaultColumns[] = array(
+				'name' => 'enabled',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("enabled",array("id"=>$data->user_id)), $data->enabled, 3)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Phrase::trans(588,0),
+					0=>Phrase::trans(589,0),
+				),
+				'type' => 'raw',
 			);
 		}
 		parent::afterConstruct();
@@ -467,7 +467,7 @@ class Users extends CActiveRecord
 	protected function beforeValidate() 
 	{
 		$controller = strtolower(Yii::app()->controller->id);
-		$current = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
@@ -487,8 +487,8 @@ class Users extends CActiveRecord
 				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
 				// Random password
-				if($setting->signup_random == 1 && $controller != 'admin') {
-					if($controller == 'member') {
+				if($setting->signup_random == 1 && $controller != 'o/admin') {
+					if($controller == 'o/member') {
 						$this->new_password = $this->confirm_password = self::getGeneratePassword();
 					}
 					$this->verified = 1;
@@ -517,14 +517,14 @@ class Users extends CActiveRecord
 				 */
 				
 				// Admin modify member
-				if(in_array($current, array('admin/edit','member/edit'))) {
+				if(in_array($currentAction, array('o/admin/edit','o/member/edit'))) {
 					$this->modified_date = date('Y-m-d H:i:s');
 					$this->modified_id = Yii::app()->user->id;
 				
 				// User modify
 				} else {
 					// Admin change password
-					if(in_array($current, array('admin/password'))) {
+					if(in_array($currentAction, array('o/admin/password'))) {
 						if($this->old_password != '') {
 							$user = self::model()->findByPk(Yii::app()->user->id, array(
 								'select' => 'user_id, salt, password',

@@ -72,11 +72,8 @@ class LoginFormOauth extends CFormModel
 				case OauthIdentity::ERROR_USERNAME_INVALID:
 					$this->addError('email','Email address is incorrect.');
 					break;
-				case OauthIdentity::ERROR_PASSWORD_INVALID:
+				default: //OauthIdentity::ERROR_PASSWORD_INVALID
 					$this->addError('password','Password is incorrect.');
-					break;
-				default: //OauthIdentity::ERROR_TOKEN_INVALID
-					$this->addError('password','Token is incorrect.');
 					break;
 			}
 		}
