@@ -31,9 +31,48 @@ plugin_menu		:
 	- urlTitle: User Level
 		urlRules: {siteType: 0,1, userLevel: 1}
 		urlPath: {url: o/level/manage, attr: -, icon: -}
+		
+	- urlTitle: Subscribes
+		urlRules: {siteType: 1, userLevel: 1,2}
+		urlPath: {url: o/newsletter/manage, attr: -, icon: -}
+		
+	- urlTitle: Invite
+		urlRules: {siteType: 1, userLevel: 1,2}
+		urlPath: {url: o/invite/manage, attr: -, icon: -}
+		
+	- urlTitle: History
+		urlRules: {siteType: 0,1, userLevel: 1}
+		urlPath: {url: -, attr: -, icon: -}
+		submenu :
+			- urlTitle: Login
+				urlRules: {siteType: 0,1, userLevel: 1}
+				urlPath: {url: o/history/login, attr: -, icon: -}
+			- urlTitle: Subscribes
+				urlRules: {siteType: 1, userLevel: 1}
+				urlPath: {url: o/history/subscribe, attr: -, icon: -}
 
 content_menu	:
 # controller o/level
 	- urlTitle: Add User Level
 		urlRules: {users, o/level, manage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+		
+# controller o/invite
+		
+	- urlTitle: Invite User
+		urlRules: {users, o/invite, manage,queuemanage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: add, attr: -, icon: -}
+		
+	- urlTitle: View Invites
+		urlRules: {users, o/invite, manage,queuemanage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: manage, attr: -, icon: -}
+		
+	- urlTitle: Queue Invites
+		urlRules: {users, o/invite, manage,queuemanage, siteType: 0,1, userLevel: 1,2}
+		urlPath: {url: queuemanage, attr: -, icon: -}
+		
+# controller o/newsletter
+
+	- urlTitle: Add Subscribe
+		urlRules: {users, o/newsletter, manage, siteType: 0,1, userLevel: 1,2}
 		urlPath: {url: add, attr: -, icon: -}
