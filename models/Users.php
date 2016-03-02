@@ -430,16 +430,16 @@ class Users extends CActiveRecord
 		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		srand((double)microtime()*1000000);
 		$i = 0;
-		$salt = '' ;
+		$password = '' ;
 
 		while ($i <= 4) {
 			$num = rand() % 33;
 			$tmp = substr($chars, $num, 2);
-			$salt = $salt . $tmp; 
+			$password = $password . $tmp; 
 			$i++;
 		}
 
-		return $salt;
+		return $password;
 	}
 
 	/**
@@ -499,10 +499,10 @@ class Users extends CActiveRecord
 					if($this->username != '') {
 						$user = self::model()->findByAttributes(array('username' => $this->username));
 						if($user != null) {
-							$this->addError('username', Phrase::trans(16196,1));
+							$this->addError('username', 'Username already in use');
 						}
 					} else {
-						$this->addError('username', Phrase::trans(16197,1));
+						$this->addError('username', 'Username cannot be blank.');
 					}
 				}
 				$this->profile_id = 1;
@@ -530,7 +530,7 @@ class Users extends CActiveRecord
 								'select' => 'user_id, salt, password',
 							));
 							if($user->password !== self::hashPassword($user->salt, $this->old_password)) {
-								$this->addError('old_password', Phrase::trans(16120,1));
+								$this->addError('old_password', 'Old password is incorrect.');
 							}
 						}
 					}
