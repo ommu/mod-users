@@ -375,7 +375,7 @@ class Users extends CActiveRecord
 				$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
 				$this->creation_ip = $_SERVER['REMOTE_ADDR'];
 				
-			} else {				
+			} else {
 				// Admin modify member
 				if(in_array($currentAction, array('o/admin/edit','o/member/edit'))) {
 					$this->modified_date = date('Y-m-d H:i:s');
@@ -383,7 +383,7 @@ class Users extends CActiveRecord
 				} else {
 					$this->update_date = date('Y-m-d H:i:s');
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
-				}				
+				}
 			}
 		}
 		return true;
