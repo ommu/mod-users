@@ -47,13 +47,13 @@ if($render == 1) {
 			</div>
 			
 			<div class="clearfix">
-				<?php echo $form->passwordField($model,'new_password',array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('new_password'))); ?>
-				<?php echo $form->error($model,'new_password'); ?>
+				<?php echo $form->passwordField($model,'newPassword',array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('newPassword'))); ?>
+				<?php echo $form->error($model,'newPassword'); ?>
 			</div>
 
 			<div class="clearfix">
-				<?php echo $form->passwordField($model,'confirm_password',array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('confirm_password'))); ?>
-				<?php echo $form->error($model,'confirm_password'); ?>
+				<?php echo $form->passwordField($model,'confirmPassword',array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('confirmPassword'))); ?>
+				<?php echo $form->error($model,'confirmPassword'); ?>
 			</div>
 
 			<div class="submit clearfix">

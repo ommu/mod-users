@@ -81,18 +81,18 @@
 		
 		<?php if($model->isNewRecord || (!$model->isNewRecord && isset($_GET['id']))) {?>
 		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('new_password')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
+			<label><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
 			<div class="desc">
-				<?php echo $form->passwordField($model,'new_password',array('maxlength'=>32,'class'=>'span-7')); ?>
-				<?php echo $form->error($model,'new_password'); ?>
+				<?php echo $form->passwordField($model,'newPassword',array('maxlength'=>32,'class'=>'span-7')); ?>
+				<?php echo $form->error($model,'newPassword'); ?>
 			</div>
 		</div>
 
 		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('confirm_password')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
+			<label><?php echo $model->getAttributeLabel('confirmPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
 			<div class="desc">
-				<?php echo $form->passwordField($model,'confirm_password',array('maxlength'=>32,'class'=>'span-7')); ?>
-				<?php echo $form->error($model,'confirm_password'); ?>
+				<?php echo $form->passwordField($model,'confirmPassword',array('maxlength'=>32,'class'=>'span-7')); ?>
+				<?php echo $form->error($model,'confirmPassword'); ?>
 			</div>
 		</div>
 

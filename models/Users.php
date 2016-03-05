@@ -64,9 +64,9 @@ class Users extends CActiveRecord
 {
 	public $defaultColumns = array();
 
-	public $old_password;
-	public $new_password;
-	public $confirm_password;
+	public $oldPassword;
+	public $newPassword;
+	public $confirmPassword;
 	public $invite_code;
 	public $reference_id;
 
@@ -99,26 +99,26 @@ class Users extends CActiveRecord
 			array('profile_id, email, first_name, last_name', 'required', 'on'=>'adminadd, adminedit'),
 			array('displayname', 'required', 'on'=>'adminedit'),
 			array('
-				old_password', 'required', 'on'=>'adminpassword'),
+				oldPassword', 'required', 'on'=>'adminpassword'),
 			array('
-				new_password', 'required', 'on'=>'adminadd, adminpassword, resetpassword'),
+				newPassword', 'required', 'on'=>'adminadd, adminpassword, resetpassword'),
 			array('
-				confirm_password', 'required', 'on'=>'adminadd, adminpassword, resetpassword'),
+				confirmPassword', 'required', 'on'=>'adminadd, adminpassword, resetpassword'),
 			array('level_id, profile_id, language_id, photo_id, enabled, verified, deactivate, search, invisible, show_profile, privacy, comments, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
 			array('photo_id, status_id, modified_id', 'length', 'max'=>11),
 			array('
 				invite_code', 'length', 'max'=>16),
 			array('creation_ip, lastlogin_ip, update_ip', 'length', 'max'=>20),
 			array('email, salt, password, first_name, last_name, username, last_email, 
-				old_password, new_password, confirm_password', 'length', 'max'=>32),
+				oldPassword, newPassword, confirmPassword', 'length', 'max'=>32),
 			array('displayname', 'length', 'max'=>64),
 			//array('email', 'email'),
 			array('email, username', 'unique'),
 			array('username', 'match', 'pattern' => '/^[a-zA-Z0-9_.-]{0,25}$/', 'message' => Yii::t('other', 'Nama user hanya boleh berisi karakter, angka dan karakter (., -, _)')),
 			array('level_id, password, username, enabled, verified, deactivate, invisible, lastlogin_from,
-				old_password, new_password, confirm_password, invite_code, reference_id', 'safe'),
+				oldPassword, newPassword, confirmPassword, invite_code, reference_id', 'safe'),
 			array('
-				new_password', 'compare', 'compareAttribute' => 'confirm_password', 'message' => 'Kedua password tidak sama2.', 'on'=>'adminadd, adminedit, adminpassword, resetpassword'),
+				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama2.', 'on'=>'adminadd, adminedit, adminpassword, resetpassword'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('user_id, level_id, profile_id, language_id, email, salt, password, first_name, last_name, displayname, photo_id, status_id, username, enabled, verified, deactivate, search, invisible, show_profile, privacy, comments, last_email, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
@@ -180,9 +180,9 @@ class Users extends CActiveRecord
 			'update_ip' => Phrase::trans(16167,1),
 			'locale_id' => Phrase::trans(16168,1),
 			'timezone_id' => Phrase::trans(16169,1),
-			'old_password' => Phrase::trans(16112,1),
-			'new_password' => Phrase::trans(16110,1),
-			'confirm_password' => Phrase::trans(16111,1),
+			'oldPassword' => Phrase::trans(16112,1),
+			'newPassword' => Phrase::trans(16110,1),
+			'confirmPassword' => Phrase::trans(16111,1),
 			'invite_code' => Phrase::trans(16211,1),
 		);
 	}
@@ -489,7 +489,7 @@ class Users extends CActiveRecord
 				// Random password
 				if($setting->signup_random == 1 && $controller != 'o/admin') {
 					if($controller == 'o/member') {
-						$this->new_password = $this->confirm_password = self::getGeneratePassword();
+						$this->newPassword = $this->confirmPassword = self::getGeneratePassword();
 					}
 					$this->verified = 1;
 				}
@@ -525,12 +525,12 @@ class Users extends CActiveRecord
 				} else {
 					// Admin change password
 					if(in_array($currentAction, array('o/admin/password'))) {
-						if($this->old_password != '') {
+						if($this->oldPassword != '') {
 							$user = self::model()->findByPk(Yii::app()->user->id, array(
 								'select' => 'user_id, salt, password',
 							));
-							if($user->password !== self::hashPassword($user->salt, $this->old_password)) {
-								$this->addError('old_password', 'Old password is incorrect.');
+							if($user->password !== self::hashPassword($user->salt, $this->oldPassword)) {
+								$this->addError('oldPassword', 'Old password is incorrect.');
 							}
 						}
 					}
@@ -545,16 +545,16 @@ class Users extends CActiveRecord
 		return true;
 	}
 	
-	protected function afterValidate()
-	{
-		$controller = strtolower(Yii::app()->controller->id);
-		parent::afterValidate();
-		if(($this->new_password != '') && ($this->new_password == $this->confirm_password)) {
-			if(count($this->errors) == 0) {
-				$this->password = self::hashPassword($this->salt, $this->new_password);
-			}
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		if(parent::beforeSave()) {
+			$this->email = strtolower($this->email);
+			$this->username = strtolower($this->username);
+			$this->password = self::hashPassword($this->salt, $this->newPassword);
 		}
-		return true;
+		return true;	
 	}
 	
 	/**
