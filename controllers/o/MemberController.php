@@ -79,12 +79,12 @@ class MemberController extends /*SBaseController*/ Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('suggest'),
+				'actions'=>array(),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','edit','delete','enabled','verify'),
+				'actions'=>array('suggest','manage','add','edit','delete','enabled','verify'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -168,13 +168,16 @@ class MemberController extends /*SBaseController*/ Controller
 	public function actionAdd() 
 	{
 		$model=new Users;
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_random',
+		));
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Users'])) {
 			$model->attributes=$_POST['Users'];
-			$model->scenario = 'adminadd';
+			$model->scenario = 'formAdd';
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
@@ -205,6 +208,7 @@ class MemberController extends /*SBaseController*/ Controller
 			$this->pageMeta = '';
 			$this->render('admin_add',array(
 				'model'=>$model,
+				'setting'=>$setting,
 			));
 		}
 	}
@@ -217,13 +221,16 @@ class MemberController extends /*SBaseController*/ Controller
 	public function actionEdit($id) 
 	{
 		$model=$this->loadModel($id);
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_random',
+		));
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Users'])) {
 			$model->attributes=$_POST['Users'];
-			$model->scenario = 'adminedit';
+			$model->scenario = 'formEdit';
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
@@ -254,6 +261,7 @@ class MemberController extends /*SBaseController*/ Controller
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
 				'model'=>$model,
+				'setting'=>$setting,
 			));
 		}
 	}

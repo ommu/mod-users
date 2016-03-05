@@ -62,7 +62,7 @@
 		</div>
 		<?php }?>
 
-		<?php if(OmmuSettings::getInfo('signup_username') == 1) {?>
+		<?php if($setting->signup_username == 1) {?>
 		<div class="clearfix">
 			<label><?php echo $model->getAttributeLabel('username')?> <span class="required">*</span></label>
 			<div class="desc">
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 
-		<?php if(($model->isNewRecord && OmmuSettings::getInfo('signup_random') != 1) || !$model->isNewRecord) {?>
+		<?php if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {?>
 		<div class="clearfix">
 			<label><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
 			<div class="desc">
@@ -98,6 +98,7 @@
 		</div>
 		<?php }?>
 
+		<?php if(($model->isNewRecord && $setting->signup_approve == 1) || !$model->isNewRecord) {?>
 		<div class="clearfix publish">
 			<?php echo $form->labelEx($model,'enabled'); ?>
 			<div class="desc">
@@ -106,7 +107,9 @@
 				<?php echo $form->error($model,'enabled'); ?>
 			</div>
 		</div>
+		<?php }?>
 
+		<?php if(($model->isNewRecord && $setting->signup_verifyemail == 1) || !$model->isNewRecord) {?>
 		<div class="clearfix publish">
 			<?php echo $form->labelEx($model,'verified'); ?>
 			<div class="desc">
@@ -115,6 +118,7 @@
 				<?php echo $form->error($model,'verified'); ?>
 			</div>
 		</div>
+		<?php }?>
 
 	</fieldset>
 </div>
