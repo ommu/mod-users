@@ -141,8 +141,12 @@ class AdminController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionEdit($id) 
+	public function actionEdit() 
 	{
+		if(isset($_GET['id']))
+			$id = $_GET['id'];
+		else 
+			$id = Yii::app()->user->id;
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
