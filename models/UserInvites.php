@@ -290,34 +290,33 @@ class UserInvites extends CActiveRecord
 		
 		if(parent::beforeValidate()) {
 			if($this->email != '') {
-				$model = UserInviteQueue::model()->findByAttributes(array('email' => $this->email), array(
+				$model = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
 					'select' => 'queue_id, member_id, invite',
 				));
 				if($model == null) {														// email belum masuk daftar invite
 					$invite = new UserInviteQueue;
 					$invite->email = $this->email;
-					if($invite->save()) {
+					if($invite->save())
 						$this->queue_id = $invite->queue_id;
-					}
 					
 				} else {																	// email sudah dalam daftar invite
 					if(($module != null && $module == 'users') && $controller == 'invite') {
-						if($model->member_id != 0) {										// email sudah menjadi member
+						if($model->member_id != 0)											// email sudah menjadi member
 							$this->addError('email', Phrase::trans(16213,1));
-						} else {															// email belum menjadi member
+							
+						else {																// email belum menjadi member
 							$invite = self::model()->with('queue')->find(array(
 								'select' => 'invite_id',
 								'condition' => 'queue.email = :email AND t.user_id = :user',
 								'params' => array(
-									':email' => $this->email,
+									':email' => strtolower($this->email),
 									':user' => Yii::app()->user->id,
 								),
 							));
-							if($invite == null) {
+							if($invite == null)
 								$this->queue_id = $model->queue_id;
-							} else {														// email sudah invite sebelumnya
+							else															// email sudah invite sebelumnya
 								$this->addError('email', Phrase::trans(16212,1));
-							}
 						}
 					}
 				}
@@ -340,11 +339,11 @@ class UserInvites extends CActiveRecord
 			$setting = OmmuSettings::model()->findByPk(1, array(
 				'select' => 'signup_checkemail',
 			));
-			if($setting->signup_checkemail == 1) {
+			if($setting->signup_checkemail == 1)
 				SupportMailSetting::sendEmail($this->queue->email, $this->queue->email, 'User Invite', 'Silahkan bergabung dan masukkan code invite', 1);
-			} else {
+			
+			else
 				SupportMailSetting::sendEmail($this->queue->email, $this->queue->email, 'User Invite', 'Silahkan bergabung', 1);
-			}
 		}
 	}
 

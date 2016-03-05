@@ -227,4 +227,14 @@ class UserInviteQueue extends CActiveRecord
 		}
 		return true;
 	}
+	
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		if(parent::beforeSave()) {
+			$this->email = strtolower($this->email);
+		}
+		return true;	
+	}
 }

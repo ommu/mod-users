@@ -67,8 +67,8 @@ class Users extends CActiveRecord
 	public $oldPassword;
 	public $newPassword;
 	public $confirmPassword;
-	public $invite_code;
-	public $reference_id;
+	public $inviteCode;
+	public $referenceId;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -105,7 +105,7 @@ class Users extends CActiveRecord
 			array('level_id, profile_id, language_id, photo_id, enabled, verified, deactivate, search, invisible, show_profile, privacy, comments, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
 			array('photo_id, status_id, modified_id', 'length', 'max'=>11),
 			array('
-				invite_code', 'length', 'max'=>16),
+				inviteCode', 'length', 'max'=>16),
 			array('creation_ip, lastlogin_ip, update_ip', 'length', 'max'=>20),
 			array('email, salt, password, first_name, last_name, username, last_email, 
 				oldPassword, newPassword, confirmPassword', 'length', 'max'=>32),
@@ -114,7 +114,7 @@ class Users extends CActiveRecord
 			array('email, username', 'unique'),
 			array('username', 'match', 'pattern' => '/^[a-zA-Z0-9_.-]{0,25}$/', 'message' => Yii::t('other', 'Nama user hanya boleh berisi karakter, angka dan karakter (., -, _)')),
 			array('level_id, password, username, enabled, verified, deactivate, invisible, lastlogin_from,
-				oldPassword, newPassword, confirmPassword, invite_code, reference_id', 'safe'),
+				oldPassword, newPassword, confirmPassword, inviteCode, referenceId', 'safe'),
 			array('
 				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama2.'),
 			// The following rule is used by search().
@@ -181,7 +181,7 @@ class Users extends CActiveRecord
 			'oldPassword' => Phrase::trans(16112,1),
 			'newPassword' => Phrase::trans(16110,1),
 			'confirmPassword' => Phrase::trans(16111,1),
-			'invite_code' => Phrase::trans(16211,1),
+			'inviteCode' => Phrase::trans(16211,1),
 		);
 	}
 	
@@ -488,6 +488,61 @@ class Users extends CActiveRecord
 				 */
 				$this->profile_id = 1;
 				$this->salt = self::getUniqueCode();
+				
+				if(in_array($controller, array('o/admin','o/member'))) {
+					// Auto Approve Users
+					if($setting->signup_approve == 1)
+						$this->enabled = 1;
+				
+					// Auto Verified Email User
+					if($setting->signup_verifyemail == 1)
+						$this->verified = 0;
+				
+					// Generate user by admin
+					$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+					
+				} else {
+					$this->level_id = UserLevel::getDefault();
+					$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
+					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;					
+
+					// Signup by Invite (Admin or User)
+					if($setting->signup_inviteonly != 0) {
+						if($setting->signup_checkemail == 1 && $this->inviteCode == '')
+							$this->addError('inviteCode', 'Invite Code tidak boleh kosong.');
+						
+						if($this->email != '') {
+							$invite = UserInvites::getInvite(strtolower($this->email));
+							
+							if($invite != null) {
+								if($invite->queue->member_id != 0)
+									$this->addError('email', 'Email anda sudah terdaftar sebagai user, silahkan login.');
+									
+								else {
+									if($setting->signup_inviteonly == 1 && $invite->queue->invite == 0)
+										$this->addError('email', 'Maaf invite hanya bisa dilakukan oleh admin');
+									
+									else {
+										if($setting->signup_checkemail == 1) {
+											$code = UserInvites::model()->findByAttributes(array('code' => $this->inviteCode), array(
+												'select' => 'queue_id, user_id, code',
+											));
+											if($code == null)
+												$this->addError('inviteCode', 'Invite Code yang and masukan salah.');
+											else
+												$this->referenceId = $code->user_id;
+										}
+									}
+								}
+							} else
+								$this->addError('email', 'Email anda belum ada dalam daftar invite.');
+							
+						} else {
+							if($setting->signup_checkemail == 1)
+								$this->addError('inviteCode', 'Invite Code yang and masukan salah, silahkan lengkapi input email');
+						}
+					}
+				}
 
 				// Username required
 				if($setting->signup_username == 1) {
@@ -500,17 +555,6 @@ class Users extends CActiveRecord
 						$this->addError('username', 'Username cannot be blank.');
 					}
 				}
-				
-				// Auto Approve Users
-				if($setting->signup_approve == 1)
-					$this->enabled = 1;
-				
-				// Auto Verified Email User
-				if($setting->signup_verifyemail == 1)
-					$this->verified = 1;				
-				
-				// Generate user by admin
-				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
 				// Random password
 				if($setting->signup_random == 1) {
@@ -610,6 +654,16 @@ class Users extends CActiveRecord
 				'select' => 'site_type, signup_welcome, signup_adminemail',
 			));
 			
+			$invite = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
+				'select' => 'queue_id, member_id, reference_id',
+			));
+			if($invite != null && $invite->member_id == 0) {
+				$invite->member_id = $this->user_id;
+				if($this->referenceId != '')
+					$invite->reference_id = $this->referenceId;
+				$invite->update();
+			}
+			
 			// this user ommu (administrator)
 			$ommuStatus = $this->level_id == 1 ? 1 : 0;
 			UserOption::model()->updateByPk($this->user_id, array(
@@ -618,29 +672,25 @@ class Users extends CActiveRecord
 			));
 				
 			// Send Welcome Email
-			if($setting->signup_welcome == 1) {
+			if($setting->signup_welcome == 1)
 				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Welcome', 'Selamat bergabung dengan Nirwasita Hijab and Dress Corner', 1);
-			}
 
 			// Send Account Information
-			if($this->enabled == 1) {
+			if($this->enabled == 1)
 				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Account Information', 'your account information', 1);
-			}
 
 			// Send New Account to Email Administrator
-			if($setting->signup_adminemail == 1) {
+			if($setting->signup_adminemail == 1)
 				SupportMailSetting::sendEmail($this->email, $this->displayname, 'New Member', 'informasi member terbaru', 0);
-			}
 			
 		} else {
 			// Send Account Information
 			if($this->enabled == 1) {			
-				if($controller == 'forgot') {
+				if($controller == 'forgot')
 					SupportMailSetting::sendEmail($this->email, $this->displayname, 'New Account Information', 'this new your account information', 1);
 
-				} else if($controller == 'verify') {
+				else if($controller == 'verify')
 					SupportMailSetting::sendEmail($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success', 1);
-				}
 			}
 		}
 	}
