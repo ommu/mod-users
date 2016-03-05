@@ -123,7 +123,7 @@ class AdminController extends /*SBaseController*/ Controller
 
 		if(isset($_POST['Users'])) {
 			$model->attributes=$_POST['Users'];
-			$model->scenario = 'adminpassword';
+			$model->scenario = 'formChangePassword';
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
@@ -193,13 +193,18 @@ class AdminController extends /*SBaseController*/ Controller
 	public function actionAdd() 
 	{
 		$model=new Users;
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_random',
+		));
+		if($model->isNewRecord)
+			$model->level_id = 1;
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Users'])) {
 			$model->attributes=$_POST['Users'];
-			$model->scenario = 'adminadd';
+			$model->scenario = 'formAdd';
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
@@ -219,19 +224,19 @@ class AdminController extends /*SBaseController*/ Controller
 				}
 			}
 			Yii::app()->end();
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 500;
-			
-			$this->pageTitle = Phrase::trans(16098,1);
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_add',array(
-				'model'=>$model,
-			));
 		}
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 500;
+		
+		$this->pageTitle = Phrase::trans(16098,1);
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_add',array(
+			'model'=>$model,
+			'setting'=>$setting,
+		));
 	}
 
 	/**
@@ -247,13 +252,16 @@ class AdminController extends /*SBaseController*/ Controller
 			$id = Yii::app()->user->id;
 			
 		$model=$this->loadModel($id);
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_random',
+		));
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Users'])) {
 			$model->attributes=$_POST['Users'];
-			$model->scenario = 'adminedit';
+			$model->scenario = 'formEdit';
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
@@ -273,19 +281,19 @@ class AdminController extends /*SBaseController*/ Controller
 				}
 			}
 			Yii::app()->end();
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = isset($_GET['id']) ? Yii::app()->controller->createUrl('manage') : Yii::app()->createUrl('admin/dashboard');
-			$this->dialogWidth = 500;
-			
-			$this->pageTitle = Phrase::trans(16100,1).': '.$model->displayname;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_edit',array(
-				'model'=>$model,
-			));
 		}
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = isset($_GET['id']) ? Yii::app()->controller->createUrl('manage') : Yii::app()->createUrl('admin/dashboard');
+		$this->dialogWidth = 500;
+		
+		$this->pageTitle = Phrase::trans(16100,1).': '.$model->displayname;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_edit',array(
+			'model'=>$model,
+			'setting'=>$setting,
+		));
 	}
 	
 	/**
@@ -360,6 +368,53 @@ class AdminController extends /*SBaseController*/ Controller
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_enabled',array(
+				'title'=>$title,
+				'model'=>$model,
+			));
+		}
+	}
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionVerify($id) 
+	{
+		$model=$this->loadModel($id);
+		if($model->verified == 1) {
+			$title = Phrase::trans(304,0);
+			$replace = 0;
+		} else {
+			$title = Phrase::trans(303,0);
+			$replace = 1;
+		}
+
+		if(Yii::app()->request->isPostRequest) {
+			// we only allow deletion via POST request
+			if(isset($id)) {
+				//change value active or publish
+				$model->verified = $replace;
+
+				if($model->update()) {
+					echo CJSON::encode(array(
+						'type' => 5,
+						'get' => Yii::app()->controller->createUrl('manage'),
+						'id' => 'partial-users',
+						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16088,1).'</strong></div>',
+					));
+				}
+			}
+
+		} else {
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+			$this->dialogWidth = 350;
+
+			$this->pageTitle = $title;
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_verify',array(
 				'title'=>$title,
 				'model'=>$model,
 			));

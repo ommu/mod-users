@@ -22,13 +22,6 @@
 
 	<fieldset>
 
-		<?php if($model->isNewRecord) {
-			$model->level_id = 1;
-			echo $form->hiddenField($model,'level_id');
-			$model->verified = 1;
-			echo $form->hiddenField($model,'verified');
-		}?>
-
 		<?php if(isset($_GET['id'])) {?>
 		<div class="intro">
 			<?php echo Phrase::trans(16104,1);?>
@@ -61,7 +54,7 @@
 		</div>
 		<?php }?>
 
-		<?php if(OmmuSettings::getInfo('signup_username') == 1) {?>
+		<?php if($setting->signup_username == 1) {?>
 		<div class="clearfix">
 			<label><?php echo $model->getAttributeLabel('username')?> <span class="required">*</span></label>
 			<div class="desc">
@@ -79,41 +72,47 @@
 			</div>
 		</div>
 		
-		<?php if($model->isNewRecord || (!$model->isNewRecord && isset($_GET['id']))) {?>
-		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
-			<div class="desc">
-				<?php echo $form->passwordField($model,'newPassword',array('maxlength'=>32,'class'=>'span-7')); ?>
-				<?php echo $form->error($model,'newPassword'); ?>
+		<?php if($model->isNewRecord || (!$model->isNewRecord && isset($_GET['id']))) {
+			if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {?>
+			<div class="clearfix">
+				<label><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
+				<div class="desc">
+					<?php echo $form->passwordField($model,'newPassword',array('maxlength'=>32,'class'=>'span-7')); ?>
+					<?php echo $form->error($model,'newPassword'); ?>
+				</div>
 			</div>
-		</div>
 
-		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('confirmPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
-			<div class="desc">
-				<?php echo $form->passwordField($model,'confirmPassword',array('maxlength'=>32,'class'=>'span-7')); ?>
-				<?php echo $form->error($model,'confirmPassword'); ?>
+			<div class="clearfix">
+				<label><?php echo $model->getAttributeLabel('confirmPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
+				<div class="desc">
+					<?php echo $form->passwordField($model,'confirmPassword',array('maxlength'=>32,'class'=>'span-7')); ?>
+					<?php echo $form->error($model,'confirmPassword'); ?>
+				</div>
 			</div>
-		</div>
+			<?php }?>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'enabled'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'enabled'); ?>
+			<?php if(($model->isNewRecord && $setting->signup_approve == 1) || !$model->isNewRecord) {?>
+			<div class="clearfix publish">
 				<?php echo $form->labelEx($model,'enabled'); ?>
-				<?php echo $form->error($model,'enabled'); ?>
+				<div class="desc">
+					<?php echo $form->checkBox($model,'enabled'); ?>
+					<?php echo $form->labelEx($model,'enabled'); ?>
+					<?php echo $form->error($model,'enabled'); ?>
+				</div>
 			</div>
-		</div>
+			<?php }?>
 
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'verified'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'verified'); ?>
+			<?php if(($model->isNewRecord && $setting->signup_verifyemail == 1) || !$model->isNewRecord) {?>
+			<div class="clearfix publish">
 				<?php echo $form->labelEx($model,'verified'); ?>
-				<?php echo $form->error($model,'verified'); ?>
+				<div class="desc">
+					<?php echo $form->checkBox($model,'verified'); ?>
+					<?php echo $form->labelEx($model,'verified'); ?>
+					<?php echo $form->error($model,'verified'); ?>
+				</div>
 			</div>
-		</div>
-		<?php }?>
+		<?php }
+		}?>
 
 	</fieldset>
 </div>
