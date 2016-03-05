@@ -477,7 +477,7 @@ class Users extends CActiveRecord
 			if($this->isNewRecord) {
 
 				$setting = OmmuSettings::model()->findByPk(1, array(
-					'select' => 'signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
+					'select' => 'site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
 				));
 
 				/**
@@ -507,7 +507,7 @@ class Users extends CActiveRecord
 					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;					
 
 					// Signup by Invite (Admin or User)
-					if($setting->signup_inviteonly != 0) {
+					if($setting->site_type == 1 && $setting->signup_inviteonly != 0) {
 						if($setting->signup_checkemail == 1 && $this->inviteCode == '')
 							$this->addError('inviteCode', 'Invite Code tidak boleh kosong.');
 						
@@ -654,14 +654,16 @@ class Users extends CActiveRecord
 				'select' => 'site_type, signup_welcome, signup_adminemail',
 			));
 			
-			$invite = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
-				'select' => 'queue_id, member_id, reference_id',
-			));
-			if($invite != null && $invite->member_id == 0) {
-				$invite->member_id = $this->user_id;
-				if($this->referenceId != '')
-					$invite->reference_id = $this->referenceId;
-				$invite->update();
+			if($setting->site_type == 1) {
+				$invite = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
+					'select' => 'queue_id, member_id, reference_id',
+				));
+				if($invite != null && $invite->member_id == 0) {
+					$invite->member_id = $this->user_id;
+					if($this->referenceId != '')
+						$invite->reference_id = $this->referenceId;
+					$invite->update();
+				}				
 			}
 			
 			// this user ommu (administrator)
