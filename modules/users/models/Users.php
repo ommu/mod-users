@@ -357,6 +357,52 @@ class Users extends CActiveRecord
 	}
 
 	/**
+	 * User salt codes
+	 */
+	public static function getUniqueCode() {
+		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		srand((double)microtime()*1000000);
+		$i = 0;
+		$salt = '' ;
+
+		while ($i <= 15) {
+			$num = rand() % 33;
+			$tmp = substr($chars, $num, 2);
+			$salt = $salt . $tmp; 
+			$i++;
+		}
+
+		return $salt;
+	}
+
+	/**
+	 * User generate password
+	 */
+	public static function getGeneratePassword() {
+		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		srand((double)microtime()*1000000);
+		$i = 0;
+		$password = '' ;
+
+		while ($i <= 4) {
+			$num = rand() % 33;
+			$tmp = substr($chars, $num, 2);
+			$password = $password . $tmp; 
+			$i++;
+		}
+
+		return $password;
+	}
+
+	/**
+	 * User Salt
+	 */
+	public static function hashPassword($salt, $password)
+	{
+		return md5($salt.$password);
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {

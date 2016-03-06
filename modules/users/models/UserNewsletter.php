@@ -326,6 +326,7 @@ class UserNewsletter extends CActiveRecord
 	 */
 	protected function beforeSave() {
 		if(parent::beforeSave()) {
+			$this->email = strtolower($this->email);
 			if(!$this->isNewRecord && $this->subscribe == 0) {
 				$this->unsubscribe_ip = $_SERVER['REMOTE_ADDR'];
 			}
