@@ -47,6 +47,12 @@ plugin_menu		:
 			- urlTitle: Login
 				urlRules: {siteType: 0,1, userLevel: 1}
 				urlPath: {url: o/history/login, attr: -, icon: -}
+			- urlTitle: Change Password
+				urlRules: {siteType: 1, userLevel: 1}
+				urlPath: {url: o/history/password, attr: -, icon: -}
+			- urlTitle: Forgot Password
+				urlRules: {siteType: 1, userLevel: 1}
+				urlPath: {url: o/history/forgot, attr: -, icon: -}
 			- urlTitle: Subscribes
 				urlRules: {siteType: 1, userLevel: 1}
 				urlPath: {url: o/history/subscribe, attr: -, icon: -}
