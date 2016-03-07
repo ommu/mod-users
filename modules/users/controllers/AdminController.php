@@ -96,8 +96,14 @@ class AdminController extends /*SBaseController*/ Controller
 			$this->redirect(Yii::app()->createUrl('admin/index'));
 
 		} else {				
-			$model=new LoginFormOauth;
-
+			if(isset($_GET['oauth'])) {
+				$model=new LoginFormOauth;
+				$modelForm = 'LoginFormOauth';
+			} else {
+				$model=new LoginFormAdmin;
+				$modelForm = 'LoginFormAdmin';				
+			}
+			
 			// if it is ajax validation request
 			if(isset($_POST['ajax']) && $_POST['ajax']==='login-form') {
 				echo CActiveForm::validate($model);
@@ -105,9 +111,9 @@ class AdminController extends /*SBaseController*/ Controller
 			}
 
 			// collect user input data
-			if(isset($_POST['LoginFormOauth']))
+			if(isset($_POST[$modelForm]))
 			{
-				$model->attributes=$_POST['LoginFormOauth'];
+				$model->attributes=$_POST[$modelForm];
 
 				$jsonError = CActiveForm::validate($model);
 				if(strlen($jsonError) > 2) {

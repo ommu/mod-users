@@ -17,6 +17,7 @@ mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\Verify
 -------
 models
 =======
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\LoginFormAdmin.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\LoginFormAdmin.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\LoginFormOauth.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\LoginFormOauth.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserForgot.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserForgot.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserHistoryForgot.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserHistoryForgot.php"
