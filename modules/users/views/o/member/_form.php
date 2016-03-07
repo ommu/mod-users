@@ -43,19 +43,29 @@
 		</div>
 
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'email'); ?>
-			<div class="desc">
-				<?php echo $form->textField($model,'email',array('maxlength'=>32,'class'=>'span-7')); ?>
-				<?php echo $form->error($model,'email'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
-			</div>
-		</div>
-
-		<div class="clearfix">
 			<?php echo $form->labelEx($model,'displayname'); ?>
 			<div class="desc">
 				<?php echo $form->textField($model,'displayname',array('maxlength'=>64,'class'=>'span-7')); ?>
 				<?php echo $form->error($model,'displayname'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+		</div>
+
+		<?php if($setting->signup_username == 1) {?>
+		<div class="clearfix">
+			<label><?php echo $model->getAttributeLabel('username')?> <span class="required">*</span></label>
+			<div class="desc">
+				<?php echo $form->textField($model,'username',array('maxlength'=>32,'class'=>'span-7')); ?>
+				<?php echo $form->error($model,'username'); ?>
+			</div>
+		</div>
+		<?php }?>
+
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'email'); ?>
+			<div class="desc">
+				<?php echo $form->textField($model,'email',array('maxlength'=>32,'class'=>'span-7')); ?>
+				<?php echo $form->error($model,'email'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
@@ -68,7 +78,26 @@
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
+		
+		<?php if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {?>
+		<div class="clearfix">
+			<label><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
+			<div class="desc">
+				<?php echo $form->passwordField($model,'newPassword',array('maxlength'=>32,'class'=>'span-7')); ?>
+				<?php echo $form->error($model,'newPassword'); ?>
+			</div>
+		</div>
 
+		<div class="clearfix">
+			<label><?php echo $model->getAttributeLabel('confirmPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
+			<div class="desc">
+				<?php echo $form->passwordField($model,'confirmPassword',array('maxlength'=>32,'class'=>'span-7')); ?>
+				<?php echo $form->error($model,'confirmPassword'); ?>
+			</div>
+		</div>
+		<?php }?>
+
+		<?php if(($model->isNewRecord && $setting->signup_approve == 1) || !$model->isNewRecord) {?>
 		<div class="clearfix publish">
 			<?php echo $form->labelEx($model,'enabled'); ?>
 			<div class="desc">
@@ -78,7 +107,9 @@
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
+		<?php }?>
 
+		<?php if(($model->isNewRecord && $setting->signup_verifyemail == 1) || !$model->isNewRecord) {?>
 		<div class="clearfix publish">
 			<?php echo $form->labelEx($model,'verified'); ?>
 			<div class="desc">
@@ -88,6 +119,7 @@
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
+		<?php }?>
 
 	</fieldset>
 </div>

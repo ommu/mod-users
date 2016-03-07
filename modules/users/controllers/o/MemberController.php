@@ -167,16 +167,72 @@ class MemberController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionEdit($id) 
+	public function actionAdd() 
 	{
-		$model=$this->loadModel($id);
+		$model=new Users;
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_random',
+		));
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 
 		if(isset($_POST['Users'])) {
 			$model->attributes=$_POST['Users'];
-			$model->scenario = 'edit';
+			$model->scenario = 'formAdd';
+			
+			$jsonError = CActiveForm::validate($model);
+			if(strlen($jsonError) > 2) {
+				echo $jsonError;
+
+			} else {
+				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+					if($model->save()) {
+						echo CJSON::encode(array(
+							'type' => 5,
+							'get' => Yii::app()->controller->createUrl('manage'),
+							'id' => 'partial-users',
+							'msg' => '<div class="errorSummary success"><strong>Users success created.</strong></div>',
+						));
+					} else {
+						print_r($model->getErrors());
+					}
+				}
+			}
+			Yii::app()->end();			
+		}
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = 'Create Users';
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_add',array(
+			'model'=>$model,
+			'setting'=>$setting,
+		));
+	}
+
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionEdit($id) 
+	{
+		$model=$this->loadModel($id);
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_random',
+		));
+
+		// Uncomment the following line if AJAX validation is needed
+		$this->performAjaxValidation($model);
+
+		if(isset($_POST['Users'])) {
+			$model->attributes=$_POST['Users'];
+			$model->scenario = 'formEdit';
 			
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
@@ -208,6 +264,7 @@ class MemberController extends Controller
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
 			'model'=>$model,
+			'setting'=>$setting,
 		));
 	}
 	
@@ -218,6 +275,10 @@ class MemberController extends Controller
 	public function actionView($id) 
 	{
 		$model=$this->loadModel($id);
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
 
 		$this->pageTitle = 'View Users';
 		$this->pageDescription = '';

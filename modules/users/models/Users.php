@@ -22,11 +22,13 @@
  *
  * The followings are the available columns in table 'ommu_user_oauth':
  * @property string $user_id
- * @property string $source_id
  * @property integer $level_id
  * @property integer $profile_id
  * @property integer $language_id
+ * @property string $salt
+ * @property string $password
  * @property string $email
+ * @property string $username
  * @property string $displayname
  * @property string $photos
  * @property integer $enabled
@@ -48,6 +50,12 @@
 class Users extends CActiveRecord
 {
 	public $defaultColumns = array();
+
+	public $oldPassword;
+	public $newPassword;
+	public $confirmPassword;
+	public $inviteCode;
+	public $referenceId;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -77,16 +85,28 @@ class Users extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('email, displayname', 'required'),
-			array('level_id, profile_id, language_id, enabled, verified, locale_id, timezone_id', 'required', 'on'=>'edit'),
+			array('level_id, profile_id, language_id, enabled, verified, locale_id, timezone_id', 'required', 'on'=>'formEdit'),
+			array('
+				oldPassword', 'required', 'on'=>'formChangePassword'),
+			array('
+				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetpassword'),
 			array('level_id, profile_id, language_id, enabled, verified, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
-			array('source_id, modified_id', 'length', 'max'=>11),
-			array('email', 'length', 'max'=>32),
-			array('displayname', 'length', 'max'=>64),
+			array('modified_id', 'length', 'max'=>11),
+			array('
+				inviteCode', 'length', 'max'=>16),
 			array('creation_ip, lastlogin_ip, update_ip', 'length', 'max'=>20),
-			array('source_id, photos', 'safe'),
+			array('salt, email, password, username, 
+				oldPassword, newPassword, confirmPassword', 'length', 'max'=>32),
+			array('displayname', 'length', 'max'=>64),
+			array('email, username', 'unique'),
+			array('username', 'match', 'pattern' => '/^[a-zA-Z0-9_.-]{0,25}$/', 'message' => Yii::t('other', 'Nama user hanya boleh berisi karakter, angka dan karakter (., -, _)')),
+			array('level_id, password, username, photos,
+				oldPassword, newPassword, confirmPassword, inviteCode, referenceId', 'safe'),
+			array('
+				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama2.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, source_id, level_id, profile_id, language_id, email, displayname, photos, enabled, verified, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
+			array('user_id, level_id, profile_id, language_id, salt, password, email, username, displayname, photos, enabled, verified, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -109,11 +129,13 @@ class Users extends CActiveRecord
 	{
 		return array(
 			'user_id' => 'User',
-			'source_id' => 'Source',
 			'level_id' => 'Level',
 			'profile_id' => 'Profile',
 			'language_id' => 'Language',
+			'salt' => 'Salt',
+			'password' => 'Password',
 			'email' => 'Email',
+			'username' => 'Username',
 			'displayname' => 'Displayname',
 			'photos' => 'Photos',
 			'enabled' => 'Enabled',
@@ -128,6 +150,9 @@ class Users extends CActiveRecord
 			'update_ip' => 'Update Ip',
 			'locale_id' => 'Locale',
 			'timezone_id' => 'Timezone',
+			'newPassword' => 'Password',
+			'confirmPassword' => 'Confirm Password',
+			'inviteCode' => 'Invite Code',
 		);
 	}
 
@@ -157,14 +182,16 @@ class Users extends CActiveRecord
 		} else if($controller == 'o/admin') {
 			$criteria->compare('t.level_id',1);
 		}
-		$criteria->compare('t.source_id',strtolower($this->source_id),true);
 		if(isset($_GET['level']))
 			$criteria->compare('t.level_id',$_GET['level']);
 		else
 			$criteria->compare('t.level_id',$this->level_id);
 		$criteria->compare('t.profile_id',$this->profile_id);
 		$criteria->compare('t.language_id',$this->language_id);
+		$criteria->compare('t.salt',$this->salt,true);
+		$criteria->compare('t.password',$this->password,true);
 		$criteria->compare('t.email',strtolower($this->email),true);
+		$criteria->compare('t.username',strtolower($this->username),true);
 		$criteria->compare('t.displayname',strtolower($this->displayname),true);
 		$criteria->compare('t.photos',strtolower($this->photos),true);
 		$criteria->compare('t.enabled',$this->enabled);
@@ -217,11 +244,13 @@ class Users extends CActiveRecord
 			}
 		} else {
 			//$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'source_id';
 			$this->defaultColumns[] = 'level_id';
 			$this->defaultColumns[] = 'profile_id';
 			$this->defaultColumns[] = 'language_id';
+			$this->defaultColumns[] = 'salt';
+			$this->defaultColumns[] = 'password';
 			$this->defaultColumns[] = 'email';
+			$this->defaultColumns[] = 'username';
 			$this->defaultColumns[] = 'displayname';
 			$this->defaultColumns[] = 'photos';
 			$this->defaultColumns[] = 'enabled';
@@ -405,34 +434,139 @@ class Users extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
-		if(parent::beforeValidate()) {
-			$controller = strtolower(Yii::app()->controller->id);
-			$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
-			
+	protected function beforeValidate() 
+	{
+		$controller = strtolower(Yii::app()->controller->id);
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		
+		if(parent::beforeValidate()) {			
 			if($this->isNewRecord) {
 				$setting = OmmuSettings::model()->findByPk(1, array(
-					'select' => 'signup_approve, signup_verifyemail',
+					'select' => 'site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
 				));
 				
-				$this->level_id = UserLevel::getDefault();
 				$this->profile_id = 1;
-				$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
-				$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
+				$this->salt = self::getUniqueCode();
+				
+				if(in_array($controller, array('o/admin','o/member'))) {
+					// Auto Approve Users
+					if($setting->signup_approve == 1)
+						$this->enabled = 1;
+				
+					// Auto Verified Email User
+					if($setting->signup_verifyemail == 1)
+						$this->verified = 0;
+				
+					// Generate user by admin
+					$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+					
+				} else {
+					$this->level_id = UserLevel::getDefault();
+					$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
+					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
+
+					// Signup by Invite (Admin or User)
+					if($setting->site_type == 1 && $setting->signup_inviteonly != 0) {
+						if($setting->signup_checkemail == 1 && $this->inviteCode == '')
+							$this->addError('inviteCode', 'Invite Code tidak boleh kosong.');
+						
+						if($this->email != '') {
+							$invite = UserInvites::getInvite(strtolower($this->email));
+							
+							if($invite != null) {
+								if($invite->queue->member_id != 0)
+									$this->addError('email', 'Email anda sudah terdaftar sebagai user, silahkan login.');
+									
+								else {
+									if($setting->signup_inviteonly == 1 && $invite->queue->invite == 0)
+										$this->addError('email', 'Maaf invite hanya bisa dilakukan oleh admin');
+									
+									else {
+										if($setting->signup_checkemail == 1) {
+											$code = UserInvites::model()->findByAttributes(array('code' => $this->inviteCode), array(
+												'select' => 'queue_id, user_id, code',
+											));
+											if($code == null)
+												$this->addError('inviteCode', 'Invite Code yang and masukan salah.');
+											else
+												$this->referenceId = $code->user_id;
+										}
+									}
+								}
+							} else
+								$this->addError('email', 'Email anda belum ada dalam daftar invite.');
+							
+						} else {
+							if($setting->signup_checkemail == 1)
+								$this->addError('inviteCode', 'Invite Code yang and masukan salah, silahkan lengkapi input email');
+						}
+					}					
+				}
+
+				// Username required
+				if($setting->signup_username == 1) {
+					if($this->username != '') {
+						$user = self::model()->findByAttributes(array('username' => $this->username));
+						if($user != null) {
+							$this->addError('username', 'Username already in use');
+						}
+					} else {
+						$this->addError('username', 'Username cannot be blank.');
+					}
+				}
+
+				// Random password
+				if($setting->signup_random == 1) {
+					$this->confirmPassword = $this->newPassword = self::getGeneratePassword();
+					$this->verified = 1;
+				}
+				
 				$this->creation_ip = $_SERVER['REMOTE_ADDR'];
 				
 			} else {
+				/**
+				 * Modify Mamber
+				 * = Admin modify member
+				 * = User modify
+				 */
+				 
 				// Admin modify member
 				if(in_array($currentAction, array('o/admin/edit','o/member/edit'))) {
 					$this->modified_date = date('Y-m-d H:i:s');
 					$this->modified_id = Yii::app()->user->id;
 				} else {
-					$this->update_date = date('Y-m-d H:i:s');
+					// Admin change password
+					if(in_array($currentAction, array('o/admin/password'))) {
+						if($this->oldPassword != '') {
+							$user = self::model()->findByPk(Yii::app()->user->id, array(
+								'select' => 'user_id, salt, password',
+							));
+							if($user->password !== self::hashPassword($user->salt, $this->oldPassword)) {
+								$this->addError('oldPassword', 'Old password is incorrect.');
+							}
+						}
+					}
+					if($controller != 'forgot') {
+						$this->update_date = date('Y-m-d H:i:s');
+					}
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
 				}
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * before save attributes
+	 */
+	protected function beforeSave() {
+		if(parent::beforeSave()) {
+			$this->email = strtolower($this->email);
+			$this->username = strtolower($this->username);
+			if($this->newPassword != '')
+				$this->password = self::hashPassword($this->salt, $this->newPassword);
+		}
+		return true;	
 	}
 	
 	/**
@@ -452,6 +586,18 @@ class Users extends CActiveRecord
 			$setting = OmmuSettings::model()->findByPk(1, array(
 				'select' => 'site_type, signup_welcome, signup_adminemail',
 			));
+			
+			if($setting->site_type == 1) {
+				$invite = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
+					'select' => 'queue_id, member_id, reference_id',
+				));
+				if($invite != null && $invite->member_id == 0) {
+					$invite->member_id = $this->user_id;
+					if($this->referenceId != '')
+						$invite->reference_id = $this->referenceId;
+					$invite->update();
+				}
+			}
 				
 			// Send Welcome Email
 			if($setting->signup_welcome == 1) {
