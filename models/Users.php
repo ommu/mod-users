@@ -475,7 +475,6 @@ class Users extends CActiveRecord
 
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-
 				$setting = OmmuSettings::model()->findByPk(1, array(
 					'select' => 'site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
 				));
@@ -504,7 +503,7 @@ class Users extends CActiveRecord
 				} else {
 					$this->level_id = UserLevel::getDefault();
 					$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
-					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;					
+					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
 
 					// Signup by Invite (Admin or User)
 					if($setting->site_type == 1 && $setting->signup_inviteonly != 0) {
@@ -561,6 +560,7 @@ class Users extends CActiveRecord
 					$this->confirmPassword = $this->newPassword = self::getGeneratePassword();
 					$this->verified = 1;
 				}
+				
 				$this->creation_ip = $_SERVER['REMOTE_ADDR'];
 
 			} else {
@@ -663,7 +663,7 @@ class Users extends CActiveRecord
 					if($this->referenceId != '')
 						$invite->reference_id = $this->referenceId;
 					$invite->update();
-				}				
+				}
 			}
 			
 			// this user ommu (administrator)
