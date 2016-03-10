@@ -12,6 +12,11 @@ class AdminAccount extends CWidget
 
 	protected function renderContent() 
 	{
-		$this->render('admin_account');	
+		$model = Users::model()->findByPk(Yii::app()->user->id, array(
+			'select' => 'photos, lastlogin_date',
+		));
+		$this->render('admin_account', array(
+			'model'=>$model,	
+		));	
 	}
 }
