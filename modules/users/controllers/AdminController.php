@@ -101,7 +101,7 @@ class AdminController extends /*SBaseController*/ Controller
 				$modelForm = 'LoginFormOauth';
 			} else {
 				$model=new LoginFormAdmin;
-				$modelForm = 'LoginFormAdmin';				
+				$modelForm = 'LoginFormAdmin';
 			}
 			
 			// if it is ajax validation request

@@ -25,11 +25,6 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('source_id'); ?><br/>
-			<?php echo $form->textField($model,'source_id',array('size'=>11,'maxlength'=>11)); ?>
-		</li>
-
-		<li>
 			<?php echo $model->getAttributeLabel('level_id'); ?><br/>
 			<?php echo $form->textField($model,'level_id'); ?>
 		</li>

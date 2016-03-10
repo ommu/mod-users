@@ -516,7 +516,7 @@ class Users extends CActiveRecord
 				}
 
 				// Random password
-				if($setting->signup_random == 1) {
+				if($setting->signup_random == 1 || $currentAction == 'admin/login') {
 					$this->confirmPassword = $this->newPassword = self::getGeneratePassword();
 					$this->verified = 1;
 				}
@@ -534,6 +534,7 @@ class Users extends CActiveRecord
 				if(in_array($currentAction, array('o/admin/edit','o/member/edit'))) {
 					$this->modified_date = date('Y-m-d H:i:s');
 					$this->modified_id = Yii::app()->user->id;
+					
 				} else {
 					// Admin change password
 					if(in_array($currentAction, array('o/admin/password'))) {
@@ -541,14 +542,12 @@ class Users extends CActiveRecord
 							$user = self::model()->findByPk(Yii::app()->user->id, array(
 								'select' => 'user_id, salt, password',
 							));
-							if($user->password !== self::hashPassword($user->salt, $this->oldPassword)) {
+							if($user->password !== self::hashPassword($user->salt, $this->oldPassword))
 								$this->addError('oldPassword', 'Old password is incorrect.');
-							}
 						}
 					}
-					if($controller != 'forgot') {
+					if($controller != 'forgot')
 						$this->update_date = date('Y-m-d H:i:s');
-					}
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
 				}
 			}
@@ -600,26 +599,25 @@ class Users extends CActiveRecord
 			}
 				
 			// Send Welcome Email
-			if($setting->signup_welcome == 1) {
+			if($setting->signup_welcome == 1)
 				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Welcome', 'Selamat bergabung dengan Nirwasita Hijab and Dress Corner', 1);
-			}
 
 			// Send Account Information
-			if($this->enabled == 1) {
-				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Account Information', 'your account information', 1);
-			}
+			if($this->enabled == 1)
+				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Account Information '.$this->newPassword, 'your account information', 1);
 
 			// Send New Account to Email Administrator
-			if($setting->signup_adminemail == 1) {
+			if($setting->signup_adminemail == 1)
 				SupportMailSetting::sendEmail($this->email, $this->displayname, 'New Member', 'informasi member terbaru', 0);
-			}
 			
 		} else {
 			// Send Account Information
 			if($this->enabled == 1) {
-				if($controller == 'verify') {
-					SupportMailSetting::sendEmail($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success', 1);					
-				}
+				if($controller == 'forgot')
+					SupportMailSetting::sendEmail($this->email, $this->displayname, 'New Account Information', 'this new your account information', 1);
+				
+				if($controller == 'verify')
+					SupportMailSetting::sendEmail($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success', 1);	
 			}
 			
 		}	
