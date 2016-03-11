@@ -619,7 +619,6 @@ class Users extends CActiveRecord
 				if($controller == 'verify')
 					SupportMailSetting::sendEmail($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success', 1);	
 			}
-			
 		}	
 	}
 
