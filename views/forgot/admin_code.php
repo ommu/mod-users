@@ -62,7 +62,7 @@ if($render == 1) {
 
 				<div class="submit clearfix">
 					<div class="desc">
-						<?php echo CHtml::submitButton($model->isNewRecord ? Phrase::trans(1,0) : Phrase::trans(2,0) ,array('onclick' => 'setEnableSave()', 'class'=>'blue-button')); ?>
+						<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()', 'class'=>'blue-button')); ?>
 					</div>
 				</div>
 			</div>
