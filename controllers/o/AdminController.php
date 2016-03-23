@@ -336,10 +336,10 @@ class AdminController extends /*SBaseController*/ Controller
 	{
 		$model=$this->loadModel($id);
 		if($model->enabled == 1) {
-			$title = Phrase::trans(284,0);
+			$title = Yii::t('phrase', 'Disabled');
 			$replace = 0;
 		} else {
-			$title = Phrase::trans(283,0);
+			$title = Yii::t('phrase', 'Enabled');
 			$replace = 1;
 		}
 
@@ -383,10 +383,10 @@ class AdminController extends /*SBaseController*/ Controller
 	{
 		$model=$this->loadModel($id);
 		if($model->verified == 1) {
-			$title = Phrase::trans(304,0);
+			$title = Yii::t('phrase', 'Unverified');
 			$replace = 0;
 		} else {
-			$title = Phrase::trans(303,0);
+			$title = Yii::t('phrase', 'Verified');
 			$replace = 1;
 		}
 

@@ -114,10 +114,10 @@ class NewsletterController extends Controller
 		$id = $_GET['id'];
 		$model=$this->loadModel($id);
 		if($model->subscribe == 1) {
-			$title = Phrase::trans(309,0);
+			$title = Yii::t('phrase', 'Unsubcribe');
 			$replace = 0;
 		} else {
-			$title = Phrase::trans(310,0);
+			$title = Yii::t('phrase', 'Subcribe');
 			$replace = 1;
 		}
 

@@ -21,7 +21,7 @@ if(isset($_GET['name']) && isset($_GET['email'])) {?>
 	<div class="users-forgot">
 		<div><?php echo $desc;?></div>
 		<?php if(isset($_GET['type']) && $_GET['type'] == 'success') {
-			echo '<a class="button blue-button" href="'.Yii::app()->createUrl('site/login').'" title="'.Phrase::trans(411,0).'">'.Phrase::trans(411,0).'</a>';
+			echo '<a class="button blue-button" href="'.Yii::app()->createUrl('site/login').'" title="'.Yii::t('phrase', 'Login').'">'.Yii::t('phrase', 'Login').'</a>';
 		}?>
 	</div>	
 

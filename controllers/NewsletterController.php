@@ -140,7 +140,7 @@ class NewsletterController extends Controller
 		} else {
 			$launch = 1;
 			$this->dialogFixedClosed=array(
-				Phrase::trans(596,0)=>Yii::app()->createUrl('users/signup/index'),
+				Yii::t('phrase', 'Create Your Account')=>Yii::app()->createUrl('users/signup/index'),
 			);
 			$title = (isset($_GET['name']) && isset($_GET['email'])) ? Phrase::trans(23108,1) : Phrase::trans(23106,1);
 			$desc = (isset($_GET['name']) && isset($_GET['email'])) ? '' : Phrase::trans(23107,1);

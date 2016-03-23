@@ -145,7 +145,7 @@ class UserLevel extends CActiveRecord
 			'photo_width' => Phrase::trans(16138,1),
 			'photo_height' => Phrase::trans(16139,1),
 			'photo_exts' => Phrase::trans(16140,1),
-			'creation_date' => Phrase::trans(365,0),
+			'creation_date' => 'Creation Date',
 			'creation_id' => 'Creation',
 			'modified_date' => 'Modified Date',
 			'modified_id' => 'Modified',

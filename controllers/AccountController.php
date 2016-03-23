@@ -157,15 +157,15 @@ class AccountController extends /*SBaseController*/ Controller
 			$this->dialogFixed = true;
 			if(!isset($_GET['email'])) {
 				$this->dialogFixedClosed=array(
-					Phrase::trans(596,0)=>Yii::app()->createUrl('users/signup/index'),
+					Yii::t('phrase', 'Create Your Account')=>Yii::app()->createUrl('users/signup/index'),
 				);
 			} else {
 				$this->dialogFixedClosed=array(
-					Phrase::trans(597,0)=>Yii::app()->createUrl('users/forgot/get'),
+					Yii::t('phrase', 'Forgot your password')=>Yii::app()->createUrl('users/forgot/get'),
 				);
 			}		
 			
-			$this->pageTitle = Phrase::trans(411,0);
+			$this->pageTitle = Yii::t('phrase', 'Login');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('front_login',array(
