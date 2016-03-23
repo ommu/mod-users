@@ -18,7 +18,7 @@
 	);
 
 if($render == 1) {
-	echo '<a class="button" href="'.Yii::app()->createUrl('users/forgot/get').'" title="'.Phrase::trans(597,0).'">'.Phrase::trans(597,0).'</a>';
+	echo '<a class="button" href="'.Yii::app()->createUrl('users/forgot/get').'" title="'.Yii::t('phrase', 'Forgot your password').'">'.Yii::t('phrase', 'Forgot your password').'</a>';
 	
 } else if($render == 2) {?>
 	<?php $form=$this->beginWidget('application.components.system.OActiveForm', array(

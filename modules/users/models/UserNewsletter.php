@@ -255,7 +255,7 @@ class UserNewsletter extends CActiveRecord
 				),
 			);
 			$this->defaultColumns[] = array(
-				'header' => Phrase::trans(313,0),
+				'header' => Yii::t('phrase', 'Status'),
 				'name' => 'subscribe',
 				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("unsubscribe",array("id"=>$data->id, "type"=>"admin")), $data->subscribe, 8)',
 				'htmlOptions' => array(

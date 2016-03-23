@@ -150,7 +150,7 @@ class AdminController extends /*SBaseController*/ Controller
 			$this->dialogDetail = true;
 			$this->dialogWidth = 600;
 			
-			$this->pageTitle = Phrase::trans(411,0);
+			$this->pageTitle = Yii::t('phrase', 'Email Setting');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_login',array(

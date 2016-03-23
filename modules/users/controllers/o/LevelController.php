@@ -295,7 +295,7 @@ class LevelController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Phrase::trans(156,0);
+			$this->pageTitle = Yii::t('phrase', 'Default');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_default',array(
