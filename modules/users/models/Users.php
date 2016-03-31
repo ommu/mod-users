@@ -98,12 +98,14 @@ class Users extends CActiveRecord
 			array('salt, email, password, username, 
 				oldPassword, newPassword, confirmPassword', 'length', 'max'=>32),
 			array('displayname', 'length', 'max'=>64),
-			array('email, username', 'unique'),
-			array('username', 'match', 'pattern' => '/^[a-zA-Z0-9_.-]{0,25}$/', 'message' => Yii::t('other', 'Nama user hanya boleh berisi karakter, angka dan karakter (., -, _)')),
 			array('level_id, password, username, photos,
 				oldPassword, newPassword, confirmPassword, inviteCode, referenceId', 'safe'),
+			array('oldPassword','filter','filter'=>array($this,'validatePassword')),
+			array('email', 'email'),
+			array('email, username', 'unique'),
+			array('username', 'match', 'pattern' => '/^[a-zA-Z0-9_.-]{0,25}$/', 'message' => Yii::t('other', 'Nama user hanya boleh berisi karakter, angka dan karakter (., -, _)')),
 			array('
-				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama2.'),
+				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('user_id, level_id, profile_id, language_id, salt, password, email, username, displayname, photos, enabled, verified, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
@@ -432,6 +434,20 @@ class Users extends CActiveRecord
 	}
 
 	/**
+	 * User Salt
+	 */
+	public function validatePassword($password)
+	{
+		if($password != '') {
+			$user = self::model()->findByPk($this->user_id, array(
+				'select' => 'user_id, salt, password',
+			));
+			if($user->password !== self::hashPassword($user->salt, $password))
+				$this->addError('oldPassword', 'Old password is incorrect.');
+		}
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() 
@@ -536,16 +552,6 @@ class Users extends CActiveRecord
 					$this->modified_id = Yii::app()->user->id;
 					
 				} else {
-					// Admin change password
-					if(in_array($currentAction, array('o/admin/password'))) {
-						if($this->oldPassword != '') {
-							$user = self::model()->findByPk(Yii::app()->user->id, array(
-								'select' => 'user_id, salt, password',
-							));
-							if($user->password !== self::hashPassword($user->salt, $this->oldPassword))
-								$this->addError('oldPassword', 'Old password is incorrect.');
-						}
-					}
 					if($controller != 'forgot')
 						$this->update_date = date('Y-m-d H:i:s');
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
