@@ -23,6 +23,7 @@
  * @property string $user_id
  * @property string $level_name
  * @property string $token_key
+ * @property string $token_password
  * @property string $token_oauth
  * @property string $photos
  */
@@ -66,12 +67,12 @@ class ViewUsers extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('user_id', 'length', 'max'=>11),
-			array('token_key, token_oauth', 'length', 'max'=>32),
+			array('token_key, token_password, token_oauth', 'length', 'max'=>32),
 			array('photos', 'length', 'max'=>21),
 			array('level_name', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, level_name, token_key, token_oauth, photos', 'safe', 'on'=>'search'),
+			array('user_id, level_name, token_key, token_password, token_oauth, photos', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -96,6 +97,7 @@ class ViewUsers extends CActiveRecord
 			'user_id' => 'User',
 			'level_name' => 'Level Name',
 			'token_key' => 'Token Key',
+			'token_password' => 'Token Password',
 			'token_oauth' => 'Token Oauth',
 			'photos' => 'Photos',
 		);
@@ -121,6 +123,7 @@ class ViewUsers extends CActiveRecord
 		$criteria->compare('t.user_id',$this->user_id);
 		$criteria->compare('t.level_name',strtolower($this->level_name),true);
 		$criteria->compare('t.token_key',strtolower($this->token_key),true);
+		$criteria->compare('t.token_password',strtolower($this->token_password),true);
 		$criteria->compare('t.token_oauth',strtolower($this->token_oauth),true);
 		$criteria->compare('t.photos',strtolower($this->photos),true);
 
@@ -156,6 +159,7 @@ class ViewUsers extends CActiveRecord
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'level_name';
 			$this->defaultColumns[] = 'token_key';
+			$this->defaultColumns[] = 'token_password';
 			$this->defaultColumns[] = 'token_oauth';
 			$this->defaultColumns[] = 'photos';
 		}
@@ -175,6 +179,7 @@ class ViewUsers extends CActiveRecord
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'level_name';
 			$this->defaultColumns[] = 'token_key';
+			$this->defaultColumns[] = 'token_password';
 			$this->defaultColumns[] = 'token_oauth';
 			$this->defaultColumns[] = 'photos';
 		}
