@@ -121,6 +121,7 @@ class Users extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'level_TO' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
+			'view' => array(self::BELONGS_TO, 'ViewUsers', 'user_id'),
 		);
 	}
 
