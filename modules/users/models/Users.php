@@ -434,7 +434,7 @@ class Users extends CActiveRecord
 	}
 
 	/**
-	 * User Salt
+	 * get Current Password
 	 */
 	public function validatePassword($password)
 	{
@@ -444,6 +444,10 @@ class Users extends CActiveRecord
 			));
 			if($user->password !== self::hashPassword($user->salt, $password))
 				$this->addError('oldPassword', 'Old password is incorrect.');
+			else {
+				if($this->newPassword == $this->confirmPassword && $this->newPassword == $password)
+					$this->addError('newPassword', 'New Password tidak boleh sama dengan Password sebelumnya.');
+			}
 		}
 	}
 

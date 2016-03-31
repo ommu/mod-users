@@ -85,14 +85,15 @@ class MemberController extends Controller
 	public function actionChangePassword() 
 	{
 		if(Yii::app()->request->isPostRequest) {
-			$user = trim($_POST['user']);
+			$token = trim($_POST['token']);
 			$password = trim($_POST['password']);
 			$newpassword = trim($_POST['newpassword']);
 			$confirmpassword = trim($_POST['confirmpassword']);
 			
-			$model = Users::model()->findByPk(array('user_id' => $user));
-			$model->scenario = 'formChangePassword';
-			if($model != null) {
+			$user = ViewUsers::model()->findByAttributes(array('token_password' => $token));
+			if($user != null) {
+				$model = Users::model()->findByPk(array('user_id' => $user->user_id));
+				$model->scenario = 'formChangePassword';
 				$model->oldPassword = $password;	
 				$model->newPassword = $newpassword;
 				$model->confirmPassword = $confirmpassword;
