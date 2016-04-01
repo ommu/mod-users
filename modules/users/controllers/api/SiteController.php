@@ -107,6 +107,7 @@ class SiteController extends Controller
 					$return['success'] = '1';
 					$return['message'] = 'success';
 					$return['token'] = $record->view->token_password;
+					$return['oauth'] = $record->view->token_oauth;
 					$return['email'] = $record->email;
 					$return['displayname'] = $record->displayname;
 					$return['lastlogin_date'] = $logindate;	

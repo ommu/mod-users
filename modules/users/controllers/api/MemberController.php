@@ -10,6 +10,8 @@
  * TOC :
  *	Index
  *	ChangePassword
+ *	CheckPassword
+ *	CheckOauth
  *
  *	LoadModel
  *	performAjaxValidation
@@ -52,7 +54,7 @@ class MemberController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','changepassword'),
+				'actions'=>array('index','changepassword','checkpassword','checkoauth'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -115,6 +117,50 @@ class MemberController extends Controller
 				$return['success'] = '0';
 				$return['error'] = 'NULL';
 				$return['message'] = 'error, user tidak ditemukan';
+			}
+			echo CJSON::encode($return);
+			
+		} else
+			$this->redirect(Yii::app()->createUrl('site/index'));
+	}
+	
+	/**
+	 * Lists all models.
+	 */
+	public function actionCheckPassword() 
+	{
+		if(Yii::app()->request->isPostRequest) {
+			$token = trim($_POST['token']);			
+			$model = ViewUsers::model()->findByAttributes(array('token_password' => $token));
+			
+			if($model != null) {
+				$return['success'] = '1';
+				$return['error'] = 'NOTNULL';		
+			} else {
+				$return['success'] = '0';
+				$return['error'] = 'NULL';
+			}
+			echo CJSON::encode($return);
+			
+		} else
+			$this->redirect(Yii::app()->createUrl('site/index'));
+	}
+	
+	/**
+	 * Lists all models.
+	 */
+	public function actionCheckOauth() 
+	{
+		if(Yii::app()->request->isPostRequest) {
+			$token = trim($_POST['token']);			
+			$model = ViewUsers::model()->findByAttributes(array('token_oauth' => $token));
+			
+			if($model != null) {
+				$return['success'] = '1';
+				$return['error'] = 'NOTNULL';		
+			} else {
+				$return['success'] = '0';
+				$return['error'] = 'NULL';
 			}
 			echo CJSON::encode($return);
 			
