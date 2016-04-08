@@ -10,6 +10,7 @@ mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\components" "D:\ht
 -------
 controllers
 =======
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\DeviceController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\DeviceController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\InviteController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\InviteController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\NewsletterController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\NewsletterController.php"
 
@@ -23,6 +24,7 @@ models
 =======
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\LoginFormAdmin.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\LoginFormAdmin.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\LoginFormOauth.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\LoginFormOauth.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserDevice.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserDevice.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserForgot.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserForgot.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserHistoryForgot.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserHistoryForgot.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserHistoryLogin.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserHistoryLogin.php"
@@ -36,6 +38,7 @@ mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\UserVerify.
 -------
 views
 =======
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\o\device" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\device"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\o\invite" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\invite"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\views\o\newsletter" "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\newsletter"
 
