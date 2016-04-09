@@ -40,6 +40,10 @@ plugin_menu		:
 		urlRules: {siteType: 1, userLevel: 1,2}
 		urlPath: {url: o/invite/manage, attr: -, icon: -}
 		
+	- urlTitle: Device
+		urlRules: {siteType: 1, userLevel: 1,2}
+		urlPath: {url: o/device/manage, attr: -, icon: -}
+		
 	- urlTitle: History
 		urlRules: {siteType: 0,1, userLevel: 1}
 		urlPath: {url: -, attr: -, icon: -}
