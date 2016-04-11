@@ -46,11 +46,6 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('creation_id'); ?><br/>
-			<?php echo $form->textField($model,'creation_id',array('size'=>11,'maxlength'=>11)); ?>
-		</li>
-
-		<li>
 			<?php echo $model->getAttributeLabel('modified_date'); ?><br/>
 			<?php echo $form->textField($model,'modified_date'); ?>
 		</li>
