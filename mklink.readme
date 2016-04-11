@@ -20,6 +20,12 @@ mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\Newsle
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\VerifyController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\VerifyController.php"
 
 -------
+api
+=======
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\api\DeviceController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\api\DeviceController.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\api\MemberController.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\api\MemberController.php"
+
+-------
 models
 =======
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\models\LoginFormAdmin.php" "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\LoginFormAdmin.php"
