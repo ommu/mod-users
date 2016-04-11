@@ -28,7 +28,6 @@
  * @property string $user_id
  * @property string $android_id
  * @property string $creation_date
- * @property string $creation_id
  * @property string $modified_date
  * @property string $modified_id
  */
@@ -38,7 +37,6 @@ class UserDevice extends CActiveRecord
 	
 	// Variable Search
 	public $user_search;
-	public $creation_search;
 	public $modified_search;
 
 	/**
@@ -68,14 +66,14 @@ class UserDevice extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, android_id', 'required'),
+			array('android_id', 'required'),
 			array('publish', 'numerical', 'integerOnly'=>true),
-			array('user_id, creation_id, modified_id', 'length', 'max'=>11),
-			array('modified_date', 'safe'),
+			array('user_id, modified_id', 'length', 'max'=>11),
+			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, publish, user_id, android_id, creation_date, creation_id, modified_date, modified_id,
-				user_search, creation_search, modified_search', 'safe', 'on'=>'search'),
+			array('id, publish, user_id, android_id, creation_date, modified_date, modified_id,
+				user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -88,7 +86,6 @@ class UserDevice extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
@@ -104,11 +101,9 @@ class UserDevice extends CActiveRecord
 			'user_id' => Yii::t('attribute', 'User'),
 			'android_id' => Yii::t('attribute', 'Android'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
-			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'user_search' => Yii::t('attribute', 'User'),
-			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 		/*
@@ -117,7 +112,6 @@ class UserDevice extends CActiveRecord
 			'User' => 'User',
 			'Android' => 'Android',
 			'Creation Date' => 'Creation Date',
-			'Creation' => 'Creation',
 			'Modified Date' => 'Modified Date',
 			'Modified' => 'Modified',
 		
@@ -160,10 +154,6 @@ class UserDevice extends CActiveRecord
 		$criteria->compare('t.android_id',strtolower($this->android_id),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		if(isset($_GET['creation']))
-			$criteria->compare('t.creation_id',$_GET['creation']);
-		else
-			$criteria->compare('t.creation_id',$this->creation_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		if(isset($_GET['modified']))
@@ -177,17 +167,12 @@ class UserDevice extends CActiveRecord
 				'alias'=>'user',
 				'select'=>'displayname'
 			),
-			'creation' => array(
-				'alias'=>'creation',
-				'select'=>'displayname'
-			),
 			'modified' => array(
 				'alias'=>'modified',
 				'select'=>'displayname'
 			),
 		);
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
-		$criteria->compare('creation.displayname',strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['UserDevice_sort']))
@@ -224,7 +209,6 @@ class UserDevice extends CActiveRecord
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'android_id';
 			$this->defaultColumns[] = 'creation_date';
-			$this->defaultColumns[] = 'creation_id';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
 		}
@@ -254,10 +238,6 @@ class UserDevice extends CActiveRecord
 				'value' => '$data->user->displayname',
 			);
 			$this->defaultColumns[] = 'android_id';
-			$this->defaultColumns[] = array(
-				'name' => 'creation_search',
-				'value' => '$data->creation->displayname',
-			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -324,9 +304,6 @@ class UserDevice extends CActiveRecord
 	 */
 	protected function beforeValidate() {
 		if(parent::beforeValidate()) {
-			if($this->isNewRecord && $this->creation_id == '')
-				$this->creation_id = Yii::app()->user->id;			
-			
 			if(!$this->isNewRecord)
 				$this->modified_id = Yii::app()->user->id;
 		}
