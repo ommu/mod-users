@@ -26,7 +26,9 @@ class UsersModule extends CWebModule
 				'invite',
 				'newsletter',
 				'verify',
+				'api/device',
 				'api/member',
+				'api/site',
 			);
 			
 			// pake ini untuk set theme per action di controller..
