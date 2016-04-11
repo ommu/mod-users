@@ -28,6 +28,8 @@
  * @property string $user_id
  * @property string $android_id
  * @property string $creation_date
+ * @property string $generate_date
+ * @property string $unpublish_date
  * @property string $modified_date
  * @property string $modified_id
  */
@@ -72,7 +74,7 @@ class UserDevice extends CActiveRecord
 			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, publish, user_id, android_id, creation_date, modified_date, modified_id,
+			array('id, publish, user_id, android_id, creation_date, generate_date, unpublish_date, modified_date, modified_id,
 				user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -101,6 +103,8 @@ class UserDevice extends CActiveRecord
 			'user_id' => Yii::t('attribute', 'User'),
 			'android_id' => Yii::t('attribute', 'Android'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
+			'generate_date' => Yii::t('attribute', 'Generate Date'),
+			'unpublish_date' => Yii::t('attribute', 'Unpublish Date'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'user_search' => Yii::t('attribute', 'User'),
@@ -112,6 +116,8 @@ class UserDevice extends CActiveRecord
 			'User' => 'User',
 			'Android' => 'Android',
 			'Creation Date' => 'Creation Date',
+			'Generate Date' => 'Generate Date',
+			'Unpublish Date' => 'Unpublish Date',
 			'Modified Date' => 'Modified Date',
 			'Modified' => 'Modified',
 		
@@ -154,6 +160,10 @@ class UserDevice extends CActiveRecord
 		$criteria->compare('t.android_id',strtolower($this->android_id),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		if($this->generate_date != null && !in_array($this->generate_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.generate_date)',date('Y-m-d', strtotime($this->generate_date)));
+		if($this->unpublish_date != null && !in_array($this->unpublish_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.unpublish_date)',date('Y-m-d', strtotime($this->unpublish_date)));
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		if(isset($_GET['modified']))
@@ -209,6 +219,8 @@ class UserDevice extends CActiveRecord
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'android_id';
 			$this->defaultColumns[] = 'creation_date';
+			$this->defaultColumns[] = 'generate_date';
+			$this->defaultColumns[] = 'unpublish_date';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
 		}
@@ -252,6 +264,58 @@ class UserDevice extends CActiveRecord
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'creation_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'generate_date',
+				'value' => 'Utility::dateFormat($data->generate_date)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'generate_date',
+					'language' => 'ja',
+					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'generate_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'unpublish_date',
+				'value' => 'Utility::dateFormat($data->unpublish_date)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'unpublish_date',
+					'language' => 'ja',
+					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'unpublish_date_filter',
 					),
 					'options'=>array(
 						'showOn' => 'focus',
