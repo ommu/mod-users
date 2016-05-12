@@ -94,23 +94,23 @@ class SiteController extends Controller
 			$return = '';
 			if($record === null) {
 				$return['success'] = '0';
-				$return['error'] = 'USER';
+				$return['error'] = 'USER_NULL';
 				$return['message'] = 'error, user tidak ditemukan';
 				
 			} else if($record->password !== Users::hashPassword($record->salt,$password)) {
 				$return['success'] = '0';
-				$return['error'] = 'PASSWORD';
+				$return['error'] = 'USER_WRONG_PASSWORD';
 				$return['message'] = 'error, password salah';
 				
 			} else {
 				if($record->enabled == 1) {
 					$return['success'] = '1';
-					$return['message'] = 'success';
 					$return['token'] = $record->view->token_password;
 					$return['oauth'] = $record->view->token_oauth;
 					$return['email'] = $record->email;
 					$return['displayname'] = $record->displayname;
-					$return['lastlogin_date'] = $logindate;	
+					$return['lastlogin_date'] = $logindate;
+					$return['enabled'] = $record->enabled;
 					$return['verified'] = $record->verified;
 					Users::model()->updateByPk($record->user_id, array(
 						'lastlogin_date'=>$logindate, 
@@ -119,7 +119,7 @@ class SiteController extends Controller
 					
 				} else {
 					$return['success'] = '0';
-					$return['error'] = 'USERBLOCK';
+					$return['error'] = 'USER_BLOCK';
 					$return['message'] = 'error, user tidak bisa digunakan';					
 				}
 			}

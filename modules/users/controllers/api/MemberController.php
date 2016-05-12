@@ -102,9 +102,9 @@ class MemberController extends Controller
 				if($model->save()) {
 					$return['success'] = '1';
 					$return['message'] = 'success';					
-				}
-				else {
+				} else {
 					$return['success'] = '0';
+					$return['error'] = 'USER_PASSWORD_ERROR';
 					$data = array();
 					foreach($model->getErrors() as $key => $val) {
 						foreach($val as $key => $row)
