@@ -94,31 +94,22 @@ class DeviceController extends Controller
 			$criteria->compare('t.android_id',$key);
 			
 			$device = UserDevice::model()->find($criteria);
+			if($token != null && $token != '') {
+				$user = ViewUsers::model()->findByAttributes(array('token_password' => $token), array(
+					'select' => 'user_id',
+				));
+			}
 			if($device == null) {
 				$data=new UserDevice;
+				if(($token != null && $token != '') && $user != null)
+					$data->user_id = $user->user_id;
 				$data->android_id = $key;
-				if($data->save() && ($token != null && $token != '')) {
-					$user = ViewUsers::model()->findByAttributes(array('token_password' => $token), array(
-						'select' => 'user_id',
-					));
-					if($user != null) {
-						if(UserDevice::model()->updateByPk($data->id, array('user_id'=>$user->user_id))) {
-							$return = array(
-								'success'=>'1',
-								'message'=>'success, device berhasil ditambahkan (info member selesai diperbarui)',
-							);
-						} else {
-							$return = array(
-								'success'=>'1',
-								'message'=>'success, device berhasil ditambahkan (info member tidak ada perubahan)',
-							);
-						}
-					} else {
-						$return = array(
-							'success'=>'1',
-							'message'=>'success, device berhasil ditambahkan (member tidak ditemukan)',
-						);							
-					}
+					
+				if($data->save()) {
+					$return = array(
+						'success'=>'1',
+						'message'=>'success, device berhasil ditambahkan',
+					);
 				} else {
 					$return = array(
 						'success'=>'0',
@@ -126,34 +117,17 @@ class DeviceController extends Controller
 					);
 				}
 			} else {
+				$return['success'] = '1';				
 				if($device->user_id == 0 && ($token != null && $token != '')) {
-					$user = ViewUsers::model()->findByAttributes(array('token_password' => $token), array(
-						'select' => 'user_id',
-					));
 					if($user != null) {
-						if(UserDevice::model()->updateByPk($device->id, array('user_id'=>$user->user_id))) {
-							$return = array(
-								'success'=>'1',
-								'message'=>'success, device berhasil ditambahkan (info member selesai diperbarui)',
-							);
-						} else {
-							$return = array(
-								'success'=>'1',
-								'message'=>'success, device tidak terjadi perubahan (info member tidak ada perubahan)',
-							);
-						}
-					} else {
-						$return = array(
-							'success'=>'1',
-							'message'=>'success, device tidak terjadi perubahan (member tidak ditemukan)',
-						);	
-					}
-				} else {
-					$return = array(
-						'success'=>'1',
-						'message'=>'success, device tidak terjadi perubahan',
-					);					
-				}
+						if(UserDevice::model()->updateByPk($device->id, array('user_id'=>$user->user_id)))
+							$return['message'] = 'success, device berhasil ditambahkan (info member selesai diperbarui)';
+						else
+							$return['message'] = 'success, device tidak terjadi perubahan (info member tidak ada perubahan)';
+					} else
+						$return['message'] = 'success, device tidak terjadi perubahan (member tidak ditemukan)';
+				} else
+					$return['message'] = 'success, device tidak terjadi perubahan';
 			}
 			
 			echo CJSON::encode($return);
