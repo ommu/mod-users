@@ -86,12 +86,12 @@ class DeviceController extends Controller
 	{
 		if(Yii::app()->request->isPostRequest) {
 			$token = trim($_POST['token']);
-			$key = trim($_POST['key']);
+			$android_key = trim($_POST['android_key']);
 			
 			$criteria=new CDbCriteria;
 			$criteria->select = array('t.id','t.user_id');
 			$criteria->compare('t.publish',1);
-			$criteria->compare('t.android_id',$key);
+			$criteria->compare('t.android_id',$android_key);
 			
 			$device = UserDevice::model()->find($criteria);
 			if($token != null && $token != '') {
@@ -103,17 +103,17 @@ class DeviceController extends Controller
 				$data=new UserDevice;
 				if(($token != null && $token != '') && $user != null)
 					$data->user_id = $user->user_id;
-				$data->android_id = $key;
+				$data->android_id = $android_key;
 					
 				if($data->save()) {
 					$return = array(
 						'success'=>'1',
-						'message'=>'success, device berhasil ditambahkan',
+						'message'=>Yii::t('phrase', 'success, device berhasil ditambahkan'),
 					);
 				} else {
 					$return = array(
 						'success'=>'0',
-						'message'=>'success, device tidak berhasil ditambahkan',
+						'message'=>Yii::t('phrase', 'success, device tidak berhasil ditambahkan'),
 					);
 				}
 			} else {
@@ -121,13 +121,13 @@ class DeviceController extends Controller
 				if($device->user_id == 0 && ($token != null && $token != '')) {
 					if($user != null) {
 						if(UserDevice::model()->updateByPk($device->id, array('user_id'=>$user->user_id)))
-							$return['message'] = 'success, device berhasil ditambahkan (info member selesai diperbarui)';
+							$return['message'] = Yii::t('phrase', 'success, device berhasil ditambahkan (info member selesai diperbarui)');
 						else
-							$return['message'] = 'success, device tidak terjadi perubahan (info member tidak ada perubahan)';
+							$return['message'] = Yii::t('phrase', 'success, device tidak terjadi perubahan (info member tidak ada perubahan)');
 					} else
-						$return['message'] = 'success, device tidak terjadi perubahan (member tidak ditemukan)';
+						$return['message'] = Yii::t('phrase', 'success, device tidak terjadi perubahan (member tidak ditemukan)');
 				} else
-					$return['message'] = 'success, device tidak terjadi perubahan';
+					$return['message'] = Yii::t('phrase', 'success, device tidak terjadi perubahan');
 			}
 			
 			echo CJSON::encode($return);

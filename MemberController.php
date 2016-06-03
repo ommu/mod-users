@@ -116,7 +116,7 @@ class MemberController extends Controller
 			} else {
 				$return['success'] = '0';
 				$return['error'] = 'NULL';
-				$return['message'] = 'error, user tidak ditemukan';
+				$return['message'] = Yii::t('phrase', 'error, user tidak ditemukan');
 			}
 			echo CJSON::encode($return);
 			

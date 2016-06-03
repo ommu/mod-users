@@ -95,12 +95,12 @@ class SiteController extends Controller
 			if($record === null) {
 				$return['success'] = '0';
 				$return['error'] = 'USER_NULL';
-				$return['message'] = 'error, user tidak ditemukan';
+				$return['message'] = Yii::t('phrase', 'error, user tidak ditemukan');
 				
 			} else if($record->password !== Users::hashPassword($record->salt,$password)) {
 				$return['success'] = '0';
 				$return['error'] = 'USER_WRONG_PASSWORD';
-				$return['message'] = 'error, password salah';
+				$return['message'] = Yii::t('phrase', 'error, password salah');
 				
 			} else {
 				if($record->enabled == 1) {
@@ -120,7 +120,7 @@ class SiteController extends Controller
 				} else {
 					$return['success'] = '0';
 					$return['error'] = 'USER_BLOCK';
-					$return['message'] = 'error, user tidak bisa digunakan';					
+					$return['message'] = Yii::t('phrase', 'error, user tidak bisa digunakan');					
 				}
 			}
 			echo CJSON::encode($return);
