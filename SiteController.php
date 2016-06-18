@@ -23,7 +23,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class SiteController extends Controller
+class SiteController extends ControllerApi
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -123,7 +123,7 @@ class SiteController extends Controller
 					$return['message'] = Yii::t('phrase', 'error, user tidak bisa digunakan');					
 				}
 			}
-			echo CJSON::encode($return);
+			$this->_sendResponse(200, CJSON::encode($this->renderJson($return)));
 			
 		} else
 			$this->redirect(Yii::app()->createUrl('site/index'));

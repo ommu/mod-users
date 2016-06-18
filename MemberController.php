@@ -25,7 +25,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class MemberController extends Controller
+class MemberController extends ControllerApi
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -118,7 +118,7 @@ class MemberController extends Controller
 				$return['error'] = 'NULL';
 				$return['message'] = Yii::t('phrase', 'error, user tidak ditemukan');
 			}
-			echo CJSON::encode($return);
+			$this->_sendResponse(200, CJSON::encode($this->renderJson($return)));
 			
 		} else
 			$this->redirect(Yii::app()->createUrl('site/index'));
@@ -140,7 +140,7 @@ class MemberController extends Controller
 				$return['success'] = '0';
 				$return['error'] = 'NULL';
 			}
-			echo CJSON::encode($return);
+			$this->_sendResponse(200, CJSON::encode($this->renderJson($return)));
 			
 		} else
 			$this->redirect(Yii::app()->createUrl('site/index'));
@@ -162,7 +162,7 @@ class MemberController extends Controller
 				$return['success'] = '0';
 				$return['error'] = 'NULL';
 			}
-			echo CJSON::encode($return);
+			$this->_sendResponse(200, CJSON::encode($this->renderJson($return)));
 			
 		} else
 			$this->redirect(Yii::app()->createUrl('site/index'));
