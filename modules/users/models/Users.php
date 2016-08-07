@@ -39,6 +39,7 @@
  * @property string $modified_id
  * @property string $lastlogin_date
  * @property string $lastlogin_ip
+ * @property string $lastlogin_from
  * @property string $update_date
  * @property string $update_ip
  * @property integer $locale_id
@@ -108,7 +109,7 @@ class Users extends CActiveRecord
 				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, level_id, profile_id, language_id, salt, password, email, username, displayname, photos, enabled, verified, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
+			array('user_id, level_id, profile_id, language_id, salt, password, email, username, displayname, photos, enabled, verified, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -149,6 +150,7 @@ class Users extends CActiveRecord
 			'modified_id' => 'Modified',
 			'lastlogin_date' => 'Lastlogin Date',
 			'lastlogin_ip' => 'Lastlogin Ip',
+			'lastlogin_from' => 'Last Login From',
 			'update_date' => 'Update Date',
 			'update_ip' => 'Update Ip',
 			'locale_id' => 'Locale',
@@ -211,6 +213,7 @@ class Users extends CActiveRecord
 		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.lastlogin_date)',date('Y-m-d', strtotime($this->lastlogin_date)));
 		$criteria->compare('t.lastlogin_ip',strtolower($this->lastlogin_ip),true);
+		$criteria->compare('t.lastlogin_from',$this->lastlogin_from,true);
 		if($this->update_date != null && !in_array($this->update_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.update_date)',date('Y-m-d', strtotime($this->update_date)));
 		$criteria->compare('t.update_ip',strtolower($this->update_ip),true);
@@ -264,6 +267,7 @@ class Users extends CActiveRecord
 			$this->defaultColumns[] = 'modified_id';
 			$this->defaultColumns[] = 'lastlogin_date';
 			$this->defaultColumns[] = 'lastlogin_ip';
+			$this->defaultColumns[] = 'lastlogin_from';
 			$this->defaultColumns[] = 'update_date';
 			$this->defaultColumns[] = 'update_ip';
 			$this->defaultColumns[] = 'locale_id';
@@ -610,12 +614,32 @@ class Users extends CActiveRecord
 			}
 				
 			// Send Welcome Email
-			if($setting->signup_welcome == 1)
-				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Welcome', 'Selamat bergabung dengan Nirwasita Hijab and Dress Corner', 1);
+			if($setting->signup_welcome == 1) {
+				$welcome_search = array(
+					'{$baseURL}'
+				);
+				$welcome_replace = array(
+					Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl
+				);
+				$welcome_template = 'user_welcome';
+				$welcome_title = 'Welcome';
+				$welcome_message = file_get_contents(YiiBase::getPathOfAlias('webroot.externals.users.template').'/'.$welcome_template.'.php');
+				$welcome_ireplace = str_ireplace($welcome_search, $welcome_replace, $welcome_message);
+				SupportMailSetting::sendEmail($this->email, $this->displayname, $welcome_title, $welcome_ireplace, 1);
+			}
 
 			// Send Account Information
-			if($this->enabled == 1)
-				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Account Information '.$this->newPassword, 'your account information', 1);
+			$account_search = array(
+				'{$baseURL}'
+			);
+			$account_replace = array(
+				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl
+			);
+			$account_template = 'user_account';
+			$account_title = 'Welcome';
+			$account_message = file_get_contents(YiiBase::getPathOfAlias('webroot.externals.users.template').'/'.$account_template.'.php');
+			$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
+			SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace, 1);
 
 			// Send New Account to Email Administrator
 			if($setting->signup_adminemail == 1)
