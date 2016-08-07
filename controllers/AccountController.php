@@ -138,7 +138,7 @@ class AccountController extends /*SBaseController*/ Controller
 								));
 								
 								echo CJSON::encode(array(
-									'redirect' => in_array(Yii::app()->user->level, array(1,2)) ? Yii::app()->createUrl('admin/index') : Yii::app()->user->returnUrl,
+									'redirect' => Yii::app()->user->returnUrl,
 								));
 							} else {
 								print_r($model->getErrors());

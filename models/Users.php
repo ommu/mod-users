@@ -48,6 +48,7 @@
  * @property string $modified_id
  * @property string $lastlogin_date
  * @property string $lastlogin_ip
+ * @property string $lastlogin_from
  * @property string $update_date
  * @property string $update_ip
  * @property integer $locale_id
