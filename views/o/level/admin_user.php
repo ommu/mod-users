@@ -32,57 +32,57 @@
 		</div>
 		<?php //begin.Messages ?>
 
-		<h3><?php echo Phrase::trans(16019,1);?></h3>
+		<h3><?php echo Yii::t('phrase', 'User Settings');?></h3>
 		<fieldset>
 
 			<div class="intro">
-				<?php echo Phrase::trans(16020,1);?>
+				<?php echo Yii::t('phrase', 'This page contains various settings that affect your users\' accounts.');?>
 			</div>
 
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'profile_block'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16059,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'If set to "yes", users can block other users from sending them private messages, requesting their friendship, and viewing their profile. This helps fight spam and network abuse.');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_block', array(
-						1 => Phrase::trans(16060,1),
-						0 => Phrase::trans(16061,1),
+						1 => Yii::t('phrase', 'Yes, users can block other users.'),
+						0 => Yii::t('phrase', 'No, users cannot block other users.'),
 					)); ?>
 					<?php echo $form->error($model,'profile_block'); ?>
 				</div>
 			</div>
 
 			<div class="clearfix">
-				<label><?php echo Phrase::trans(16062,1);?></label>
+				<label><?php echo Yii::t('phrase', 'Privacy Options');?></label>
 				<div class="desc">
-					<p><?php echo Phrase::trans(16063,1);?></p>
-					<span class="desc"><?php echo Phrase::trans(16064,1);?></span>
+					<p><?php echo Yii::t('phrase', 'Search Privacy Options');?></p>
+					<span class="desc"><?php echo Yii::t('phrase', 'If you enable this feature, users will be able to exclude themselves from search results and the lists of users on the homepage (such as Recent Signups). Otherwise, all users will be included in search results.');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_search', array(
-						1 => Phrase::trans(16065,1),
-						0 => Phrase::trans(16066,1),
+						1 => Yii::t('phrase', 'Yes, allow users to exclude themselves from search results. '),
+						0 => Yii::t('phrase', 'No, force all users to be included in search results.  '),
 					)); ?>
 					<?php echo $form->error($model,'profile_search'); ?>
 
-					<p><?php echo Phrase::trans(16067,1);?></p>
-					<span class="desc"><?php echo Phrase::trans(16068,1);?></span>
+					<p><?php echo Yii::t('phrase', 'Profile Privacy Options');?></p>
+					<span class="desc"><?php echo Yii::t('phrase', 'Your users can choose from any of the options checked below when they decide who can see their profile. If you do not check any options, everyone will be allowed to view profiles.');?></span>
 					<?php echo $form->checkBoxList($model, 'profile_privacy', array(
-						1 => Phrase::trans(16071,1),
-						2 => Phrase::trans(16072,1),
-						3 => Phrase::trans(16073,1),
-						4 => Phrase::trans(16074,1),
-						5 => Phrase::trans(16075,1),
-						6 => Phrase::trans(16076,1),
+						1 => Yii::t('phrase', 'Everyone'),
+						2 => Yii::t('phrase', 'All Registered Users'),
+						3 => Yii::t('phrase', 'Only My Friends and Everyone within My Subnetwork'),
+						4 => Yii::t('phrase', 'Only My Friends and Their Friends within My Subnetwork'),
+						5 => Yii::t('phrase', 'Only My Friends'),
+						6 => Yii::t('phrase', 'Only Me'),
 					)); ?>
 					<?php echo $form->error($model,'profile_privacy'); ?>
 
-					<p><?php echo Phrase::trans(16069,1);?></p>
-					<span class="desc"><?php echo Phrase::trans(16070,1);?></span>
+					<p><?php echo Yii::t('phrase', 'Profile Comment Options');?></p>
+					<span class="desc"><?php echo Yii::t('phrase', 'Your users can choose from any of the options checked below when they decide who can post comments on their profile. If you do not check any options, everyone will be allowed to post comments on profiles.');?></span>
 					<?php echo $form->checkBoxList($model, 'profile_comments', array(
-						1 => Phrase::trans(16071,1),
-						2 => Phrase::trans(16072,1),
-						3 => Phrase::trans(16073,1),
-						4 => Phrase::trans(16074,1),
-						5 => Phrase::trans(16075,1),
-						6 => Phrase::trans(16076,1),
+						1 => Yii::t('phrase', 'Everyone'),
+						2 => Yii::t('phrase', 'All Registered Users'),
+						3 => Yii::t('phrase', 'Only My Friends and Everyone within My Subnetwork'),
+						4 => Yii::t('phrase', 'Only My Friends and Their Friends within My Subnetwork'),
+						5 => Yii::t('phrase', 'Only My Friends'),
+						6 => Yii::t('phrase', 'Only Me'),
 					)); ?>
 					<?php echo $form->error($model,'profile_comments'); ?>
 				</div>
@@ -91,22 +91,22 @@
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'photo_allow'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16022,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'If you enable this feature, users can upload a small photo icon of themselves. This will be shown next to their name/username on their profiles, in search/browse results, next to their private messages, etc.');?></span>
 					<?php echo $form->radioButtonList($model, 'photo_allow', array(
-						1 => Phrase::trans(16023,1),
-						0 => Phrase::trans(16024,1),
+						1 => Yii::t('phrase', 'Yes, users can upload a photo.'),
+						0 => Yii::t('phrase', 'No, users can not upload a photo.'),
 					)); ?>
 					<?php echo $form->error($model,'photo_allow'); ?>
 
-					<span class="small-px"><?php echo Phrase::trans(16025,1);?></span>
-					<?php echo Phrase::trans(16026,1);?>&nbsp;<?php echo $form->textField($model,'photo_width'); ?>&nbsp;<?php echo Phrase::trans(16028,1);?><br/>
+					<span class="small-px"><?php echo Yii::t('phrase', 'If you have selected "Yes" above, please input the maximum dimensions for the user photos. If your users upload a photo that is larger than these dimensions, the server will attempt to scale them down automatically. This feature requires that your PHP server is compiled with support for the GD Libraries.');?></span>
+					<?php echo Yii::t('phrase', 'Maximum Width:');?>&nbsp;<?php echo $form->textField($model,'photo_width'); ?>&nbsp;<?php echo Yii::t('phrase', '(in pixels, between 1 and 999)');?><br/>
 					<?php echo $form->error($model,'photo_width'); ?>
 
-					<?php echo Phrase::trans(16027,1);?>&nbsp;<?php echo $form->textField($model,'photo_height'); ?>&nbsp;<?php echo Phrase::trans(16028,1);?><br/>
+					<?php echo Yii::t('phrase', 'Maximum Height:');?>&nbsp;<?php echo $form->textField($model,'photo_height'); ?>&nbsp;<?php echo Yii::t('phrase', '(in pixels, between 1 and 999)');?><br/>
 					<?php echo $form->error($model,'photo_height'); ?>
 
-					<span class="small-px"><?php echo Phrase::trans(16029,1);?></span>
-					<?php echo Phrase::trans(16030,1);?>&nbsp;<?php echo $form->textField($model,'photo_exts',array('maxlength'=>32)); ?><br/>
+					<span class="small-px"><?php echo Yii::t('phrase', 'What file types do you want to allow for user photos (gif, jpg, jpeg, or png)? Separate file types with commas, i.e. jpg, jpeg, gif, png');?></span>
+					<?php echo Yii::t('phrase', 'Allowed File Types:');?>&nbsp;<?php echo $form->textField($model,'photo_exts',array('maxlength'=>32)); ?><br/>
 					<?php echo $form->error($model,'photo_exts'); ?>
 				</div>
 			</div>
@@ -114,17 +114,17 @@
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'profile_style'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16032,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'Enable this feature if you want to allow users to customize the colors and fonts of their profiles with their own CSS styles.');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_style', array(
-						1 => Phrase::trans(16033,1),
-						0 => Phrase::trans(16034,1),
+						1 => Yii::t('phrase', 'Yes, users can add custom CSS styles to their profiles.'),
+						0 => Yii::t('phrase', 'No, users cannot add custom CSS styles to their profiles.'),
 					)); ?>
 					<?php echo $form->error($model,'profile_style'); ?>
 
-					<span class="small-px"><?php echo Phrase::trans(16035,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'Enable this feature if you want your users to choose from existing CSS samples. To add additional samples, simply insert a row into the se_stylesamples database table containing the exact CSS code that should be entered into the Profile Style textarea and, optionally, the path to a thumbnail for the template.');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_style_sample', array(
-						1 => Phrase::trans(16036,1),
-						0 => Phrase::trans(16037,1),
+						1 => Yii::t('phrase', 'Yes, users can choose from the provided sample CSS.'),
+						0 => Yii::t('phrase', 'No, users can not choose from the provided sample CSS.'),
 					)); ?>
 					<?php echo $form->error($model,'profile_style_sample'); ?>
 				</div>
@@ -133,10 +133,10 @@
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'profile_status'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16039,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'Enable this feature if you want to allow users to show their "status" on their profile. By updating their status, users can tell others what they are up to, what\'s on their minds, etc.');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_status', array(
-						1 => Phrase::trans(16040,1),
-						0 => Phrase::trans(16041,1),
+						1 => Yii::t('phrase', 'Yes, allow users to have a "status" message.'),
+						0 => Yii::t('phrase', 'No, users cannot have a "status" message.'),
 					)); ?>
 					<?php echo $form->error($model,'profile_status'); ?>
 				</div>
@@ -145,10 +145,10 @@
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'profile_invisible'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16043,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'Enable this feature if you want to allow users to go "invisible" (not be displayed in the online users list even if they are online).');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_invisible', array(
-						1 => Phrase::trans(16044,1),
-						0 => Phrase::trans(16045,1),
+						1 => Yii::t('phrase', 'Yes, allow users to go invisible.'),
+						0 => Yii::t('phrase', 'No, do not allow users to go invisible.'),
 					)); ?>
 					<?php echo $form->error($model,'profile_invisible'); ?>
 				</div>
@@ -157,10 +157,10 @@
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'profile_views'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16047,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'If you enable this feature, users will be given the option of seeing which users have visited their profile.');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_views', array(
-						1 => Phrase::trans(16048,1),
-						0 => Phrase::trans(16049,1),
+						1 => Yii::t('phrase', 'Yes, allow users to see who has viewed their profile.'),
+						0 => Yii::t('phrase', 'No, do not allow users to see who has viewed their profile.'),
 					)); ?>
 					<?php echo $form->error($model,'profile_views'); ?>
 				</div>
@@ -169,10 +169,10 @@
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'profile_change'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16051,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'Enable this feature if you want to allow your users to be able to change their username. Note that if you have usernames disabled on the General Settings page, this feature is irrelevant.');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_change', array(
-						1 => Phrase::trans(16052,1),
-						0 => Phrase::trans(16053,1),
+						1 => Yii::t('phrase', 'Yes, allow users to change their username.'),
+						0 => Yii::t('phrase', 'No, do not allow users to change their username.'),
 					)); ?>
 					<?php echo $form->error($model,'profile_change'); ?>
 				</div>
@@ -181,10 +181,11 @@
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'profile_delete'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16055,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'Enable this feature if you would like to allow your users to delete their account manually.');?></span>
 					<?php echo $form->radioButtonList($model, 'profile_delete', array(
-						1 => Phrase::trans(16056,1),
-						0 => Phrase::trans(16057,1),
+						1 => Yii::t('phrase', 'Yes, allow users to delete their account.'),
+						0 => Yii::t('phrase', 'No, do not allow users to delete their account.
+'),
 					)); ?>
 					<?php echo $form->error($model,'profile_delete'); ?>
 				</div>

@@ -32,11 +32,11 @@
 		</div>
 		<?php //begin.Messages ?>
 
-		<h3><?php echo Phrase::trans(16013,1);?></h3>
+		<h3><?php echo Yii::t('phrase', 'Level Settings');?></h3>
 		<fieldset>
 
 			<div class="intro">
-				<?php echo Phrase::trans(16016,1);?>
+				<?php echo Yii::t('phrase', 'To modify this user level, complete the following form.');?>
 			</div>
 
 			<div class="clearfix">

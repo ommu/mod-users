@@ -32,30 +32,30 @@
 		</div>
 		<?php //begin.Messages ?>
 
-		<h3><?php echo Phrase::trans(16077,1);?></h3>
+		<h3><?php echo Yii::t('phrase', 'Message Settings');?></h3>
 		<fieldset>
 
 			<div class="intro">
-				<?php echo Phrase::trans(16078,1);?>
+				<?php echo Yii::t('phrase', 'Facilitating user interactivity is the key to developing a successful social network. Allowing private messages between users is an excellent way to increase interactivity. From this page, you can enable the private messaging feature and configure its settings.');?>
 			</div>
 
 			<div class="clearfix">
 				<?php echo $form->labelEx($model,'message_allow'); ?>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16080,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.');?></span>
 					<?php echo $form->radioButtonList($model, 'message_allow', array(
-						2 => Phrase::trans(16083,1),
-						1 => Phrase::trans(16082,1),
-						0 => Phrase::trans(16081,1),
+						2 => Yii::t('phrase', 'Everyone - users can send private messages to anyone.'),
+						1 => Yii::t('phrase', 'Friends only - users can send private messages to their friends only.'),
+						0 => Yii::t('phrase', 'Nobody - users cannot send private messages.'),
 					)); ?>
 					<?php echo $form->error($model,'message_allow'); ?>
 				</div>
 			</div>
 
 			<div class="clearfix">
-				<label><?php echo Phrase::trans(16084,1);?></label>
+				<label><?php echo Yii::t('phrase', 'Inbox/Outbox Capacity');?></label>
 				<div class="desc">
-					<span class="small-px"><?php echo Phrase::trans(16085,1);?></span>
+					<span class="small-px"><?php echo Yii::t('phrase', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.');?></span>
 					<?php echo $form->dropDownList($model, 'message_inbox', array(
 						5 => 5,
 						10 => 10,
@@ -67,7 +67,7 @@
 						200 => 200,
 						500 => 500,
 					)); ?>
-					<?php echo Phrase::trans(16086,1);?>
+					<?php echo Yii::t('phrase', 'conversations in inbox folder.');?>
 					<?php echo $form->error($model,'message_inbox'); ?>
 					<br/>
 					<?php echo $form->dropDownList($model, 'message_outbox', array(
@@ -81,7 +81,7 @@
 						200 => 200,
 						500 => 500,
 					)); ?>
-					<?php echo Phrase::trans(16087,1);?>
+					<?php echo Yii::t('phrase', 'conversations in outbox folder.');?>
 					<?php echo $form->error($model,'message_outbox'); ?>
 				</div>
 			</div>

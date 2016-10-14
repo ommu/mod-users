@@ -127,7 +127,7 @@ class HistoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(16237,1);
+		$this->pageTitle = Yii::t('phrase', 'User History Logins');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_history_login',array(
@@ -157,7 +157,7 @@ class HistoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(16238,1);
+		$this->pageTitle = Yii::t('phrase', 'User History Change Email');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_history_email',array(
@@ -187,7 +187,7 @@ class HistoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(16239,1);
+		$this->pageTitle = Yii::t('phrase', 'User History Change Password');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_history_password',array(
@@ -217,7 +217,7 @@ class HistoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(16249,1);
+		$this->pageTitle = Yii::t('phrase', 'History Forgot Password');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_history_forgot',array(
@@ -247,7 +247,7 @@ class HistoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(16254,1);
+		$this->pageTitle = Yii::t('phrase', 'History Change Username');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_history_username',array(
@@ -277,7 +277,7 @@ class HistoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(16255,1);
+		$this->pageTitle = Yii::t('phrase', 'History Subscribe/Unsubscribe');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_history_username',array(

@@ -29,7 +29,7 @@
 		<div class="clearfix">
 			<label></label>
 			<div class="desc">
-				<?php echo CHtml::submitButton(Phrase::trans(16228,1), array('onclick' => 'setEnableSave()', 'class'=>'blue-button')); ?>
+				<?php echo CHtml::submitButton(Yii::t('phrase', 'Get Password'), array('onclick' => 'setEnableSave()', 'class'=>'blue-button')); ?>
 			</div>
 		</div>
 	</fieldset>

@@ -177,8 +177,8 @@ class AdminController extends /*SBaseController*/ Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(16096,1);
-		$this->pageDescription = Phrase::trans(16097,1);
+		$this->pageTitle = Yii::t('phrase', 'Manage Administrator');
+		$this->pageDescription = Yii::t('phrase', 'Your social network can have more than one administrator. This is useful if you want to have a staff of admins who maintain your social network. However, the first admin to be created (upon installation) is the "superadmin" and cannot be deleted. The superadmin can create and delete other admin accounts. All admin accounts on your system are listed below.');
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
 			'model'=>$model,
@@ -216,7 +216,7 @@ class AdminController extends /*SBaseController*/ Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-users',
-							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16099,1).'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success created.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -230,7 +230,7 @@ class AdminController extends /*SBaseController*/ Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 500;
 		
-		$this->pageTitle = Phrase::trans(16098,1);
+		$this->pageTitle = Yii::t('phrase', 'Add Administrator');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_add',array(
@@ -273,7 +273,7 @@ class AdminController extends /*SBaseController*/ Controller
 							'type' => 5,
 							'get' => isset($_GET['id']) ? Yii::app()->controller->createUrl('manage') : Yii::app()->createUrl('admin/dashboard'),
 							'id' => 'partial-users',
-							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16101,1).'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -287,7 +287,7 @@ class AdminController extends /*SBaseController*/ Controller
 		$this->dialogGroundUrl = isset($_GET['id']) ? Yii::app()->controller->createUrl('manage') : Yii::app()->createUrl('admin/dashboard');
 		$this->dialogWidth = 500;
 		
-		$this->pageTitle = Phrase::trans(16100,1).': '.$model->displayname;
+		$this->pageTitle = Yii::t('phrase', 'Update Administrator').': '.$model->displayname;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_edit',array(
@@ -312,7 +312,7 @@ class AdminController extends /*SBaseController*/ Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-users',
-					'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16103,1).'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success deleted.').'</strong></div>',
 				));
 			}
 		} else {
@@ -320,7 +320,7 @@ class AdminController extends /*SBaseController*/ Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Phrase::trans(16102,1);
+			$this->pageTitle = Yii::t('phrase', 'Delete Administrator');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -354,7 +354,7 @@ class AdminController extends /*SBaseController*/ Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16101,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success updated.').'</strong></div>',
 					));
 				}
 			}
@@ -401,7 +401,7 @@ class AdminController extends /*SBaseController*/ Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16088,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success deleted.').'</strong></div>',
 					));
 				}
 			}

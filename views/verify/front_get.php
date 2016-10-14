@@ -18,7 +18,10 @@
 	);
 
 if(isset($_GET['name']) && isset($_GET['email'])) {
-	echo Phrase::trans(16187,1).', '.$_GET['name'].' sebuah code verifikasi telah kami kirimkan ke email '.$_GET['email'];
+	echo Yii::t('phrase', 'Hi, <strong>{name}</strong> an email with instructions for creating a new password has been sent to <strong>{email}</strong>', array(
+		'{name}'=>$_GET['name'],
+		'{email}'=>$_GET['email'],
+	));
 
 } else {?>
 	<div class="form">

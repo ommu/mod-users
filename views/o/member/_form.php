@@ -24,7 +24,7 @@
 
 		<?php if(!$model->isNewRecord) {?>
 		<div class="intro">
-			<?php echo Phrase::trans(16105,1);?>
+			<?php echo Yii::t('phrase', 'To edit this users\'s account, make changes to the form below. If you want to temporarily prevent this user from logging in, you can set the user account to "disabled" below.');?>
 		</div>
 		<?php }?>
 

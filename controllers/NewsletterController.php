@@ -135,15 +135,15 @@ class NewsletterController extends Controller
 
 		if($setting->online == 0 && date('Y-m-d', strtotime($setting->construction_date)) > date('Y-m-d')) {
 			$launch = 0;
-			$title = (isset($_GET['name']) && isset($_GET['email'])) ? Phrase::trans(23105,1) : Phrase::trans(23103,1);
-			$desc = (isset($_GET['name']) && isset($_GET['email'])) ? '' : Phrase::trans(23104,1);
+			$title = (isset($_GET['name']) && isset($_GET['email'])) ? Yii::t('phrase', 'You will be notified when we launch. Thank You!') : Yii::t('phrase', 'We will be back soon!');
+			$desc = (isset($_GET['name']) && isset($_GET['email'])) ? '' : Yii::t('phrase', 'Enter your email to be notified when more info is available.');
 		} else {
 			$launch = 1;
 			$this->dialogFixedClosed=array(
 				Yii::t('phrase', 'Create Your Account')=>Yii::app()->createUrl('users/signup/index'),
 			);
-			$title = (isset($_GET['name']) && isset($_GET['email'])) ? Phrase::trans(23108,1) : Phrase::trans(23106,1);
-			$desc = (isset($_GET['name']) && isset($_GET['email'])) ? '' : Phrase::trans(23107,1);
+			$title = (isset($_GET['name']) && isset($_GET['email'])) ? Yii::t('phrase', 'Thanks for your subscription') : Yii::t('phrase', 'Newsletter');
+			$desc = (isset($_GET['name']) && isset($_GET['email'])) ? '' : Yii::t('phrase', 'Subscribe and we\'ll keep you updated');
 		}
 		
 		$this->pageTitle = $title;
@@ -173,16 +173,16 @@ class NewsletterController extends Controller
 		 if(isset($_GET['success']) || (isset($_GET['email']) || isset($_GET['secret']))) {
 			if(isset($_GET['success'])) {
 				if(isset($_GET['date'])) {
-					$title = Phrase::trans(23116,1);
-					$desc = Phrase::trans(23118,1, array(
-						$_GET['success'], 
-						Utility::dateFormat($_GET['date']),
+					$title = Yii::t('phrase', 'Unsubscribe successful');
+					$desc = Yii::t('phrase', 'Your email <strong>{email}</strong> has been successfully unsubscribed on {date}.', array(
+						'{email}'=>$_GET['email'], 
+						'{date}'=>Utility::dateFormat($_GET['date']),
 					));
 
 				} else {
-					$title = Phrase::trans(23119,1);
-					$desc = Phrase::trans(23120,1, array(
-						$_GET['success'],
+					$title = Yii::t('phrase', 'Unsubscribe Ticket Sent');
+					$desc = Yii::t('phrase', 'Hi, instructions and ticket for unsubscribe newsletter has been sent to <strong>{email}</strong>', array(
+						'{email}'=>$_GET['email'], 
 					));
 				}
 				
@@ -204,29 +204,29 @@ class NewsletterController extends Controller
 							if($newsletter->subscribe == 1) {
 								$newsletter->subscribe = 0;
 								if($newsletter->update()) {
-									$title = Phrase::trans(23116,1);
-									$desc = Phrase::trans(23117,1, array(
-										$newsletter->email,
+									$title = Yii::t('phrase', 'Unsubscribe successful');
+									$desc = Yii::t('phrase', 'Your email <strong>{email}</strong> has been successfully unsubscribed.', array(
+										'{email}'=>$newsletter->email,
 									));
 								}
 							} else {
-								$title = Phrase::trans(23116,1);
-								$desc = Phrase::trans(23118,1, array(
-									$newsletter->email, 
-									Utility::dateFormat($newsletter->unsubscribe_date),
+								$title = Yii::t('phrase', 'Unsubscribe successful');
+								$desc = Yii::t('phrase', 'Your email <strong>{email}</strong> has been successfully unsubscribed on {date}.', array(
+									'{email}'=>$newsletter->email, 
+									'{date}'=>Utility::dateFormat($newsletter->unsubscribe_date),
 								));
 							}					
 						} else {
 							$renderError = 1;
-							$title = Phrase::trans(23113,1);
-							$desc = Phrase::trans(23115,1, array(
-								$newsletter->email,
+							$title = Yii::t('phrase', 'Unsubscribe Not Valid');
+							$desc = Yii::t('phrase', 'Hi <strong>{email}</strong> maaf anda tidak bisa melakukan Unsubscribe,<br/>silahkan menghubungi support kami untuk informasi lebih lanjut.', array(
+								'{email}'=>$newsletter->email,
 							));
 						}
 					} else {
 						$renderError = 1;
-						$title = Phrase::trans(23113,1);
-						$desc = Phrase::trans(23114,1);
+						$title = Yii::t('phrase', 'Unsubscribe Not Valid');
+						$desc = Yii::t('phrase', 'Maaf anda tidak bisa melakukan Unsubscribe,<br/>silahkan menghubungi support kami untuk informasi lebih lanjut.');
 					}
 				}
 			}
@@ -279,8 +279,8 @@ class NewsletterController extends Controller
 				Yii::app()->end();
 			}
 			
-			$title = Phrase::trans(23111,1);
-			$desc = Phrase::trans(23112,1);
+			$title = Yii::t('phrase', 'Unsubscribe newsletter');
+			$desc = Yii::t('phrase', 'Untuk unsubscribe newsletter, silahkan masukkan alamat email untuk mendapatkan instruksi dan ticket.');
 		}
 		
 		$this->dialogDetail = true;

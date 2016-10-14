@@ -152,8 +152,8 @@ class MemberController extends /*SBaseController*/ Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Phrase::trans(16090,1);
-		$this->pageDescription = Phrase::trans(16091,1);
+		$this->pageTitle = Yii::t('phrase', 'Managa Users');
+		$this->pageDescription = Yii::t('phrase', 'This page lists all of the users that exist on your social network. For more information about a specific user, click on the "edit" link in its row. Click the "login" link to login as a specific user. Use the filter fields to find specific users based on your criteria. To view all users on your system, leave all the filter fields blank.');
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
 			'model'=>$model,
@@ -189,7 +189,7 @@ class MemberController extends /*SBaseController*/ Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-users',
-							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16092,1).'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success created.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -203,7 +203,7 @@ class MemberController extends /*SBaseController*/ Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 500;
 			
-			$this->pageTitle = Phrase::trans(16093,1);
+			$this->pageTitle = Yii::t('phrase', 'Add User');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_add',array(
@@ -242,7 +242,7 @@ class MemberController extends /*SBaseController*/ Controller
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
 							'id' => 'partial-users',
-							'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16095,1).'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -256,7 +256,7 @@ class MemberController extends /*SBaseController*/ Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 500;
 			
-			$this->pageTitle = Phrase::trans(16094,1).': '.$model->displayname;
+			$this->pageTitle = Yii::t('phrase', 'Update User').': '.$model->displayname;
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
@@ -282,7 +282,7 @@ class MemberController extends /*SBaseController*/ Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-users',
-					'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16088,1).'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success deleted.').'</strong></div>',
 				));
 			}
 		} else {
@@ -290,7 +290,7 @@ class MemberController extends /*SBaseController*/ Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Phrase::trans(16089,1);
+			$this->pageTitle = Yii::t('phrase', 'Delete User');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -324,7 +324,7 @@ class MemberController extends /*SBaseController*/ Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16088,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success updated.').'</strong></div>',
 					));
 				}
 			}
@@ -371,7 +371,7 @@ class MemberController extends /*SBaseController*/ Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16088,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success updated.').'</strong></div>',
 					));
 				}
 			}

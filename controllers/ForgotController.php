@@ -123,9 +123,9 @@ class ForgotController extends Controller
 				if($secret->email == $key->user->email) {
 					if(Utility::getDifferenceDay($key->forgot_date, date('Y-m-d H:i:s')) > 3) {
 						$key->delete();
-						$title = Phrase::trans(16230,1);
-						$desc = Phrase::trans(16232,1, array(
-							$secret->email,
+						$title = Yii::t('phrase', 'Forgot Password Expired Key');
+						$desc = Yii::t('phrase', 'Hi <strong>{email}</strong>! Maaf forgot password gagal,<br/>silahkan menghubungi support kami untuk informasi lebih lanjut.', array(
+							'{email}'=>$secret->email,
 						));
 						$render = 1;
 					} else {
@@ -135,22 +135,22 @@ class ForgotController extends Controller
 						$model = Users::model()->findByPk(Yii::app()->params['reset_user_id'], array(
 							'select' => 'user_id, email, displayname, photo_id',
 						));
-						$title = Phrase::trans(16189,1);
-						$desc = Phrase::trans(16190,1);
+						$title = Yii::t('phrase', 'Create a new password');
+						$desc = Yii::t('phrase', 'Create a new password which you will easily remember!');
 						$render = 2;
 					}
 				} else {
-					$title = Phrase::trans(16229,1);
-					$desc = Phrase::trans(16231,1);
+					$title = Yii::t('phrase', 'Forgot Password Not Valid');
+					$desc = Yii::t('phrase', 'Maaf forgot password gagal,<br/>silahkan menghubungi support kami untuk informasi lebih lanjut.');
 				}
 			} else {
-				$title = Phrase::trans(16229,1);
-				$desc = Phrase::trans(16231,1);
+				$title = Yii::t('phrase', 'Forgot Password Not Valid');
+				$desc = Yii::t('phrase', 'Maaf forgot password gagal,<br/>silahkan menghubungi support kami untuk informasi lebih lanjut.');
 			}
 
 		} else {
-			$title = Phrase::trans(16229,1);
-			$desc = Phrase::trans(16231,1);
+			$title = Yii::t('phrase', 'Forgot Password Not Valid');
+			$desc = Yii::t('phrase', 'Maaf forgot password gagal,<br/>silahkan menghubungi support kami untuk informasi lebih lanjut.');
 		}
 
 		$this->dialogDetail = true;
@@ -241,20 +241,20 @@ class ForgotController extends Controller
 		
 		if(isset($_GET['name']) && isset($_GET['email'])) {
 			if(isset($_GET['type']) && $_GET['type'] == 'success')
-				$desc = Phrase::trans(16191,1);			
+				$desc = Yii::t('phrase', 'You have successfully changed your password. To sign in to your account, use your email and new password at the following link:');			
 			else {
-				$desc = Phrase::trans(16187,1, array(
-					$_GET['name'],
-					$_GET['email'],
+				$desc = Yii::t('phrase', 'Hi, <strong>{name}</strong> an email with instructions for creating a new password has been sent to <strong>{email}</strong>', array(
+					'{name}'=>$_GET['name'],
+					'{email}'=>$_GET['email'],
 				));
 			}
 		} else
-			$desc = Phrase::trans(16185,1);
+			$desc = Yii::t('phrase', 'Enter your email address and we\'ll send you instructions to create a new password.<br/> Make sure you enter the same email address you used to create your profile');
 
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->createUrl('site/index');
 		
-		$this->pageTitle = Phrase::trans(16184,1);
+		$this->pageTitle = Yii::t('phrase', 'Forgot your password?');
 		$this->pageDescription = $desc;
 		$this->pageMeta = '';
 		$this->render('front_get',array(
