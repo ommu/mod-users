@@ -92,12 +92,12 @@ class UserHistoryBlock extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'type' => 'Type',
-			'user_id' => Phrase::trans(16001,1),
-			'block_id' => Phrase::trans(16181,1),
-			'creation_date' => 'Creation Date',
-			'user_search' => Phrase::trans(16001,1),
+			'id' => Yii::t('attribute', 'ID'),
+			'type' => Yii::t('attribute', 'Type'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'block_id' => Yii::t('attribute', 'Block'),
+			'creation_date' => Yii::t('attribute', 'Creation Date'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 	}
 
@@ -190,13 +190,13 @@ class UserHistoryBlock extends CActiveRecord
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'type',
-					'value' => '$data->type == 1 ? Phrase::trans(16181,1) : Phrase::trans(16248,1)',
+					'value' => '$data->type == 1 ? Yii::t(\'phrase\', \'Block\') : Yii::t(\'phrase\', \'Unblock\')',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
 					'filter'=>array(
-						1=>Phrase::trans(16181,1),
-						0=>Phrase::trans(16248,1),
+						1=>Yii::t('phrase', 'Block'),
+						0=>Yii::t('phrase', 'Unblock'),
 					),
 					'type' => 'raw',
 				);

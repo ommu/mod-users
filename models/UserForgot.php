@@ -94,12 +94,12 @@ class UserForgot extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'forgot_id' => Phrase::trans(16145,1),
-			'user_id' => Phrase::trans(16001,1),
-			'code' => Phrase::trans(16146,1),
-			'forgot_date' => Phrase::trans(16147,1),
-			'forgot_ip' => Phrase::trans(16148,1),
-			'email' => Phrase::trans(16108,1),
+			'forgot_id' => Yii::t('attribute', 'Forgot'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'code' => Yii::t('attribute', 'Forgot Code'),
+			'forgot_date' => Yii::t('attribute', 'Forgot Date'),
+			'forgot_ip' => Yii::t('attribute', 'Forgot Ip'),
+			'email' => Yii::t('attribute', 'Email'),
 		);
 	}
 	
@@ -230,7 +230,7 @@ class UserForgot extends CActiveRecord
 						'select' => 'user_id, email',
 					));
 					if($user == null) {
-						$this->addError('email', Phrase::trans(16186,1));
+						$this->addError('email', Yii::t('phrase', 'Incorrect email address'));
 					} else {
 						$this->user_id = $user->user_id;
 					}

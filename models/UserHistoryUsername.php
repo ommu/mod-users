@@ -91,10 +91,10 @@ class UserHistoryUsername extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'user_id' => Phrase::trans(16001,1),
-			'username_old' => 'Username Old',
-			'update_date' => Phrase::trans(16166,1),
+			'id' => Yii::t('attribute', 'ID'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'username_old' => Yii::t('attribute', 'Username Old'),
+			'update_date' => Yii::t('attribute', 'Update Date'),
 		);
 	}
 

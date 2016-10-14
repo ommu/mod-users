@@ -94,12 +94,12 @@ class ViewUsers extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'user_id' => 'User',
-			'level_name' => 'Level Name',
-			'token_key' => 'Token Key',
-			'token_password' => 'Token Password',
-			'token_oauth' => 'Token Oauth',
-			'photos' => 'Photos',
+			'user_id' => Yii::t('attribute', 'User'),
+			'level_name' => Yii::t('attribute', 'Level Name'),
+			'token_key' => Yii::t('attribute', 'Token Key'),
+			'token_password' => Yii::t('attribute', 'Token Password'),
+			'token_oauth' => Yii::t('attribute', 'Token Oauth'),
+			'photos' => Yii::t('attribute', 'Photos'),
 		);
 	}
 

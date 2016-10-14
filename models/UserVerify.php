@@ -94,12 +94,12 @@ class UserVerify extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'verify_id' => Phrase::trans(16141,1),
-			'user_id' => Phrase::trans(16001,1),
-			'code' => Phrase::trans(16142,1),
-			'verify_date' => Phrase::trans(16143,1),
-			'verify_ip' => Phrase::trans(16144,1),
-			'email' => Phrase::trans(16108,1),
+			'verify_id' => Yii::t('attribute', 'Verify'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'code' => Yii::t('attribute', 'Verify Code'),
+			'verify_date' => Yii::t('attribute', 'Verify Date'),
+			'verify_ip' => Yii::t('attribute', 'Verify Ip'),
+			'email' => Yii::t('attribute', 'Email'),
 		);
 	}
 	
@@ -230,10 +230,10 @@ class UserVerify extends CActiveRecord
 						'select' => 'user_id, email, verified',
 					));
 					if($user == null) {
-						$this->addError('email', Phrase::trans(16186,1));
+						$this->addError('email', Yii::t('phrase', 'Incorrect email address'));
 					} else {
 						if($user->verified == 1) {
-							$this->addError('email', Phrase::trans(16198,1));
+							$this->addError('email', Yii::t('phrase', 'Your account verified'));
 						} else {
 							$this->user_id = $user->user_id;
 						}

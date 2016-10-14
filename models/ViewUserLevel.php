@@ -88,9 +88,9 @@ class ViewUserLevel extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'level_id' => 'Level',
-			'level_name' => 'Level Name',
-			'level_desc' => 'Level Desc',
+			'level_id' => Yii::t('attribute', 'Level'),
+			'level_name' => Yii::t('attribute', 'Level Name'),
+			'level_desc' => Yii::t('attribute', 'Level Desc'),
 		);
 	}
 

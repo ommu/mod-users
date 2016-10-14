@@ -86,12 +86,12 @@ class UserPhoto extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'photo_id' => Phrase::trans(16151,1),
-			'user_id' => Phrase::trans(16001,1),
-			'orders' => Phrase::trans(16170,1),
-			'cover' => Phrase::trans(16171,1),
-			'photo' => Phrase::trans(16151,1),
-			'creation_date' => Phrase::trans(16160,1),
+			'photo_id' => Yii::t('attribute', 'Photo'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'orders' => Yii::t('attribute', 'Order'),
+			'cover' => Yii::t('attribute', 'Cover'),
+			'photo' => Yii::t('attribute', 'Photo'),
+			'creation_date' => Yii::t('attribute', 'Creation Date'),
 		);
 	}
 	

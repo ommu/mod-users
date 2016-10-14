@@ -45,9 +45,9 @@ class LoginForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-			'email' => 'Email',
-			'password' => 'Password',
-			'rememberMe' => 'Remember me next time',
+			'email' => Yii::t('attribute', 'Email'),
+			'password' => Yii::t('attribute', 'Password'),
+			'rememberMe' => Yii::t('attribute', 'Remember me next time'),
 		);
 	}
 
@@ -69,7 +69,7 @@ class LoginForm extends CFormModel
 					Yii::app()->user->login($this->_identity);
 					break;
 				case UserIdentity::ERROR_USERNAME_INVALID:
-					$this->addError('email','Email address is incorrect.');
+					$this->addError('email', Yii::t('phrase', 'Email address is incorrect.'));
 					break;
 			}
 		}
@@ -105,7 +105,7 @@ class LoginForm extends CFormModel
 			if($this->password != '') {
 				$user = Users::model()->findByAttributes(array('email' => $this->email));
 				if($user !== null && $user->password !== Users::hashPassword($user->salt,$this->password)) {
-					$this->addError('password', 'Password is incorrect.');
+					$this->addError('password', Yii::t('phrase', 'Password is incorrect.'));
 				}
 			}
 		}

@@ -82,10 +82,10 @@ class UserOption extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'option_id' => Phrase::trans(16001,1),
-			'invite_limit' => Phrase::trans(16176,1),
-			'invite_success' => Phrase::trans(16177,1),
-			'ommu_status' => 'Ommu Status',
+			'option_id' => Yii::t('attribute', 'Option'),
+			'invite_limit' => Yii::t('attribute', 'Invite Limit'),
+			'invite_success' => Yii::t('attribute', 'Invite Success'),
+			'ommu_status' =>  Yii::t('attribute', 'Ommu Status'),
 		);
 	}
 	

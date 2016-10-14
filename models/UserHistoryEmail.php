@@ -91,11 +91,11 @@ class UserHistoryEmail extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'user_id' => Phrase::trans(16001,1),
-			'email' => Phrase::trans(16108,1),
-			'update_date' => Phrase::trans(16166,1),
-			'user_search' => Phrase::trans(16001,1),
+			'id' => Yii::t('attribute', 'ID'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'email' => Yii::t('attribute', 'Email'),
+			'update_date' => Yii::t('attribute', 'Update Date'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 	}
 
