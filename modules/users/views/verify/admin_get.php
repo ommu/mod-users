@@ -20,9 +20,9 @@
 if(isset($_GET['name']) && isset($_GET['email'])) {?>
 	<div class="users-forgot">
 		<div>
-			<?php echo Phrase::trans(16235,1, array(
-				$_GET['name'],
-				$_GET['email'],
+			<?php echo Yii::t('phrase', 'Hi, <strong>{name}</strong> sebuah code verifikasi telah kami kirimkan ke email <strong>{email}</strong>', array(
+				'{name}'=>$_GET['name'],
+				'{email}=>'$_GET['email'],
 			));?>
 		</div>
 	</div>

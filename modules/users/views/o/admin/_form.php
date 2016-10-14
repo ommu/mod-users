@@ -24,7 +24,7 @@
 
 		<?php if(isset($_GET['id'])) {?>
 		<div class="intro">
-			<?php echo Phrase::trans(16104,1);?>
+			<?php echo Yii::t('phrase', 'Complete the form below to add/edit this admin account. Note that normal admins will not be able to delete or modify the superadmin account. If you want to change this admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');?>
 		</div>
 		<?php }?>
 

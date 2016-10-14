@@ -21,7 +21,7 @@
 <?php 
 if(isset($_GET['success']) || (isset($_GET['email']) || isset($_GET['secret']))) {
 	if($renderError == 1)
-		echo '<a class="button" href="'.Yii::app()->controller->createUrl('contact/index').'" title="'.Phrase::trans(23102,1).'">'.Phrase::trans(23102,1).'</a>';
+		echo '<a class="button" href="'.Yii::app()->controller->createUrl('contact/index').'" title="'.Yii::t('phrase', 'Feedback').'">'.Yii::t('phrase', 'Feedback').'</a>';
 } else {
 	echo $this->renderPartial('_form', array(
 		'model'=>$model,

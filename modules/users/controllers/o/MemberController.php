@@ -349,7 +349,7 @@ class MemberController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16088,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success updated.').'</strong></div>',
 					));
 				}
 			}
@@ -396,7 +396,7 @@ class MemberController extends Controller
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
 						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Phrase::trans(16088,1).'</strong></div>',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success updated.').'</strong></div>',
 					));
 				}
 			}
