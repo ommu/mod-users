@@ -630,8 +630,8 @@ class Users extends CActiveRecord
 		if($this->isNewRecord) {
 			// Add User Folder
 			$user_path = "public/users/".$this->user_id;
-			if ( !file_exists($user_path) ) {
-				mkdir($user_path, 0777, true);
+			if(!file_exists($user_path)) {
+				mkdir($user_path, 0755, true);
 
 				// Add File in User Folder (index.php)
 				$newFile = $user_path.'/index.php';

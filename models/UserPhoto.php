@@ -260,10 +260,17 @@ class UserPhoto extends CActiveRecord
 			$user->photo_id = $this->photo_id;
 			$user->update();
 		}
+		
+		$user_path = "public/users/".$this->user_id;
+		if(!file_exists($user_path)) {
+			mkdir($user_path, 0755, true);
 
+			// Add File in User Folder (index.php)
+			$newFile = $user_path.'/index.php';
+			$FileHandle = fopen($newFile, 'w');
+		}
 		//create thumb image
 		Yii::import('ext.phpthumb.PhpThumbFactory');
-		$user_path = "public/users/".$this->user_id;
 		$userImg = PhpThumbFactory::create($user_path.'/'.$this->photo, array('jpegQuality' => 90, 'correctPermissions' => true));
 		//$userImg->adaptiveResize(700, 1200);
 		$userImg->resize(700);

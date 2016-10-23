@@ -115,6 +115,13 @@ class PhotoController extends Controller
 			
 		$userPhoto = CUploadedFile::getInstanceByName('namaFile');
 		$user_path = "public/users/".$id;
+		if(!file_exists($user_path)) {
+			mkdir($user_path, 0755, true);
+
+			// Add File in User Folder (index.php)
+			$newFile = $user_path.'/index.php';
+			$FileHandle = fopen($newFile, 'w');
+		}
 		$fileName	= time().'_'.$id.'.'.$userPhoto->extensionName;
 		if($userPhoto->saveAs($user_path.'/'.$fileName)) {
 			$model = new UserPhoto;
