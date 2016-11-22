@@ -62,14 +62,16 @@
 			</div>
 		</div>
 
+		<?php if($setting->signup_photo == 1) {?>
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'photos'); ?>
 			<div class="desc">
-				<?php echo $form->textArea($model,'photos',array('rows'=>6, 'cols'=>50)); ?>
+				<?php echo $form->textArea($model,'photos',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
 				<?php echo $form->error($model,'photos'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
+				<div class="small-px silent"><?php echo Yii::t('phrase', 'Inputkan alamat url photo Anda.<br/>contoh: http://ommu.co/putrasudaryanto.jpg');?></div>
 			</div>
 		</div>
+		<?php }?>
 		
 		<?php if($model->isNewRecord || (!$model->isNewRecord && isset($_GET['id']))) {
 			if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {?>
@@ -90,7 +92,7 @@
 			</div>
 			<?php }?>
 
-			<?php if(($model->isNewRecord && $setting->signup_approve == 1) || !$model->isNewRecord) {?>
+			<?php if(($model->isNewRecord && $setting->signup_approve == 0) || !$model->isNewRecord) {?>
 			<div class="clearfix publish">
 				<?php echo $form->labelEx($model,'enabled'); ?>
 				<div class="desc">

@@ -100,7 +100,7 @@
                                             <!-- ======= section header ======= -->
                                             <div style="line-height: 26px;">
                                                 <multiline>
-                                                    Welcome to SSO-GTP
+                                                    Welcome to {$site_title}
                                                 </multiline>
                                             </div>
                                         </td>
@@ -172,7 +172,7 @@
                                                         <div style="line-height: 25px">
                                                             <!-- ======= section text ======= -->
                                                             <multiline>
-                                                                If you have any questions please answer to this email or contact us at <a style="color: #ff4444; text-decoration: none;" href="mailto:support@grhatamapustaka.com">support@grhatamapustaka.com</a>
+                                                                If you have any questions please answer to this email or contact us at <a style="color: #ff4444; text-decoration: none;" href="mailto:{$site_support_email}">{$site_support_email}</a>
                                                             </multiline>
                                                         </div>
                                                     </td>
