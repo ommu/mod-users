@@ -268,7 +268,9 @@ class UserPhoto extends CActiveRecord
 			// Add File in User Folder (index.php)
 			$newFile = $user_path.'/index.php';
 			$FileHandle = fopen($newFile, 'w');
-		}
+		} else
+			@chmod($user_path, 0755, true);
+			
 		//create thumb image
 		Yii::import('ext.phpthumb.PhpThumbFactory');
 		$userImg = PhpThumbFactory::create($user_path.'/'.$this->photo, array('jpegQuality' => 90, 'correctPermissions' => true));

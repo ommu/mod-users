@@ -121,7 +121,9 @@ class PhotoController extends Controller
 			// Add File in User Folder (index.php)
 			$newFile = $user_path.'/index.php';
 			$FileHandle = fopen($newFile, 'w');
-		}
+		} else
+			@chmod($user_path, 0755, true);
+		
 		$fileName	= time().'_'.$id.'.'.$userPhoto->extensionName;
 		if($userPhoto->saveAs($user_path.'/'.$fileName)) {
 			$model = new UserPhoto;

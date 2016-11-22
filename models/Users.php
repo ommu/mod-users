@@ -636,7 +636,8 @@ class Users extends CActiveRecord
 				// Add File in User Folder (index.php)
 				$newFile = $user_path.'/index.php';
 				$FileHandle = fopen($newFile, 'w');
-			}
+			} else
+				@chmod($user_path, 0755, true);
 
 			/**
 			 * = New Member
