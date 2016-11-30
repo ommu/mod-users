@@ -94,12 +94,12 @@ class UserForgot extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'forgot_id' =>  => Yii::t('attribute', 'Forgot'),
-			'user_id' =>  => Yii::t('attribute', 'User'),
-			'code' =>  => Yii::t('attribute', 'Forgot Code'),
-			'forgot_date' =>  => Yii::t('attribute', 'Forgot Date'),
-			'forgot_ip' =>  => Yii::t('attribute', 'Forgot Ip'),
-			'email' =>  => Yii::t('attribute', 'Email'),
+			'forgot_id' => Yii::t('attribute', 'Forgot'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'code' => Yii::t('attribute', 'Forgot Code'),
+			'forgot_date' => Yii::t('attribute', 'Forgot Date'),
+			'forgot_ip' => Yii::t('attribute', 'Forgot Ip'),
+			'email' => Yii::t('attribute', 'Email'),
 		);
 	}
 	

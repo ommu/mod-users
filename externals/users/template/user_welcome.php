@@ -114,10 +114,10 @@
                                                 <tr>
                                                     <td align="center" mc:edit="main-text2" style="color: #f3d8d6; font-size: 14px; font-family: Lato, sans-serif; mso-line-height-rule: exactly; line-height: 22px;" class="text_color">
                                                         <div style="line-height: 22px">
-                                                            <!-- ======= section text ======= -->
+                                                            <!-- ======= section text ======= 
                                                             <multiline>
                                                                 Lorem ipsum dolor sit amet consectetur adipiscing elit curabitur lacus risus cursus et lorem ut  
-                                                            </multiline>
+                                                            </multiline> -->
                                                         </div>
                                                     </td>
                                                 </tr>
