@@ -258,7 +258,7 @@ class NewsletterController extends Controller
 								}
 								// Send Email to Member
 								$ticket = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('support/newsletter/unsubscribe', array('email'=>$email,'secret'=>$secret));
-								SupportMailSetting::sendEmail($email, $displayname, 'Unsubscribe Ticket', $ticket, 1);
+								SupportMailSetting::sendEmail($email, $displayname, 'Unsubscribe Ticket', $ticket);
 								
 								$url = Yii::app()->controller->createUrl('unsubscribe', array('success'=>$email));
 							
