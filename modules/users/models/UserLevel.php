@@ -230,11 +230,11 @@ class UserLevel extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'title',
-				'value' => 'Phrase::trans($data->name, 2)',
+				'value' => 'Phrase::trans($data->name)',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'description',
-				'value' => 'Phrase::trans($data->desc, 2)',
+				'value' => 'Phrase::trans($data->desc)',
 			);
 			$this->defaultColumns[] = array(
 				'header' => 'Users',
@@ -330,7 +330,7 @@ class UserLevel extends CActiveRecord
 		$items = array();
 		if($model != null) {
 			foreach($model as $key => $val)
-				$items[$val->level_id] = Phrase::trans($val->name, 2);
+				$items[$val->level_id] = Phrase::trans($val->name);
 				
 			return $items;
 		} else
