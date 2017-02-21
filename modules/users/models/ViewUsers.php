@@ -17,11 +17,10 @@
  *
  * --------------------------------------------------------------------------------------
  *
- * This is the model class for table "_view_user_oauth".
+ * This is the model class for table "_view_users".
  *
- * The followings are the available columns in table '_view_user_oauth':
+ * The followings are the available columns in table '_view_users':
  * @property string $user_id
- * @property string $level_name
  * @property string $token_key
  * @property string $token_password
  * @property string $token_oauth
@@ -46,7 +45,7 @@ class ViewUsers extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return '_view_user_oauth';
+		return '_view_users';
 	}
 
 	/**
@@ -67,10 +66,10 @@ class ViewUsers extends CActiveRecord
 		return array(
 			array('user_id', 'length', 'max'=>11),
 			array('token_key, token_password, token_oauth', 'length', 'max'=>32),
-			array('level_name', 'safe'),
+			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, level_name, token_key, token_password, token_oauth', 'safe', 'on'=>'search'),
+			array('user_id, token_key, token_password, token_oauth', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -93,7 +92,6 @@ class ViewUsers extends CActiveRecord
 	{
 		return array(
 			'user_id' => 'User',
-			'level_name' => 'Level Name',
 			'token_key' => 'Token Key',
 			'token_password' => 'Token Password',
 			'token_oauth' => 'Token Oauth',
@@ -118,7 +116,6 @@ class ViewUsers extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 		$criteria->compare('t.user_id',$this->user_id);
-		$criteria->compare('t.level_name',strtolower($this->level_name),true);
 		$criteria->compare('t.token_key',strtolower($this->token_key),true);
 		$criteria->compare('t.token_password',strtolower($this->token_password),true);
 		$criteria->compare('t.token_oauth',strtolower($this->token_oauth),true);
@@ -153,7 +150,6 @@ class ViewUsers extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'level_name';
 			$this->defaultColumns[] = 'token_key';
 			$this->defaultColumns[] = 'token_password';
 			$this->defaultColumns[] = 'token_oauth';
@@ -172,7 +168,6 @@ class ViewUsers extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'level_name';
 			$this->defaultColumns[] = 'token_key';
 			$this->defaultColumns[] = 'token_password';
 			$this->defaultColumns[] = 'token_oauth';
