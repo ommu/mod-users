@@ -97,7 +97,7 @@ class UserLevel extends CActiveRecord
 			'description' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
-			//'ommuUsers_relation' => array(self::HAS_MANY, 'OmmuUsers', 'level_id'),
+			'users' => array(self::HAS_MANY, 'Users', 'level_id'),
 		);
 	}
 
