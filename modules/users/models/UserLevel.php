@@ -107,18 +107,18 @@ class UserLevel extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'level_id' => 'Level',
-			'name' => 'Name',
-			'desc' => 'Desc',
-			'defaults' => 'Defaults',
-			'creation_date' => 'Creation Date',
-			'creation_id' => 'Creation',
-			'modified_date' => 'Modified Date',
-			'modified_id' => 'Modified',
-			'title' => 'Title',
-			'description' => 'Description',
-			'creation_search' => 'Creation',
-			'modified_search' => 'Modified',
+			'level_id' => Yii::t('attribute', 'Level'),
+			'name' => Yii::t('attribute', 'Name'),
+			'desc' => Yii::t('attribute', 'Desc'),
+			'defaults' => Yii::t('attribute', 'Defaults'),
+			'creation_date' => Yii::t('attribute', 'Creation Date'),
+			'creation_id' => Yii::t('attribute', 'Creation'),
+			'modified_date' => Yii::t('attribute', 'Modified Date'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
+			'title' => Yii::t('attribute', 'Title'),
+			'description' => Yii::t('attribute', 'Description'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
 
@@ -251,8 +251,8 @@ class UserLevel extends CActiveRecord
 				'value' => 'Phrase::trans($data->desc)',
 			);
 			$this->defaultColumns[] = array(
-				'header' => 'Users',
-				'value' => '$data->level_id != 1 ? CHtml::link($data->view->oauths." ".Yii::t(\'phrase\', \'User\'), Yii::app()->controller->createUrl("o/member/manage",array("level"=>$data->level_id))) : CHtml::link($data->view->oauths." ".Yii::t(\'phrase\', \'User\'), Yii::app()->controller->createUrl("o/admin/manage",array("level"=>$data->level_id)))',
+				'header' => Yii::t('phrase', 'Users'),
+				'value' => '$data->level_id != 1 ? CHtml::link($data->view->users." ".Yii::t(\'phrase\', \'User\'), Yii::app()->controller->createUrl("o/member/manage",array("level"=>$data->level_id))) : CHtml::link($data->view->users." ".Yii::t(\'phrase\', \'User\'), Yii::app()->controller->createUrl("o/admin/manage",array("level"=>$data->level_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
