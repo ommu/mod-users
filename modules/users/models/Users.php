@@ -1,10 +1,12 @@
 <?php
 /**
  * Users
+ * version: 0.0.1
+ *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @copyright Copyright (c) 2016 Ommu Platform (ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
  * @created date 24 February 2016, 17:58 WIB
- * @link http://company.ommu.co
+ * @link https://github.com/ommu/Users
  * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
@@ -25,7 +27,6 @@
  * @property integer $enabled
  * @property integer $verified
  * @property integer $level_id
- * @property integer $profile_id
  * @property integer $language_id
  * @property string $salt
  * @property string $password
@@ -86,12 +87,12 @@ class Users extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('email, displayname', 'required'),
-			array('enabled, verified, level_id, profile_id, language_id, locale_id, timezone_id', 'required', 'on'=>'formEdit'),
+			array('enabled, verified, level_id, language_id, locale_id, timezone_id', 'required', 'on'=>'formEdit'),
 			array('
 				oldPassword', 'required', 'on'=>'formChangePassword'),
 			array('
 				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetpassword'),
-			array('enabled, verified, level_id, profile_id, language_id, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
+			array('enabled, verified, level_id, language_id, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
 			array('modified_id', 'length', 'max'=>11),
 			array('
 				inviteCode', 'length', 'max'=>16),
@@ -109,7 +110,7 @@ class Users extends CActiveRecord
 				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, enabled, verified, level_id, profile_id, language_id, salt, password, email, username, displayname, photos, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
+			array('user_id, enabled, verified, level_id, language_id, salt, password, email, username, displayname, photos, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -136,7 +137,6 @@ class Users extends CActiveRecord
 			'enabled' => Yii::t('attribute', 'Enabled'),
 			'verified' => Yii::t('attribute', 'Verified'),
 			'level_id' => Yii::t('attribute', 'Level'),
-			'profile_id' => Yii::t('attribute', 'Profile'),
 			'language_id' => Yii::t('attribute', 'Language'),
 			'salt' => Yii::t('attribute', 'Salt'),
 			'password' => Yii::t('attribute', 'Password'),
@@ -193,7 +193,6 @@ class Users extends CActiveRecord
 			$criteria->compare('t.level_id',$_GET['level']);
 		else
 			$criteria->compare('t.level_id',$this->level_id);
-		$criteria->compare('t.profile_id',$this->profile_id);
 		$criteria->compare('t.language_id',$this->language_id);
 		$criteria->compare('t.salt',$this->salt,true);
 		$criteria->compare('t.password',$this->password,true);
@@ -253,7 +252,6 @@ class Users extends CActiveRecord
 			$this->defaultColumns[] = 'enabled';
 			$this->defaultColumns[] = 'verified';
 			$this->defaultColumns[] = 'level_id';
-			$this->defaultColumns[] = 'profile_id';
 			$this->defaultColumns[] = 'language_id';
 			$this->defaultColumns[] = 'salt';
 			$this->defaultColumns[] = 'password';
@@ -470,7 +468,6 @@ class Users extends CActiveRecord
 					'select' => 'site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
 				));
 				
-				$this->profile_id = 1;
 				$this->salt = self::getUniqueCode();
 				
 				if(in_array($controller, array('o/admin','o/member'))) {
