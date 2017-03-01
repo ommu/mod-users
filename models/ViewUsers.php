@@ -1,9 +1,11 @@
 <?php
 /**
  * ViewUsers
+ * version: 0.0.1
+ *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @copyright Copyright (c) 2015 Ommu Platform (ommu.co)
- * @link https://github.com/oMMu/Ommu-Users
+ * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
+ * @link https://github.com/ommu/Users
  * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
@@ -21,7 +23,6 @@
  *
  * The followings are the available columns in table '_view_users':
  * @property string $user_id
- * @property string $level_name
  * @property string $token_key
  * @property string $token_password
  * @property string $token_oauth
@@ -69,10 +70,10 @@ class ViewUsers extends CActiveRecord
 			array('user_id', 'length', 'max'=>11),
 			array('token_key, token_password, token_oauth', 'length', 'max'=>32),
 			array('photos', 'length', 'max'=>21),
-			array('level_name', 'safe'),
+			array('token_key, token_password, token_oauth, photos', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, level_name, token_key, token_password, token_oauth, photos', 'safe', 'on'=>'search'),
+			array('user_id, token_key, token_password, token_oauth, photos', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,7 +96,6 @@ class ViewUsers extends CActiveRecord
 	{
 		return array(
 			'user_id' => Yii::t('attribute', 'User'),
-			'level_name' => Yii::t('attribute', 'Level Name'),
 			'token_key' => Yii::t('attribute', 'Token Key'),
 			'token_password' => Yii::t('attribute', 'Token Password'),
 			'token_oauth' => Yii::t('attribute', 'Token Oauth'),
@@ -121,7 +121,6 @@ class ViewUsers extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 		$criteria->compare('t.user_id',$this->user_id);
-		$criteria->compare('t.level_name',strtolower($this->level_name),true);
 		$criteria->compare('t.token_key',strtolower($this->token_key),true);
 		$criteria->compare('t.token_password',strtolower($this->token_password),true);
 		$criteria->compare('t.token_oauth',strtolower($this->token_oauth),true);
@@ -157,7 +156,6 @@ class ViewUsers extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'level_name';
 			$this->defaultColumns[] = 'token_key';
 			$this->defaultColumns[] = 'token_password';
 			$this->defaultColumns[] = 'token_oauth';
@@ -177,7 +175,6 @@ class ViewUsers extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'level_name';
 			$this->defaultColumns[] = 'token_key';
 			$this->defaultColumns[] = 'token_password';
 			$this->defaultColumns[] = 'token_oauth';
