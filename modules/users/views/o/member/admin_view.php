@@ -38,11 +38,6 @@
 			//'value'=>$model->level_id != '' ? $model->level_id : '-',
 		),
 		array(
-			'name'=>'profile_id',
-			'value'=>$model->profile_id,
-			//'value'=>$model->profile_id != '' ? $model->profile_id : '-',
-		),
-		array(
 			'name'=>'language_id',
 			'value'=>$model->language_id,
 			//'value'=>$model->language_id != '' ? $model->language_id : '-',

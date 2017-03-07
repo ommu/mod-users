@@ -36,10 +36,6 @@
 			'value'=>$model->level_id,
 		),
 		array(
-			'name'=>'profile_id',
-			'value'=>$model->profile_id,
-		),
-		array(
 			'name'=>'language_id',
 			'value'=>$model->language_id,
 		),

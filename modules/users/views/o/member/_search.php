@@ -31,11 +31,6 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('profile_id'); ?><br/>
-			<?php echo $form->textField($model,'profile_id'); ?>
-		</li>
-
-		<li>
 			<?php echo $model->getAttributeLabel('language_id'); ?><br/>
 			<?php echo $form->textField($model,'language_id'); ?>
 		</li>
