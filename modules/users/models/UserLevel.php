@@ -326,22 +326,20 @@ class UserLevel extends CActiveRecord
 	}
 
 	//get Default
-	public static function getDefault(){
+	public static function getDefault() 
+	{
 		$model = self::model()->findByAttributes(array('defaults' => 1));
 		return $model->level_id;
 	}
 
 	//get Type Member (Except administrator)
-	public static function getTypeMember($type=null){
-		if($type == null) {
-			$model = self::model()->findAll(array(
-				'condition'=>'level_id != :level',
-				'params' => array(
-					':level' => 1,
-				),
-			));
-		} else
-			$model = self::model()->findAll();
+	public static function getUserLevel($type=null) 
+	{
+		$criteria=new CDbCriteria;
+		if($type != null && $type == 'member')
+			$criteria->addNotInCondition('t.level_id',array(1));
+		
+		$model = self::model()->findAll($criteria);
 		
 		$items = array();
 		if($model != null) {
@@ -356,7 +354,8 @@ class UserLevel extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
+	protected function beforeValidate() 
+	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->creation_id = Yii::app()->user->id;
@@ -369,7 +368,8 @@ class UserLevel extends CActiveRecord
 	/**
 	 * before save attributes
 	 */
-	protected function beforeSave() {
+	protected function beforeSave() 
+	{
 		if(parent::beforeSave()) {
 			$action = strtolower(Yii::app()->controller->action->id);
 			if($this->isNewRecord) {

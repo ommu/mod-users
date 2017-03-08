@@ -86,8 +86,8 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('email, displayname', 'required'),
-			array('enabled, verified, level_id, language_id, locale_id, timezone_id', 'required', 'on'=>'formEdit'),
+			array('level_id, email, displayname', 'required'),
+			array('enabled, verified, language_id, locale_id, timezone_id', 'required', 'on'=>'formEdit'),
 			array('
 				oldPassword', 'required', 'on'=>'formChangePassword'),
 			array('
@@ -309,7 +309,7 @@ class Users extends CActiveRecord
 					'htmlOptions' => array(
 						//'class' => 'center',
 					),
-					'filter'=>UserLevel::getTypeMember(),
+					'filter'=>UserLevel::getUserLevel('member'),
 					'type' => 'raw',
 				);
 			}
