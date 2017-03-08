@@ -224,15 +224,15 @@ class UserForgot extends CActiveRecord
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
-		$current = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		if(parent::beforeValidate()) {		
 			if($this->isNewRecord) {
-				if($current == 'forgot/get' && $this->email != '') {
+				if($currentAction == 'password/forgot' && $this->email != '') {
 					$user = Users::model()->findByAttributes(array('email' => $this->email), array(
 						'select' => 'user_id, email',
 					));
 					if($user == null) {
-						$this->addError('email', Yii::t('phrase', 'Incorrect email address'));
+						$this->addError('email', 'Incorrect email address');
 					} else {
 						$this->user_id = $user->user_id;
 					}
@@ -247,22 +247,25 @@ class UserForgot extends CActiveRecord
 	/**
 	 * After save attributes
 	 */
-	protected function afterSave() {
+	protected function afterSave() {			
 		parent::afterSave();
-
+		
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select' => 'site_title',
+		));
+		
 		if($this->isNewRecord) {
 			// Send Email to Member
 			$forgot_search = array(
-				'{$baseURL}',
-				'{$forgot}','{$displayname}',
+				'{$baseURL}', '{$displayname}', '{$site_support_email}',
+				'{$forgot_link}',
 			);
 			$forgot_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl,
+				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl, $this->user->displayname, SupportMailSetting::getInfo(1, 'mail_contact'),
 				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('users/password/verify',array('key'=>$this->code, 'secret'=>$this->user->salt)),
-				$this->user->displayname,
 			);
 			$forgot_template = 'user_forgot_password';
-			$forgot_title = 'SSO-GTP Password Assistance';
+			$forgot_title = $setting->site_title.' Password Assistance';
 			$forgot_message = file_get_contents(YiiBase::getPathOfAlias('webroot.externals.users.template').'/'.$forgot_template.'.php');
 			$forgot_ireplace = str_ireplace($forgot_search, $forgot_replace, $forgot_message);
 			SupportMailSetting::sendEmail($this->user->email, $this->user->displayname, $forgot_title, $forgot_ireplace);
