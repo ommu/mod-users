@@ -684,13 +684,13 @@ class Users extends CActiveRecord
 					'{$index}','{$displayname}',
 				);
 				$welcome_replace = array(
-					Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl,
+					Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl,
 					Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/index'),
 					$this->displayname,	
 				);
 				$welcome_template = 'user_welcome';
 				$welcome_title = 'Welcome to SSO-GTP by BPAD Yogyakarta';
-				$welcome_message = file_get_contents(YiiBase::getPathOfAlias('webroot.externals.users.template').'/'.$welcome_template.'.php');
+				$welcome_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$welcome_template.'.php');
 				$welcome_ireplace = str_ireplace($welcome_search, $welcome_replace, $welcome_message);
 				SupportMailSetting::sendEmail($this->email, $this->displayname, $welcome_title, $welcome_ireplace);		
 			}
@@ -702,13 +702,13 @@ class Users extends CActiveRecord
 				'{$login}','{$displayname}','{$email}','{$password}',
 			);
 			$account_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl,
+				Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl,
 				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
 				$this->displayname, $this->email, $this->newPassword,
 			);
 			$account_template = 'user_welcome_account';
 			$account_title = 'SSO-GTP Account ('.$this->displayname.')';
-			$account_message = file_get_contents(YiiBase::getPathOfAlias('webroot.externals.users.template').'/'.$account_template.'.php');
+			$account_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$account_template.'.php');
 			$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
 			SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
 
@@ -725,13 +725,13 @@ class Users extends CActiveRecord
 					'{$login}','{$displayname}','{$email}','{$password}',
 				);
 				$account_replace = array(
-					Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl,
+					Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl,
 					Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
 					$this->displayname, $this->email, $this->newPassword,
 				);
 				$account_template = 'user_forgot_new_password';
 				$account_title = 'Your password changed';
-				$account_message = file_get_contents(YiiBase::getPathOfAlias('webroot.externals.users.template').'/'.$account_template.'.php');
+				$account_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$account_template.'.php');
 				$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
 				SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
 			}

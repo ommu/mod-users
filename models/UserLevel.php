@@ -352,13 +352,15 @@ class UserLevel extends CActiveRecord
 	}
 
 	//get Default
-	public static function getDefault(){
+	public static function getDefault() 
+	{
 		$model = self::model()->findByAttributes(array('defaults' => 1));
 		return $model->level_id;
 	}
 
 	//get Type Member (Except administrator)
-	public static function getTypeMember($type=null){
+	public static function getTypeMember($type=null) 
+	{
 		if($type == null) {
 			$model = self::model()->findAll(array(
 				'condition'=>'level_id != :level',
