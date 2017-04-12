@@ -206,8 +206,8 @@ class UserNewsletter extends CActiveRecord
 				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$this, 
 					'attribute'=>'subscribe_date', 
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					'language' => 'en',
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'subscribe_date_filter',
@@ -232,8 +232,8 @@ class UserNewsletter extends CActiveRecord
 				'filter' => Yii::app()->controller->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$this, 
 					'attribute'=>'unsubscribe_date', 
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					'language' => 'en',
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'unsubscribe_date_filter',
