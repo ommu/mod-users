@@ -207,7 +207,7 @@ class UserNewsletter extends CActiveRecord
 					'model'=>$this, 
 					'attribute'=>'subscribe_date', 
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'subscribe_date_filter',
@@ -233,7 +233,7 @@ class UserNewsletter extends CActiveRecord
 					'model'=>$this, 
 					'attribute'=>'unsubscribe_date', 
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'unsubscribe_date_filter',

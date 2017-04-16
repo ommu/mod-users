@@ -229,7 +229,7 @@ class UserInvites extends CActiveRecord
 					'model'=>$this, 
 					'attribute'=>'invite_date', 
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'invite_date_filter',

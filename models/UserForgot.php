@@ -180,7 +180,7 @@ class UserForgot extends CActiveRecord
 					'model'=>$this, 
 					'attribute'=>'forgot_date', 
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'forgot_date_filter',

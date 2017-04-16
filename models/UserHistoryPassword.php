@@ -200,7 +200,7 @@ class UserHistoryPassword extends CActiveRecord
 					'model'=>$this,
 					'attribute'=>'update_date',
 					'language' => 'en',
-					'i18nScriptFile' => 'jquery-ui-i18n.min.js'
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'update_date_filter',
