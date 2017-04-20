@@ -189,7 +189,7 @@ class NewsletterController extends Controller
 			} else {
 				if(isset($_GET['email']) || isset($_GET['secret'])) {
 					$newsletter = UserNewsletter::model()->findByAttributes(array('email' => $_GET['email']), array(
-						'select' => 'id, user_id, email, subscribe, subscribe_date, unsubscribe_date',
+						'select' => 'newsletter_id, status, user_id, email, subscribe_date, updated_date',
 					));
 					if($newsletter != null) {
 						if($newsletter->user_id != 0) {
@@ -201,8 +201,8 @@ class NewsletterController extends Controller
 							$guest = (md5($newsletter->email.$newsletter->subscribe_date) == $_GET['secret']) ? 1 : 0;
 						}
 						if($guest == 1) {
-							if($newsletter->subscribe == 1) {
-								$newsletter->subscribe = 0;
+							if($newsletter->status == 1) {
+								$newsletter->status = 0;
 								if($newsletter->update()) {
 									$title = Yii::t('phrase', 'Unsubscribe successful');
 									$desc = Yii::t('phrase', 'Your email <strong>{email}</strong> has been successfully unsubscribed.', array(
@@ -213,7 +213,7 @@ class NewsletterController extends Controller
 								$title = Yii::t('phrase', 'Unsubscribe successful');
 								$desc = Yii::t('phrase', 'Your email <strong>{email}</strong> has been successfully unsubscribed on {date}.', array(
 									'{email}'=>$newsletter->email, 
-									'{date}'=>Utility::dateFormat($newsletter->unsubscribe_date),
+									'{date}'=>Utility::dateFormat($newsletter->updated_date),
 								));
 							}					
 						} else {
@@ -247,7 +247,7 @@ class NewsletterController extends Controller
 				} else {
 					if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
 						if($model->validate()) {
-							if($model->subscribe == 1) {
+							if($model->status == 1) {
 								if($model->user_id != 0) {
 									$email = $model->user->email;
 									$displayname = $model->user->displayname;
@@ -257,14 +257,13 @@ class NewsletterController extends Controller
 									$secret = md5($email.$model->subscribe_date);
 								}
 								// Send Email to Member
-								$ticket = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('support/newsletter/unsubscribe', array('email'=>$email,'secret'=>$secret));
+								$ticket = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('users/newsletter/unsubscribe', array('email'=>$email,'secret'=>$secret));
 								SupportMailSetting::sendEmail($email, $displayname, 'Unsubscribe Ticket', $ticket);
 								
 								$url = Yii::app()->controller->createUrl('unsubscribe', array('success'=>$email));
 							
-							} else {
-								$url = Yii::app()->controller->createUrl('unsubscribe', array('success'=>$model->email, 'date'=>$model->unsubscribe_date));
-							}
+							} else
+								$url = Yii::app()->controller->createUrl('unsubscribe', array('success'=>$model->email, 'date'=>$model->updated_date));
 							
 							echo CJSON::encode(array(
 								'type' => 5,
