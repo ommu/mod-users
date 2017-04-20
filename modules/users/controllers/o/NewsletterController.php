@@ -213,9 +213,9 @@ class NewsletterController extends Controller
                     }
                 }
             }
-            Yii::app()->end();			
+            Yii::app()->end();
         }
-		
+
 		$this->dialogDetail = true;
 		$this->dialogWidth = 500;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');

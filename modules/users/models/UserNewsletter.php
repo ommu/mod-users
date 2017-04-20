@@ -244,8 +244,8 @@ class UserNewsletter extends CActiveRecord
 				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
 					'model'=>$this, 
 					'attribute'=>'subscribe_date', 
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					'language' => 'en',
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'subscribe_date_filter',
@@ -270,8 +270,8 @@ class UserNewsletter extends CActiveRecord
 				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
 					'model'=>$this, 
 					'attribute'=>'updated_date', 
-					'language' => 'ja',
-					'i18nScriptFile' => 'jquery.ui.datepicker-en.js',
+					'language' => 'en',
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
 					//'mode'=>'datetime',
 					'htmlOptions' => array(
 						'id' => 'updated_date_filter',
@@ -331,7 +331,7 @@ class UserNewsletter extends CActiveRecord
 						if($this->unsubscribe == 0) {
 							$this->addError('email', Yii::t('phrase', 'Anda Sudah terdaftar dalam newsletter.'));
 						}
-					}					
+					}
 				}
 				$this->subscribe_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 				
