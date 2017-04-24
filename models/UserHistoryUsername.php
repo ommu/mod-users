@@ -24,7 +24,7 @@
  * The followings are the available columns in table 'ommu_user_history_username':
  * @property string $id
  * @property string $user_id
- * @property string $username_old
+ * @property string $username
  * @property string $update_date
  *
  * The followings are the available model relations:
@@ -64,13 +64,13 @@ class UserHistoryUsername extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, username_old', 'required'),
+			array('user_id, username', 'required'),
 			array('user_id', 'length', 'max'=>11),
-			array('username_old', 'length', 'max'=>32),
+			array('username', 'length', 'max'=>32),
 			array('update_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, user_id, username_old, update_date,
+			array('id, user_id, username, update_date,
 				user_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -95,7 +95,7 @@ class UserHistoryUsername extends CActiveRecord
 		return array(
 			'id' => Yii::t('attribute', 'ID'),
 			'user_id' => Yii::t('attribute', 'User'),
-			'username_old' => Yii::t('attribute', 'Username Old'),
+			'username' => Yii::t('attribute', 'Username'),
 			'update_date' => Yii::t('attribute', 'Update Date'),
 		);
 	}
@@ -124,7 +124,7 @@ class UserHistoryUsername extends CActiveRecord
 		} else {
 			$criteria->compare('t.user_id',$this->user_id);
 		}
-		$criteria->compare('t.username_old',$this->username_old,true);
+		$criteria->compare('t.username',$this->username,true);
 		if($this->update_date != null && !in_array($this->update_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.update_date)',date('Y-m-d', strtotime($this->update_date)));
 		
@@ -168,7 +168,7 @@ class UserHistoryUsername extends CActiveRecord
 		} else {
 			//$this->defaultColumns[] = 'id';
 			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'username_old';
+			$this->defaultColumns[] = 'username';
 			$this->defaultColumns[] = 'update_date';
 		}
 
@@ -188,7 +188,7 @@ class UserHistoryUsername extends CActiveRecord
 				'name' => 'user_search',
 				'value' => '$data->user->displayname',
 			);
-			$this->defaultColumns[] = 'username_old';
+			$this->defaultColumns[] = 'username';
 			$this->defaultColumns[] = array(
 				'name' => 'update_date',
 				'value' => 'Utility::dateFormat($data->update_date, true)',

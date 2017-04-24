@@ -297,6 +297,7 @@ class UserLevel extends CActiveRecord
 				'name' => 'description',
 				'value' => 'Phrase::trans($data->desc, 2)',
 			);
+			/*
 			$this->defaultColumns[] = array(
 				'name' => 'users',
 				'value' => '$data->level_id != 1 ? CHtml::link($data->view_level->users." ".Yii::t(\'attribute\', \'Users\'), Yii::app()->controller->createUrl("o/member/manage",array("level"=>$data->level_id))) : CHtml::link($data->view_level->users." ".Yii::t(\'attribute\', \'Users\'), Yii::app()->controller->createUrl("o/admin/manage",array("level"=>$data->level_id)))',
@@ -305,6 +306,7 @@ class UserLevel extends CActiveRecord
 				),
 				'type' => 'raw',
 			);
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
 				'value' => '$data->creation_relation->displayname',
