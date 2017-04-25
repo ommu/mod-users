@@ -21,10 +21,10 @@
 )); ?>
 	<fieldset class="users-forgot">
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'email'); ?>
+			<?php echo $form->labelEx($model,'email_i'); ?>
 			<div class="desc">
-				<?php echo $form->textField($model,'email', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('email'))); ?>
-				<?php echo $form->error($model,'email'); ?>
+				<?php echo $form->textField($model,'email_i', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('email_i'))); ?>
+				<?php echo $form->error($model,'email_i'); ?>
 			</div>
 		</div>
 		<div class="clearfix">
