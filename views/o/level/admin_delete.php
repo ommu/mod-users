@@ -1,6 +1,6 @@
 <?php
 /**
- * User Level (user-level)
+ * User Levels (user-level)
  * @var $this LevelController
  * @var $model UserLevel
  * @var $form CActiveForm
@@ -20,7 +20,7 @@
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array(
-	'id'=>'ommu-pages-form',
+	'id'=>'user-level-form',
 	'enableAjaxValidation'=>true,
 	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>

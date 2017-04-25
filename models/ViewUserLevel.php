@@ -4,7 +4,7 @@
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
  * @link https://github.com/ommu/Users
  * @contact (+62)856-299-4114
  *
@@ -23,10 +23,11 @@
  *
  * The followings are the available columns in table '_view_user_level':
  * @property integer $level_id
- * @property string $user_pending
- * @property string $user_enable_verified
- * @property string $user_blocked
  * @property string $users
+ * @property string $user_pending
+ * @property string $user_noverified
+ * @property string $user_blocked
+ * @property string $user_all
  */
 class ViewUserLevel extends CActiveRecord
 {
@@ -68,10 +69,10 @@ class ViewUserLevel extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('level_id', 'numerical', 'integerOnly'=>true),
-			array('user_pending, user_enable_verified, user_blocked, users', 'safe'),
+			array('users, user_pending, user_noverified, user_blocked, user_all', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('level_id, user_pending, user_enable_verified, user_blocked, users', 'safe', 'on'=>'search'),
+			array('level_id, users, user_pending, user_noverified, user_blocked, user_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -93,10 +94,11 @@ class ViewUserLevel extends CActiveRecord
 	{
 		return array(
 			'level_id' => Yii::t('attribute', 'Level'),
-			'user_pending' => Yii::t('attribute', 'Pending'),
-			'user_enable_verified' => Yii::t('attribute', 'Enable Verified'),
-			'user_blocked' => Yii::t('attribute', 'Blocked'),
 			'users' => Yii::t('attribute', 'Users'),
+			'user_pending' => Yii::t('attribute', 'Pending'),
+			'user_noverified' => Yii::t('attribute', 'No Verified'),
+			'user_blocked' => Yii::t('attribute', 'Blocked'),
+			'user_all' => Yii::t('attribute', 'User All'),
 		);
 	}
 
@@ -119,10 +121,11 @@ class ViewUserLevel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.level_id',$this->level_id);
-		$criteria->compare('t.user_pending',$this->user_pending);
-		$criteria->compare('t.user_enable_verified',$this->user_enable_verified);
-		$criteria->compare('t.user_blocked',$this->user_blocked);
 		$criteria->compare('t.users',$this->users);
+		$criteria->compare('t.user_pending',$this->user_pending);
+		$criteria->compare('t.user_noverified',$this->user_noverified);
+		$criteria->compare('t.user_blocked',$this->user_blocked);
+		$criteria->compare('t.user_all',$this->user_all);
 
 		if(!isset($_GET['ViewUserLevel_sort']))
 			$criteria->order = 't.level_id DESC';
@@ -154,10 +157,11 @@ class ViewUserLevel extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'level_id';
-			$this->defaultColumns[] = 'user_pending';
-			$this->defaultColumns[] = 'user_enable_verified';
-			$this->defaultColumns[] = 'user_blocked';
 			$this->defaultColumns[] = 'users';
+			$this->defaultColumns[] = 'user_pending';
+			$this->defaultColumns[] = 'user_noverified';
+			$this->defaultColumns[] = 'user_blocked';
+			$this->defaultColumns[] = 'user_all';
 		}
 
 		return $this->defaultColumns;
@@ -172,10 +176,11 @@ class ViewUserLevel extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'user_pending';
-			$this->defaultColumns[] = 'user_enable_verified';
-			$this->defaultColumns[] = 'user_blocked';
 			$this->defaultColumns[] = 'users';
+			$this->defaultColumns[] = 'user_pending';
+			$this->defaultColumns[] = 'user_noverified';
+			$this->defaultColumns[] = 'user_blocked';
+			$this->defaultColumns[] = 'user_all';
 		}
 		parent::afterConstruct();
 	}

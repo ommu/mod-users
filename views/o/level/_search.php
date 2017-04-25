@@ -1,6 +1,6 @@
 <?php
 /**
- * User Level (user-level)
+ * User Levels (user-level)
  * @var $this LevelController
  * @var $model UserLevel
  * @var $form CActiveForm
@@ -50,13 +50,8 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('message_inbox'); ?><br/>
-			<?php echo $form->textField($model,'message_inbox'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('message_outbox'); ?><br/>
-			<?php echo $form->textField($model,'message_outbox'); ?>
+			<?php echo $model->getAttributeLabel('message_limit'); ?><br/>
+			<?php echo $form->textField($model,'message_limit'); ?>
 		</li>
 
 		<li>
@@ -120,13 +115,8 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('photo_width'); ?><br/>
-			<?php echo $form->textField($model,'photo_width'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('photo_height'); ?><br/>
-			<?php echo $form->textField($model,'photo_height'); ?>
+			<?php echo $model->getAttributeLabel('photo_size'); ?><br/>
+			<?php echo $form->textField($model,'photo_size'); ?>
 		</li>
 
 		<li>

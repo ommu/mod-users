@@ -1,6 +1,6 @@
 <?php
 /**
- * User Level (user-level)
+ * User Levels (user-level)
  * @var $this LevelController
  * @var $model UserLevel
  * @var $form CActiveForm
@@ -41,27 +41,29 @@
 			</div>
 
 			<div class="clearfix">
-				<?php echo $form->labelEx($model,'title'); ?>
+				<label><?php echo $model->getAttributeLabel('title_i');?> <span class="required">*</span></label>
 				<div class="desc">
 					<?php
-					$model->title = Phrase::trans($model->name, 2);
-					echo $form->textField($model,'title',array('maxlength'=>32, 'class'=>'span-7')); ?>
-					<?php echo $form->error($model,'title'); ?>
+					if(!$model->getErrors())
+						$model->title_i = Phrase::trans($model->name);
+					echo $form->textField($model,'title_i',array('maxlength'=>32, 'class'=>'span-7')); ?>
+					<?php echo $form->error($model,'title_i'); ?>
 				</div>
 			</div>
 
 			<div class="clearfix">
-				<?php echo $form->labelEx($model,'description'); ?>
+				<label><?php echo $model->getAttributeLabel('description_i');?> <span class="required">*</span></label>
 				<div class="desc">
 					<?php
-					$model->description = Phrase::trans($model->desc, 2);
-					echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50, 'class'=>'span-9 smaller')); ?>
-					<?php echo $form->error($model,'description'); ?>
+					if(!$model->getErrors())
+						$model->description_i = Phrase::trans($model->desc);
+					echo $form->textArea($model,'description_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-9 smaller')); ?>
+					<?php echo $form->error($model,'description_i'); ?>
 				</div>
 			</div>
 
 			<div class="clearfix">
-				<?php echo $form->labelEx($model,'defaults'); ?>
+				<label><?php echo $model->getAttributeLabel('defaults');?> <span class="required">*</span></label>
 				<div class="desc">
 					<?php echo $form->checkBox($model,'defaults'); ?>
 					<?php echo $form->error($model,'defaults'); ?>

@@ -125,14 +125,13 @@ class LevelController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'User Levels');
+		$this->pageTitle = Yii::t('phrase', 'User Levels Manage');
 		$this->pageDescription = Yii::t('phrase', 'If you want to put users into different groups with varying access to features (e.g. Bronze, Silver, and Gold membership plans), you can create multiple user groups. You must always have at least one group - your default group (which cannot be deleted). When users signup, they will be placed into the group you have designated as the default group on this page. You can change a user\'s group by editing their account from the View Users page. If you want to give all users on your social network the same features and limits, you will only need one user level. ');
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
-
 	}	
 	
 	/**
@@ -153,14 +152,15 @@ class LevelController extends Controller
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
+
 			} else {
 				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-levels',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success created.').'</strong></div>',
+							'id' => 'partial-user-level',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'UserLevel success created.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -168,19 +168,18 @@ class LevelController extends Controller
 				}
 			}
 			Yii::app()->end();
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 500;
-
-			$this->pageTitle = Yii::t('phrase', 'Add User Level');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_add',array(
-				'model'=>$model,
-			));
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 550;
+
+		$this->pageTitle = Yii::t('phrase', 'Create User Levels');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_add',array(
+			'model'=>$model,
+		));
 	}
 
 	/**
@@ -219,7 +218,7 @@ class LevelController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 0,
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Level setting success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'UserLevel success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -229,7 +228,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Yii::t('phrase', 'Update User Level').': '.Phrase::trans($model->name,2);
+			$this->pageTitle = Yii::t('phrase', 'Update User Levels: {level_name}', array('{level_name}'=>Phrase::trans($model->name)));
 			$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
@@ -274,7 +273,7 @@ class LevelController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 0,
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User setting success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'UserLevel success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -284,7 +283,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Yii::t('phrase', 'Update User Level').': '.Phrase::trans($model->name,2);
+			$this->pageTitle = Yii::t('phrase', 'Update User Levels: {level_name}', array('{level_name}'=>Phrase::trans($model->name)));
 			$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 			$this->pageMeta = '';
 			$this->render('admin_user',array(
@@ -329,7 +328,7 @@ class LevelController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 0,
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Message setting success updated.').'</strong></div>',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'UserLevel success updated.').'</strong></div>',
 						));
 					} else {
 						print_r($model->getErrors());
@@ -339,7 +338,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Yii::t('phrase', 'Update User Level').': '.Phrase::trans($model->name,2);
+			$this->pageTitle = Yii::t('phrase', 'Update User Levels: {level_name}', array('{level_name}'=>Phrase::trans($model->name)));
 			$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 			$this->pageMeta = '';
 			$this->render('admin_message',array(
@@ -356,17 +355,19 @@ class LevelController extends Controller
 	 */
 	public function actionDelete($id) 
 	{
+		$model=$this->loadModel($id);
+		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			if(isset($id)) {
-				$this->loadModel($id)->delete();
-
-				echo CJSON::encode(array(
-					'type' => 5,
-					'get' => Yii::app()->controller->createUrl('manage'),
-					'id' => 'partial-levels',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success deleted.').'</strong></div>',
-				));
+				if($model->delete()) {
+					echo CJSON::encode(array(
+						'type' => 5,
+						'get' => Yii::app()->controller->createUrl('manage'),
+						'id' => 'partial-user-level',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'UserLevel success deleted.').'</strong></div>',
+					));
+				}
 			}
 
 		} else {
@@ -374,7 +375,7 @@ class LevelController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = 'Delete Level';
+			$this->pageTitle = Yii::t('phrase', 'UserLevel Delete.');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -400,8 +401,8 @@ class LevelController extends Controller
 					echo CJSON::encode(array(
 						'type' => 5,
 						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-levels',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Level setting success updated.').'</strong></div>',
+						'id' => 'partial-user-level',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'UserLevel success updated.').'</strong></div>',
 					));
 				}
 			}
@@ -411,7 +412,7 @@ class LevelController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Default');
+			$this->pageTitle = Yii::t('phrase', 'UserLevel Default');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_default',array(

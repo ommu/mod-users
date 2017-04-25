@@ -1,6 +1,6 @@
 <?php
 /**
- * User Level (user-level)
+ * User Levels (user-level)
  * @var $this LevelController
  * @var $model UserLevel
  * version: 0.0.1
@@ -21,19 +21,13 @@
 			'label' => Yii::t('phrase', 'Filter'), 
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'search-button'),
-			'linkOptions' => array(
-				'title' => Yii::t('phrase', 'Filter'),
-				'off_address' => '',
-			),
+			'linkOptions' => array('title' => Yii::t('phrase', 'Filter')),
 		),
 		array(
 			'label' => Yii::t('phrase', 'Grid Options'), 
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'grid-button'),
-			'linkOptions' => array(
-				'title' => Yii::t('phrase', 'Grid Options'),
-				'off_address' => '',
-			),
+			'linkOptions' => array('title' => Yii::t('phrase', 'Grid Options')),
 		),
 	);
 
@@ -55,15 +49,14 @@
 </div>
 <?php //end.Grid Option ?>
 
-<div id="partial-levels">
-
+<div id="partial-user-level">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
-		if(Yii::app()->user->hasFlash('error'))
-			echo Utility::flashError(Yii::app()->user->getFlash('error'));
-		if(Yii::app()->user->hasFlash('success'))
-			echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
+	if(Yii::app()->user->hasFlash('error'))
+		echo Utility::flashError(Yii::app()->user->getFlash('error'));
+	if(Yii::app()->user->hasFlash('success'))
+		echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
 	?>
 	</div>
 	<?php //begin.Messages ?>
@@ -73,14 +66,14 @@
 		<?php 
 			$columnData   = $columns;
 			array_push($columnData, array(
-				'header' => 'Option',
+				'header' => Yii::t('phrase', 'Options'),
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
 						'label' => 'view',
 						'imageUrl' => false,
 						'options' => array(
-							'class' => 'view'
+							'class' => 'view',
 						),
 						'url' => 'Yii::app()->controller->createUrl("view",array("id"=>$data->primaryKey))'),
 					'update' => array(

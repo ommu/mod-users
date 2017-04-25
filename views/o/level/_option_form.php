@@ -1,6 +1,6 @@
 <?php
 /**
- * User Level (user-level)
+ * User Levels (user-level)
  * @var $this LevelController
  * @var $model UserLevel
  * @var $form CActiveForm
@@ -26,10 +26,11 @@ foreach($model->metaData->columns as $key => $val) {
 }
 ?>
 <ul>
-	<?php foreach($columns as $val): ?>	<li>
+	<?php foreach($columns as $val): ?>
+	<li>
 		<?php echo CHtml::checkBox('GridColumn['.$val.']'); ?>
 		<?php echo CHtml::label($val, 'GridColumn_'.$val); ?>
 	</li>
-	<?php endforeach; ?></ul>
-<div class="clear"></div>
+	<?php endforeach; ?>
+</ul>
 <?php echo CHtml::endForm(); ?>

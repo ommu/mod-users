@@ -1,6 +1,6 @@
 <?php
 /**
- * User Level (user-level)
+ * User Levels (user-level)
  * @var $this LevelController
  * @var $model UserLevel
  * @var $form CActiveForm
@@ -65,7 +65,10 @@
 
 					<p><?php echo Yii::t('phrase', 'Profile Privacy Options');?></p>
 					<span class="desc"><?php echo Yii::t('phrase', 'Your users can choose from any of the options checked below when they decide who can see their profile. If you do not check any options, everyone will be allowed to view profiles.');?></span>
-					<?php echo $form->checkBoxList($model, 'profile_privacy', array(
+					<?php 
+					if(!$model->getErrors())
+						$model->profile_privacy = unserialize($model->profile_privacy);
+					echo $form->checkBoxList($model, 'profile_privacy', array(
 						1 => Yii::t('phrase', 'Everyone'),
 						2 => Yii::t('phrase', 'All Registered Users'),
 						3 => Yii::t('phrase', 'Only My Friends and Everyone within My Subnetwork'),
@@ -77,7 +80,10 @@
 
 					<p><?php echo Yii::t('phrase', 'Profile Comment Options');?></p>
 					<span class="desc"><?php echo Yii::t('phrase', 'Your users can choose from any of the options checked below when they decide who can post comments on their profile. If you do not check any options, everyone will be allowed to post comments on profiles.');?></span>
-					<?php echo $form->checkBoxList($model, 'profile_comments', array(
+					<?php 
+					if(!$model->getErrors())
+						$model->profile_comments = unserialize($model->profile_comments);
+					echo $form->checkBoxList($model, 'profile_comments', array(
 						1 => Yii::t('phrase', 'Everyone'),
 						2 => Yii::t('phrase', 'All Registered Users'),
 						3 => Yii::t('phrase', 'Only My Friends and Everyone within My Subnetwork'),
@@ -100,14 +106,27 @@
 					<?php echo $form->error($model,'photo_allow'); ?>
 
 					<span class="small-px"><?php echo Yii::t('phrase', 'If you have selected "Yes" above, please input the maximum dimensions for the user photos. If your users upload a photo that is larger than these dimensions, the server will attempt to scale them down automatically. This feature requires that your PHP server is compiled with support for the GD Libraries.');?></span>
-					<?php echo Yii::t('phrase', 'Maximum Width:');?>&nbsp;<?php echo $form->textField($model,'photo_width'); ?>&nbsp;<?php echo Yii::t('phrase', '(in pixels, between 1 and 999)');?><br/>
-					<?php echo $form->error($model,'photo_width'); ?>
+					<?php echo Yii::t('phrase', 'Maximum Width:');?>&nbsp;
+					<?php 
+					if(!$model->getErrors())
+						$model->photo_size = unserialize($model->photo_size);
+					echo $form->textField($model,'photo_size[width]'); ?>&nbsp;<?php echo Yii::t('phrase', '(in pixels, between 1 and 999)');?><br/>
+					<?php echo $form->error($model,'photo_size[width]'); ?>
 
-					<?php echo Yii::t('phrase', 'Maximum Height:');?>&nbsp;<?php echo $form->textField($model,'photo_height'); ?>&nbsp;<?php echo Yii::t('phrase', '(in pixels, between 1 and 999)');?><br/>
-					<?php echo $form->error($model,'photo_height'); ?>
+					<?php echo Yii::t('phrase', 'Maximum Height:');?>&nbsp;
+					<?php echo $form->textField($model,'photo_size[height]'); ?>&nbsp;<?php echo Yii::t('phrase', '(in pixels, between 1 and 999)');?><br/>
+					<?php echo $form->error($model,'photo_size[height]'); ?><br/>
+					<?php echo $form->error($model,'photo_size'); ?>
 
 					<span class="small-px"><?php echo Yii::t('phrase', 'What file types do you want to allow for user photos (gif, jpg, jpeg, or png)? Separate file types with commas, i.e. jpg, jpeg, gif, png');?></span>
-					<?php echo Yii::t('phrase', 'Allowed File Types:');?>&nbsp;<?php echo $form->textField($model,'photo_exts',array('maxlength'=>32)); ?><br/>
+					<?php echo Yii::t('phrase', 'Allowed File Types:');?>&nbsp;
+					<?php 
+					if(!$model->getErrors()) {
+						$photo_exts = unserialize($model->photo_exts);
+						if(!empty($photo_exts))
+							$model->photo_exts = Utility::formatFileType($photo_exts, false);
+					}
+					echo $form->textField($model,'photo_exts',array('maxlength'=>32)); ?><br/>
 					<?php echo $form->error($model,'photo_exts'); ?>
 				</div>
 			</div>

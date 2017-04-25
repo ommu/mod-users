@@ -1,6 +1,6 @@
 <?php
 /**
- * User Level (user-level)
+ * User Levels (user-level)
  * @var $this LevelController
  * @var $model UserLevel
  * @var $form CActiveForm
@@ -57,7 +57,10 @@
 				<label><?php echo Yii::t('phrase', 'Inbox/Outbox Capacity');?></label>
 				<div class="desc">
 					<span class="small-px"><?php echo Yii::t('phrase', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.');?></span>
-					<?php echo $form->dropDownList($model, 'message_inbox', array(
+					<?php 
+					if(!$model->getErrors())
+						$model->message_limit = unserialize($model->message_limit);
+					echo $form->dropDownList($model, 'message_limit[inbox]', array(
 						5 => 5,
 						10 => 10,
 						20 => 20,
@@ -69,9 +72,9 @@
 						500 => 500,
 					)); ?>
 					<?php echo Yii::t('phrase', 'conversations in inbox folder.');?>
-					<?php echo $form->error($model,'message_inbox'); ?>
+					<?php echo $form->error($model,'message_limit[inbox]'); ?>
 					<br/>
-					<?php echo $form->dropDownList($model, 'message_outbox', array(
+					<?php echo $form->dropDownList($model, 'message_limit[outbox]', array(
 						5 => 5,
 						10 => 10,
 						20 => 20,
@@ -83,7 +86,7 @@
 						500 => 500,
 					)); ?>
 					<?php echo Yii::t('phrase', 'conversations in outbox folder.');?>
-					<?php echo $form->error($model,'message_outbox'); ?>
+					<?php echo $form->error($model,'message_limit[outbox]'); ?>
 				</div>
 			</div>
 
