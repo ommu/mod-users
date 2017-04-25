@@ -2,7 +2,7 @@
 
 class UsersModule extends CWebModule
 {
-	public $defaultController = 'account'; 
+	public $defaultController = 'account';
 	
 	// getAssetsUrl()
 	//	return the URL for this module's assets, performing the publish operation
