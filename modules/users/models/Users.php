@@ -52,7 +52,8 @@
 class Users extends CActiveRecord
 {
 	public $defaultColumns = array();
-
+	
+	public $old_photos_i;
 	public $oldPassword;
 	public $newPassword;
 	public $confirmPassword;
@@ -104,7 +105,7 @@ class Users extends CActiveRecord
 				oldPassword, newPassword, confirmPassword', 'length', 'max'=>32),
 			array('displayname', 'length', 'max'=>64),
 			array('enabled, verified, level_id, language_id, password, username, photos, locale_id, timezone_id,
-				oldPassword, newPassword, confirmPassword, inviteCode, referenceId', 'safe'),
+				old_photos_i, oldPassword, newPassword, confirmPassword, inviteCode, referenceId', 'safe'),
 			array('oldPassword','filter','filter'=>array($this,'validatePassword')),
 			array('email', 'email'),
 			array('email, username', 'unique'),
@@ -160,6 +161,7 @@ class Users extends CActiveRecord
 			'lastlogin_from' => Yii::t('attribute', 'Last Login From'),
 			'update_date' => Yii::t('attribute', 'Update Date'),
 			'update_ip' => Yii::t('attribute', 'Update Ip'),
+			'old_photos_i' => Yii::t('attribute', 'Old Photo (File)'),
 			'newPassword' => Yii::t('attribute', 'Password'),
 			'confirmPassword' => Yii::t('attribute', 'Confirm Password'),
 			'inviteCode' => Yii::t('attribute', 'Invite Code'),
@@ -495,7 +497,22 @@ class Users extends CActiveRecord
 		$controller = strtolower(Yii::app()->controller->id);
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		
-		if(parent::beforeValidate()) {			
+		if(parent::beforeValidate()) {
+			$photo_exts = unserialize($this->level->photo_exts);
+			$photos = CUploadedFile::getInstance($this, 'photos');
+			if($photos != null) {
+				$extension = pathinfo($photos->name, PATHINFO_EXTENSION);
+				if(!in_array(strtolower($extension), $photo_exts))
+					$this->addError('photos', Yii::t('phrase', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}.', array(
+						'{name}'=>$photos->name,
+						'{extensions}'=>Utility::formatFileType($photo_exts, false),
+					)));
+					
+			} else {
+				if(!$this->isNewRecord && $currentAction == 'o/admin/photo')
+					$this->addError('photos', 'Photo cannot be blank.');
+			}
+			
 			if($this->isNewRecord) {
 				$setting = OmmuSettings::model()->findByPk(1, array(
 					'select' => 'site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
@@ -604,12 +621,41 @@ class Users extends CActiveRecord
 	/**
 	 * before save attributes
 	 */
-	protected function beforeSave() {
+	protected function beforeSave() 
+	{
 		if(parent::beforeSave()) {
 			$this->email = strtolower($this->email);
 			$this->username = strtolower($this->username);
 			if($this->newPassword != '')
 				$this->password = self::hashPassword($this->salt, $this->newPassword);
+			
+			if(!$this->isNewRecord) {
+				// Add User Folder
+				$user_path = 'public/users/'.$this->user_id;
+				if(!file_exists($user_path)) {
+					mkdir($user_path, 0755, true);
+
+					// Add File in User Folder (index.php)
+					$newFile = $user_path.'/index.php';
+					$FileHandle = fopen($newFile, 'w');
+				} else
+					@chmod($user_path, 0755, true);
+				
+				$this->photos = CUploadedFile::getInstance($this, 'photos');
+				if($this->photos != null) {
+					if($this->photos instanceOf CUploadedFile) {
+						$fileName = time().'_'.Utility::getUrlTitle($this->displayname).'.'.strtolower($this->photos->extensionName);
+						if($this->photos->saveAs($user_path.'/'.$fileName)) {							
+							if($this->old_photos_i != '' && file_exists($user_path.'/'.$this->old_photos_i))
+								rename($user_path.'/'.$this->old_photos_i, 'public/users/verwijderen/'.$this->user_id.'_'.$this->old_photos_i);
+							$this->photos = $fileName;
+						}
+					}
+				} else {
+					if($this->photos == '')
+						$this->photos = $this->old_photos_i;
+				}
+			}
 		}
 		return true;	
 	}
@@ -631,6 +677,27 @@ class Users extends CActiveRecord
 		}
 		
 		if($this->isNewRecord) {
+			// Add User Folder
+			$user_path = 'public/users/'.$this->user_id;
+			if(!file_exists($user_path)) {
+				mkdir($user_path, 0755, true);
+
+				// Add File in User Folder (index.php)
+				$newFile = $user_path.'/index.php';
+				$FileHandle = fopen($newFile, 'w');
+			} else
+				@chmod($user_path, 0755, true);
+			
+			$this->photos = CUploadedFile::getInstance($this, 'photos');
+			if($this->photos != null) {
+				if($this->photos instanceOf CUploadedFile) {
+					$fileName = time().'_'.Utility::getUrlTitle($this->displayname).'.'.strtolower($this->photos->extensionName);
+					if($this->photos->saveAs($user_path.'/'.$fileName)) {
+						self::model()->updateByPk($this->user_id, array('photos'=>$fileName));
+					}
+				}
+			}
+			
 			$setting = OmmuSettings::model()->findByPk(1, array(
 				'select' => 'site_type, site_title, signup_welcome, signup_adminemail',
 			));

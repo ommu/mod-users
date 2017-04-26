@@ -84,7 +84,7 @@ class AdminController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('edit','password'),
+				'actions'=>array('edit','password','photo'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -154,6 +154,75 @@ class AdminController extends Controller
 		$this->render('admin_password',array(
 			'model'=>$model,
 		));
+	}
+
+
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionPhoto($id=null) 
+	{
+		$condition = 1;
+		if($id == null) {
+			$condition = 0;
+			$id = Yii::app()->user->id;
+		}
+		
+		$model = Users::model()->findByPk($id);
+		$photo_exts = unserialize($model->level->photo_exts);
+		if(!$model->getErrors())
+			$photos = $model->photos;
+		
+		if($condition == 0) {
+			$user_path = 'public/users/'.$id;
+			if(!file_exists($user_path)) {
+				mkdir($user_path, 0755, true);
+
+				// Add File in User Folder (index.php)
+				$newFile = $user_path.'/index.php';
+				$FileHandle = fopen($newFile, 'w');
+			} else
+				@chmod($user_path, 0755, true);
+			
+			$userPhoto = CUploadedFile::getInstanceByName('namaFile');
+			$fileName = time().'_'.Utility::getUrlTitle($model->displayname).'.'.strtolower($userPhoto->extensionName);
+			if($userPhoto->saveAs($user_path.'/'.$fileName)) {
+				if(Users::model()->updateByPk($model->user_id, array('photos'=>$fileName,'update_date'=>date('Y-m-d H:i:s')))) {
+					if($photos != '')
+						rename($user_path.'/'.$photos, 'public/users/verwijderen/'.$model->user_id.'_'.$photos);
+					echo CJSON::encode(array(
+						'id' => 'div.account a.photo img',
+						'image' => Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/users/'.$model->user_id.'/'.$fileName, 82, 82, 1),
+					));					
+				}
+			}
+			
+		} else {
+			// Uncomment the following line if AJAX validation is needed
+			$this->performAjaxValidation($model);
+
+			if(isset($_POST['Users'])) {
+				$model->attributes=$_POST['Users'];
+				
+				if($model->save()) {
+					Yii::app()->user->setFlash('success', Yii::t('phrase', 'Users success updated.'));
+					$this->redirect(array('manage'));
+				}
+			}
+			
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = $condition == 1 ? Yii::app()->controller->createUrl('manage') : Yii::app()->createUrl('admin/dashboard');
+			$this->dialogWidth = 600;
+
+			$this->pageTitle = 'Photo Users';
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_photo',array(
+				'model'=>$model,
+				'photo_exts'=>$photo_exts,
+			));
+		}
 	}
 
 	/**
@@ -246,12 +315,13 @@ class AdminController extends Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionEdit() 
+	public function actionEdit($id=null) 
 	{
-		if(isset($_GET['id']))
-			$id = $_GET['id'];
-		else 
+		$condition = 1;
+		if($id == null) {
+			$condition = 0;
 			$id = Yii::app()->user->id;
+		}
 		
 		$model=$this->loadModel($id);
 		$setting = OmmuSettings::model()->findByPk(1, array(
@@ -287,7 +357,7 @@ class AdminController extends Controller
 		}
 		
 		$this->dialogDetail = true;
-		$this->dialogGroundUrl = isset($_GET['id']) ? Yii::app()->controller->createUrl('manage') : Yii::app()->createUrl('admin/dashboard');
+		$this->dialogGroundUrl = $condition == 1 ? Yii::app()->controller->createUrl('manage') : Yii::app()->createUrl('admin/dashboard');
 		$this->dialogWidth = 600;
 
 		$this->pageTitle = 'Update Users';
