@@ -97,6 +97,7 @@ class UserHistoryUsername extends CActiveRecord
 			'user_id' => Yii::t('attribute', 'User'),
 			'username' => Yii::t('attribute', 'Username'),
 			'update_date' => Yii::t('attribute', 'Update Date'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 	}
 
@@ -117,16 +118,6 @@ class UserHistoryUsername extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		$criteria->compare('t.id',$this->id,true);
-		if(isset($_GET['user'])) {
-			$criteria->compare('t.user_id',$_GET['user']);
-		} else {
-			$criteria->compare('t.user_id',$this->user_id);
-		}
-		$criteria->compare('t.username',$this->username,true);
-		if($this->update_date != null && !in_array($this->update_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.update_date)',date('Y-m-d', strtotime($this->update_date)));
 		
 		// Custom Search
 		$criteria->with = array(
@@ -135,6 +126,16 @@ class UserHistoryUsername extends CActiveRecord
 				'select'=>'displayname'
 			),
 		);
+
+		$criteria->compare('t.id',$this->id,true);
+		if(isset($_GET['user']))
+			$criteria->compare('t.user_id',$_GET['user']);
+		else
+			$criteria->compare('t.user_id',$this->user_id);
+		$criteria->compare('t.username',$this->username,true);
+		if($this->update_date != null && !in_array($this->update_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.update_date)',date('Y-m-d', strtotime($this->update_date)));
+		
 		$criteria->compare('user.displayname',strtolower($this->user_search), true);
 
 		if(!isset($_GET['UserHistoryUsername_sort']))
@@ -184,16 +185,21 @@ class UserHistoryUsername extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
+			if(!isset($_GET['user'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'user_search',
+					'value' => '$data->user->displayname',
+				);
+			}
 			$this->defaultColumns[] = array(
-				'name' => 'user_search',
-				'value' => '$data->user->displayname',
+				'name' => 'username',
+				'value' => '$data->username',
 			);
-			$this->defaultColumns[] = 'username';
 			$this->defaultColumns[] = array(
 				'name' => 'update_date',
 				'value' => 'Utility::dateFormat($data->update_date, true)',
 				'htmlOptions' => array(
-					//'class' => 'center',
+					'class' => 'center',
 				),
 				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
 					'model'=>$this,

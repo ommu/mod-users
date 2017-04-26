@@ -400,9 +400,8 @@ class UserNewsletter extends CActiveRecord
 				$displayname = $this->user->displayname;
 			}
 			
-			if($this->status == 0) {
+			if($this->status == 0)
 				SupportMailSetting::sendEmail($email, $displayname, 'Unsubscribe Success', 'Unsubscribe Success');
-			}
 		}
 	}
 
