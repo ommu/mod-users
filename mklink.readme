@@ -13,6 +13,7 @@ controllers
 =======
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\DeviceController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\DeviceController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\InviteController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\InviteController.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\LevelController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\LevelController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\NewsletterController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\NewsletterController.php"
 
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\ForgotController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\ForgotController.php"
@@ -38,15 +39,20 @@ mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\User
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserHistoryPassword.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserHistoryPassword.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserInviteQueue.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserInviteQueue.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserInvites.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserInvites.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserLevel.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserLevel.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserNewsletter.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserNewsletter.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserNewsletterHistory.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserNewsletterHistory.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserVerify.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserVerify.php"
+
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\ViewUserLevel.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\ViewUserLevel.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\ViewUsers.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\ViewUsers.php"
 
 -------
 views
 =======
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\device" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\device"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\invite" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\invite"
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\level" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\level"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\newsletter" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\newsletter"
 
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\forgot" "D:\htdocs\_project_ommu_module_users\modules\users\views\forgot"

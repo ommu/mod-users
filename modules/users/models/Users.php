@@ -28,12 +28,14 @@
  * @property integer $verified
  * @property integer $level_id
  * @property integer $language_id
- * @property string $salt
- * @property string $password
+ * @property integer $locale_id
+ * @property integer $timezone_id
  * @property string $email
  * @property string $username
  * @property string $displayname
+ * @property string $password
  * @property string $photos
+ * @property string $salt
  * @property string $creation_date
  * @property string $creation_ip
  * @property string $modified_date
@@ -43,8 +45,6 @@
  * @property string $lastlogin_from
  * @property string $update_date
  * @property string $update_ip
- * @property integer $locale_id
- * @property integer $timezone_id
  *
  * The followings are the available model relations:
  * @property OmmuUserLevel $level
@@ -58,6 +58,9 @@ class Users extends CActiveRecord
 	public $confirmPassword;
 	public $inviteCode;
 	public $referenceId;
+	
+	// Variable Search
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -110,7 +113,8 @@ class Users extends CActiveRecord
 				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, enabled, verified, level_id, language_id, salt, password, email, username, displayname, photos, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
+			array('user_id, enabled, verified, level_id, language_id, locale_id, timezone_id, email, username, displayname, password, photos, salt, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip,
+				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -124,6 +128,7 @@ class Users extends CActiveRecord
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewUsers', 'user_id'),
 			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
 
@@ -138,12 +143,14 @@ class Users extends CActiveRecord
 			'verified' => Yii::t('attribute', 'Verified'),
 			'level_id' => Yii::t('attribute', 'Level'),
 			'language_id' => Yii::t('attribute', 'Language'),
-			'salt' => Yii::t('attribute', 'Salt'),
-			'password' => Yii::t('attribute', 'Password'),
+			'locale_id' => Yii::t('attribute', 'Locale'),
+			'timezone_id' => Yii::t('attribute', 'Timezone'),
 			'email' => Yii::t('attribute', 'Email'),
 			'username' => Yii::t('attribute', 'Username'),
 			'displayname' => Yii::t('attribute', 'Displayname'),
+			'password' => Yii::t('attribute', 'Password'),
 			'photos' => Yii::t('attribute', 'Photos'),
+			'salt' => Yii::t('attribute', 'Salt'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_ip' => Yii::t('attribute', 'Creation Ip'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
@@ -153,11 +160,10 @@ class Users extends CActiveRecord
 			'lastlogin_from' => Yii::t('attribute', 'Last Login From'),
 			'update_date' => Yii::t('attribute', 'Update Date'),
 			'update_ip' => Yii::t('attribute', 'Update Ip'),
-			'locale_id' => Yii::t('attribute', 'Locale'),
-			'timezone_id' => Yii::t('attribute', 'Timezone'),
 			'newPassword' => Yii::t('attribute', 'Password'),
 			'confirmPassword' => Yii::t('attribute', 'Confirm Password'),
 			'inviteCode' => Yii::t('attribute', 'Invite Code'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
 
@@ -179,27 +185,41 @@ class Users extends CActiveRecord
 		$controller = strtolower(Yii::app()->controller->id);
 
 		$criteria=new CDbCriteria;
+		
+		// Custom Search
+		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
+			'modified' => array(
+				'alias'=>'modified',
+				'select'=>'displayname',
+			),
+		);
 
 		$criteria->compare('t.user_id',$this->user_id,true);
 		$criteria->compare('t.enabled',$this->enabled);
 		$criteria->compare('t.verified',$this->verified);
-		if($controller == 'o/member') {
-			$criteria->addNotInCondition('t.level_id',array(1));
-			$criteria->compare('t.level_id',$this->level_id);
-		} else if($controller == 'o/admin') {
-			$criteria->compare('t.level_id',1);
-		}
 		if(isset($_GET['level']))
 			$criteria->compare('t.level_id',$_GET['level']);
-		else
-			$criteria->compare('t.level_id',$this->level_id);
+		else {
+			if($controller == 'o/member') {
+				$criteria->addNotInCondition('t.level_id',array(1));
+				$criteria->compare('t.level_id',$this->level_id);
+			} else if($controller == 'o/admin')
+				$criteria->compare('t.level_id',1);
+			else
+				$criteria->compare('t.level_id',$this->level_id);
+		}
 		$criteria->compare('t.language_id',$this->language_id);
-		$criteria->compare('t.salt',$this->salt,true);
-		$criteria->compare('t.password',$this->password,true);
+		$criteria->compare('t.locale_id',$this->locale_id);
+		$criteria->compare('t.timezone_id',$this->timezone_id);
 		$criteria->compare('t.email',strtolower($this->email),true);
 		$criteria->compare('t.username',strtolower($this->username),true);
 		$criteria->compare('t.displayname',strtolower($this->displayname),true);
+		$criteria->compare('t.password',strtolower($this->password),true);
 		$criteria->compare('t.photos',strtolower($this->photos),true);
+		$criteria->compare('t.salt',strtolower($this->salt),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		$criteria->compare('t.creation_ip',strtolower($this->creation_ip),true);
@@ -212,12 +232,12 @@ class Users extends CActiveRecord
 		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.lastlogin_date)',date('Y-m-d', strtotime($this->lastlogin_date)));
 		$criteria->compare('t.lastlogin_ip',strtolower($this->lastlogin_ip),true);
-		$criteria->compare('t.lastlogin_from',$this->lastlogin_from,true);
+		$criteria->compare('t.lastlogin_from',strtolower($this->lastlogin_from),true);
 		if($this->update_date != null && !in_array($this->update_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.update_date)',date('Y-m-d', strtotime($this->update_date)));
 		$criteria->compare('t.update_ip',strtolower($this->update_ip),true);
-		$criteria->compare('t.locale_id',$this->locale_id);
-		$criteria->compare('t.timezone_id',$this->timezone_id);
+		
+		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
 
 		if(!isset($_GET['Users_sort']))
 			$criteria->order = 't.user_id DESC';
@@ -253,12 +273,14 @@ class Users extends CActiveRecord
 			$this->defaultColumns[] = 'verified';
 			$this->defaultColumns[] = 'level_id';
 			$this->defaultColumns[] = 'language_id';
-			$this->defaultColumns[] = 'salt';
-			$this->defaultColumns[] = 'password';
+			$this->defaultColumns[] = 'locale_id';
+			$this->defaultColumns[] = 'timezone_id';
 			$this->defaultColumns[] = 'email';
 			$this->defaultColumns[] = 'username';
 			$this->defaultColumns[] = 'displayname';
+			$this->defaultColumns[] = 'password';
 			$this->defaultColumns[] = 'photos';
+			$this->defaultColumns[] = 'salt';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_ip';
 			$this->defaultColumns[] = 'modified_date';
@@ -268,8 +290,6 @@ class Users extends CActiveRecord
 			$this->defaultColumns[] = 'lastlogin_from';
 			$this->defaultColumns[] = 'update_date';
 			$this->defaultColumns[] = 'update_ip';
-			$this->defaultColumns[] = 'locale_id';
-			$this->defaultColumns[] = 'timezone_id';
 		}
 
 		return $this->defaultColumns;
@@ -278,9 +298,11 @@ class Users extends CActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	protected function afterConstruct() {
+	protected function afterConstruct() 
+	{
+		$controller = strtolower(Yii::app()->controller->id);
+		
 		if(count($this->defaultColumns) == 0) {
-			$controller = strtolower(Yii::app()->controller->id);
 			/*
 			$this->defaultColumns[] = array(
 				'class' => 'CCheckBoxColumn',
@@ -300,8 +322,6 @@ class Users extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			$this->defaultColumns[] = 'displayname';
-			$this->defaultColumns[] = 'email';
 			if(!in_array($controller, array('o/admin'))) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_id',
@@ -313,7 +333,14 @@ class Users extends CActiveRecord
 					'type' => 'raw',
 				);
 			}
-			//$this->defaultColumns[] = 'photos';
+			$this->defaultColumns[] = array(
+				'name' => 'displayname',
+				'value' => '$data->displayname',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'email',
+				'value' => '$data->email',
+			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_date',
 				'value' => 'Utility::dateFormat($data->creation_date)',
@@ -340,8 +367,14 @@ class Users extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'creation_ip';
-			if($controller != 'o/admin') {
+			$this->defaultColumns[] = array(
+				'name' => 'creation_ip',
+				'value' => '$data->creation_ip',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			if(!in_array($controller, array('o/admin'))) {
 				$this->defaultColumns[] = array(
 					'name' => 'verified',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("verified",array("id"=>$data->user_id)), $data->verified, 1)',
