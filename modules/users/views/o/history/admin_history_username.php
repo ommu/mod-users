@@ -1,8 +1,8 @@
 <?php
 /**
- * User Newsletter Histories (user-newsletter-history)
+ * User History Usernames (user-history-username)
  * @var $this HistoryController
- * @var $model UserNewsletterHistory
+ * @var $model UserHistoryUsername
  * @var $form CActiveForm
  * version: 0.0.1
  *
@@ -14,12 +14,12 @@
  */
 
 	$this->breadcrumbs=array(
-		'User History Password'=>array('manage'),
+		'User History Username'=>array('manage'),
 		'Manage',
 	);
 ?>
 
-<div id="partial-user-newsletter-history">
+<div id="partial-user-history-username">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
@@ -36,7 +36,7 @@
 		<?php 
 			$columnData   = $columns;
 			$this->widget('application.components.system.OGridView', array(
-				'id'=>'user-newsletter-history-grid',
+				'id'=>'user-history-username-grid',
 				'dataProvider'=>$model->search(),
 				'filter'=>$model,
 				'afterAjaxUpdate' => 'reinstallDatePicker',

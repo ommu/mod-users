@@ -206,8 +206,20 @@ class UserNewsletterHistory extends CActiveRecord
 				);
 			}
 			$this->defaultColumns[] = array(
+				'name' => 'status',
+				'value' => '$data->status == 1 ? Yii::t(\'phrase\', \'Subscribe\') : Yii::t(\'phrase\', \'Unsubscribe\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Subscribe'),
+					0=>Yii::t('phrase', 'Unsubscribe'),
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
 				'name' => 'updated_date',
-				'value' => 'Utility::dateFormat($data->updated_date)',
+				'value' => 'Utility::dateFormat($data->updated_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -237,18 +249,6 @@ class UserNewsletterHistory extends CActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'status',
-				'value' => '$data->status == 1 ? Yii::t(\'phrase\', \'Subscribe\') : Yii::t(\'phrase\', \'Unsubscribe\')',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter'=>array(
-					1=>Yii::t('phrase', 'Subscribe'),
-					0=>Yii::t('phrase', 'Unsubscribe'),
-				),
-				'type' => 'raw',
 			);
 		}
 		parent::afterConstruct();

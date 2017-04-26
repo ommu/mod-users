@@ -19,13 +19,14 @@ plugin_menu		:
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/member/manage, attr: -, icon: -}
 		
+	- urlTitle: Userlevel
+		urlRules: {siteType: "0,1", userLevel: 1}
+		urlPath: {url: o/level/manage, attr: -, icon: -}
+		
 	- urlTitle: Datas
 		urlRules: {siteType: "0,1", userLevel: 1}
 		urlPath: {url: -, attr: -, icon: -}
 		submenu :		
-			- urlTitle: Userlevel
-				urlRules: {siteType: "0,1", userLevel: 1}
-				urlPath: {url: o/level/manage, attr: -, icon: -}
 			- urlTitle: Subscribes
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/newsletter/manage, attr: -, icon: -}
@@ -43,13 +44,16 @@ plugin_menu		:
 			- urlTitle: Login
 				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/history/login, attr: -, icon: -}
-			- urlTitle: Change Password
+			- urlTitle: Emails
+				urlRules: {siteType: 1, userLevel: "1,2"}
+				urlPath: {url: o/history/email, attr: -, icon: -}
+			- urlTitle: Usernames
+				urlRules: {siteType: 1, userLevel: "1,2"}
+				urlPath: {url: o/history/username, attr: -, icon: -}
+			- urlTitle: Passwords
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/history/password, attr: -, icon: -}
-			- urlTitle: Forgot Password
-				urlRules: {siteType: 1, userLevel: "1,2"}
-				urlPath: {url: o/history/forgot, attr: -, icon: -}
-			- urlTitle: Subscribes
+			- urlTitle: Subscribe/Unsubscribe
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/history/subscribe, attr: -, icon: -}
 
