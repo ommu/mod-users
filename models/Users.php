@@ -24,7 +24,6 @@
  * The followings are the available columns in table 'ommu_users':
  * @property string $user_id
  * @property integer $level_id
- * @property integer $profile_id
  * @property integer $language_id
  * @property string $email
  * @property string $salt
@@ -43,7 +42,6 @@
  * @property integer $show_profile
  * @property integer $privacy
  * @property integer $comments
- * @property string $last_email
  * @property string $creation_date
  * @property string $creation_ip
  * @property string $modified_date
@@ -99,18 +97,18 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('level_id, profile_id, email, first_name, last_name', 'required'),
+			array('level_id, email, first_name, last_name', 'required'),
 			array('displayname', 'required', 'on'=>'formEdit'),
 			array('
 				oldPassword', 'required', 'on'=>'formChangePassword'),
 			array('
 				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetpassword'),
-			array('level_id, profile_id, language_id, photo_id, enabled, verified, deactivate, search, invisible, show_profile, privacy, comments, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
+			array('level_id, language_id, photo_id, enabled, verified, deactivate, search, invisible, show_profile, privacy, comments, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
 			array('photo_id, status_id, modified_id', 'length', 'max'=>11),
 			array('
 				inviteCode', 'length', 'max'=>16),
 			array('creation_ip, lastlogin_ip, update_ip', 'length', 'max'=>20),
-			array('email, salt, password, first_name, last_name, username, last_email, 
+			array('email, salt, password, first_name, last_name, username,
 				oldPassword, newPassword, confirmPassword', 'length', 'max'=>32),
 			array('displayname', 'length', 'max'=>64),
 			//array('email', 'email'),
@@ -122,7 +120,7 @@ class Users extends CActiveRecord
 				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama2.'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('user_id, level_id, profile_id, language_id, email, salt, password, first_name, last_name, displayname, photo_id, status_id, username, enabled, verified, deactivate, search, invisible, show_profile, privacy, comments, last_email, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
+			array('user_id, level_id, language_id, email, salt, password, first_name, last_name, displayname, photo_id, status_id, username, enabled, verified, deactivate, search, invisible, show_profile, privacy, comments, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip, locale_id, timezone_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -138,7 +136,9 @@ class Users extends CActiveRecord
 			'photo' => array(self::BELONGS_TO, 'UserPhoto', 'photo_id'),
 			'option' => array(self::BELONGS_TO, 'UserOption', 'user_id'),
 			'view_user' => array(self::BELONGS_TO, 'ViewUsers', 'user_id'),
-			'view_level' => array(self::BELONGS_TO, 'ViewUserLevel', 'level_id'),
+			'view' => array(self::BELONGS_TO, 'ViewUserLevel', 'level_id'),
+			'photos' => array(self::HAS_MANY, 'UserPhoto', 'user_id', 'on'=>'photos.publish=1'),
+			'photo_all' => array(self::HAS_MANY, 'UserPhoto', 'user_id'),
 		);
 	}
 
@@ -150,7 +150,6 @@ class Users extends CActiveRecord
 		return array(
 			'user_id' => Yii::t('attribute', 'User'),
 			'level_id' => Yii::t('attribute', 'User Level'),
-			'profile_id' => Yii::t('attribute', 'Profile'),
 			'language_id' => Yii::t('attribute', 'Language'),
 			'email' => Yii::t('attribute', 'Email'),
 			'salt' => Yii::t('attribute', 'Salt'),
@@ -169,7 +168,6 @@ class Users extends CActiveRecord
 			'show_profile' => Yii::t('attribute', 'Show Profile'),
 			'privacy' => Yii::t('attribute', 'Privacy'),
 			'comments' => Yii::t('attribute', 'Comments'),
-			'last_email' => Yii::t('attribute', 'Last Email'),
 			'creation_date' => Yii::t('attribute', 'Creation Date'),
 			'creation_ip' => Yii::t('attribute', 'Creation Ip'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
@@ -207,8 +205,7 @@ class Users extends CActiveRecord
 		} else if($controller == 'o/admin') {
 			$criteria->compare('t.level_id',1);
 		}
-		$criteria->addNotInCondition('t.user_id',array(1,2,3,4));	
-		$criteria->compare('t.profile_id',$this->profile_id);
+		$criteria->addNotInCondition('t.user_id',array(1,2,3,4));
 		$criteria->compare('t.language_id',$this->language_id);
 		$criteria->compare('t.email',strtolower($this->email),true);
 		$criteria->compare('t.salt',$this->salt,true);
@@ -227,7 +224,6 @@ class Users extends CActiveRecord
 		$criteria->compare('t.show_profile',$this->show_profile);
 		$criteria->compare('t.privacy',$this->privacy);
 		$criteria->compare('t.comments',$this->comments);
-		$criteria->compare('t.last_email',strtolower($this->last_email),true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
 		$criteria->compare('t.creation_ip',$this->creation_ip,true);
@@ -275,7 +271,6 @@ class Users extends CActiveRecord
 		}else {
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'level_id';
-			$this->defaultColumns[] = 'profile_id';
 			$this->defaultColumns[] = 'language_id';
 			$this->defaultColumns[] = 'email';
 			$this->defaultColumns[] = 'salt';
@@ -294,7 +289,6 @@ class Users extends CActiveRecord
 			$this->defaultColumns[] = 'show_profile';
 			$this->defaultColumns[] = 'privacy';
 			$this->defaultColumns[] = 'comments';
-			$this->defaultColumns[] = 'last_email';
 			$this->defaultColumns[] = 'creation_date';
 			$this->defaultColumns[] = 'creation_ip';
 			$this->defaultColumns[] = 'modified_date';
@@ -345,7 +339,7 @@ class Users extends CActiveRecord
 					'htmlOptions' => array(
 						//'class' => 'center',
 					),
-					'filter'=>UserLevel::getTypeMember(),
+					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);
 			}
@@ -488,7 +482,6 @@ class Users extends CActiveRecord
 				 * = Random password
 				 * = Username required
 				 */
-				$this->profile_id = 1;
 				$this->salt = self::getUniqueCode();
 				
 				if(in_array($controller, array('o/admin','o/member'))) {
@@ -591,9 +584,8 @@ class Users extends CActiveRecord
 							}
 						}
 					}
-					if($controller != 'forgot') {
+					if($controller != 'forgot')
 						$this->update_date = date('Y-m-d H:i:s');
-					}
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
 				}
 			}
@@ -745,12 +737,14 @@ class Users extends CActiveRecord
 	 * Before delete attributes
 	 */
 	protected function beforeDelete() {
-		if(parent::beforeDelete()) {
-			$user_photo = UserPhoto::getPhoto($this->user_id);
-			$user_path = "public/users/".$this->user_id;
-			foreach($user_photo as $val) {
-				if($val->photo != '' && file_exists($user_path.'/'.$val->photo)) {
-					rename($user_path.'/'.$val->photo, 'public/users/verwijderen/'.$val->user_id.'_'.$val->photo);
+		if(parent::beforeDelete()) {			
+			//delete user photo_all
+			$photo_all = $this->photo_all;
+			if(!empty($photo_all)) {
+				foreach($photo_all as $val) {
+					$user_path = 'public/users/'.$val->user_id;
+					if($val->photo != '' && file_exists($user_path.'/'.$val->photo))
+						rename($user_path.'/'.$val->photo, 'public/users/verwijderen/'.$val->user_id.'_'.$val->photo);
 				}
 			}
 		}

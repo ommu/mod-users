@@ -32,7 +32,7 @@
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'level_id'); ?>
 			<div class="desc">
-				<?php echo $form->dropDownList($model,'level_id', UserLevel::getTypeMember()); ?>
+				<?php echo $form->dropDownList($model,'level_id', UserLevel::getUserLevel()); ?>
 				<?php echo $form->error($model,'level_id'); ?>
 			</div>
 		</div>
