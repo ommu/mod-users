@@ -11,9 +11,8 @@
  *	Index
  *	Login
  *	Email
- *	Password
- *	Forgot
  *	Username
+ *	Password
  *	Subscribe
  *
  *	LoadModel
@@ -42,7 +41,7 @@ class HistoryController extends Controller
 	public function init() 
 	{
 		if(!Yii::app()->user->isGuest) {
-			if(Yii::app()->user->level == 1) {
+			if(in_array(Yii::app()->user->level, array(1,2))) {
 				$arrThemes = Utility::getCurrentTemplate('admin');
 				Yii::app()->theme = $arrThemes['folder'];
 				$this->layout = $arrThemes['layout'];
@@ -82,7 +81,7 @@ class HistoryController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('login','email','password','forgot','username','subscribe'),
+				'actions'=>array('login','email','username','password','subscribe'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level == 1)',
 			),
@@ -155,10 +154,40 @@ class HistoryController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'User History Change Email');
+		$this->pageTitle = Yii::t('phrase', 'User History Emails');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_history_email',array(
+			'model'=>$model,
+			'columns' => $columns,
+		));
+	}
+
+	/**
+	 * Manages all models.
+	 */
+	public function actionUsername() 
+	{
+		$model=new UserHistoryUsername('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['UserHistoryUsername'])) {
+			$model->attributes=$_GET['UserHistoryUsername'];
+		}
+
+		$columnTemp = array();
+		if(isset($_GET['GridColumn'])) {
+			foreach($_GET['GridColumn'] as $key => $val) {
+				if($_GET['GridColumn'][$key] == 1) {
+					$columnTemp[] = $key;
+				}
+			}
+		}
+		$columns = $model->getGridColumn($columnTemp);
+
+		$this->pageTitle = Yii::t('phrase', 'User History Usernames');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_history_username',array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -197,66 +226,6 @@ class HistoryController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionForgot() 
-	{
-		$model=new UserHistoryForgot('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['UserHistoryForgot'])) {
-			$model->attributes=$_GET['UserHistoryForgot'];
-		}
-
-		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
-					$columnTemp[] = $key;
-				}
-			}
-		}
-		$columns = $model->getGridColumn($columnTemp);
-
-		$this->pageTitle = Yii::t('phrase', 'History Forgot Password');
-		$this->pageDescription = '';
-		$this->pageMeta = '';
-		$this->render('admin_history_forgot',array(
-			'model'=>$model,
-			'columns' => $columns,
-		));
-	}
-
-	/**
-	 * Manages all models.
-	 */
-	public function actionUsername() 
-	{
-		$model=new UserHistoryUsername('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['UserHistoryUsername'])) {
-			$model->attributes=$_GET['UserHistoryUsername'];
-		}
-
-		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
-					$columnTemp[] = $key;
-				}
-			}
-		}
-		$columns = $model->getGridColumn($columnTemp);
-
-		$this->pageTitle = Yii::t('phrase', 'History Change Username');
-		$this->pageDescription = '';
-		$this->pageMeta = '';
-		$this->render('admin_history_username',array(
-			'model'=>$model,
-			'columns' => $columns,
-		));
-	}
-
-	/**
-	 * Manages all models.
-	 */
 	public function actionSubscribe() 
 	{
 		$model=new UserNewsletterHistory('search');
@@ -278,7 +247,7 @@ class HistoryController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'History Subscribe/Unsubscribe');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_history_username',array(
+		$this->render('admin_history_subscribe',array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
