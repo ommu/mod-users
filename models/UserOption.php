@@ -23,9 +23,10 @@
  *
  * The followings are the available columns in table 'ommu_user_option':
  * @property string $option_id
+ * @property integer $ommu_status
  * @property integer $invite_limit
  * @property integer $invite_success
- * @property integer $ommu_status
+ * @property string $signup_from
  */
 class UserOption extends CActiveRecord
 {
@@ -58,11 +59,11 @@ class UserOption extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('option_id', 'required'),
-			array('invite_limit, invite_success, ommu_status', 'numerical', 'integerOnly'=>true),
+			array('ommu_status, invite_limit, invite_success', 'numerical', 'integerOnly'=>true),
 			array('option_id', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('option_id, invite_limit, invite_success, ommu_status', 'safe', 'on'=>'search'),
+			array('option_id, ommu_status, invite_limit, invite_success, signup_from', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,9 +86,10 @@ class UserOption extends CActiveRecord
 	{
 		return array(
 			'option_id' => Yii::t('attribute', 'Option'),
+			'ommu_status' =>  Yii::t('attribute', 'Ommu Status'),
 			'invite_limit' => Yii::t('attribute', 'Invite Limit'),
 			'invite_success' => Yii::t('attribute', 'Invite Success'),
-			'ommu_status' =>  Yii::t('attribute', 'Ommu Status'),
+			'signup_from' => Yii::t('attribute', 'Signup From'),
 		);
 	}
 	
@@ -103,9 +105,10 @@ class UserOption extends CActiveRecord
 		$criteria=new CDbCriteria;
 		
 		$criteria->compare('t.option_id',$this->option_id);
+		$criteria->compare('t.ommu_status',$this->ommu_status);
 		$criteria->compare('t.invite_limit',$this->invite_limit);
 		$criteria->compare('t.invite_success',$this->invite_success);
-		$criteria->compare('t.ommu_status',$this->ommu_status);
+		$criteria->compare('t.signup_from',$this->signup_from);
 
 		if(!isset($_GET['UserOption_sort']))
 			$criteria->order = 't.option_id DESC';
@@ -134,9 +137,10 @@ class UserOption extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'option_id';
+			$this->defaultColumns[] = 'ommu_status';
 			$this->defaultColumns[] = 'invite_limit';
 			$this->defaultColumns[] = 'invite_success';
-			$this->defaultColumns[] = 'ommu_status';
+			$this->defaultColumns[] = 'signup_from';
 		}
 
 		return $this->defaultColumns;
@@ -152,9 +156,10 @@ class UserOption extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = 'option_id';
+			$this->defaultColumns[] = 'ommu_status';
 			$this->defaultColumns[] = 'invite_limit';
 			$this->defaultColumns[] = 'invite_success';
-			$this->defaultColumns[] = 'ommu_status';
+			$this->defaultColumns[] = 'signup_from';
 		}
 		parent::afterConstruct();
 	}
