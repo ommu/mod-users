@@ -26,7 +26,7 @@ plugin_menu		:
 	- urlTitle: Datas
 		urlRules: {siteType: "0,1", userLevel: 1}
 		urlPath: {url: -, attr: -, icon: -}
-		submenu :		
+		submenu :
 			- urlTitle: Subscribes
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/newsletter/manage, attr: -, icon: -}
@@ -45,16 +45,16 @@ plugin_menu		:
 				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/history/login, attr: -, icon: -}
 			- urlTitle: Emails
-				urlRules: {siteType: 1, userLevel: "1,2"}
+				urlRules: {siteType: 1, userLevel: 1}
 				urlPath: {url: o/history/email, attr: -, icon: -}
 			- urlTitle: Usernames
-				urlRules: {siteType: 1, userLevel: "1,2"}
+				urlRules: {siteType: 1, userLevel: 1}
 				urlPath: {url: o/history/username, attr: -, icon: -}
 			- urlTitle: Passwords
-				urlRules: {siteType: 1, userLevel: "1,2"}
+				urlRules: {siteType: 1, userLevel: 1}
 				urlPath: {url: o/history/password, attr: -, icon: -}
 			- urlTitle: Subscribe/Unsubscribe
-				urlRules: {siteType: 1, userLevel: "1,2"}
+				urlRules: {siteType: 1, userLevel: 1}
 				urlPath: {url: o/history/subscribe, attr: -, icon: -}
 
 content_menu	:
@@ -88,7 +88,7 @@ content_menu	:
 	- urlTitle: Message Settings
 		urlRules: {users, o/level, "edit,user,message", siteType: 1, userLevel: "1,2"}
 		urlPath: {url: message, attr: id=$_GET*id, icon: -}
-# controller o/invite	
+# controller o/invite
 	- urlTitle: Invite User
 		urlRules: {users, o/invite, "manage,queuemanage", siteType: 1, userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
