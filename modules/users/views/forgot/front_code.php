@@ -34,13 +34,11 @@ if($render == 1) {
 
 		<fieldset>
 			<?php
-			if($model->photo_id == 0) {
-				$images = Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/users/default.png', 60, 60, 1);
-			} else {
-				$images = Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/users/'.$model->user_id.'/'.$model->photo->photo, 60, 60, 1);
-			}?>
+			$photos = Yii::app()->request->baseUrl.'/public/users/default.png';
+			if($model->photos != '')
+				$photos = Utility::getTimThumb(Yii::app()->request->baseUrl.'/public/users/'.$model->user_id.'/'.$model->photos, 60, 60, 1);?>
 			<div class="user-info clearfix">
-				<img src="<?php echo $images;?>" alt="<?php echo $model->photo_id != 0 ? $model->displayname: 'Ommu Platform';?>"/>
+				<img src="<?php echo $photos;?>" alt="<?php echo $model->photos != '' ? $model->displayname : 'Ommu Platform';?>"/>
 				<div>
 					<h3><?php echo $model->displayname;?></h3>
 					<?php echo $model->email;?>

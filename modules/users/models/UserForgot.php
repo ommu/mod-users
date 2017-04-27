@@ -318,7 +318,7 @@ class UserForgot extends CActiveRecord
 				'{$forgot_link}',
 			);
 			$forgot_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl, $this->user->displayname, SupportMailSetting::getInfo(1, 'mail_contact'),
+				Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl, $this->user->displayname, SupportMailSetting::getInfo('mail_contact'),
 				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('users/password/verify',array('key'=>$this->code, 'secret'=>$this->user->salt)),
 			);
 			$forgot_template = 'user_forgot_password';
