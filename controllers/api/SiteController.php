@@ -3,7 +3,6 @@
  * SiteController
  * @var $this SiteController
  * @var $model Users
- * @var $form CActiveForm
  * version: 0.0.1
  * Reference start
  *
@@ -75,7 +74,7 @@ class SiteController extends ControllerApi
 			
 			$logindate = date('Y-m-d H:i:s');
 			$return = '';
-			if($record === null || (!isset($_POST['token']) && (!isset($_POST['email']) || isset($_POST['email']) && $password == ''))) {
+			if($record === null || (!isset($_POST['token']) && (!isset($_POST['email']) || isset($_POST['email']) && $email == ''))) {
 				$return['success'] = '0';
 				$return['error'] = 'USER_NULL';
 				$return['message'] = Yii::t('phrase', 'error, user tidak ditemukan');
@@ -101,7 +100,10 @@ class SiteController extends ControllerApi
 						$return['userlevel'] = $record->view_user->level_name;
 						$return['email'] = $record->email;
 						$return['username'] = $record->username;
+						$return['first_name'] = $record->first_name;
+						$return['last_name'] = $record->last_name;
 						$return['displayname'] = $record->displayname;
+						$return['photo'] = $record->photos != '' ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl.'/public/users/'.$record->user_id.'/'.$record->photos : '';
 						$return['lastlogin_date'] = $logindate;
 						$return['password'] = md5(md5($record->salt.$record->password).$logindate);
 						$return['enabled'] = $record->enabled;
