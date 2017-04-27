@@ -6,14 +6,17 @@ mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers
 -------
 components
 =======
-mklink /J "D:\htdocs\_project_ommu_module_users\modules\users\components" "D:\htdocs\_project_ommu_module_users\modules\users_manage\components\oauth"
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\components" "D:\htdocs\_project_ommu_module_users\modules\users\components"
 
 -------
 controllers
 =======
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\AdminController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\AdminController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\DeviceController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\DeviceController.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\HistoryController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\HistoryController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\InviteController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\InviteController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\LevelController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\LevelController.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\MemberController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\MemberController.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\o\NewsletterController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\o\NewsletterController.php"
 
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\controllers\ForgotController.php" "D:\htdocs\_project_ommu_module_users\modules\users\controllers\ForgotController.php"
@@ -43,6 +46,8 @@ mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\User
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserLevel.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserLevel.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserNewsletter.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserNewsletter.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserNewsletterHistory.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserNewsletterHistory.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserOption.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserOption.php"
+mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\Users.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\Users.php"
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\UserVerify.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\UserVerify.php"
 
 mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\ViewUserLevel.php" "D:\htdocs\_project_ommu_module_users\modules\users\models\ViewUserLevel.php"
@@ -51,9 +56,12 @@ mklink /H "D:\htdocs\_project_ommu_module_users\modules\users_manage\models\View
 -------
 views
 =======
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\admin" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\admin"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\device" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\device"
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\history" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\history"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\invite" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\invite"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\level" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\level"
+mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\member" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\member"
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\o\newsletter" "D:\htdocs\_project_ommu_module_users\modules\users\views\o\newsletter"
 
 mklink /J "D:\htdocs\_project_ommu_module_users\modules\users_manage\views\forgot" "D:\htdocs\_project_ommu_module_users\modules\users\views\forgot"

@@ -1,7 +1,7 @@
 <?php
 /**
- * SiteController
- * @var $this SiteController
+ * OauthController
+ * @var $this OauthController
  * @var $model Users
  * version: 0.0.1
  * Reference start
@@ -14,7 +14,6 @@
  *
  *	LoadModel
  *	performAjaxValidation
- *	Test
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
@@ -24,7 +23,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class SiteController extends ControllerApi
+class OauthController extends ControllerApi
 {
 	/**
 	 * Initialize public template
@@ -94,21 +93,23 @@ class SiteController extends ControllerApi
 					if($record->enabled == 1) {
 						$return['success'] = '1';
 						$return['message'] = 'success';
-						$return['token'] = $record->view->token_password;
-						$return['oauth'] = $record->view->token_oauth;
-						$return['userlevel_id'] = $record->level_id;
-						$return['userlevel'] = $record->view_user->level_name;
 						$return['email'] = $record->email;
 						$return['username'] = $record->username;
 						$return['first_name'] = $record->first_name;
 						$return['last_name'] = $record->last_name;
 						$return['displayname'] = $record->displayname;
 						$return['photo'] = $record->photos != '' ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl.'/public/users/'.$record->user_id.'/'.$record->photos : '';
+						/*
+						$return['token'] = $record->view->token_password;
+						$return['oauth'] = $record->view->token_oauth;
+						$return['userlevel_id'] = $record->level_id;
+						$return['userlevel'] = $record->view_user->level_name;
 						$return['lastlogin_date'] = $logindate;
 						$return['password'] = md5(md5($record->salt.$record->password).$logindate);
 						$return['enabled'] = $record->enabled;
 						$return['verified'] = $record->verified;
 						$return['secretkey'] = $record->salt;
+						*/
 						if(isset($_POST['access'])) {
 							Users::model()->updateByPk($record->user_id, array(
 								'lastlogin_date'=>$logindate, 
@@ -161,16 +162,5 @@ class SiteController extends ControllerApi
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
-	}
-
-	/**
-	 * Logs out the current user and redirect to homepage.
-	 */
-	public function actionTest()
-	{
-		$url = 'http://localhost/_client_bpadjogja_20150804/users/api/site/login/email/putra.sudaryanto@gmail.com/password/0o9i8u7y';
-		$json = file_get_contents($url);
-		$onject = json_decode($json);
-		print_r($onject);
 	}
 }
