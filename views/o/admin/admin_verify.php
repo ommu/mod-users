@@ -25,7 +25,7 @@
 	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 	<div class="dialog-content">
-		<?php echo $model->enabled == 1 ? Yii::t('phrase', 'Are you sure you want to unverified this user?') : Yii::t('phrase', 'Are you sure you want to verified this user?')?>
+		<?php echo $model->verified == 1 ? Yii::t('phrase', 'Are you sure you want to unverified this user?') : Yii::t('phrase', 'Are you sure you want to verified this user?')?>
 	</div>
 	<div class="dialog-submit">
 		<?php echo CHtml::submitButton($title, array('onclick' => 'setEnableSave()')); ?>

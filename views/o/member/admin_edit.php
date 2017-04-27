@@ -1,7 +1,7 @@
 <?php
 /**
  * Users (users)
- * @var $this AdminController
+ * @var $this MemberController
  * @var $model Users
  * @var $form CActiveForm
  * version: 0.0.1

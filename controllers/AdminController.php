@@ -95,9 +95,10 @@ class AdminController extends /*SBaseController*/ Controller
 		if(!Yii::app()->user->isGuest) {
 			$this->redirect(Yii::app()->createUrl('admin/index'));
 
-		} else {				
+		} else {
 			$model=new LoginFormAdmin;
-
+			$modelForm = 'LoginFormAdmin';
+			
 			// if it is ajax validation request
 			if(isset($_POST['ajax']) && $_POST['ajax']==='login-form') {
 				echo CActiveForm::validate($model);
@@ -105,9 +106,9 @@ class AdminController extends /*SBaseController*/ Controller
 			}
 
 			// collect user input data
-			if(isset($_POST['LoginFormAdmin']))
+			if(isset($_POST[$modelForm]))
 			{
-				$model->attributes=$_POST['LoginFormAdmin'];
+				$model->attributes=$_POST[$modelForm];
 
 				$jsonError = CActiveForm::validate($model);
 				if(strlen($jsonError) > 2) {
@@ -132,13 +133,11 @@ class AdminController extends /*SBaseController*/ Controller
 								));
 							}
 							//$this->redirect(Yii::app()->user->returnUrl);
-						} else {
+						} else
 							print_r($model->getErrors());
-						}
 					}
 				}
 				Yii::app()->end();
-				
 			}
 			
 			// display the login form

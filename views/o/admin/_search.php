@@ -60,13 +60,8 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('photo'); ?><br/>
-			<?php echo $form->textField($model,'photo',array('size'=>60,'maxlength'=>64)); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('status_id'); ?><br/>
-			<?php echo $form->textField($model,'status_id',array('size'=>11,'maxlength'=>11)); ?>
+			<?php echo $model->getAttributeLabel('photos'); ?><br/>
+			<?php echo $form->textField($model,'photos',array('size'=>60,'maxlength'=>64)); ?>
 		</li>
 
 		<li>
@@ -97,11 +92,6 @@
 		<li>
 			<?php echo $model->getAttributeLabel('invisible'); ?><br/>
 			<?php echo $form->textField($model,'invisible'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('show_profile'); ?><br/>
-			<?php echo $form->textField($model,'show_profile'); ?>
 		</li>
 
 		<li>

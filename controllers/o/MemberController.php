@@ -13,8 +13,9 @@
  *	Manage
  *	Add
  *	Edit
+ *	View
  *	Delete
- *	Enabled
+ *	Enable
  *	Verify
  *
  *	LoadModel
@@ -28,7 +29,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class MemberController extends /*SBaseController*/ Controller
+class MemberController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -51,7 +52,7 @@ class MemberController extends /*SBaseController*/ Controller
 				throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		} else
 			$this->redirect(Yii::app()->createUrl('site/login'));
-	}	
+	}
 
 	/**
 	 * @return array action filters
@@ -77,12 +78,13 @@ class MemberController extends /*SBaseController*/ Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
+				'actions'=>array('suggest'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level)',
+				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('suggest','manage','add','edit','delete','enabled','verify'),
+				'actions'=>array('manage','add','edit','view','delete','enable','verify'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -109,26 +111,31 @@ class MemberController extends /*SBaseController*/ Controller
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
 	 */
-	public function actionSuggest($limit=10) {
-		if(isset($_GET['term'])) {
-			$criteria = new CDbCriteria;
-			$criteria->condition = 'enabled = 1 AND displayname LIKE :displayname';
-			$criteria->select	= "user_id, displayname";
-			$criteria->limit = $limit;
-			$criteria->order = "user_id ASC";
-			$criteria->params = array(':displayname' => '%' . strtolower($_GET['term']) . '%');
-			$model = Users::model()->findAll($criteria);
+	public function actionSuggest($limit=10) 
+	{
+		if(Yii::app()->request->isAjaxRequest) {
+			if(isset($_GET['term'])) {
+				$criteria = new CDbCriteria;
+				$criteria->condition = 'enabled = 1 AND displayname LIKE :displayname';
+				$criteria->select	= "user_id, displayname";
+				$criteria->limit = $limit;
+				$criteria->order = "user_id ASC";
+				$criteria->params = array(':displayname' => '%' . strtolower($_GET['term']) . '%');
+				$model = Users::model()->findAll($criteria);
 
-			if($model) {
-				foreach($model as $items) {
-					$result[] = array('id' => $items->user_id, 'value' => $items->displayname);
+				if($model) {
+					foreach($model as $items) {
+						$result[] = array('id' => $items->user_id, 'value' => $items->displayname);
+					}
 				}
 			}
-		}
-		echo CJSON::encode($result);
-		Yii::app()->end();
+			echo CJSON::encode($result);
+			Yii::app()->end();
+			
+		} else
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 	}
-	
+
 	/**
 	 * Manages all models.
 	 */
@@ -157,17 +164,18 @@ class MemberController extends /*SBaseController*/ Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
-	}	
-	
+	}
+
 	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
 	 */
 	public function actionAdd() 
 	{
 		$model=new Users;
 		$setting = OmmuSettings::model()->findByPk(1, array(
-			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_random',
+			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_photo, signup_random',
 		));
 
 		// Uncomment the following line if AJAX validation is needed
@@ -180,6 +188,7 @@ class MemberController extends /*SBaseController*/ Controller
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
+
 			} else {
 				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
 					if($model->save()) {
@@ -195,20 +204,19 @@ class MemberController extends /*SBaseController*/ Controller
 				}
 			}
 			Yii::app()->end();
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 500;
-			
-			$this->pageTitle = Yii::t('phrase', 'Add User');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_add',array(
-				'model'=>$model,
-				'setting'=>$setting,
-			));
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = Yii::t('phrase', 'Add User');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_add',array(
+			'model'=>$model,
+			'setting'=>$setting,
+		));
 	}
 
 	/**
@@ -220,7 +228,7 @@ class MemberController extends /*SBaseController*/ Controller
 	{
 		$model=$this->loadModel($id);
 		$setting = OmmuSettings::model()->findByPk(1, array(
-			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_random',
+			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_photo, signup_random',
 		));
 
 		// Uncomment the following line if AJAX validation is needed
@@ -233,6 +241,7 @@ class MemberController extends /*SBaseController*/ Controller
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
+
 			} else {
 				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
 					if($model->save()) {
@@ -248,20 +257,39 @@ class MemberController extends /*SBaseController*/ Controller
 				}
 			}
 			Yii::app()->end();
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 500;
-			
-			$this->pageTitle = Yii::t('phrase', 'Update User').': '.$model->displayname;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_edit',array(
-				'model'=>$model,
-				'setting'=>$setting,
-			));
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = Yii::t('phrase', 'Update User : {displayname}', array('{displayname}'=>$model->displayname));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_edit',array(
+			'model'=>$model,
+			'setting'=>$setting,
+		));
+	}
+	
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id) 
+	{
+		$model=$this->loadModel($id);
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = 'View Users';
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_view',array(
+			'model'=>$model,
+		));
 	}
 
 	/**
@@ -271,18 +299,21 @@ class MemberController extends /*SBaseController*/ Controller
 	 */
 	public function actionDelete($id) 
 	{
+		$model=$this->loadModel($id);
+		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			if(isset($id)) {
-				$this->loadModel($id)->delete();
-
-				echo CJSON::encode(array(
-					'type' => 5,
-					'get' => Yii::app()->controller->createUrl('manage'),
-					'id' => 'partial-users',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success deleted.').'</strong></div>',
-				));
+				if($model->delete()) {
+					echo CJSON::encode(array(
+						'type' => 5,
+						'get' => Yii::app()->controller->createUrl('manage'),
+						'id' => 'partial-users',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User success deleted.').'</strong></div>',
+					));
+				}
 			}
+
 		} else {
 			$this->dialogDetail = true;
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
@@ -300,7 +331,7 @@ class MemberController extends /*SBaseController*/ Controller
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionEnabled($id) 
+	public function actionEnable($id) 
 	{
 		$model=$this->loadModel($id);
 		if($model->enabled == 1) {

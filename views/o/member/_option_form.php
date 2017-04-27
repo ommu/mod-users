@@ -1,7 +1,7 @@
 <?php
 /**
  * Users (users)
- * @var $this AdminController
+ * @var $this MemberController
  * @var $model Users
  * @var $form CActiveForm
  * version: 0.0.1
@@ -44,10 +44,11 @@ foreach($model->metaData->columns as $key => $val) {
 }
 ?>
 <ul>
-	<?php foreach($columns as $val): ?>	<li>
+	<?php foreach($columns as $val): ?>
+	<li>
 		<?php echo CHtml::checkBox('GridColumn['.$val.']'); ?>
 		<?php echo CHtml::label($val, 'GridColumn_'.$val); ?>
 	</li>
-	<?php endforeach; ?></ul>
-<div class="clear"></div>
+	<?php endforeach; ?>
+</ul>
 <?php echo CHtml::endForm(); ?>
