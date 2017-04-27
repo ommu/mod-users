@@ -133,7 +133,7 @@ class ForgotController extends Controller
 							Yii::app()->params['reset_user_id'] = $secret->user_id;
 						}
 						$model = Users::model()->findByPk(Yii::app()->params['reset_user_id'], array(
-							'select' => 'user_id, email, displayname, photo_id',
+							'select' => 'user_id, email, displayname, photos',
 						));
 						$title = Yii::t('phrase', 'Create a new password');
 						$desc = Yii::t('phrase', 'Create a new password which you will easily remember!');

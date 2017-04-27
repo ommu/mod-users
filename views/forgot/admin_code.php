@@ -35,12 +35,10 @@ if($render == 1) {
 		<fieldset>
 			<div class="cell">
 				<?php
-				if($model->photo_id == 0) {
-					$images = Yii::app()->request->baseUrl.'/public/users/default.png';
-				} else {
-					$images = Yii::app()->request->baseUrl.'/public/users/'.$model->user_id.'/'.$model->photo->photo;
-				}?>
-				<img src="<?php echo Utility::getTimThumb($images, 120, 120, 1);?>" alt="<?php echo $model->photo_id != 0 ? $model->displayname: 'Ommu Platform';?>"/>
+				$photos = Yii::app()->request->baseUrl.'/public/users/default.png';
+				if($model->photos != '')
+					$photos = Yii::app()->request->baseUrl.'/public/users/'.$model->user_id.'/'.$model->photos;?>
+				<img src="<?php echo Utility::getTimThumb($photos, 120, 120, 1);?>" alt="<?php echo $model->photos != '' ? $model->displayname: 'Ommu Platform';?>"/>
 			</div>
 			<div class="cell">
 				<div class="user-info">
