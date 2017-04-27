@@ -322,7 +322,7 @@ class UserVerify extends CActiveRecord
 				'{$site_title}', '{$verify_link}',
 			);
 			$verify_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl, $this->user->displayname, SupportMailSetting::getInfo(1, 'mail_contact'),
+				Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl, $this->user->displayname, SupportMailSetting::getInfo('mail_contact'),
 				$setting->site_title, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('users/verify/code',array('key'=>$this->code, 'secret'=>$this->user->salt)),
 			);
 			$verify_template = 'user_verify_email';
