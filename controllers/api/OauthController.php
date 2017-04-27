@@ -95,7 +95,7 @@ class OauthController extends Controller
 						$return['email'] = $record->email;
 						$return['displayname'] = $record->displayname;
 						//$return['username'] = $record->username;
-						$return['photo'] = $record->photo_id != 0 ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl.'/public/users/'.$record->user_id.'/'.$record->photo->photo : '';
+						$return['photo'] = $record->photos != '' ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl.'/public/users/'.$record->user_id.'/'.$record->photos : '';
 						/*
 						$return['userlevel_id'] = $record->level_id;
 						$return['userlevel'] = $record->view_user->level_name;
