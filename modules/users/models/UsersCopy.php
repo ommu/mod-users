@@ -61,7 +61,7 @@
  * @property OmmuUserStatus[] $ommuUserStatuses
  * @property OmmuUserVerify[] $ommuUserVerifies
  */
-class Users extends CActiveRecord
+class UsersCopy extends CActiveRecord
 {
 	public $defaultColumns = array();
 

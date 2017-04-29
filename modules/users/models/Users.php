@@ -85,7 +85,9 @@ class Users extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_users';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_users';
+		//return 'ommu_users';
 	}
 
 	/**
@@ -213,7 +215,9 @@ class Users extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.user_id',$this->user_id,true);
+		if($controller == 'o/admin')
+			$criteria->addNotInCondition('t.user_id',array(1));
+		$criteria->compare('t.user_id',$this->user_id);
 		$criteria->compare('t.enabled',$this->enabled);
 		$criteria->compare('t.verified',$this->verified);
 		if(isset($_GET['level']))

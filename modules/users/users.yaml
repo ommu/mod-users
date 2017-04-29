@@ -24,7 +24,7 @@ plugin_menu		:
 		urlPath: {url: o/level/manage, attr: -, icon: -}
 		
 	- urlTitle: Datas
-		urlRules: {siteType: "0,1", userLevel: 1}
+		urlRules: {siteType: 1, userLevel: "1,2"}
 		urlPath: {url: -, attr: -, icon: -}
 		submenu :
 			- urlTitle: Subscribes
