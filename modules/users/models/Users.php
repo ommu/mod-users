@@ -531,6 +531,8 @@ class Users extends CActiveRecord
 
 		if(parent::beforeValidate()) {
 			$photo_exts = unserialize($this->level->photo_exts);
+			if(empty($photo_exts))
+				$photo_exts = array();
 			$photos = CUploadedFile::getInstance($this, 'photos');
 			if($photos != null) {
 				$extension = pathinfo($photos->name, PATHINFO_EXTENSION);
