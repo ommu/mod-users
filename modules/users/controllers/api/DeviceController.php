@@ -33,42 +33,13 @@ class DeviceController extends ControllerApi
 	public $defaultAction = 'index';
 
 	/**
-	 * @return array action filters
+	 * Initialize public template
 	 */
-	public function filters() 
+	public function init() 
 	{
-		return array(
-			'accessControl', // perform access control for CRUD operations
-			//'postOnly + delete', // we only allow deletion via POST request
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules() 
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','android'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array(),
-				'users'=>array('@'),
-				'expression'=>'isset(Yii::app()->user->level)',
-				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array(),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
+		$arrThemes = Utility::getCurrentTemplate('public');
+		Yii::app()->theme = $arrThemes['folder'];
+		$this->layout = $arrThemes['layout'];
 	}
 	
 	/**
@@ -94,14 +65,14 @@ class DeviceController extends ControllerApi
 			$criteria->compare('t.android_id',$android_key);
 			
 			$device = UserDevice::model()->find($criteria);
-			if($token != null && $token != '') {
+			if($token) {
 				$user = ViewUsers::model()->findByAttributes(array('token_password' => $token), array(
 					'select' => 'user_id',
 				));
 			}
 			if($device == null) {
 				$data=new UserDevice;
-				if(($token != null && $token != '') && $user != null)
+				if($token && $user != null)
 					$data->user_id = $user->user_id;
 				$data->android_id = $android_key;
 					
@@ -118,7 +89,7 @@ class DeviceController extends ControllerApi
 				}
 			} else {
 				$return['success'] = '1';				
-				if($device->user_id == 0 && ($token != null && $token != '')) {
+				if($token && $device->user_id == 0) {
 					if($user != null) {
 						if(UserDevice::model()->updateByPk($device->id, array('user_id'=>$user->user_id)))
 							$return['message'] = Yii::t('phrase', 'success, device berhasil ditambahkan (info member selesai diperbarui)');

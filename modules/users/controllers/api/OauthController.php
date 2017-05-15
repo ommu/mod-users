@@ -7,8 +7,8 @@
  * Reference start
  *
  * TOC :
- *	Error
  *	Index
+ *	Error
  *	Login
  *	Logout
  *
@@ -30,15 +30,9 @@ class OauthController extends ControllerApi
 	 */
 	public function init() 
 	{
-		Yii::import('application.modules.users.models.*');
-	}
-
-	/**
-	 * This is the action to handle external exceptions.
-	 */
-	public function actionError()
-	{
-		$this->redirect(Yii::app()->createUrl('site/index'));
+		$arrThemes = Utility::getCurrentTemplate('public');
+		Yii::app()->theme = $arrThemes['folder'];
+		$this->layout = $arrThemes['layout'];
 	}
 
 	/**
@@ -51,29 +45,40 @@ class OauthController extends ControllerApi
 	}
 
 	/**
+	 * This is the action to handle external exceptions.
+	 */
+	public function actionError()
+	{
+		$this->redirect(Yii::app()->createUrl('site/index'));
+	}
+
+	/**
 	 * Displays the login page
 	 */
 	public function actionLogin()
 	{
 		if(Yii::app()->request->isPostRequest) {
 			$token = trim($_POST['token']);
-			$email = trim($_POST['email']);
+			$username = trim($_POST['username']);
 			$password = trim($_POST['password']);
+			$access = trim($_POST['access']);
+			$ipaddress = trim($_POST['ipaddress']);
 			
 			if(isset($_POST['token']))
 				$userToken = ViewUsers::model()->findByAttributes(array('token_oauth'=>$token));
 			
-			$email = isset($_POST['token']) ? $userToken->user_relation->email : $email;
+			$username = isset($_POST['token']) ? $userToken->user->email : $username;
 			$password = isset($_POST['token']) ? null : $password;
 			
-			if(preg_match('/@/',$email)) //$this->username can filled by username or email 
-				$record = Users::model()->findByAttributes(array('email' => $email));
+			if(preg_match('/@/',$username)) //$this->username can filled by username or email 
+				$record = Users::model()->findByAttributes(array('email' => $username));
 			else
-				$record = Users::model()->findByAttributes(array('username' => $email));
+				$record = Users::model()->findByAttributes(array('username' => $username));
 			
 			$logindate = date('Y-m-d H:i:s');
 			$return = '';
-			if($record === null || (!isset($_POST['token']) && (!isset($_POST['email']) || isset($_POST['email']) && $email == ''))) {
+			
+			if($record === null || (!isset($_POST['token']) && (!isset($_POST['username']) || isset($_POST['username']) && $username == ''))) {
 				$return['success'] = '0';
 				$return['error'] = 'USER_NULL';
 				$return['message'] = Yii::t('phrase', 'error, user tidak ditemukan');
@@ -113,8 +118,8 @@ class OauthController extends ControllerApi
 						if(isset($_POST['access'])) {
 							Users::model()->updateByPk($record->user_id, array(
 								'lastlogin_date'=>$logindate, 
-								'lastlogin_ip'=>isset($_POST['ipaddress']) ? $_POST['ipaddress'] : $_SERVER['REMOTE_ADDR'],
-								'lastlogin_from'=>isset($_POST['token']) ? '@'.$_POST['access'] : $_POST['access'],
+								'lastlogin_ip'=>isset($_POST['ipaddress']) ? $ipaddress : $_SERVER['REMOTE_ADDR'],
+								'lastlogin_from'=>isset($_POST['token']) ? '@'.$access : $access,
 							));
 						}
 					} else {
@@ -135,8 +140,33 @@ class OauthController extends ControllerApi
 	 */
 	public function actionLogout()
 	{
-		Yii::app()->user->logout();
-		$this->redirect(Yii::app()->homeUrl);
+		if(Yii::app()->request->isPostRequest) {
+			$token = trim($_POST['token']);
+			
+			if(isset($_POST['token']))
+				$userToken = ViewUsers::model()->findByAttributes(array('token_oauth'=>$token));
+			
+			$username = $userToken->user->email;
+			
+			if(preg_match('/@/',$username)) //$this->username can filled by username or email 
+				$record = Users::model()->findByAttributes(array('email' => $username));
+			else
+				$record = Users::model()->findByAttributes(array('username' => $username));
+			
+			$return = '';
+			if($record === null) {
+				$return['success'] = '0';
+				$return['error'] = 'USER_NULL';
+				$return['message'] = Yii::t('phrase', 'error, user tidak ditemukan');				
+			} else {
+				$return['success'] = '1';
+				$return['message'] = 'success';
+				Yii::app()->user->logout();
+			}
+			$this->_sendResponse(200, CJSON::encode($this->renderJson($return)));
+			
+		} else
+			$this->redirect(Yii::app()->createUrl('site/index'));
 	}
 
 	/**
