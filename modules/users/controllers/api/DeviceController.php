@@ -78,20 +78,20 @@ class DeviceController extends ControllerApi
 					
 				if($data->save()) {
 					$return = array(
-						'success'=>'1',
-						'message'=>Yii::t('phrase', 'success, device berhasil ditambahkan'),
+						'success' => '1',
+						'message' => Yii::t('phrase', 'success, device berhasil ditambahkan'),
 					);
 				} else {
 					$return = array(
-						'success'=>'0',
-						'message'=>Yii::t('phrase', 'success, device tidak berhasil ditambahkan'),
+						'success' => '0',
+						'message' => Yii::t('phrase', 'success, device tidak berhasil ditambahkan'),
 					);
 				}
 			} else {
 				$return['success'] = '1';				
 				if($token && $device->user_id == 0) {
 					if($user != null) {
-						if(UserDevice::model()->updateByPk($device->id, array('user_id'=>$user->user_id)))
+						if(UserDevice::model()->updateByPk($device->id, array('user_id' => $user->user_id)))
 							$return['message'] = Yii::t('phrase', 'success, device berhasil ditambahkan (info member selesai diperbarui)');
 						else
 							$return['message'] = Yii::t('phrase', 'success, device tidak terjadi perubahan (info member tidak ada perubahan)');

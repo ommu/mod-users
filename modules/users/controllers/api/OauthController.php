@@ -65,7 +65,7 @@ class OauthController extends ControllerApi
 			$ipaddress = trim($_POST['ipaddress']);
 			
 			if(isset($_POST['token']))
-				$userToken = ViewUsers::model()->findByAttributes(array('token_oauth'=>$token));
+				$userToken = ViewUsers::model()->findByAttributes(array('token_oauth' => $token));
 			
 			$username = isset($_POST['token']) ? $userToken->user->email : $username;
 			$password = isset($_POST['token']) ? null : $password;
@@ -103,13 +103,13 @@ class OauthController extends ControllerApi
 						$return['first_name'] = $record->first_name;
 						$return['last_name'] = $record->last_name;
 						$return['displayname'] = $record->displayname;
-						$return['photo'] = $record->photos != '' ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl.'/public/users/'.$record->user_id.'/'.$record->photos : '';
+						$return['photo'] = $record->photos ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl.'/public/users/'.$record->user_id.'/'.$record->photos : '';
 						/*
 						$return['token'] = $record->view->token_password;
 						$return['oauth'] = $record->view->token_oauth;
 						$return['userlevel_id'] = $record->level_id;
 						$return['userlevel'] = $record->view_user->level_name;
-						$return['lastlogin_date'] = $logindate;
+						$return['lastlogin_date'] = date_timestamp_get(date_create(d$logindate));
 						$return['password'] = md5(md5($record->salt.$record->password).$logindate);
 						$return['enabled'] = $record->enabled;
 						$return['verified'] = $record->verified;
@@ -117,9 +117,9 @@ class OauthController extends ControllerApi
 						*/
 						if(isset($_POST['access'])) {
 							Users::model()->updateByPk($record->user_id, array(
-								'lastlogin_date'=>$logindate, 
-								'lastlogin_ip'=>isset($_POST['ipaddress']) ? $ipaddress : $_SERVER['REMOTE_ADDR'],
-								'lastlogin_from'=>isset($_POST['token']) ? '@'.$access : $access,
+								'lastlogin_date' => $logindate, 
+								'lastlogin_ip' => isset($_POST['ipaddress']) ? $ipaddress : $_SERVER['REMOTE_ADDR'],
+								'lastlogin_from' => isset($_POST['token']) ? '@'.$access : $access,
 							));
 						}
 					} else {
@@ -144,7 +144,7 @@ class OauthController extends ControllerApi
 			$token = trim($_POST['token']);
 			
 			if(isset($_POST['token']))
-				$userToken = ViewUsers::model()->findByAttributes(array('token_oauth'=>$token));
+				$userToken = ViewUsers::model()->findByAttributes(array('token_oauth' => $token));
 			
 			$username = $userToken->user->email;
 			
