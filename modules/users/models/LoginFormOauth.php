@@ -31,7 +31,6 @@ class LoginFormOauth extends CFormModel
 		return array(
 			// email and password are required
 			array('email, password', 'required'),
-
 			//array('email', 'email'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),

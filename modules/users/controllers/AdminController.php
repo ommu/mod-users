@@ -10,6 +10,7 @@
  * TOC :
  *	Index
  *	Login
+ *	Autologin
  *
  *	LoadModel
  *	performAjaxValidation
@@ -171,33 +172,26 @@ class AdminController extends /*SBaseController*/ Controller
 		));
 		
 		$token = $_GET['token'];
-		if(isset($token) && ($setting && $setting->site_oauth == 1)) {
-			$user = ViewUsers::model()->findByAttributes(array('token_oauth'=>$token));
-			$email	= $user->user->email;
-			$password	= null;
-		
-			if($user==null)
-				throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));	
-				
-			} else {
-				$model=new LoginFormOauth;
-				$model->email = $email;
-				$model->password = $password;			
-				if(isset($token))
-					$model->token = $token;
-				
-				if($model->login()) {
-					Users::model()->updateByPk(Yii::app()->user->id, array(
-						'lastlogin_date'=>date('Y-m-d H:i:s'), 
-						'lastlogin_ip'=>$_SERVER['REMOTE_ADDR'],
-						'lastlogin_from'=>Yii::app()->params['product_access_system'],
-					));
-					$this->redirect(in_array(Yii::app()->user->level, array(1,2)) ? Yii::app()->createUrl('admin/index') : Yii::app()->user->returnUrl);
-				}				
-			}
+		if(isset($token) && ($setting && $setting->site_oauth == 1)) 
+		{
+			$model=new LoginFormOauth;
+			$model->email = null;
+			$model->password = null;			
+			if(isset($token))
+				$model->token = $token;
+			
+			if($model->login()) {
+				Users::model()->updateByPk(Yii::app()->user->id, array(
+					'lastlogin_date'=>date('Y-m-d H:i:s'), 
+					'lastlogin_ip'=>$_SERVER['REMOTE_ADDR'],
+					'lastlogin_from'=>Yii::app()->params['product_access_system'],
+				));
+				$this->redirect(in_array(Yii::app()->user->level, array(1,2)) ? Yii::app()->createUrl('admin/index') : Yii::app()->user->returnUrl);
+			}			
 			
 		} else
-			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));		
+			echo '0';
+			//throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));		
 	}
 
 	/**
