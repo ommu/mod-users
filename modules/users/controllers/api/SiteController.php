@@ -109,7 +109,7 @@ class SiteController extends ControllerApi
 						$return['last_name'] = $record->last_name;
 						$return['displayname'] = $record->displayname;
 						$return['photo'] = $record->photos ? Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->request->baseUrl.'/public/users/'.$record->user_id.'/'.$record->photos : '';
-						$return['lastlogin_date'] = date_timestamp_get(date_create($logindate));
+						$return['lastlogin_date'] = strtotime($logindate);
 						$return['password'] = md5(md5($record->salt.$record->password).$logindate);
 						$return['enabled'] = $record->enabled;
 						$return['verified'] = $record->verified;

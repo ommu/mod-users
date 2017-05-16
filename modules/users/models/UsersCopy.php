@@ -469,12 +469,12 @@ class UsersCopy extends CActiveRecord
 	{
 		$controller = strtolower(Yii::app()->controller->id);
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select' => 'site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
+		));
 
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-				$setting = OmmuSettings::model()->findByPk(1, array(
-					'select' => 'site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
-				));
 
 				/**
 				 * Default action
@@ -612,6 +612,10 @@ class UsersCopy extends CActiveRecord
 	protected function afterSave() 
 	{
 		$controller = strtolower(Yii::app()->controller->id);
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select' => 'site_type, signup_welcome, signup_adminemail',
+		));
+		$_assetsUrl = Yii::app()->assetManager->publish(Yii::getPathOfAlias('users.assets'));
 		parent::afterSave();
 
 		// Generate Verification Code
@@ -645,11 +649,7 @@ class UsersCopy extends CActiveRecord
 			 * Send New Account Information
 			 * Send Account Information
 			 *
-			 */
-			$setting = OmmuSettings::model()->findByPk(1, array(
-				'select' => 'site_type, signup_welcome, signup_adminemail',
-			));
-			
+			 */			
 			if($setting->site_type == 1) {
 				$invite = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
 					'select' => 'queue_id, member_id, reference_id',
@@ -676,7 +676,7 @@ class UsersCopy extends CActiveRecord
 					'{$index}','{$displayname}',
 				);
 				$welcome_replace = array(
-					Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl,
+					Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl,
 					Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/index'),
 					$this->displayname,	
 				);
@@ -694,7 +694,7 @@ class UsersCopy extends CActiveRecord
 				'{$login}','{$displayname}','{$email}','{$password}',
 			);
 			$account_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl,
+				Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl,
 				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
 				$this->displayname, $this->email, $this->newPassword,
 			);
@@ -717,7 +717,7 @@ class UsersCopy extends CActiveRecord
 					'{$login}','{$displayname}','{$email}','{$password}',
 				);
 				$account_replace = array(
-					Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl,
+					Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl,
 					Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
 					$this->displayname, $this->email, $this->newPassword,
 				);

@@ -61,7 +61,7 @@ class AdminController extends /*SBaseController*/ Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','login'),
+				'actions'=>array('index','login','autologin'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -91,13 +91,21 @@ class AdminController extends /*SBaseController*/ Controller
 	 * Displays the login page
 	 */
 	public function actionLogin()
-	{
-		if(!Yii::app()->user->isGuest) {
+	{		
+		if(!Yii::app()->user->isGuest)
 			$this->redirect(Yii::app()->createUrl('admin/index'));
 
-		} else {
+		else {
+			$setting = OmmuSettings::model()->findByPk(1, array(
+				'select'=>'site_oauth',
+			));
+			
 			$model=new LoginFormAdmin;
 			$modelForm = 'LoginFormAdmin';
+			if($setting && $setting->site_oauth == 1) {
+				$model=new LoginFormOauth;	
+				$modelForm = 'LoginFormOauth';
+			}
 			
 			// if it is ajax validation request
 			if(isset($_POST['ajax']) && $_POST['ajax']==='login-form') {
@@ -152,6 +160,45 @@ class AdminController extends /*SBaseController*/ Controller
 			));			
 		}
 	}
+	
+	/**
+	 * Lists all models.
+	 */
+	public function actionAutologin() 
+	{
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select'=>'site_oauth',
+		));
+		
+		$token = $_GET['token'];
+		if(isset($token) && ($setting && $setting->site_oauth == 1)) {
+			$user = ViewUsers::model()->findByAttributes(array('token_oauth'=>$token));
+			$email	= $user->user->email;
+			$password	= null;
+		
+			if($user==null)
+				throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));	
+				
+			} else {
+				$model=new LoginFormOauth;
+				$model->email = $email;
+				$model->password = $password;			
+				if(isset($token))
+					$model->token = $token;
+				
+				if($model->login()) {
+					Users::model()->updateByPk(Yii::app()->user->id, array(
+						'lastlogin_date'=>date('Y-m-d H:i:s'), 
+						'lastlogin_ip'=>$_SERVER['REMOTE_ADDR'],
+						'lastlogin_from'=>Yii::app()->params['product_access_system'],
+					));
+					$this->redirect(in_array(Yii::app()->user->level, array(1,2)) ? Yii::app()->createUrl('admin/index') : Yii::app()->user->returnUrl);
+				}				
+			}
+			
+		} else
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));		
+	}
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
@@ -162,7 +209,7 @@ class AdminController extends /*SBaseController*/ Controller
 	{
 		$model = Users::model()->findByPk($id);
 		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		return $model;
 	}
 

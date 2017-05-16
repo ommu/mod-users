@@ -527,6 +527,7 @@ class Users extends CActiveRecord
 	protected function beforeValidate() 
 	{
 		$controller = strtolower(Yii::app()->controller->id);
+		$action = strtolower(Yii::app()->controller->action->id);
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 
 		if(parent::beforeValidate()) {
@@ -549,7 +550,7 @@ class Users extends CActiveRecord
 			
 			if($this->isNewRecord) {
 				$setting = OmmuSettings::model()->findByPk(1, array(
-					'select' => 'site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
+					'select' => 'site_oauth, site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
 				));
 
 				/**
@@ -558,6 +559,10 @@ class Users extends CActiveRecord
 				 * = Random password
 				 * = Username required
 				 */
+				$oauthCondition = 0;
+				if($action == 'login' && $setting->site_oauth == 1)
+					$oauthCondition = 1;
+				
 				$this->salt = self::getUniqueCode();
 				
 				if(in_array($controller, array('o/admin','o/member'))) {
@@ -578,7 +583,7 @@ class Users extends CActiveRecord
 					$this->verified = $setting->signup_verifyemail == 0 ? 1 : 0;
 
 					// Signup by Invite (Admin or User)
-					if($setting->site_type == 1 && $setting->signup_inviteonly != 0) {
+					if(($setting->site_type == 1 && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
 						if($setting->signup_checkemail == 1 && $this->invite_code_i == '')
 							$this->addError('invite_code_i', 'Invite Code tidak boleh kosong.');
 						
@@ -616,7 +621,7 @@ class Users extends CActiveRecord
 				}
 
 				// Username required
-				if($setting->signup_username == 1) {
+				if($setting->signup_username == 1 && $oauthCondition == 0) {
 					if($this->username != '') {
 						$user = self::model()->findByAttributes(array('username' => $this->username));
 						if($user != null) {
@@ -628,7 +633,7 @@ class Users extends CActiveRecord
 				}
 
 				// Random password
-				if($setting->signup_random == 1) {
+				if($setting->signup_random == 1 || $oauthCondition == 1) {
 					$this->confirmPassword = $this->newPassword = self::getGeneratePassword();
 					$this->verified = 1;
 				}
@@ -706,6 +711,10 @@ class Users extends CActiveRecord
 	protected function afterSave() 
 	{
 		$controller = strtolower(Yii::app()->controller->id);
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select' => 'site_type, site_title, signup_welcome, signup_adminemail',
+		));
+		$_assetsUrl = Yii::app()->assetManager->publish(Yii::getPathOfAlias('users.assets'));
 
 		parent::afterSave();
 
@@ -750,11 +759,7 @@ class Users extends CActiveRecord
 			 * Send New Account Information
 			 * Send Account Information
 			 *
-			 */
-			$setting = OmmuSettings::model()->findByPk(1, array(
-				'select' => 'site_type, site_title, signup_welcome, signup_adminemail',
-			));
-			
+			 */			
 			if($setting->site_type == 1) {
 				$invite = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
 					'select' => 'queue_id, member_id, reference_id',
@@ -781,7 +786,7 @@ class Users extends CActiveRecord
 					'{$site_title}', '{$index}',
 				);
 				$welcome_replace = array(
-					Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'), 
+					Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'), 
 					$setting->site_title, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/index'),
 				);
 				$welcome_template = 'user_welcome';
@@ -797,7 +802,7 @@ class Users extends CActiveRecord
 				'{$site_title}', '{$email}', '{$password}', '{$login}'
 			);
 			$account_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'),
+				Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'),
 				$setting->site_title, $this->email, $this->newPassword, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
 			);
 			$account_template = 'user_welcome_account';
@@ -819,7 +824,7 @@ class Users extends CActiveRecord
 					'{$site_title}', '{$email}', '{$password}', '{$login}',
 				);
 				$account_replace = array(
-					Utility::getProtocol().'://'.Yii::app()->request->serverName.$this->module->assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'),
+					Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'),
 					$setting->site_title, $this->email, $this->newPassword, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
 				);
 				$account_template = 'user_forgot_new_password';

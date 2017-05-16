@@ -51,6 +51,7 @@ class LoginFormOauth extends CFormModel
 			'email' => Yii::t('attribute', 'Email'),
 			'password' => Yii::t('attribute', 'Password'),
 			'rememberMe' => Yii::t('attribute', 'Remember me next time'),
+			'token' => Yii::t('attribute', 'Token'),
 		);
 	}
 

@@ -109,7 +109,7 @@ class OauthController extends ControllerApi
 						$return['oauth'] = $record->view->token_oauth;
 						$return['userlevel_id'] = $record->level_id;
 						$return['userlevel'] = $record->view_user->level_name;
-						$return['lastlogin_date'] = date_timestamp_get(date_create(d$logindate));
+						$return['lastlogin_date'] = strtotime($logindate);
 						$return['password'] = md5(md5($record->salt.$record->password).$logindate);
 						$return['enabled'] = $record->enabled;
 						$return['verified'] = $record->verified;
