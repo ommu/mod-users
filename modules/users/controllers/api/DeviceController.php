@@ -60,9 +60,9 @@ class DeviceController extends ControllerApi
 			$android_key = trim($_POST['android_key']);
 			
 			$criteria=new CDbCriteria;
-			$criteria->select = array('t.id','t.user_id');
-			$criteria->compare('t.publish',1);
-			$criteria->compare('t.android_id',$android_key);
+			$criteria->select = 'id, user_id';
+			$criteria->compare('publish',1);
+			$criteria->compare('android_id',$android_key);
 			
 			$device = UserDevice::model()->find($criteria);
 			if($token) {
