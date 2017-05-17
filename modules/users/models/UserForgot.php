@@ -330,9 +330,9 @@ class UserForgot extends CActiveRecord
 
 			// Update all history
 			$criteria=new CDbCriteria;
-			$criteria->addNotInCondition('t.forgot_id', array($this->forgot_id));
-			$criteria->compare('t.publish',1);
-			$criteria->compare('t.user_id',$this->user_id);
+			$criteria->addNotInCondition('forgot_id', array($this->forgot_id));
+			$criteria->compare('publish',1);
+			$criteria->compare('user_id',$this->user_id);
 
 			self::model()->updateAll(array('publish'=>0), $criteria);
 			

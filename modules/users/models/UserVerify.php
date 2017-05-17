@@ -334,9 +334,9 @@ class UserVerify extends CActiveRecord
 
 			// Update all history
 			$criteria=new CDbCriteria;
-			$criteria->addNotInCondition('t.verify_id', array($this->verify_id));
-			$criteria->compare('t.publish',1);
-			$criteria->compare('t.user_id',$this->user_id);
+			$criteria->addNotInCondition('verify_id', array($this->verify_id));
+			$criteria->compare('publish',1);
+			$criteria->compare('user_id',$this->user_id);
 
 			self::model()->updateAll(array('publish'=>0), $criteria);
 			

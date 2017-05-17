@@ -450,13 +450,22 @@ class UserLevel extends CActiveRecord
 		$location = Utility::getUrlTitle($currentAction);
 		
 		if(parent::beforeSave()) {
-			if($this->isNewRecord) {
+			if($this->isNewRecord || (!$this->isNewRecord && $this->name == 0)) {
 				$title=new OmmuSystemPhrase;
 				$title->location = $location.'_title';
 				$title->en_us = $this->title_i;
 				if($title->save())
 					$this->name = $title->phrase_id;
-
+				
+			} else {
+				if($currentAction == 'o/level/edit') {
+					$title = OmmuSystemPhrase::model()->findByPk($this->name);
+					$title->en_us = $this->title_i;
+					$title->save();
+				}
+			}
+			
+			if($this->isNewRecord || (!$this->isNewRecord && $this->desc == 0)) {
 				$desc=new OmmuSystemPhrase;
 				$desc->location = $location.'_description';
 				$desc->en_us = $this->description_i;
@@ -465,23 +474,20 @@ class UserLevel extends CActiveRecord
 
 			} else {
 				if($currentAction == 'o/level/edit') {
-					$title = OmmuSystemPhrase::model()->findByPk($this->name);
-					$title->en_us = $this->title_i;
-					$title->save();
-
 					$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
 					$desc->en_us = $this->description_i;
 					$desc->save();
 				}
-
-				// set to default modules
-				if($this->defaults == 1) {
-					self::model()->updateAll(array(
-						'defaults' => 0,	
-					));
-					$this->defaults = 1;
-				}
 			}
+
+			// set to default modules
+			if($this->defaults == 1) {
+				self::model()->updateAll(array(
+					'defaults' => 0,	
+				));
+				$this->defaults = 1;
+			}
+				
 			if($currentAction == 'o/level/user') {
 				$this->profile_privacy = serialize($this->profile_privacy);
 				$this->profile_comments = serialize($this->profile_comments);

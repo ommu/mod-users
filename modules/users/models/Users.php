@@ -529,6 +529,9 @@ class Users extends CActiveRecord
 		$controller = strtolower(Yii::app()->controller->id);
 		$action = strtolower(Yii::app()->controller->action->id);
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		$setting = OmmuSettings::model()->findByPk(1, array(
+			'select' => 'site_oauth, site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
+		));
 
 		if(parent::beforeValidate()) {
 			$photo_exts = unserialize($this->level->photo_exts);
@@ -549,10 +552,6 @@ class Users extends CActiveRecord
 			}
 			
 			if($this->isNewRecord) {
-				$setting = OmmuSettings::model()->findByPk(1, array(
-					'select' => 'site_oauth, site_type, signup_username, signup_approve, signup_verifyemail, signup_random, signup_inviteonly, signup_checkemail',
-				));
-
 				/**
 				 * Default action
 				 * = Default register member
@@ -571,8 +570,8 @@ class Users extends CActiveRecord
 						$this->enabled = 1;
 				
 					// Auto Verified Email User
-					if($setting->signup_verifyemail == 1)
-						$this->verified = 0;
+					if($setting->signup_verifyemail == 0)
+						$this->verified = 1;
 				
 					// Generate user by admin
 					$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
