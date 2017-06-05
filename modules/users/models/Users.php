@@ -138,6 +138,9 @@ class Users extends CActiveRecord
 			'option' => array(self::BELONGS_TO, 'UserOption', 'user_id'),
 			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'language' => array(self::BELONGS_TO, 'OmmuLanguages', 'language_id'),
+			'locale' => array(self::BELONGS_TO, 'OmmuLocale', 'locale_id'),
+			'timezone' => array(self::BELONGS_TO, 'OmmuTimezone', 'timezone_id'),
 		);
 	}
 
@@ -264,7 +267,7 @@ class Users extends CActiveRecord
 			$criteria->compare('date(t.update_date)',date('Y-m-d', strtotime($this->update_date)));
 		$criteria->compare('t.update_ip',strtolower($this->update_ip),true);
 		
-		$criteria->compare('modified.displayname',strtolower($this->modified_search), true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 
 		if(!isset($_GET['Users_sort']))
 			$criteria->order = 't.user_id DESC';
