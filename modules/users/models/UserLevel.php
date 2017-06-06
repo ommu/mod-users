@@ -5,7 +5,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
- * @link https://github.com/ommu/Users
+ * @link https://github.com/ommu/mod-users
  * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
@@ -129,7 +129,7 @@ class UserLevel extends CActiveRecord
 	{
 		return array(
 			'level_id' => Yii::t('attribute', 'Level'),
-			'name' => Yii::t('attribute', 'Name'),
+			'name' => Yii::t('attribute', 'Level'),
 			'desc' => Yii::t('attribute', 'Description'),
 			'defaults' => Yii::t('attribute', 'Defaults'),
 			'signup' => Yii::t('attribute', 'Signup'),
@@ -153,7 +153,7 @@ class UserLevel extends CActiveRecord
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
-			'title_i' => Yii::t('attribute', 'Name'),
+			'title_i' => Yii::t('attribute', 'Level'),
 			'description_i' => Yii::t('attribute', 'Description'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),

@@ -5,7 +5,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
- * @link https://github.com/ommu/Users
+ * @link https://github.com/ommu/mod-users
  * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
@@ -36,7 +36,6 @@ class UserInviteQueue extends CActiveRecord
 	public $defaultColumns = array();
 	
 	// Variable Search
-	public $level_search;
 	public $user_search;
 	public $reference_search;
 
@@ -75,7 +74,7 @@ class UserInviteQueue extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('queue_id, user_id, reference_id, email, invite,
-				level_search, user_search, reference_search', 'safe', 'on'=>'search'),
+				user_search, reference_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -104,7 +103,6 @@ class UserInviteQueue extends CActiveRecord
 			'reference_id' => Yii::t('attribute', 'Reference'),
 			'email' => Yii::t('attribute', 'Email'),
 			'invite' => Yii::t('attribute', 'Invite'),
-			'level_search' => Yii::t('attribute', 'level'),
 			'user_search' => Yii::t('attribute', 'User'),
 			'reference_search' => Yii::t('attribute', 'Reference'),
 		);
@@ -138,11 +136,13 @@ class UserInviteQueue extends CActiveRecord
 			$criteria->compare('t.user_id',$_GET['user']);
 		else
 			$criteria->compare('t.user_id',$this->user_id);
-		$criteria->compare('t.reference_id',$this->reference_id);
+		if(isset($_GET['reference']))
+			$criteria->compare('t.reference_id',$_GET['reference']);
+		else
+			$criteria->compare('t.reference_id',$this->reference_id);
 		$criteria->compare('t.email',strtolower($this->email),true);
 		$criteria->compare('t.invite',$this->invite);
 		
-		$criteria->compare('user.level_id',$this->level_search);
 		$criteria->compare('user.displayname',strtolower($this->user_search),true);
 		$criteria->compare('reference.displayname',strtolower($this->reference_search),true);
 		
@@ -193,20 +193,16 @@ class UserInviteQueue extends CActiveRecord
 			);
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
-					'name' => 'level_search',
-					'value' => '$data->user_id ? Phrase::trans($data->user->level->name) : \'-\'',
-					'filter'=>UserLevel::getUserLevel(),
-					'type' => 'raw',
-				);
-				$this->defaultColumns[] = array(
 					'name' => 'user_search',
 					'value' => '$data->user_id ? $data->user->displayname : \'-\'',
 				);
 			}
-			$this->defaultColumns[] = array(
-				'name' => 'reference_search',
-				'value' => '$data->reference_id ? $data->reference->displayname : \'-\'',
-			);
+			if(!isset($_GET['reference'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'reference_search',
+					'value' => '$data->reference_id ? $data->reference->displayname : \'-\'',
+				);
+			}
 			$this->defaultColumns[] = 'email';
 			$this->defaultColumns[] = array(
 				'name' => 'inviters',

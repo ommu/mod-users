@@ -5,7 +5,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
- * @link https://github.com/ommu/Users
+ * @link https://github.com/ommu/mod-users
  * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
@@ -210,13 +210,13 @@ class UserInvites extends CActiveRecord
 			if(!isset($_GET['invite'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
-					'value' => '$data->user_id ? Phrase::trans($data->user->level->name) : \'-\'',
+					'value' => '$data->user_id ? Phrase::trans($data->inviter->level->name) : \'-\'',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'inviter_search',
-					'value' => '$data->inviter->displayname',
+					'value' => '$data->user_id ? $data->inviter->displayname : \'-\'',
 				);
 			}
 			$this->defaultColumns[] = array(
