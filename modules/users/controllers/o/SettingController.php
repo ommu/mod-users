@@ -9,15 +9,14 @@
  *
  * TOC :
  *	Index
- *	Edit
  *	Manual
  *
  *	LoadModel
  *	performAjaxValidation
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
- * @link https://github.com/ommu/mod-article
+ * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @link https://github.com/ommu/mod-users
  * @contact (+62)856-299-4114
  *
  *----------------------------------------------------------------------------------------------------------
@@ -114,10 +113,10 @@ class SettingController extends Controller
 		$manual_path = $this->module->basePath.'/assets/manual';
 		
 		$this->dialogDetail = true;
-		$this->dialogGroundUrl = Yii::app()->controller->createUrl('o/admin/manage');
+		$this->dialogGroundUrl = Yii::app()->user->level == 1 ? Yii::app()->controller->createUrl('o/admin/manage') : Yii::app()->controller->createUrl('o/member/manage');
 		$this->dialogWidth = 400;
 		
-		$this->pageTitle = Yii::t('phrase', 'Downlaod Manual Book');
+		$this->pageTitle = Yii::t('phrase', 'Users Manual Book');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manual', array(
