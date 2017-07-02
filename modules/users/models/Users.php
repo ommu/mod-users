@@ -53,7 +53,7 @@
  * @property string $update_ip
  *
  * The followings are the available model relations:
- * @property OmmuUserLevel $level
+ * @property UserLevel $level
  */
 class Users extends CActiveRecord
 {
@@ -85,9 +85,9 @@ class Users extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'.ommu_users';
-		//return 'ommu_users';
+		//preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		//return $matches[1].'.ommu_users';
+		return 'ommu_users';
 	}
 
 	/**

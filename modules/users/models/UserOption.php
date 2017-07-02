@@ -23,7 +23,7 @@
  *
  * The followings are the available columns in table 'ommu_user_option':
  * @property string $option_id
- * @property integer $ommu_status
+ * @property integer _status
  * @property integer $invite_limit
  * @property integer $invite_success
  * @property string $signup_from

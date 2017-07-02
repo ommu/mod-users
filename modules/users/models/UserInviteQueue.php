@@ -29,7 +29,7 @@
  * @property integer $invite
  *
  * The followings are the available model relations:
- * @property OmmuUserInvites[] $ommuUserInvites
+ * @property UserInvites[] $UserInvites
  */
 class UserInviteQueue extends CActiveRecord
 {

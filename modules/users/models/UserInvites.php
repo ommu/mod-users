@@ -30,7 +30,7 @@
  * @property string $invite_ip
  *
  * The followings are the available model relations:
- * @property OmmuUserInviteQueue $queue
+ * @property UserInviteQueue $queue
  */
 class UserInvites extends CActiveRecord
 {
