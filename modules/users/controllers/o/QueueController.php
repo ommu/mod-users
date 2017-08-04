@@ -1,8 +1,8 @@
 <?php
 /**
- * InviteController
- * @var $this InviteController
- * @var $model UserInvites
+ * QueueController
+ * @var $this QueueController
+ * @var $model UserInviteQueue
  * @var $form CActiveForm
  * version: 0.0.1
  * Reference start
@@ -10,7 +10,6 @@
  * TOC :
  *	Index
  *	Manage
- *	Add
  *	RunAction
  *	Delete
  *	Publish
@@ -26,7 +25,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class InviteController extends Controller
+class QueueController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -81,7 +80,7 @@ class InviteController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','runaction','delete','publish'),
+				'actions'=>array('manage','runaction','delete','publish'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -106,18 +105,12 @@ class InviteController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage($user=null) 
+	public function actionManage() 
 	{
-		$pageTitle = Yii::t('phrase', 'User Invites');
-		if($user != null) {
-			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'User Invites: by $user_displayname', array ('$user_displayname'=>$data->displayname));
-		}
-		
-		$model=new UserInvites('search');
+		$model=new UserInviteQueue('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['UserInvites'])) {
-			$model->attributes=$_GET['UserInvites'];
+		if(isset($_GET['UserInviteQueue'])) {
+			$model->attributes=$_GET['UserInviteQueue'];
 		}
 
 		$columnTemp = array();
@@ -130,61 +123,13 @@ class InviteController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = $pageTitle;
+		$this->pageTitle = Yii::t('phrase', 'Queue Invite');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
-	}
-	
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionAdd() 
-	{
-		$model=new UserInvites;
-
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
-
-		if(isset($_POST['UserInvites'])) {
-			$model->attributes=$_POST['UserInvites'];
-			
-			$jsonError = CActiveForm::validate($model);
-			if(strlen($jsonError) > 2) {
-				echo $jsonError;
-
-			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
-					if($model->save()) {
-						echo CJSON::encode(array(
-							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-user-invite',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Invite User success.').'</strong></div>',
-						));
-					} else {
-						print_r($model->getErrors());
-					}
-				}
-			}
-			Yii::app()->end();
-			
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 500;
-			
-			$this->pageTitle = Yii::t('phrase', 'Invite User');
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_add',array(
-				'model'=>$model,
-			));		
-		}
 	}
 
 	/**
@@ -198,22 +143,22 @@ class InviteController extends Controller
 
 		if(count($id) > 0) {
 			$criteria = new CDbCriteria;
-			$criteria->addInCondition('invite_id', $id);
+			$criteria->addInCondition('queue_id', $id);
 
 			if($actions == 'publish') {
-				UserInvites::model()->updateAll(array(
+				UserInviteQueue::model()->updateAll(array(
 					'publish' => 1,
 				),$criteria);
 			} elseif($actions == 'unpublish') {
-				UserInvites::model()->updateAll(array(
+				UserInviteQueue::model()->updateAll(array(
 					'publish' => 0,
 				),$criteria);
 			} elseif($actions == 'trash') {
-				UserInvites::model()->updateAll(array(
+				UserInviteQueue::model()->updateAll(array(
 					'publish' => 2,
 				),$criteria);
 			} elseif($actions == 'delete') {
-				UserInvites::model()->deleteAll($criteria);
+				UserInviteQueue::model()->deleteAll($criteria);
 			}
 		}
 
@@ -232,9 +177,7 @@ class InviteController extends Controller
 	{
 		$model=$this->loadModel($id);
 		
-		$pageTitle = Yii::t('phrase', 'Delete Invite: $queue_email by Guest', array('$queue_email'=>$model->queue->email));
-		if($model->user->displayname)
-			$pageTitle = Yii::t('phrase', 'Delete Invite: $queue_email by $inviter_displayname', array('$queue_email'=>$model->queue->email, '$inviter_displayname'=>$model->user->displayname));
+		$pageTitle = Yii::t('phrase', 'Delete Queue: $email_address', array('$email_address'=>$model->email));
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
@@ -244,8 +187,8 @@ class InviteController extends Controller
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
-					'id' => 'partial-user-invite',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Invite success deleted.').'</strong></div>',
+					'id' => 'partial-user-invite-queue',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Queue Invite success deleted.').'</strong></div>',
 				));
 			}
 
@@ -282,21 +225,17 @@ class InviteController extends Controller
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
-					'id' => 'partial-user-invite',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Invite success updated.').'</strong></div>',
+					'id' => 'partial-user-invite-queue',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Queue Invite success updated.').'</strong></div>',
 				));
 			}
 
 		} else {
 			$this->dialogDetail = true;
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-		
-			$pageTitle = Yii::t('phrase', '$title Invite: $queue_email by Guest', array('$title'=>$title, '$queue_email'=>$model->queue->email));
-			if($model->user->displayname)
-				$pageTitle = Yii::t('phrase', '$title Invite: $queue_email by $inviter_displayname', array('$title'=>$title, '$queue_email'=>$model->queue->email, '$inviter_displayname'=>$model->user->displayname));
+			$this->dialogWidth = 350;		
 
-			$this->pageTitle = $pageTitle;
+			$this->pageTitle = Yii::t('phrase', '$title Queue: $email_address', array('$title'=>$title, '$email_address'=>$model->email));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(
@@ -313,7 +252,7 @@ class InviteController extends Controller
 	 */
 	public function loadModel($id) 
 	{
-		$model = UserInvites::model()->findByPk($id);
+		$model = UserInviteQueue::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 		return $model;

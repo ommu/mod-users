@@ -23,10 +23,14 @@
  *
  * The followings are the available columns in table 'ommu_user_invite_queue':
  * @property string $queue_id
- * @property string $user_id
- * @property string $reference_id
+ * @property integer $publish
+ * @property string $displayname
  * @property string $email
- * @property integer $invite
+ * @property string $creation_date
+ * @property string $creation_id
+ * @property string $modified_date
+ * @property string $modified_id
+ * @property string $updated_date
  *
  * The followings are the available model relations:
  * @property UserInvites[] $UserInvites
@@ -36,8 +40,10 @@ class UserInviteQueue extends CActiveRecord
 	public $defaultColumns = array();
 	
 	// Variable Search
+	public $creation_search;
+	public $modified_search;
 	public $user_search;
-	public $reference_search;
+	public $invite_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -66,15 +72,16 @@ class UserInviteQueue extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('email', 'required'),
-			array('invite', 'numerical', 'integerOnly'=>true),
-			array('user_id, reference_id', 'length', 'max'=>11),
+			array('publish, creation_id, modified_id', 'numerical', 'integerOnly'=>true),
+			array('creation_id, modified_id', 'length', 'max'=>11),
 			array('email', 'length', 'max'=>32),
+			array('displayname', 'length', 'max'=>64),
 			array('email', 'email'),
-			array('', 'safe', 'on'=>'search'),
+			array('displayname', 'safe', 'on'=>'search'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('queue_id, user_id, reference_id, email, invite,
-				user_search, reference_search', 'safe', 'on'=>'search'),
+			array('queue_id, publish, displayname, email, creation_date, creation_id, modified_date, modified_id, updated_date,
+				creation_search, modified_search, user_search, invite_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,9 +93,10 @@ class UserInviteQueue extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
-			'reference' => array(self::BELONGS_TO, 'Users', 'reference_id'),
-			'invite' => array(self::HAS_MANY, 'UserInvites', 'queue_id'),
+			'view' => array(self::BELONGS_TO, 'ViewUserInviteQueue', 'queue_id'),
+			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
+			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'invites' => array(self::HAS_MANY, 'UserInvites', 'queue_id'),
 		);
 	}
 
@@ -99,12 +107,18 @@ class UserInviteQueue extends CActiveRecord
 	{
 		return array(
 			'queue_id' => Yii::t('attribute', 'Queue'),
-			'user_id' => Yii::t('attribute', 'User'),
-			'reference_id' => Yii::t('attribute', 'Reference'),
+			'publish' => Yii::t('attribute', 'Publish'),
+			'displayname' => Yii::t('attribute', 'Displayname'),
 			'email' => Yii::t('attribute', 'Email'),
-			'invite' => Yii::t('attribute', 'Invite'),
+			'creation_date' => Yii::t('attribute', 'Creation Date'),
+			'creation_id' => Yii::t('attribute', 'Creation'),
+			'modified_date' => Yii::t('attribute', 'Modified Date'),
+			'modified_id' => Yii::t('attribute', 'Modified'),
+			'updated_date' => Yii::t('attribute', 'Updated Date'),
+			'creation_search' => Yii::t('attribute', 'Creation'),
+			'modified_search' => Yii::t('attribute', 'Modified'),
 			'user_search' => Yii::t('attribute', 'User'),
-			'reference_search' => Yii::t('attribute', 'Reference'),
+			'invite_search' => Yii::t('attribute', 'Invites'),
 		);
 	}
 	
@@ -121,30 +135,60 @@ class UserInviteQueue extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
-			'user' => array(
-				'alias'=>'user',
+			'view' => array(
+				'alias'=>'view',
+			),
+			'view.user' => array(
+				'alias'=>'view_user',
 				'select'=>'level_id, displayname'
 			),
-			'reference' => array(
-				'alias'=>'reference',
+			'creation' => array(
+				'alias'=>'creation',
+				'select'=>'displayname'
+			),
+			'modified' => array(
+				'alias'=>'modified',
 				'select'=>'displayname'
 			),
 		);
 
 		$criteria->compare('t.queue_id',$this->queue_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
-		else
-			$criteria->compare('t.user_id',$this->user_id);
-		if(isset($_GET['reference']))
-			$criteria->compare('t.reference_id',$_GET['reference']);
-		else
-			$criteria->compare('t.reference_id',$this->reference_id);
+		if(isset($_GET['type']) && $_GET['type'] == 'publish')
+			$criteria->compare('t.publish',1);
+		elseif(isset($_GET['type']) && $_GET['type'] == 'unpublish')
+			$criteria->compare('t.publish',0);
+		elseif(isset($_GET['type']) && $_GET['type'] == 'trash')
+			$criteria->compare('t.publish',2);
+		else {
+			$criteria->addInCondition('t.publish',array(0,1));
+			$criteria->compare('t.publish',$this->publish);
+		}
+		$criteria->compare('t.displayname',strtolower($this->displayname),true);
 		$criteria->compare('t.email',strtolower($this->email),true);
-		$criteria->compare('t.invite',$this->invite);
-		
-		$criteria->compare('user.displayname',strtolower($this->user_search),true);
-		$criteria->compare('reference.displayname',strtolower($this->reference_search),true);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
+		if(isset($_GET['creation']))
+			$criteria->compare('t.creation_id',$_GET['creation']);
+		else
+			$criteria->compare('t.creation_id',$this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+		if(isset($_GET['modified']))
+			$criteria->compare('t.modified_id',$_GET['modified']);
+		else
+			$criteria->compare('t.modified_id',$this->modified_id);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
+
+		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
+		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
+		if(isset($_GET['user']))
+			$criteria->compare('view.user_id',$_GET['user']);
+		if($this->view->user_id)
+			$criteria->compare('view_user.displayname',strtolower($this->user_search),true);
+		else
+			$criteria->compare('t.displayname',strtolower($this->user_search),true);			
+		$criteria->compare('view.invites',$this->invite_search);
 		
 		if(!isset($_GET['UserInviteQueue_sort']))
 			$criteria->order = 't.queue_id DESC';
@@ -173,10 +217,14 @@ class UserInviteQueue extends CActiveRecord
 			}
 		}else {
 			//$this->defaultColumns[] = 'queue_id';
-			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'reference_id';
+			$this->defaultColumns[] = 'publish';
+			$this->defaultColumns[] = 'displayname';
 			$this->defaultColumns[] = 'email';
-			$this->defaultColumns[] = 'invite';
+			$this->defaultColumns[] = 'creation_date';
+			$this->defaultColumns[] = 'creation_id';
+			$this->defaultColumns[] = 'modified_date';
+			$this->defaultColumns[] = 'modified_id';
+			$this->defaultColumns[] = 'updated_date';
 		}
 
 		return $this->defaultColumns;
@@ -194,35 +242,62 @@ class UserInviteQueue extends CActiveRecord
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
-					'value' => '$data->user_id ? $data->user->displayname : \'-\'',
-				);
-			}
-			if(!isset($_GET['reference'])) {
-				$this->defaultColumns[] = array(
-					'name' => 'reference_search',
-					'value' => '$data->reference_id ? $data->reference->displayname : \'-\'',
+					'value' => '$data->view->user_id ? $data->view->user->displayname : ($data->displayname ? $data->displayname : \'-\')',
 				);
 			}
 			$this->defaultColumns[] = 'email';
 			$this->defaultColumns[] = array(
-				'name' => 'inviters',
-				'value' => 'CHtml::link($data->inviters ? $data->inviters : 0, Yii::app()->controller->createUrl("o/invite/manage",array("queue"=>$data->queue_id)))',
+				'name' => 'creation_search',
+				'value' => '$data->creation->displayname',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'creation_date',
+				'value' => 'Utility::dateFormat($data->creation_date)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'creation_date',
+					'language' => 'en',
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'creation_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'invite_search',
+				'value' => 'CHtml::link($data->view->invites ? $data->view->invites : 0, Yii::app()->controller->createUrl("o/invite/manage",array("queue"=>$data->queue_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'type' => 'raw',
 			);
-			$this->defaultColumns[] = array(
-				'name' => 'invite',
-				'value' => '$data->invite == 1 ? Yii::t(\'phrase\', \'by Admin\') : Yii::t(\'phrase\', \'by Member\')',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter'=>array(
-					1=>Yii::t('phrase', 'by Admin'),
-					0=>Yii::t('phrase', 'by Member'),
-				),
-			);
+			if(!isset($_GET['type'])) {
+				$this->defaultColumns[] = array(
+					'name' => 'publish',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\',array(\'id\'=>$data->queue_id)), $data->publish)',
+					'htmlOptions' => array(
+						'class' => 'center',
+					),
+					'filter'=>array(
+						1=>Yii::t('phrase', 'Yes'),
+						0=>Yii::t('phrase', 'No'),
+					),
+					'type' => 'raw',
+				);
+			}
 		}
 		parent::afterConstruct();
 	}
@@ -231,12 +306,11 @@ class UserInviteQueue extends CActiveRecord
 	 * before validate attributes
 	 */
 	protected function beforeValidate() {
-		if(parent::beforeValidate()) {
-			if($this->invite == 0)
-				$this->invite = Yii::app()->user->level == 1 ? 1 : 0;
-			
+		if(parent::beforeValidate()) {			
 			if($this->isNewRecord)
-				$this->reference_id = Yii::app()->user->id;
+				$this->creation_id = Yii::app()->user->id;
+			else
+				$this->modified_id = Yii::app()->user->id;
 		}
 		return true;
 	}

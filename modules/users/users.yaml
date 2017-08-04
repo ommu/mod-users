@@ -30,10 +30,13 @@ plugin_menu		:
 			- urlTitle: Subscribes
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/newsletter/manage, attr: -, icon: -}
-			- urlTitle: Invite
+			- urlTitle: Invites
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/invite/manage, attr: -, icon: -}
-			- urlTitle: Device
+			- urlTitle: Queues
+				urlRules: {siteType: 1, userLevel: "1,2"}
+				urlPath: {url: o/queue/manage, attr: -, icon: -}
+			- urlTitle: Devices
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/device/manage, attr: -, icon: -}		
                 
@@ -108,14 +111,13 @@ content_menu	:
         
 # controller o/invite
 	- urlTitle: Invite User
-		urlRules: {users, o/invite, "manage,queuemanage", siteType: 1, userLevel: "1,2"}
+		urlRules: {users, o/invite, "manage", siteType: 1, userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
-	- urlTitle: View Invites
-		urlRules: {users, o/invite, "manage,queuemanage", siteType: 1, userLevel: "1,2"}
-		urlPath: {url: manage, attr: -, icon: -}
-	- urlTitle: Queue Invites
-		urlRules: {users, o/invite, "manage,queuemanage", siteType: 1, userLevel: "1,2"}
-		urlPath: {url: queuemanage, attr: -, icon: -}
+        
+# controller o/queue
+	- urlTitle: Back to Invite
+		urlRules: {users, o/queue, "manage", siteType: 1, userLevel: "1,2"}
+		urlPath: {url: o/invite/manage, attr: -, icon: -}
 
 # controller o/newsletter
 	- urlTitle: Back to Mambers
