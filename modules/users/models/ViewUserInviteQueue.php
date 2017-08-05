@@ -25,6 +25,8 @@
  * The followings are the available columns in table '_view_user_invite_queue':
  * @property string $queue_id
  * @property string $user_id
+ * @property integer $register
+ * @property string $register_date
  * @property string $invite_by
  * @property string $invites
  * @property string $invite_all
@@ -75,14 +77,15 @@ class ViewUserInviteQueue extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('register', 'numerical', 'integerOnly'=>true),
 			array('queue_id, user_id', 'length', 'max'=>11),
 			array('invite_by', 'length', 'max'=>5),
 			array('invites', 'length', 'max'=>23),
 			array('invite_all', 'length', 'max'=>21),
-			array('first_invite_date, first_invite_user_id, last_invite_date, last_invite_user_id', 'safe'),
+			array('register_date, first_invite_date, first_invite_user_id, last_invite_date, last_invite_user_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('queue_id, user_id, invite_by, invites, invite_all, first_invite_date, first_invite_user_id, last_invite_date, last_invite_user_id', 'safe', 'on'=>'search'),
+			array('queue_id, user_id, register, register_date, invite_by, invites, invite_all, first_invite_date, first_invite_user_id, last_invite_date, last_invite_user_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -106,6 +109,8 @@ class ViewUserInviteQueue extends CActiveRecord
 		return array(
 			'queue_id' => Yii::t('attribute', 'Queue'),
 			'user_id' => Yii::t('attribute', 'User'),
+			'register' => Yii::t('attribute', 'Register'),
+			'register_date' => Yii::t('attribute', 'Register Date'),
 			'invite_by' => Yii::t('attribute', 'Invite By'),
 			'invites' => Yii::t('attribute', 'Invites'),
 			'invite_all' => Yii::t('attribute', 'Invite All'),
@@ -136,6 +141,9 @@ class ViewUserInviteQueue extends CActiveRecord
 
 		$criteria->compare('t.queue_id',$this->queue_id);
 		$criteria->compare('t.user_id',$this->user_id);
+		$criteria->compare('t.register',$this->register);
+		if($this->register_date != null && !in_array($this->register_date, array('0000-00-00 00:00:00', '0000-00-00')))
+			$criteria->compare('date(t.register_date)',date('Y-m-d', strtotime($this->register_date)));
 		$criteria->compare('t.invite_by',strtolower($this->invite_by),true);
 		$criteria->compare('t.invites',$this->invites);
 		$criteria->compare('t.invite_all',$this->invite_all);
@@ -177,6 +185,8 @@ class ViewUserInviteQueue extends CActiveRecord
 		} else {
 			$this->defaultColumns[] = 'queue_id';
 			$this->defaultColumns[] = 'user_id';
+			$this->defaultColumns[] = 'register';
+			$this->defaultColumns[] = 'register_date';
 			$this->defaultColumns[] = 'invite_by';
 			$this->defaultColumns[] = 'invites';
 			$this->defaultColumns[] = 'invite_all';
@@ -205,6 +215,36 @@ class ViewUserInviteQueue extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'user_id',
 				'value' => '$data->user_id',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'register',
+				'value' => '$data->register',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'register_date',
+				'value' => 'Utility::dateFormat($data->register_date)',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
+					'model'=>$this,
+					'attribute'=>'register_date',
+					'language' => 'en',
+					'i18nScriptFile' => 'jquery-ui-i18n.min.js',
+					//'mode'=>'datetime',
+					'htmlOptions' => array(
+						'id' => 'last_invite_date_filter',
+					),
+					'options'=>array(
+						'showOn' => 'focus',
+						'dateFormat' => 'dd-mm-yy',
+						'showOtherMonths' => true,
+						'selectOtherMonths' => true,
+						'changeMonth' => true,
+						'changeYear' => true,
+						'showButtonPanel' => true,
+					),
+				), true),
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'invite_by',

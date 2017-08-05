@@ -42,6 +42,7 @@ class UserInviteQueue extends CActiveRecord
 	// Variable Search
 	public $creation_search;
 	public $modified_search;
+	public $register_search;
 	public $user_search;
 	public $invite_search;
 
@@ -81,7 +82,7 @@ class UserInviteQueue extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('queue_id, publish, displayname, email, creation_date, creation_id, modified_date, modified_id, updated_date,
-				creation_search, modified_search, user_search, invite_search', 'safe', 'on'=>'search'),
+				creation_search, modified_search, register_search, user_search, invite_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -117,8 +118,11 @@ class UserInviteQueue extends CActiveRecord
 			'updated_date' => Yii::t('attribute', 'Updated Date'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
+			'register_search' => Yii::t('attribute', 'Register'),
 			'user_search' => Yii::t('attribute', 'User'),
 			'invite_search' => Yii::t('attribute', 'Invites'),
+			'register_name_i' => Yii::t('attribute', 'Register Name'),
+			'register_date_i' => Yii::t('attribute', 'Register Date'),
 		);
 	}
 	
@@ -182,12 +186,13 @@ class UserInviteQueue extends CActiveRecord
 
 		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
+		$criteria->compare('view.register',$this->register_search);
 		if(isset($_GET['user']))
 			$criteria->compare('view.user_id',$_GET['user']);
 		if($this->view->user_id)
 			$criteria->compare('view_user.displayname',strtolower($this->user_search),true);
 		else
-			$criteria->compare('t.displayname',strtolower($this->user_search),true);			
+			$criteria->compare('t.displayname',strtolower($this->user_search),true);
 		$criteria->compare('view.invites',$this->invite_search);
 		
 		if(!isset($_GET['UserInviteQueue_sort']))
@@ -281,6 +286,18 @@ class UserInviteQueue extends CActiveRecord
 				'value' => 'CHtml::link($data->view->invites ? $data->view->invites : 0, Yii::app()->controller->createUrl("o/invite/manage",array("queue"=>$data->queue_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
+				),
+				'type' => 'raw',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'register_search',
+				'value' => '$data->view->register == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
 				),
 				'type' => 'raw',
 			);
