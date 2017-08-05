@@ -11,6 +11,7 @@
  *	Index
  *	Manage
  *	Add
+ *	View
  *	RunAction
  *	Delete
  *	Publish
@@ -81,7 +82,7 @@ class InviteController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','runaction','delete','publish'),
+				'actions'=>array('manage','add','view','runaction','delete','publish'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -186,6 +187,30 @@ class InviteController extends Controller
 			));		
 		}
 	}
+	
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id) 
+	{
+		$model=$this->loadModel($id);
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+		
+		$pageTitle = Yii::t('phrase', 'View Invite: $queue_email by Guest', array('$queue_email'=>$model->queue->email));
+		if($model->user->displayname)
+			$pageTitle = Yii::t('phrase', 'View Invite: $queue_email by $inviter_displayname', array('$queue_email'=>$model->queue->email, '$inviter_displayname'=>$model->user->displayname));
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_view',array(
+			'model'=>$model,
+		));
+	}	
 
 	/**
 	 * Displays a particular model.

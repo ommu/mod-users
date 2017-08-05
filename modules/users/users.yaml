@@ -114,6 +114,11 @@ content_menu	:
 		urlRules: {users, o/invite, "manage", siteType: 1, userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
         
+# controller o/invitehistory
+	- urlTitle: Back to Invites
+		urlRules: {users, o/invitehistory, "manage", siteType: 1, userLevel: "1,2"}
+		urlPath: {url: o/invite/manage, attr: -, icon: -}
+        
 # controller o/queue
 	- urlTitle: Back to Invite
 		urlRules: {users, o/queue, "manage", siteType: 1, userLevel: "1,2"}

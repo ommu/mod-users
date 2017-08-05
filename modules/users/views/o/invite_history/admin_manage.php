@@ -1,19 +1,20 @@
 <?php
 /**
- * User Invites (user-invites)
- * @var $this InviteController
- * @var $model UserInvites
+ * User Invite Histories (user-invite-history)
+ * @var $this InvitehistoryController
+ * @var $model UserInviteHistory
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @created date 5 August 2017, 19:31 WIB
  * @link https://github.com/ommu/mod-users
  * @contact (+62)856-299-4114
  *
  */
 
 	$this->breadcrumbs=array(
-		'User Invites'=>array('manage'),
+		'User Invite Histories'=>array('manage'),
 		'Manage',
 	);
 	$this->menu=array(
@@ -21,19 +22,13 @@
 			'label' => Yii::t('phrase', 'Filter'), 
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'search-button'),
-			'linkOptions' => array(
-				'title' => Yii::t('phrase', 'Filter'),
-				'off_address' => '',
-			),
+			'linkOptions' => array('title' => Yii::t('phrase', 'Filter')),
 		),
 		array(
 			'label' => Yii::t('phrase', 'Grid Options'), 
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'grid-button'),
-			'linkOptions' => array(
-				'title' => Yii::t('phrase', 'Grid Options'),
-				'off_address' => '',
-			),
+			'linkOptions' => array('title' => Yii::t('phrase', 'Grid Options')),
 		),
 	);
 
@@ -41,7 +36,7 @@
 
 <?php //begin.Search ?>
 <div class="search-form">
-<?php $this->renderPartial('_search',array(
+<?php $this->renderPartial('/o/invite_history/_search',array(
 	'model'=>$model,
 )); ?>
 </div>
@@ -49,21 +44,21 @@
 
 <?php //begin.Grid Option ?>
 <div class="grid-form">
-<?php $this->renderPartial('_option_form',array(
+<?php $this->renderPartial('/o/invite_history/_option_form',array(
 	'model'=>$model,
 )); ?>
 </div>
 <?php //end.Grid Option ?>
 
-<div id="partial-user-invites">
+<div id="partial-user-invite-history">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
-		if(Yii::app()->user->hasFlash('error'))
-			echo Utility::flashError(Yii::app()->user->getFlash('error'));
-		if(Yii::app()->user->hasFlash('success'))
-			echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
-		?>
+	if(Yii::app()->user->hasFlash('error'))
+		echo Utility::flashError(Yii::app()->user->getFlash('error'));
+	if(Yii::app()->user->hasFlash('success'))
+		echo Utility::flashSuccess(Yii::app()->user->getFlash('success'));
+	?>
 	</div>
 	<?php //begin.Messages ?>
 
@@ -81,27 +76,27 @@
 						'options' => array(							
 							'class' => 'view',
 						),
-						'url' => 'Yii::app()->controller->createUrl("view",array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl(\'view\',array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
 						'label' => 'update',
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'update'
 						),
-						'url' => 'Yii::app()->controller->createUrl("edit",array("id"=>$data->primaryKey))'),
+						'url' => 'Yii::app()->controller->createUrl(\'edit\',array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
 						'label' => 'delete',
 						'imageUrl' => false,
 						'options' => array(
 							'class' => 'delete'
 						),
-						'url' => 'Yii::app()->controller->createUrl("delete",array("id"=>$data->primaryKey))')
+						'url' => 'Yii::app()->controller->createUrl(\'delete\',array(\'id\'=>$data->primaryKey))')
 				),
-				'template' => '{view}|{delete}',
+				'template' => '{delete}',
 			));
 
 			$this->widget('application.components.system.OGridView', array(
-				'id'=>'user-invites-grid',
+				'id'=>'user-invite-history-grid',
 				'dataProvider'=>$model->search(),
 				'filter'=>$model,
 				'afterAjaxUpdate' => 'reinstallDatePicker',

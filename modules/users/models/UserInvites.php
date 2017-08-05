@@ -127,7 +127,7 @@ class UserInvites extends CActiveRecord
 			'updated_date' => Yii::t('attribute', 'Updated Date'),
 			'displayname' => Yii::t('attribute', 'Displayname'),
 			'email' => Yii::t('attribute', 'Email'),
-			'userlevel_search' => Yii::t('attribute', 'Level'),
+			'userlevel_search' => Yii::t('attribute', 'Level Inviter'),
 			'user_search' => Yii::t('attribute', 'Inviter'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -148,11 +148,15 @@ class UserInvites extends CActiveRecord
 		$criteria->with = array(
 			'queue' => array(
 				'alias'=>'queue',
-				'select'=>'displayname, email'
+				'select'=>'queue_id, displayname, email'
 			),
 			'queue.view' => array(
 				'alias'=>'queue_view',
 				'select'=>'user_id'
+			),
+			'queue.view.user' => array(
+				'alias'=>'queue_view_user',
+				'select'=>'displayname'
 			),
 			'user' => array(
 				'alias'=>'user',
@@ -187,7 +191,10 @@ class UserInvites extends CActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		
-		$criteria->compare('queue.displayname',strtolower($this->displayname),true);
+		if($this->queue->view->user_id)
+			$criteria->compare('queue_view_user.displayname',strtolower($this->displayname),true);
+		else
+			$criteria->compare('queue.displayname',strtolower($this->displayname),true);
 		$criteria->compare('queue.email',strtolower($this->email),true);
 		$criteria->compare('user.level_id',$this->userlevel_search);
 		$criteria->compare('user.displayname',strtolower($this->user_search),true);
@@ -256,24 +263,16 @@ class UserInvites extends CActiveRecord
 			}
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
+					'name' => 'user_search',
+					'value' => '$data->user_id ? $data->user->displayname : \'-\'',
+				);
+				$this->defaultColumns[] = array(
 					'name' => 'userlevel_search',
 					'value' => '$data->user_id ? Phrase::trans($data->user->level->name) : \'-\'',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);
-				$this->defaultColumns[] = array(
-					'name' => 'user_search',
-					'value' => '$data->user_id ? $data->user->displayname : \'-\'',
-				);
 			}
-			$this->defaultColumns[] = array(
-				'name' => 'code',
-				'value' => '$data->code',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'invite_ip',
-				'value' => '$data->invite_ip',
-			);
 			$this->defaultColumns[] = array(
 				'name' => 'invite_date',
 				'value' => 'Utility::dateFormat($data->invite_date)',
@@ -302,10 +301,11 @@ class UserInvites extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'invites',
-				'value' => '$data->invites',
+				'value' => 'CHtml::link($data->invites ? $data->invites : 0, Yii::app()->controller->createUrl("o/invitehistory/manage",array("invite"=>$data->invite_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'type' => 'raw',
 			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
@@ -345,26 +345,20 @@ class UserInvites extends CActiveRecord
 	}
 
 	// Get plugin list
-	public static function getInvite($email) 
+	public static function getInvite($email, $order=null) 
 	{
 		$criteria=new CDbCriteria;
 		$criteria->with = array(
 			'queue' => array(
 				'alias'=>'queue',
-				'select'=>'queue_id, publish, email',
+				'select'=>'queue_id, email',
 			),
 		);
 		$criteria->compare('t.publish',1);
-		$criteria->compare('t.user_id',1);
-		$order = ($type == null || ($type != null && $type == 'asc')) ? 'invite_id ASC' : '';
-		$model = self::model()->with('queue')->find(array(
-			'select' => 'invite_id, queue_id, user_id, code',
-			'condition' => 'queue.email = :email',
-			'params' => array(
-				':email' => $email,
-			),
-			'order'=> 'invite_id DESC',
-		));
+		$criteria->compare('queue.publish',1);
+		$criteria->compare('queue.email',strtolower($email));
+		$criteria->order = $order == null || $order == 'DESC' ? 't.invite_id DESC' : 't.invite_id ASC';
+		$model = self::model()->find($criteria);
 		
 		return $model;
 	}
