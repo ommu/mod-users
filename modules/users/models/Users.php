@@ -27,8 +27,6 @@
  * @property integer $verified
  * @property integer $level_id
  * @property integer $language_id
- * @property integer $locale_id
- * @property integer $timezone_id
  * @property string $email
  * @property string $username
  * @property string $first_name
@@ -85,9 +83,8 @@ class Users extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		//preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		//return $matches[1].'.ommu_users';
-		return 'ommu_users';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_users';
 	}
 
 	/**
@@ -99,19 +96,19 @@ class Users extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('level_id, email, first_name, last_name', 'required'),
-			array('enabled, verified, language_id, locale_id, timezone_id', 'required', 'on'=>'formEdit'),
+			array('enabled, verified, language_id', 'required', 'on'=>'formEdit'),
 			array('
 				oldPassword', 'required', 'on'=>'formChangePassword'),
 			array('
 				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetpassword'),
-			array('enabled, verified, level_id, language_id, locale_id, timezone_id, deactivate, search, invisible, privacy, comments', 'numerical', 'integerOnly'=>true),
+			array('enabled, verified, level_id, language_id, deactivate, search, invisible, privacy, comments', 'numerical', 'integerOnly'=>true),
 			array('modified_id', 'length', 'max'=>11),
 			array('
 				invite_code_i', 'length', 'max'=>16),
 			array('creation_ip, lastlogin_ip, update_ip', 'length', 'max'=>20),
 			array('email, username, first_name, last_name, password, salt, 
 				oldPassword, newPassword, confirmPassword', 'length', 'max'=>32),
-			array('enabled, verified, level_id, language_id, locale_id, timezone_id, username, displayname, password, photos, deactivate, invisible,
+			array('enabled, verified, level_id, language_id, username, displayname, password, photos, deactivate, invisible,
 				old_photos_i, oldPassword, newPassword, confirmPassword, invite_code_i, reference_id_i', 'safe'),
 			array('oldPassword', 'filter', 'filter'=>array($this,'validatePassword')),
 			array('email', 'email'),
@@ -121,7 +118,7 @@ class Users extends CActiveRecord
 				newPassword', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => 'Kedua password tidak sama.'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, enabled, verified, level_id, language_id, locale_id, timezone_id, email, username, first_name, last_name, displayname, password, photos, salt, deactivate, search, invisible, privacy, comments, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip,
+			array('user_id, enabled, verified, level_id, language_id, email, username, first_name, last_name, displayname, password, photos, salt, deactivate, search, invisible, privacy, comments, creation_date, creation_ip, modified_date, modified_id, lastlogin_date, lastlogin_ip, lastlogin_from, update_date, update_ip,
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -139,8 +136,6 @@ class Users extends CActiveRecord
 			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'language' => array(self::BELONGS_TO, 'OmmuLanguages', 'language_id'),
-			'locale' => array(self::BELONGS_TO, 'OmmuLocale', 'locale_id'),
-			'timezone' => array(self::BELONGS_TO, 'OmmuTimezone', 'timezone_id'),
 		);
 	}
 
@@ -155,8 +150,6 @@ class Users extends CActiveRecord
 			'verified' => Yii::t('attribute', 'Verified'),
 			'level_id' => Yii::t('attribute', 'Level'),
 			'language_id' => Yii::t('attribute', 'Language'),
-			'locale_id' => Yii::t('attribute', 'Locale'),
-			'timezone_id' => Yii::t('attribute', 'Timezone'),
 			'email' => Yii::t('attribute', 'Email'),
 			'username' => Yii::t('attribute', 'Username'),
 			'first_name' => Yii::t('attribute', 'First Name'),
@@ -235,8 +228,6 @@ class Users extends CActiveRecord
 				$criteria->compare('t.level_id',$this->level_id);
 		}
 		$criteria->compare('t.language_id',$this->language_id);
-		$criteria->compare('t.locale_id',$this->locale_id);
-		$criteria->compare('t.timezone_id',$this->timezone_id);
 		$criteria->compare('t.email',strtolower($this->email),true);
 		$criteria->compare('t.username',strtolower($this->username),true);
 		$criteria->compare('t.first_name',strtolower($this->first_name),true);
@@ -303,8 +294,6 @@ class Users extends CActiveRecord
 			$this->defaultColumns[] = 'verified';
 			$this->defaultColumns[] = 'level_id';
 			$this->defaultColumns[] = 'language_id';
-			$this->defaultColumns[] = 'locale_id';
-			$this->defaultColumns[] = 'timezone_id';
 			$this->defaultColumns[] = 'email';
 			$this->defaultColumns[] = 'username';
 			$this->defaultColumns[] = 'first_name';
@@ -529,6 +518,8 @@ class Users extends CActiveRecord
 	 */
 	protected function beforeValidate() 
 	{
+		print_r($this->dbConnection->connectionString);
+		exit();
 		$controller = strtolower(Yii::app()->controller->id);
 		$action = strtolower(Yii::app()->controller->action->id);
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
@@ -593,11 +584,11 @@ class Users extends CActiveRecord
 							$invite = UserInvites::getInvite(strtolower($this->email));
 							
 							if($invite != null) {
-								if($invite->queue->member_id != 0)
+								if($invite->queue->view->user_id != 0)
 									$this->addError('email', 'Email anda sudah terdaftar sebagai user, silahkan login.');
 									
 								else {
-									if($setting->signup_inviteonly == 1 && $invite->queue->invite == 0)
+									if($setting->signup_inviteonly == 1 && $invite->queue->view->invite_by == 'user')
 										$this->addError('email', 'Maaf invite hanya bisa dilakukan oleh admin');
 									
 									else {

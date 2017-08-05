@@ -117,7 +117,7 @@ class MemberController extends Controller
 			if(isset($_GET['term'])) {
 				$criteria = new CDbCriteria;
 				$criteria->condition = 'enabled = 1 AND displayname LIKE :displayname';
-				$criteria->select	= "user_id, displayname";
+				$criteria->select = "user_id, displayname";
 				$criteria->limit = $limit;
 				$criteria->order = "user_id ASC";
 				$criteria->params = array(':displayname' => '%' . strtolower($_GET['term']) . '%');

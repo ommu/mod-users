@@ -94,6 +94,7 @@ class UserVerify extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'view' => array(self::BELONGS_TO, 'ViewUserVerify', 'verify_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
 	}
