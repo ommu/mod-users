@@ -101,7 +101,8 @@ class Users extends CActiveRecord
 				oldPassword', 'required', 'on'=>'formChangePassword'),
 			array('
 				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetpassword'),
-			array('enabled, verified, level_id, language_id, deactivate, search, invisible, privacy, comments', 'numerical', 'integerOnly'=>true),
+			array('enabled, verified, level_id, language_id, deactivate, search, invisible, privacy, comments,
+				reference_id_i', 'numerical', 'integerOnly'=>true),
 			array('modified_id', 'length', 'max'=>11),
 			array('
 				invite_code_i', 'length', 'max'=>16),
@@ -574,6 +575,7 @@ class Users extends CActiveRecord
 					$this->level_id = UserLevel::getDefault();
 					$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
 					$this->verified = $setting->signup_verifyemail == 0 ? 1 : 0;
+					$this->reference_id_i = 0;
 
 					// Signup by Invite (Admin or User)
 					if(($setting->site_type == 1 && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
@@ -588,18 +590,17 @@ class Users extends CActiveRecord
 									$this->addError('email', 'Email anda sudah terdaftar sebagai user, silahkan login.');
 									
 								else {
+									$this->reference_id_i = $invite->user_id;
 									if($setting->signup_inviteonly == 1 && $invite->queue->view->invite_by == 'user')
 										$this->addError('email', 'Maaf invite hanya bisa dilakukan oleh admin');
 									
 									else {
 										if($setting->signup_checkemail == 1) {
-											$code = UserInvites::model()->findByAttributes(array('code' => $this->invite_code_i), array(
-												'select' => 'queue_id, user_id, code',
-											));
-											if($code == null)
-												$this->addError('invite_code_i', 'Invite Code yang and masukan salah.');
+											$inviteCode = UserInviteHistory::getInvite($this->email, $this->invite_code_i);
+											if($inviteCode == null)
+												$this->addError('invite_code_i', 'Invite Code expired atau tidak terdaftar dalam sistem.');
 											else
-												$this->reference_id_i = $code->user_id;
+												$this->reference_id_i = $inviteCode->user_id;
 										}
 									}
 								}
@@ -753,15 +754,13 @@ class Users extends CActiveRecord
 			 * Send Account Information
 			 *
 			 */			
-			if($setting->site_type == 1) {
-				$invite = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
-					'select' => 'queue_id, member_id, reference_id',
+			if($setting->site_type == 1 && $this->reference_id_i != 0) {
+				$queue = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
+					'select' => 'queue_id, reference_id',
 				));
-				if($invite != null && $invite->member_id == 0) {
-					$invite->member_id = $this->user_id;
-					if($this->reference_id_i != '')
-						$invite->reference_id = $this->reference_id_i;
-					$invite->update();
+				if($queue != null && $queue->reference_id == 0 && $queue->view->user_id != 0) {
+					$queue->reference_id = $this->reference_id_i;
+					$queue->update();
 				}
 			}
 			

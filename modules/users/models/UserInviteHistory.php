@@ -307,6 +307,35 @@ class UserInviteHistory extends CActiveRecord
 		parent::afterConstruct();
 	}
 
+	// Get plugin list
+	public static function getInvite($email, $code, $order=null)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->with = array(
+			'queue' => array(
+				'alias'=>'queue',
+				'select'=>'queue_id, publish, email'
+			),
+			'queue.view' => array(
+				'alias'=>'queue_view',
+				'select'=>'user_id'
+			),
+			'histories' => array(
+				'alias'=>'histories',
+				'together'=>true,
+			),
+		);
+		$criteria->compare('t.publish',1);
+		$criteria->compare('queue.publish',1);
+		$criteria->compare('queue.email',strtolower($email));
+		$criteria->compare('histories.code',$code);
+		$criteria->compare('histories.expired_date','>='.date('Y-m-d H:i:s'));
+		$criteria->order = $order == null || $order == 'DESC' ? 't.invite_id DESC' : 't.invite_id ASC';
+		$model = UserInvites::model()->find($criteria);
+		
+		return $model;
+	}
+
 	/**
 	 * User get information
 	 */

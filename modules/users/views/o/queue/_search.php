@@ -30,6 +30,11 @@
 		</li>
 
 		<li>
+			<?php echo $model->getAttributeLabel('reference_id'); ?><br/>
+			<?php echo $form->textField($model,'reference_id'); ?>
+		</li>
+
+		<li>
 			<?php echo $model->getAttributeLabel('displayname'); ?><br/>
 			<?php echo $form->textField($model,'displayname'); ?>
 		</li>

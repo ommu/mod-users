@@ -105,6 +105,7 @@ class UserInvites extends CActiveRecord
 			'queue' => array(self::BELONGS_TO, 'UserInviteQueue', 'queue_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
+			'histories' => array(self::HAS_MANY, 'UserInviteHistory', 'invite_id'),
 		);
 	}
 
@@ -326,6 +327,23 @@ class UserInvites extends CActiveRecord
 	}
 
 	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::model()->findByPk($id,array(
+				'select' => $column
+			));
+			return $model->$column;
+			
+		} else {
+			$model = self::model()->findByPk($id);
+			return $model;			
+		}
+	}
+
+	/**
 	 * generate invite code
 	 */
 	public static function getUniqueCode() {
@@ -351,10 +369,11 @@ class UserInvites extends CActiveRecord
 		$criteria->with = array(
 			'queue' => array(
 				'alias'=>'queue',
-				'select'=>'queue_id, email',
+				'select'=>'queue_id, publish, email',
 			),
 		);
 		$criteria->compare('t.publish',1);
+		$criteria->compare('t.user_id','<>0');
 		$criteria->compare('queue.publish',1);
 		$criteria->compare('queue.email',strtolower($email));
 		$criteria->order = $order == null || $order == 'DESC' ? 't.invite_id DESC' : 't.invite_id ASC';
