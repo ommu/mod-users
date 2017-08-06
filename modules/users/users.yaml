@@ -24,7 +24,7 @@ plugin_menu		:
 		urlPath: {url: o/level/manage, attr: -, icon: -}		
         
 	- urlTitle: Datas
-		urlRules: {siteType: 1, userLevel: "1,2"}
+		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: -, attr: -, icon: -}
 		submenu :
 			- urlTitle: Subscribes
@@ -38,7 +38,13 @@ plugin_menu		:
 				urlPath: {url: o/queue/manage, attr: -, icon: -}
 			- urlTitle: Devices
 				urlRules: {siteType: 1, userLevel: "1,2"}
-				urlPath: {url: o/device/manage, attr: -, icon: -}		
+				urlPath: {url: o/device/manage, attr: -, icon: -}
+			- urlTitle: Forgot Passwords
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
+				urlPath: {url: o/forgot/manage, attr: -, icon: -}
+			- urlTitle: Verify Emails
+				urlRules: {siteType: "0,1", userLevel: "1,2"}
+				urlPath: {url: o/verify/manage, attr: -, icon: -}
                 
 	- urlTitle: History
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
