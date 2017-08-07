@@ -21,8 +21,8 @@
 )); ?>
 <div class="dialog-content">
 	<fieldset>
-		<?php $model->unsubscribe = 0;
-		echo $form->hiddenField($model,'unsubscribe');?>
+		<?php $model->unsubscribe_i = 0;
+		echo $form->hiddenField($model,'unsubscribe_i');?>
 		
 		<div class="clearfix">
 			<?php echo $form->labelEx($model,'email'); ?>

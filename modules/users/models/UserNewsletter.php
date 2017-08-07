@@ -36,7 +36,7 @@
 class UserNewsletter extends CActiveRecord
 {
 	public $defaultColumns = array();
-	public $unsubscribe;
+	public $unsubscribe_i;
 	
 	// Variable Search
 	public $level_search;
@@ -72,13 +72,13 @@ class UserNewsletter extends CActiveRecord
 		return array(
 			array('email', 'required'),
 			array('status,
-				unsubscribe', 'numerical', 'integerOnly'=>true),
+				unsubscribe_i', 'numerical', 'integerOnly'=>true),
 			array('user_id, subscribe_id, modified_id', 'length', 'max'=>11),
 			array('email', 'length', 'max'=>32),
 			array('updated_ip', 'length', 'max'=>20),
 			array('email', 'email'),
 			array('status, updated_ip,
-				unsubscribe', 'safe'),
+				unsubscribe_i', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('newsletter_id, status, user_id, email, subscribe_date, subscribe_id, modified_date, modified_id, updated_date, updated_ip,
@@ -291,6 +291,23 @@ class UserNewsletter extends CActiveRecord
 	}
 
 	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::model()->findByPk($id,array(
+				'select' => $column
+			));
+			return $model->$column;
+			
+		} else {
+			$model = self::model()->findByPk($id);
+			return $model;			
+		}
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() 
@@ -303,13 +320,11 @@ class UserNewsletter extends CActiveRecord
 						'select' => 'email',
 					));
 					if($newsletter == null) {
-						if($this->unsubscribe != 0) {
+						if($this->unsubscribe_i != 0)
 							$this->addError('email', 'Anda belum terdaftar dalam newsletter.');
-						}
 					} else {
-						if($this->unsubscribe == 0) {
+						if($this->unsubscribe_i == 0)
 							$this->addError('email', Yii::t('phrase', 'Anda Sudah terdaftar dalam newsletter.'));
-						}
 					}
 				}
 				$this->subscribe_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
@@ -322,29 +337,6 @@ class UserNewsletter extends CActiveRecord
 		}
 		return true;
 	}
-
-	/**
-	 * before validate attributes
-	 */
-	/*
-	protected function afterValidate() {
-		if(parent::afterValidate()) {
-			if($this->isNewRecord && $this->unsubscribe == 1 && $this->status == 1) {
-				if($this->user_id != 0) {
-					$email = $this->user->email;
-					$displayname = $this->user->displayname;
-					$ticket = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('support/newsletter/unsubscribe', array('email'=>$email,'secret'=>$this->user->salt));
-				} else {
-					$email = $displayname = $this->email;
-					$ticket = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('support/newsletter/unsubscribe', array('email'=>$email,'secret'=>md5($email.$this->subscribe_date)));
-				}
-				// Send Email to Member
-				SupportMailSetting::sendEmail($email, $displayname, 'Unsubscribe Ticket', $ticket);
-			}
-		}
-		return true;
-	}
-	*/
 	
 	/**
 	 * before save attributes

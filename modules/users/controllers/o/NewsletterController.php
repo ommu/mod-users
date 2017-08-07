@@ -11,6 +11,7 @@
  *	Index
  *	Manage
  *	Add
+ *	View
  *	Delete
  *	Subscribe
  *
@@ -80,7 +81,7 @@ class NewsletterController extends Controller
 				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','delete','subscribe'),
+				'actions'=>array('manage','add','view','delete','subscribe'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -179,6 +180,26 @@ class NewsletterController extends Controller
 	}
 	
 	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id) 
+	{
+		$model=$this->loadModel($id);
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+		
+		$this->pageTitle = Yii::t('phrase', 'View Subscribe: $email_address', array('$email_address'=>$model->email));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_view',array(
+			'model'=>$model,
+		));
+	}	
+	
+	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
@@ -203,7 +224,7 @@ class NewsletterController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Subscribe');
+			$this->pageTitle = Yii::t('phrase', 'Delete Subscribe: $email_address', array('$email_address'=>$model->email));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -215,32 +236,25 @@ class NewsletterController extends Controller
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionSubscribe() 
+	public function actionSubscribe($id) 
 	{
-		$id = $_GET['id'];
 		$model=$this->loadModel($id);
-		if($model->status == 1) {
-			$title = Yii::t('phrase', 'Unsubcribe');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Subcribe');
-			$replace = 1;
-		}
+		
+		$title = $model->status == 1 ? Yii::t('phrase', 'Unsubcribe') : Yii::t('phrase', 'Subcribe');
+		$replace = $model->status == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->status = $replace;
+			//change value active or publish
+			$model->status = $replace;
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-support-newsletter',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member newsletter success updated.').'</strong></div>',
-					));
-				}
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-support-newsletter',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member newsletter success updated.').'</strong></div>',
+				));
 			}
 
 		} else {
@@ -248,7 +262,7 @@ class NewsletterController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = $title;
+			$this->pageTitle = Yii::t('phrase', '$title: $email_address', array('$title'=>$title, '$email_address'=>$model->email));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_status',array(
