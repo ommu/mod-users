@@ -44,6 +44,7 @@ class UserForgot extends CActiveRecord
 	// Variable Search
 	public $level_search;
 	public $user_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -85,7 +86,7 @@ class UserForgot extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('forgot_id, publish, user_id, code, forgot_date, forgot_ip, expired_date, modified_date, modified_id, deleted_date,
-				level_search, user_search', 'safe', 'on'=>'search'),
+				level_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -245,10 +246,9 @@ class UserForgot extends CActiveRecord
 					'value' => '$data->user->displayname',
 				);
 			}
-			$this->defaultColumns[] = 'code';
 			$this->defaultColumns[] = array(
 				'name' => 'forgot_date',
-				'value' => 'Utility::dateFormat($data->forgot_date)',
+				'value' => 'Utility::dateFormat($data->forgot_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -272,10 +272,9 @@ class UserForgot extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'forgot_ip';
 			$this->defaultColumns[] = array(
 				'name' => 'expired_date',
-				'value' => 'Utility::dateFormat($data->expired_date)',
+				'value' => 'Utility::dateFormat($data->expired_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

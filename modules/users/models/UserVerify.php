@@ -44,6 +44,7 @@ class UserVerify extends CActiveRecord
 	// Variable Search
 	public $level_search;
 	public $user_search;
+	public $modified_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -85,7 +86,7 @@ class UserVerify extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('verify_id, publish, user_id, code, verify_date, verify_ip, expired_date, modified_date, modified_id, deleted_date,
-				level_search, user_search', 'safe', 'on'=>'search'),
+				level_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -245,10 +246,9 @@ class UserVerify extends CActiveRecord
 					'value' => '$data->user->displayname',
 				);
 			}
-			$this->defaultColumns[] = 'code';
 			$this->defaultColumns[] = array(
 				'name' => 'verify_date',
-				'value' => 'Utility::dateFormat($data->verify_date)',
+				'value' => 'Utility::dateFormat($data->verify_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -272,10 +272,9 @@ class UserVerify extends CActiveRecord
 					),
 				), true),
 			);
-			$this->defaultColumns[] = 'verify_ip';
 			$this->defaultColumns[] = array(
 				'name' => 'expired_date',
-				'value' => 'Utility::dateFormat($data->expired_date)',
+				'value' => 'Utility::dateFormat($data->expired_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
