@@ -106,8 +106,14 @@ class ForgotController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($user=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'User Forgots');
+		if($user != null) {
+			$data = Users::model()->findByPk($user);
+			$pageTitle = Yii::t('phrase', 'User Forgots: by $user_displayname', array ('$user_displayname'=>$data->displayname));
+		}
+		
 		$model=new UserForgot('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['UserForgot'])) {
@@ -124,7 +130,7 @@ class ForgotController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'User Forgots');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -145,7 +151,7 @@ class ForgotController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View User Forgots');
+		$this->pageTitle = Yii::t('phrase', 'View Forgot: user $user_displayname', array('$user_displayname'=>$model->user->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -216,7 +222,7 @@ class ForgotController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete User Forgots');
+			$this->pageTitle = Yii::t('phrase', 'Delete Forgot: user $user_displayname', array('$user_displayname'=>$model->user->displayname));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -254,7 +260,7 @@ class ForgotController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', '$title User Forgots', array('$title'=>$title));
+			$this->pageTitle = Yii::t('phrase', '$title Forgot: user $user_displayname', array('$title'=>$title, '$user_displayname'=>$model->user->displayname));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(

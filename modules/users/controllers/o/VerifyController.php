@@ -106,8 +106,14 @@ class VerifyController extends Controller
 	/**
 	 * Manages all models.
 	 */
-	public function actionManage() 
+	public function actionManage($user=null) 
 	{
+		$pageTitle = Yii::t('phrase', 'User Verifies');
+		if($user != null) {
+			$data = Users::model()->findByPk($user);
+			$pageTitle = Yii::t('phrase', 'User Verifies: by $user_displayname', array ('$user_displayname'=>$data->displayname));
+		}
+		
 		$model=new UserVerify('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['UserVerify'])) {
@@ -124,7 +130,7 @@ class VerifyController extends Controller
 		}
 		$columns = $model->getGridColumn($columnTemp);
 
-		$this->pageTitle = Yii::t('phrase', 'User Verifies');
+		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage',array(
@@ -144,8 +150,8 @@ class VerifyController extends Controller
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
-
-		$this->pageTitle = Yii::t('phrase', 'View User Verifies');
+		
+		$this->pageTitle = Yii::t('phrase', 'View Verify: user $user_displayname', array('$user_displayname'=>$model->user->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -216,7 +222,7 @@ class VerifyController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete User Verifies');
+			$this->pageTitle = Yii::t('phrase', 'Delete Verify: user $user_displayname', array('$user_displayname'=>$model->user->displayname));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -254,7 +260,7 @@ class VerifyController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', '$title User Verifies', array('$title'=>$title));
+			$this->pageTitle = Yii::t('phrase', '$title Verify: user $user_displayname', array('$title'=>$title, '$user_displayname'=>$model->user->displayname));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(
