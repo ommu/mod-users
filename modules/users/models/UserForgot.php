@@ -44,6 +44,7 @@ class UserForgot extends CActiveRecord
 	// Variable Search
 	public $level_search;
 	public $user_search;
+	public $expired_search;
 	public $modified_search;
 
 	/**
@@ -73,7 +74,7 @@ class UserForgot extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('code', 'required'),
-			array('email_i', 'required', 'on'=>'get'),
+			array('email_i', 'required', 'on'=>'getForm'),
 			array('publish, modified_id', 'numerical', 'integerOnly'=>true),
 			array('user_id, modified_id', 'length', 'max'=>11),
 			array('
@@ -86,7 +87,7 @@ class UserForgot extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('forgot_id, publish, user_id, code, forgot_date, forgot_ip, expired_date, modified_date, modified_id, deleted_date,
-				level_search, user_search, modified_search', 'safe', 'on'=>'search'),
+				level_search, user_search, expired_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -123,6 +124,7 @@ class UserForgot extends CActiveRecord
 			'email_i' => Yii::t('attribute', 'Email'),
 			'level_search' => Yii::t('attribute', 'level'),
 			'user_search' => Yii::t('attribute', 'User'),
+			'expired_search' => Yii::t('attribute', 'Expired'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
@@ -140,6 +142,9 @@ class UserForgot extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
 			'user' => array(
 				'alias'=>'user',
 				'select'=>'level_id, displayname'
@@ -182,6 +187,7 @@ class UserForgot extends CActiveRecord
 		
 		$criteria->compare('user.level_id',$this->level_search);
 		$criteria->compare('user.displayname',strtolower($this->user_search),true);
+		$criteria->compare('view.publish',$this->expired_search);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 
 		if(!isset($_GET['UserForgot_sort']))
@@ -298,6 +304,18 @@ class UserForgot extends CActiveRecord
 					),
 				), true),
 			);
+			$this->defaultColumns[] = array(
+				'name' => 'expired_search',
+				'value' => '$data->view->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
+			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
@@ -355,18 +373,20 @@ class UserForgot extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
+	protected function beforeValidate() 
+	{
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		
 		if(parent::beforeValidate()) {		
 			if($this->isNewRecord) {
-				if($currentAction == 'password/forgot' && $this->email_i != '') {
+				if(in_array($currentAction, array('password/forgot','o/forgot/add')) && $this->email_i != '') {
 					if(preg_match('/@/',$this->email_i)) {
 						$user = Users::model()->findByAttributes(array('email' => strtolower($this->email_i)), array(
-							'select' => 'user_id, email, verified',
+							'select' => 'user_id, email',
 						));
 					} else {
 						$user = Users::model()->findByAttributes(array('username' => strtolower($this->email_i)), array(
-							'select' => 'user_id, email, verified',
+							'select' => 'user_id, email',
 						));
 					}					
 					if($user == null)
@@ -417,8 +437,7 @@ class UserForgot extends CActiveRecord
 			$criteria->compare('publish',1);
 			$criteria->compare('user_id',$this->user_id);
 
-			self::model()->updateAll(array('publish'=>0), $criteria);
-			
+			self::model()->updateAll(array('publish'=>0), $criteria);			
 		}
 	}
 

@@ -24,6 +24,7 @@
  *
  * The followings are the available columns in table '_view_user_verify':
  * @property string $verify_id
+ * @property integer $publish
  * @property string $verify_day_left
  * @property string $verify_hour_left
  */
@@ -69,11 +70,12 @@ class ViewUserVerify extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('publish', 'numerical', 'integerOnly'=>true),
 			array('verify_id', 'length', 'max'=>11),
 			array('verify_day_left, verify_hour_left', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('verify_id, verify_day_left, verify_hour_left', 'safe', 'on'=>'search'),
+			array('verify_id, publish, verify_day_left, verify_hour_left', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,8 +97,9 @@ class ViewUserVerify extends CActiveRecord
 	{
 		return array(
 			'verify_id' => Yii::t('attribute', 'Verify'),
-			'verify_day_left' => Yii::t('attribute', 'Verify Day Left'),
-			'verify_hour_left' => Yii::t('attribute', 'Verify Hour Left'),
+			'publish' => Yii::t('attribute', 'Publish'),
+			'verify_day_left' => Yii::t('attribute', 'Day Left'),
+			'verify_hour_left' => Yii::t('attribute', 'Hour Left'),
 		);
 	}
 
@@ -119,6 +122,7 @@ class ViewUserVerify extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.verify_id',$this->verify_id);
+		$criteria->compare('t.publish',$this->publish);
 		$criteria->compare('t.verify_day_left',$this->verify_day_left);
 		$criteria->compare('t.verify_hour_left',$this->verify_hour_left);
 
@@ -152,6 +156,7 @@ class ViewUserVerify extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'verify_id';
+			$this->defaultColumns[] = 'publish';
 			$this->defaultColumns[] = 'verify_day_left';
 			$this->defaultColumns[] = 'verify_hour_left';
 		}
@@ -179,6 +184,18 @@ class ViewUserVerify extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'verify_hour_left',
 				'value' => '$data->verify_hour_left',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'publish',
+				'value' => '$data->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
 			);
 		}
 		parent::afterConstruct();

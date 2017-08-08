@@ -44,6 +44,7 @@ class UserVerify extends CActiveRecord
 	// Variable Search
 	public $level_search;
 	public $user_search;
+	public $expired_search;
 	public $modified_search;
 
 	/**
@@ -73,7 +74,7 @@ class UserVerify extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('code', 'required'),
-			array('email_i', 'required', 'on'=>'get'),
+			array('email_i', 'required', 'on'=>'getForm'),
 			array('publish, modified_id', 'numerical', 'integerOnly'=>true),
 			array('user_id, modified_id', 'length', 'max'=>11),
 			array('
@@ -86,7 +87,7 @@ class UserVerify extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('verify_id, publish, user_id, code, verify_date, verify_ip, expired_date, modified_date, modified_id, deleted_date,
-				level_search, user_search, modified_search', 'safe', 'on'=>'search'),
+				level_search, user_search, expired_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -123,6 +124,7 @@ class UserVerify extends CActiveRecord
 			'email_i' => Yii::t('attribute', 'Email'),
 			'level_search' => Yii::t('attribute', 'level'),
 			'user_search' => Yii::t('attribute', 'User'),
+			'expired_search' => Yii::t('attribute', 'Expired'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
 	}
@@ -140,6 +142,9 @@ class UserVerify extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
 			'user' => array(
 				'alias'=>'user',
 				'select'=>'level_id, displayname'
@@ -182,6 +187,7 @@ class UserVerify extends CActiveRecord
 		
 		$criteria->compare('user.level_id',$this->level_search);
 		$criteria->compare('user.displayname',strtolower($this->user_search),true);
+		$criteria->compare('view.publish',$this->expired_search);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 
 		if(!isset($_GET['UserVerify_sort']))
@@ -298,6 +304,18 @@ class UserVerify extends CActiveRecord
 					),
 				), true),
 			);
+			$this->defaultColumns[] = array(
+				'name' => 'expired_search',
+				'value' => '$data->view->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
+			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
@@ -355,11 +373,13 @@ class UserVerify extends CActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	protected function beforeValidate() {
-		$current = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+	protected function beforeValidate() 
+	{
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+		
 		if(parent::beforeValidate()) {		
 			if($this->isNewRecord) {
-				if($current == 'verify/get' && $this->email_i != '') {
+				if(in_array($currentAction, array('verify/generate','o/verify/add')) && $this->email_i != '') {
 					if(preg_match('/@/',$this->email_i)) {
 						$user = Users::model()->findByAttributes(array('email' => strtolower($this->email_i)), array(
 							'select' => 'user_id, email, verified',
@@ -370,7 +390,7 @@ class UserVerify extends CActiveRecord
 						));
 					}
 					if($user == null)
-						$this->addError('email_i', Yii::t('phrase', 'Incorrect email address'));					
+						$this->addError('email_i', Yii::t('phrase', 'Incorrect email address / username'));					
 					else {
 						if($user->verified == 1)
 							$this->addError('email_i', Yii::t('phrase', 'Your account verified'));
@@ -421,8 +441,7 @@ class UserVerify extends CActiveRecord
 			$criteria->compare('publish',1);
 			$criteria->compare('user_id',$this->user_id);
 
-			self::model()->updateAll(array('publish'=>0), $criteria);
-			
+			self::model()->updateAll(array('publish'=>0), $criteria);			
 		}
 	}
 

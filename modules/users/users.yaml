@@ -130,6 +130,16 @@ content_menu	:
 		urlRules: {users, o/queue, "manage", siteType: 1, userLevel: "1,2"}
 		urlPath: {url: o/invite/manage, attr: -, icon: -}
 
+# controller o/forgot
+	- urlTitle: Add Forgot
+		urlRules: {users, o/forgot, manage, siteType: 1, userLevel: "1,2"}
+		urlPath: {url: add, attr: -, icon: -}
+
+# controller o/verify
+	- urlTitle: Add Verify
+		urlRules: {users, o/verify, manage, siteType: 1, userLevel: "1,2"}
+		urlPath: {url: add, attr: -, icon: -}
+
 # controller o/newsletter
 	- urlTitle: Back to Mambers
 		urlRules: {users, o/history, login, siteType: "0,1", userLevel: "1,2"}

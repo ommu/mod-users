@@ -24,6 +24,7 @@
  *
  * The followings are the available columns in table '_view_user_forgot':
  * @property string $forgot_id
+ * @property integer $publish
  * @property string $forgot_day_left
  * @property string $forgot_hour_left
  */
@@ -69,11 +70,12 @@ class ViewUserForgot extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('publish', 'numerical', 'integerOnly'=>true),
 			array('forgot_id', 'length', 'max'=>11),
 			array('forgot_day_left, forgot_hour_left', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('forgot_id, forgot_day_left, forgot_hour_left', 'safe', 'on'=>'search'),
+			array('forgot_id, publish, forgot_day_left, forgot_hour_left', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,8 +97,9 @@ class ViewUserForgot extends CActiveRecord
 	{
 		return array(
 			'forgot_id' => Yii::t('attribute', 'Forgot'),
-			'forgot_day_left' => Yii::t('attribute', 'Forgot Day Left'),
-			'forgot_hour_left' => Yii::t('attribute', 'Forgot Hour Left'),
+			'publish' => Yii::t('attribute', 'Publish'),
+			'forgot_day_left' => Yii::t('attribute', 'Day Left'),
+			'forgot_hour_left' => Yii::t('attribute', 'Hour Left'),
 		);
 	}
 
@@ -119,6 +122,7 @@ class ViewUserForgot extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.forgot_id',$this->forgot_id);
+		$criteria->compare('t.publish',$this->publish);
 		$criteria->compare('t.forgot_day_left',$this->forgot_day_left);
 		$criteria->compare('t.forgot_hour_left',$this->forgot_hour_left);
 
@@ -152,6 +156,7 @@ class ViewUserForgot extends CActiveRecord
 			}
 		} else {
 			$this->defaultColumns[] = 'forgot_id';
+			$this->defaultColumns[] = 'publish';
 			$this->defaultColumns[] = 'forgot_day_left';
 			$this->defaultColumns[] = 'forgot_hour_left';
 		}
@@ -179,6 +184,18 @@ class ViewUserForgot extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'forgot_hour_left',
 				'value' => '$data->forgot_hour_left',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'publish',
+				'value' => '$data->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
 			);
 		}
 		parent::afterConstruct();

@@ -10,6 +10,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	Add
  *	View
  *	RunAction
  *	Delete
@@ -81,7 +82,7 @@ class ForgotController extends Controller
 				'expression'=>'isset(Yii::app()->user->level)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','view','runaction','delete','publish'),
+				'actions'=>array('manage','add','view','runaction','delete','publish'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && (in_array(Yii::app()->user->level, array(1,2)))',
 			),
@@ -111,7 +112,7 @@ class ForgotController extends Controller
 		$pageTitle = Yii::t('phrase', 'User Forgots');
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'User Forgots: by $user_displayname', array ('$user_displayname'=>$data->displayname));
+			$pageTitle = Yii::t('phrase', 'User Forgots: $user_displayname ($user_email)', array ('$user_displayname'=>$data->displayname, '$user_email'=>$data->email));
 		}
 		
 		$model=new UserForgot('search');
@@ -137,6 +138,54 @@ class ForgotController extends Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
+	}
+	
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionAdd() 
+	{
+		$model=new UserForgot;
+
+		// Uncomment the following line if AJAX validation is needed
+		$this->performAjaxValidation($model);
+
+		if(isset($_POST['UserForgot'])) {
+			$model->attributes=$_POST['UserForgot'];
+			$model->scenario = 'getForm';
+			
+			$jsonError = CActiveForm::validate($model);
+			if(strlen($jsonError) > 2) {
+				echo $jsonError;
+
+			} else {
+				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+					if($model->save()) {
+						echo CJSON::encode(array(
+							'type' => 5,
+							'get' => Yii::app()->controller->createUrl('manage'),
+							'id' => 'partial-user-invite',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Forgots success created.').'</strong></div>',
+						));
+					} else {
+						print_r($model->getErrors());
+					}
+				}
+			}
+			Yii::app()->end();			
+		}
+		
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+		
+		$this->pageTitle = Yii::t('phrase', 'Add Forgot');
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_add',array(
+			'model'=>$model,
+		));
 	}	
 	
 	/**
@@ -151,7 +200,7 @@ class ForgotController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Forgot: user $user_displayname', array('$user_displayname'=>$model->user->displayname));
+		$this->pageTitle = Yii::t('phrase', 'View Forgot: user $user_displayname ($user_email)', array('$user_displayname'=>$model->user->displayname, '$user_email'=>$model->user->email));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -222,7 +271,7 @@ class ForgotController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Forgot: user $user_displayname', array('$user_displayname'=>$model->user->displayname));
+			$this->pageTitle = Yii::t('phrase', 'Delete Forgot: user $user_displayname ($user_email)', array('$user_displayname'=>$model->user->displayname, '$user_email'=>$model->user->email));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -260,7 +309,7 @@ class ForgotController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', '$title Forgot: user $user_displayname', array('$title'=>$title, '$user_displayname'=>$model->user->displayname));
+			$this->pageTitle = Yii::t('phrase', '$title Forgot: user $user_displayname ($user_email)', array('$title'=>$title, '$user_displayname'=>$model->user->displayname, '$user_email'=>$model->user->email));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_publish',array(
