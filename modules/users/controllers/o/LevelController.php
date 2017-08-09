@@ -12,10 +12,11 @@
  *	Manage
  *	Add
  *	Edit
- *	User
- *	Message
+ *	View
  *	Delete
  *	Default
+ *	User
+ *	Message
  *
  *	LoadModel
  *	performAjaxValidation
@@ -82,7 +83,7 @@ class LevelController extends Controller
 				'expression'=>'isset(Yii::app()->user->level)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','edit','user','message','delete','default'),
+				'actions'=>array('manage','add','edit','view','delete','default','user','message'),
 				'users'=>array('@'),
 				'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level == 1)',
 			),
@@ -235,6 +236,95 @@ class LevelController extends Controller
 				'model'=>$model,
 			));
 		}
+	}	
+	
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id) 
+	{
+		$model=$this->loadModel($id);
+
+		$this->pageTitle = Yii::t('phrase', 'View Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
+		$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
+		$this->pageMeta = '';
+		$this->render('admin_view',array(
+			'model'=>$model,
+		));
+	}	
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionDelete($id) 
+	{
+		$model=$this->loadModel($id);
+		
+		if(Yii::app()->request->isPostRequest) {
+			// we only allow deletion via POST request
+			if(isset($id)) {
+				if($model->delete()) {
+					echo CJSON::encode(array(
+						'type' => 5,
+						'get' => Yii::app()->controller->createUrl('manage'),
+						'id' => 'partial-user-level',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success deleted.').'</strong></div>',
+					));
+				}
+			}
+
+		} else {
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+			$this->dialogWidth = 350;
+
+			$this->pageTitle = Yii::t('phrase', 'Delete Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_delete');
+		}
+	}
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionDefault($id) 
+	{
+		$model=$this->loadModel($id);
+
+		if(Yii::app()->request->isPostRequest) {
+			// we only allow deletion via POST request
+			if(isset($id)) {
+				//change value active or publish
+				$model->default = 1;
+
+				if($model->update()) {
+					echo CJSON::encode(array(
+						'type' => 5,
+						'get' => Yii::app()->controller->createUrl('manage'),
+						'id' => 'partial-user-level',
+						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success updated.').'</strong></div>',
+					));
+				}
+			}
+
+		} else {
+			$this->dialogDetail = true;
+			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+			$this->dialogWidth = 350;
+
+			$this->pageTitle = Yii::t('phrase', 'Default Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
+			$this->pageDescription = '';
+			$this->pageMeta = '';
+			$this->render('admin_default',array(
+				'model'=>$model,
+			));
+		}
 	}
 
 	/**
@@ -342,80 +432,6 @@ class LevelController extends Controller
 			$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 			$this->pageMeta = '';
 			$this->render('admin_message',array(
-				'model'=>$model,
-			));
-		}
-	}
-
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
-	public function actionDelete($id) 
-	{
-		$model=$this->loadModel($id);
-		
-		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-user-level',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success deleted.').'</strong></div>',
-					));
-				}
-			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Delete Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
-		}
-	}
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
-	public function actionDefault($id) 
-	{
-		$model=$this->loadModel($id);
-
-		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->defaults = 1;
-
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-user-level',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success updated.').'</strong></div>',
-					));
-				}
-			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Default Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_default',array(
 				'model'=>$model,
 			));
 		}
