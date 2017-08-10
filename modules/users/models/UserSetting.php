@@ -34,6 +34,7 @@
  * @property integer $verify_difference
  * @property string $invite_diff_type
  * @property integer $invite_difference
+ * @property string $invite_order
  * @property string $modified_date
  * @property string $modified_id
  */
@@ -72,15 +73,16 @@ class UserSetting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('license, permission, meta_keyword, meta_description, forgot_diff_type, forgot_difference, verify_diff_type, verify_difference, invite_diff_type, invite_difference, modified_id', 'required'),
+			array('license, permission, meta_keyword, meta_description, forgot_diff_type, forgot_difference, verify_diff_type, verify_difference, invite_diff_type, invite_difference, invite_order, modified_id', 'required'),
 			array('permission, forgot_difference, verify_difference', 'numerical', 'integerOnly'=>true),
 			array('license', 'length', 'max'=>32),
 			array('forgot_diff_type, verify_diff_type, invite_diff_type', 'length', 'max'=>1),
 			array('modified_id', 'length', 'max'=>11),
+			array('invite_order', 'length', 'max'=>4),
 			array('modified_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, license, permission, meta_keyword, meta_description, forgot_diff_type, forgot_difference, verify_diff_type, verify_difference, invite_diff_type, invite_difference, modified_date, modified_id, 
+			array('id, license, permission, meta_keyword, meta_description, forgot_diff_type, forgot_difference, verify_diff_type, verify_difference, invite_diff_type, invite_difference, invite_order, modified_date, modified_id, 
 				modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -114,6 +116,7 @@ class UserSetting extends CActiveRecord
 			'verify_difference' => Yii::t('attribute', 'Verify Difference'),
 			'invite_diff_type' => Yii::t('attribute', '0=day,1=hour'),
 			'invite_difference' => Yii::t('attribute', 'Invite Difference'),
+			'invite_order' => Yii::t('attribute', 'Invite Order'),
 			'modified_date' => Yii::t('attribute', 'trigger'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -157,6 +160,7 @@ class UserSetting extends CActiveRecord
 		$criteria->compare('t.verify_difference',$this->verify_difference);
 		$criteria->compare('t.invite_diff_type',$this->invite_diff_type);
 		$criteria->compare('t.invite_difference',$this->invite_difference);
+		$criteria->compare('t.invite_order',strtolower($this->invite_order),true);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
 		if(isset($_GET['modified']))
@@ -206,6 +210,7 @@ class UserSetting extends CActiveRecord
 			$this->defaultColumns[] = 'verify_difference';
 			$this->defaultColumns[] = 'invite_diff_type';
 			$this->defaultColumns[] = 'invite_difference';
+			$this->defaultColumns[] = 'invite_order';
 			$this->defaultColumns[] = 'modified_date';
 			$this->defaultColumns[] = 'modified_id';
 		}
@@ -269,6 +274,10 @@ class UserSetting extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'invite_difference',
 				'value' => '$data->invite_difference',
+			);
+			$this->defaultColumns[] = array(
+				'name' => 'invite_order',
+				'value' => '$data->invite_order',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'modified_date',
