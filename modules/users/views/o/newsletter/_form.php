@@ -20,17 +20,26 @@
     //'htmlOptions' => array('enctype' => 'multipart/form-data') 
 )); ?>
 <div class="dialog-content">
-	<fieldset>
-		<?php $model->unsubscribe_i = 0;
-		echo $form->hiddenField($model,'unsubscribe_i');?>
-		
+	<fieldset>		
 		<div class="clearfix">
-			<?php echo $form->labelEx($model,'email'); ?>
+			<label><?php echo $model->getAttributeLabel('email_i');?> <span class="required">*</span></label>
 			<div class="desc">
-			    <?php echo $form->textField($model,'email',array('maxlength'=>32, 'class'=>'span-9')); ?>
-			    <?php echo $form->error($model,'email'); ?>
+			    <?php echo $form->textArea($model,'email_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
+			    <?php echo $form->error($model,'email_i'); ?>
 			</div>
 		</div>
+		
+		<div class="clearfix publish">
+			<?php echo $form->labelEx($model,'multiple_email_i'); ?>
+			<div class="desc">
+			    <?php echo $form->checkBox($model,'multiple_email_i'); ?>
+				<?php echo $form->labelEx($model,'multiple_email_i'); ?>
+			    <?php echo $form->error($model,'multiple_email_i'); ?>
+			</div>
+		</div>
+		
+		<?php $model->unsubscribe_i = 0;
+		echo $form->hiddenField($model,'unsubscribe_i');?>
 
 	</fieldset>
 </div>

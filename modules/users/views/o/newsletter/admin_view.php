@@ -31,8 +31,12 @@
 				'type' => 'raw',
 			),
 			array(
+				'name'=>'level_search',
+				'value'=>$model->user->displayname ? Phrase::trans($model->user->level->name) : '-',
+			),
+			array(
 				'name'=>'user_id',
-				'value'=>$model->user->displayname ? $model->user->displayname : '-',
+				'value'=>$model->user_id ? $model->user->displayname : ($model->displayname ? $model->displayname : '-'),
 			),
 			array(
 				'name'=>'email',
@@ -59,8 +63,31 @@
 				'value'=>!in_array($model->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->updated_date, true) : '-',
 			),
 			array(
-				'name'=>'updated_ip',
-				'value'=>$model->updated_ip ? $model->updated_ip : '-',
+				'name'=>'invite_search',
+				'value'=>$model->view->invites ? $model->view->invites : 0,
+			),
+			array(
+				'name'=>'invite_users_i',
+				'value'=>$model->view->invite_users ? $model->view->invite_users : 0,
+			),
+			array(
+				'name'=>'first_invite_i',
+				'value'=>$model->view->first_invite_date || $model->view->first_invite_user_id ? $this->renderPartial('_view_first_invite', array('model'=>$model), true, false) : '-',
+				'type'=>'raw',
+			),
+			array(
+				'name'=>'last_invite_i',
+				'value'=>$model->view->last_invite_date || $model->view->last_invite_user_id ? $this->renderPartial('_view_last_invite', array('model'=>$model), true, false) : '-',
+				'type'=>'raw',
+			),
+			array(
+				'name'=>'register_search',
+				'value'=>$model->view->register ? $this->renderPartial('_view_register', array('model'=>$model), true, false) : '-',
+				'type'=>'raw',
+			),
+			array(
+				'name'=>'reference',
+				'value'=>$model->reference->displayname ? $model->reference->displayname : '-',
 			),
 		),
 	)); ?>
