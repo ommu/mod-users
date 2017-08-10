@@ -64,10 +64,14 @@ plugin_menu		:
 				urlPath: {url: o/history/password/manage, attr: -, icon: -}
 			- urlTitle: Subscribe/Unsubscribe
 				urlRules: {siteType: 1, userLevel: 1}
-				urlPath: {url: o/history/subscribe/manage, attr: -, icon: -}		
+				urlPath: {url: o/history/subscribe/manage, attr: -, icon: -}
+		
+	- urlTitle: Settings
+		urlRules: {siteType: "0,1", userLevel: 1}
+		urlPath: {url: o/setting/edit, attr: -, icon: -}
                 
 	- urlTitle: Users Manual
-		urlRules: {siteType: "0,1", userLevel: "1,2"}
+		urlRules: {siteType: "0,1", userLevel: 2}
 		urlPath: {url: o/setting/manual, attr: -, icon: -}
 
 content_menu	:
@@ -167,3 +171,8 @@ content_menu	:
 	- urlTitle: Back to Mambers
 		urlRules: {users, o/history/subscribe, manage, siteType: 1, userLevel: 1}
 		urlPath: {url: o/member/manage, attr: -, icon: -}
+		
+# controller o/setting
+	- urlTitle: User Manual Book
+		urlRules: {users, o/setting, edit, siteType: "0,1", userLevel: 1}
+		urlPath: {url: manual, attr: -, icon: -}

@@ -20,148 +20,141 @@
 	'enableAjaxValidation'=>true,
 	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
-
-<?php //begin.Messages ?>
-<div id="ajax-message">
-	<?php echo $form->errorSummary($model); ?>
-</div>
-<?php //begin.Messages ?>
-
-<fieldset>
-
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'license'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'license',array('size'=>32,'maxlength'=>32)); ?>
-			<?php echo $form->error($model,'license'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
-		</div>
+	<?php //begin.Messages ?>
+	<div id="ajax-message">
+		<?php echo $form->errorSummary($model); ?>
 	</div>
+	<?php //begin.Messages ?>
 
-	<div class="clearfix publish">
-		<?php echo $form->labelEx($model,'permission'); ?>
-		<div class="desc">
-			<?php echo $form->checkBox($model,'permission'); ?>
+	<fieldset>
+
+		<div class="clearfix">
+			<label>
+				<?php echo $model->getAttributeLabel('license');?> <span class="required">*</span><br/>
+				<span><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></span>
+			</label>
+			<div class="desc">
+				<?php 
+				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
+					$model->license = UserSetting::getLicense();
+			
+				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
+					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'span-4'));
+				else
+					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'span-4','disabled'=>'disabled'));?>
+				<?php echo $form->error($model,'license'); ?>
+				<span class="small-px"><?php echo Yii::t('phrase', 'Format: XXXX-XXXX-XXXX-XXXX');?></span>
+			</div>
+		</div>
+
+		<div class="clearfix">
 			<?php echo $form->labelEx($model,'permission'); ?>
-			<?php echo $form->error($model,'permission'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+			<div class="desc">
+				<span class="small-px"><?php echo Yii::t('phrase', 'Select whether or not you want to let the public (visitors that are not logged-in) to view the following sections of your social network. In some cases (such as Profiles, Blogs, and Albums), if you have given them the option, your users will be able to make their pages private even though you have made them publically viewable here. For more permissions settings, please visit the General Settings page.');?></span>
+				<?php 
+				if($model->isNewRecord && !$model->getErrors())
+					$model->permission = 1;
+				echo $form->radioButtonList($model, 'permission', array(
+					1 => Yii::t('phrase', 'Yes, the public can view articles unless they are made private.'),
+					0 => Yii::t('phrase', 'No, the public cannot view articles.'),
+				)); ?>
+				<?php echo $form->error($model,'permission'); ?>
+			</div>
 		</div>
-	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'meta_keyword'); ?>
-		<div class="desc">
-			<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50)); ?>
-			<?php echo $form->error($model,'meta_keyword'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'meta_description'); ?>
+			<div class="desc">
+				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
+				<?php echo $form->error($model,'meta_description'); ?>
+			</div>
 		</div>
-	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'meta_description'); ?>
-		<div class="desc">
-			<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50)); ?>
-			<?php echo $form->error($model,'meta_description'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'meta_keyword'); ?>
+			<div class="desc">
+				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'span-7 smaller')); ?>
+				<?php echo $form->error($model,'meta_keyword'); ?>
+			</div>
 		</div>
-	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'forgot_diff_type'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'forgot_diff_type',array('size'=>1,'maxlength'=>1)); ?>
-			<?php echo $form->error($model,'forgot_diff_type'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'forgot_difference'); ?>
+			<div class="desc">
+				<div>
+					<?php 
+					if($model->isNewRecord && !$model->getErrors())
+						$model->forgot_diff_type = 0;
+					echo $form->dropDownList($model, 'forgot_diff_type', array(
+						1 => Yii::t('phrase', 'Hour'),
+						0 => Yii::t('phrase', 'Day'),
+					)); ?>
+					<?php echo $form->textField($model,'forgot_difference', array('maxlength'=>2,'class'=>'span-2')); ?>
+				</div>
+				<?php echo $form->error($model,'forgot_difference'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
 		</div>
-	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'forgot_difference'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'forgot_difference'); ?>
-			<?php echo $form->error($model,'forgot_difference'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'verify_difference'); ?>
+			<div class="desc">
+				<div>
+					<?php 
+					if($model->isNewRecord && !$model->getErrors())
+						$model->verify_diff_type = 0;
+					echo $form->dropDownList($model, 'verify_diff_type', array(
+						1 => Yii::t('phrase', 'Hour'),
+						0 => Yii::t('phrase', 'Day'),
+					)); ?>
+					<?php echo $form->textField($model,'verify_difference', array('maxlength'=>2,'class'=>'span-2')); ?>
+				</div>
+				<?php echo $form->error($model,'verify_difference'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
 		</div>
-	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'verify_diff_type'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'verify_diff_type',array('size'=>1,'maxlength'=>1)); ?>
-			<?php echo $form->error($model,'verify_diff_type'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'invite_difference'); ?>
+			<div class="desc">
+				<div>
+					<?php 
+					if($model->isNewRecord && !$model->getErrors())
+						$model->invite_diff_type = 0;
+					echo $form->dropDownList($model, 'invite_diff_type', array(
+						1 => Yii::t('phrase', 'Hour'),
+						0 => Yii::t('phrase', 'Day'),
+					)); ?>
+					<?php echo $form->textField($model,'invite_difference', array('maxlength'=>2,'class'=>'span-2')); ?>
+				</div>
+				<?php echo $form->error($model,'invite_difference'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
 		</div>
-	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'verify_difference'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'verify_difference'); ?>
-			<?php echo $form->error($model,'verify_difference'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+		<div class="clearfix">
+			<?php echo $form->labelEx($model,'invite_order'); ?>
+			<div class="desc">
+				<?php 
+				if($model->isNewRecord && !$model->getErrors())
+					$model->invite_diff_type = 0;
+				echo $form->dropDownList($model, 'invite_order', array(
+					'asc' => Yii::t('phrase', 'Ascending'),
+					'desc' => Yii::t('phrase', 'Descending'),
+				)); ?>
+				<?php echo $form->error($model,'invite_order'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
 		</div>
-	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'invite_diff_type'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'invite_diff_type',array('size'=>1,'maxlength'=>1)); ?>
-			<?php echo $form->error($model,'invite_diff_type'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
+		<div class="submit clearfix">
+			<label>&nbsp;</label>
+			<div class="desc">
+				<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
+			</div>
 		</div>
-	</div>
 
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'invite_difference'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'invite_difference'); ?>
-			<?php echo $form->error($model,'invite_difference'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
-		</div>
-	</div>
-
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'invite_order'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'invite_order',array('size'=>4,'maxlength'=>4)); ?>
-			<?php echo $form->error($model,'invite_order'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
-		</div>
-	</div>
-
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'modified_date'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'modified_date'); ?>
-			<?php echo $form->error($model,'modified_date'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
-		</div>
-	</div>
-
-	<div class="clearfix">
-		<?php echo $form->labelEx($model,'modified_id'); ?>
-		<div class="desc">
-			<?php echo $form->textField($model,'modified_id',array('size'=>11,'maxlength'=>11)); ?>
-			<?php echo $form->error($model,'modified_id'); ?>
-			<?php /*<div class="small-px silent"></div>*/?>
-		</div>
-	</div>
-
-	<div class="submit clearfix">
-		<label>&nbsp;</label>
-		<div class="desc">
-			<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save'), array('onclick' => 'setEnableSave()')); ?>
-		</div>
-	</div>
-
-</fieldset>
-
-<div class="dialog-content">
-</div>
-<div class="dialog-submit">
-	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()')); ?>
-	<?php echo CHtml::button(Yii::t('phrase', 'Cancel'), array('id'=>'closed')); ?>
-</div>
+	</fieldset>
 <?php $this->endWidget(); ?>
 
 
