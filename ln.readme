@@ -1,0 +1,2 @@
+ln -s "/Users/putrasudaryanto/htdocs/_project_ommu_module_users/LICENSE" "/Users/putrasudaryanto/htdocs/_project_ommu_module_users/modules/users/LICENSE"
+ln -s "/Users/putrasudaryanto/htdocs/_project_ommu_module_users/LICENSE" "/Users/putrasudaryanto/htdocs/_project_ommu_module_users/modules/users/controllers/api/LICENSE"
