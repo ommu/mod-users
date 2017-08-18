@@ -30,8 +30,8 @@
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('queue_id'); ?><br/>
-			<?php echo $form->textField($model,'queue_id'); ?>
+			<?php echo $model->getAttributeLabel('newsletter_id'); ?><br/>
+			<?php echo $form->textField($model,'newsletter_id'); ?>
 		</li>
 
 		<li>
@@ -42,6 +42,11 @@
 		<li>
 			<?php echo $model->getAttributeLabel('code'); ?><br/>
 			<?php echo $form->textField($model,'code'); ?>
+		</li>
+
+		<li>
+			<?php echo $model->getAttributeLabel('invites'); ?><br/>
+			<?php echo $form->textField($model,'invites'); ?>
 		</li>
 
 		<li>

@@ -85,9 +85,7 @@ class UserNewsletter extends CActiveRecord
 			array('updated_ip', 'length', 'max'=>20),
 			array('email', 'email'),
 			array('email,
-				email_i', 'safe'),
-			array('status, updated_ip,
-				unsubscribe_i, multiple_email_i', 'safe'),
+				email_i, unsubscribe_i, multiple_email_i', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('newsletter_id, status, user_id, reference_id, email, subscribe_date, subscribe_id, modified_date, modified_id, updated_date, updated_ip,
@@ -131,7 +129,7 @@ class UserNewsletter extends CActiveRecord
 			'updated_ip' => Yii::t('attribute', 'Updated IP'),
 			'email_i' => Yii::t('attribute', 'Email'),
 			'multiple_email_i' => Yii::t('attribute', 'Multiple Email'),
-			'level_search' => Yii::t('attribute', 'level'),
+			'level_search' => Yii::t('attribute', 'Level'),
 			'user_search' => Yii::t('attribute', 'User'),
 			'reference_search' => Yii::t('attribute', 'Reference'),
 			'subscribe_search' => Yii::t('attribute', 'Subscribe'),
@@ -273,6 +271,7 @@ class UserNewsletter extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
+			/*
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
@@ -285,6 +284,7 @@ class UserNewsletter extends CActiveRecord
 					'value' => '$data->view->user_id ? $data->view->user->displayname : ($data->user_id ? $data->user->displayname : \'-\')',
 				);
 			}
+			*/
 			$this->defaultColumns[] = array(
 				'name' => 'email',
 				'value' => '$data->email',
@@ -406,7 +406,7 @@ class UserNewsletter extends CActiveRecord
 			if($this->isNewRecord) {
 				if($this->multiple_email_i == 1) {
 					if($this->email_i == '')
-						$this->addError('email_i', 'Email cannot be blank1.');
+						$this->addError('email_i', Yii::t('phrase', 'Email cannot be blank.'));
 					
 				} else {				
 					if($controller == 'o/newsletter' && $this->email_i != '') {
@@ -416,7 +416,7 @@ class UserNewsletter extends CActiveRecord
 						));
 						if($newsletter == null) {
 							if($this->unsubscribe_i != 0)
-								$this->addError('email_i', 'Anda belum terdaftar dalam newsletter.');
+								$this->addError('email_i', Yii::t('phrase', 'Anda belum terdaftar dalam newsletter.'));
 						} else {
 							if($this->unsubscribe_i == 0)
 								$this->addError('email_i', Yii::t('phrase', 'Anda Sudah terdaftar dalam newsletter.'));

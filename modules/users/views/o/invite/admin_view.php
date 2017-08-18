@@ -31,12 +31,16 @@
 				'type' => 'raw',
 			),
 			array(
-				'name'=>'displayname',
-				'value'=>$model->queue->view->user_id ? $model->queue->view->user->displayname : ($model->queue->displayname ? $model->queue->displayname : '-'),
+				'name'=>'email_i',
+				'value'=>$model->newsletter->email,
 			),
 			array(
-				'name'=>'email',
-				'value'=>$model->queue->email,
+				'name'=>'user_search',
+				'value'=>$model->user_id ? $model->user->displayname : '-',
+			),
+			array(
+				'name'=>'userlevel_search',
+				'value'=>$model->user_id ? Phrase::trans($model->user->level->name) : '-',
 			),
 			array(
 				'name'=>'code',
@@ -53,6 +57,11 @@
 			array(
 				'name'=>'invite_ip',
 				'value'=>$model->invite_ip,
+			),
+			array(
+				'name'=>'register_search',
+				'value'=>$model->newsletter->view->register ? $this->renderPartial('_view_register', array('model'=>$model), true, false) : '-',
+				'type'=>'raw',
 			),
 			array(
 				'name'=>'modified_date',

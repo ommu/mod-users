@@ -52,11 +52,12 @@
  *
  * The followings are the available model relations:
  * @property UserLevel $level
+ * @property UserForgot $forgots
+ * @property UserVerify $verifies
  */
 class Users extends CActiveRecord
 {
-	public $defaultColumns = array();
-	
+	public $defaultColumns = array();	
 	public $old_photos_i;
 	public $oldPassword;
 	public $newPassword;
@@ -137,6 +138,8 @@ class Users extends CActiveRecord
 			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'language' => array(self::BELONGS_TO, 'OmmuLanguages', 'language_id'),
+			'forgots' => array(self::HAS_MANY, 'UserForgot', 'user_id'),
+			'verifies' => array(self::HAS_MANY, 'UserVerify', 'user_id'),
 		);
 	}
 
@@ -455,7 +458,7 @@ class Users extends CActiveRecord
 	 */
 	public static function getUniqueCode() {
 		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		srand((double)microtime()*1000000);
+		srand((double)microtime()*time());
 		$i = 0;
 		$salt = '' ;
 
@@ -474,7 +477,7 @@ class Users extends CActiveRecord
 	 */
 	public static function getGeneratePassword() {
 		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		srand((double)microtime()*1000000);
+		srand((double)microtime()*time());
 		$i = 0;
 		$password = '' ;
 
@@ -509,7 +512,7 @@ class Users extends CActiveRecord
 				$this->addError('oldPassword', 'Old password is incorrect.');
 			else {
 				if($this->newPassword == $this->confirmPassword && $this->newPassword == $password)
-					$this->addError('newPassword', 'New Password tidak boleh sama dengan Password sebelumnya.');
+					$this->addError('newPassword', Yii::t('phrase', 'New Password tidak boleh sama dengan Password sebelumnya.'));
 			}
 		}
 	}
@@ -543,7 +546,7 @@ class Users extends CActiveRecord
 					
 			} else {
 				if(!$this->isNewRecord && $currentAction == 'o/admin/photo')
-					$this->addError('photos', 'Photo cannot be blank.');
+					$this->addError('photos', Yii::t('phrase', 'Photo cannot be blank.'));
 			}
 			
 			if($this->isNewRecord) {
@@ -558,6 +561,18 @@ class Users extends CActiveRecord
 					$oauthCondition = 1;
 				
 				$this->salt = self::getUniqueCode();
+				
+				// User Reference
+				$this->reference_id_i = 0;				
+				if($this->email != '') {
+					$settingUser = UserSetting::model()->findByPk(1, array(
+						'select' => 'invite_order',
+					));
+					$invite = UserInvites::getInvite(strtolower($this->email));
+					if($invite != null && $invite->newsletter->view->user_id == 0) {
+						$reference_id_i = $settingUser && $settingUser->invite_order == 'asc' ? $invite->newsletter->view->first_invite_user_id : $invite->newsletter->view->last_invite_user_id;					}
+						$this->reference_id_i = $reference_id_i;
+				}
 				
 				if(in_array($controller, array('o/admin','o/member'))) {
 					// Auto Approve Users
@@ -575,41 +590,37 @@ class Users extends CActiveRecord
 					$this->level_id = UserLevel::getDefault();
 					$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
 					$this->verified = $setting->signup_verifyemail == 0 ? 1 : 0;
-					$this->reference_id_i = 0;
 
 					// Signup by Invite (Admin or User)
 					if(($setting->site_type == 1 && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
 						if($setting->signup_checkemail == 1 && $this->invite_code_i == '')
-							$this->addError('invite_code_i', 'Invite Code tidak boleh kosong.');
+							$this->addError('invite_code_i', Yii::t('phrase', 'Invite Code tidak boleh kosong.'));
 						
 						if($this->email != '') {
-							$invite = UserInvites::getInvite(strtolower($this->email));
-							
 							if($invite != null) {
-								if($invite->queue->view->user_id != 0)
-									$this->addError('email', 'Email anda sudah terdaftar sebagai user, silahkan login.');
+								if($invite->newsletter->view->user_id != 0)
+									$this->addError('email', Yii::t('phrase', 'Email anda sudah terdaftar sebagai user, silahkan login.'));
 									
 								else {
-									$this->reference_id_i = $invite->user_id;
-									if($setting->signup_inviteonly == 1 && $invite->queue->view->invite_by == 'user')
-										$this->addError('email', 'Maaf invite hanya bisa dilakukan oleh admin');
+									if($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user')
+										$this->addError('email', Yii::t('phrase', 'Maaf invite hanya bisa dilakukan oleh admin'));
 									
 									else {
 										if($setting->signup_checkemail == 1) {
-											$inviteCode = UserInviteHistory::getInvite($this->email, $this->invite_code_i);
+											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->invite_code_i);
 											if($inviteCode == null)
-												$this->addError('invite_code_i', 'Invite Code expired atau tidak terdaftar dalam sistem.');
+												$this->addError('invite_code_i', Yii::t('phrase', 'Invite Code expired atau tidak terdaftar dalam sistem.'));
 											else
 												$this->reference_id_i = $inviteCode->user_id;
 										}
 									}
 								}
 							} else
-								$this->addError('email', 'Email anda belum ada dalam daftar invite.');
+								$this->addError('email', Yii::t('phrase', 'Email anda belum ada dalam daftar invite.'));
 							
 						} else {
 							if($setting->signup_checkemail == 1)
-								$this->addError('invite_code_i', 'Invite Code yang and masukan salah, silahkan lengkapi input email');
+								$this->addError('invite_code_i', Yii::t('phrase', 'Invite Code yang and masukan salah, silahkan lengkapi input email'));
 						}
 					}
 				}
@@ -617,13 +628,11 @@ class Users extends CActiveRecord
 				// Username required
 				if($setting->signup_username == 1 && $oauthCondition == 0) {
 					if($this->username != '') {
-						$user = self::model()->findByAttributes(array('username' => $this->username));
-						if($user != null) {
-							$this->addError('username', 'Username already in use');
-						}
-					} else {
-						$this->addError('username', 'Username cannot be blank.');
-					}
+						$user = self::model()->findByAttributes(array('username' => strtolower($this->username)));
+						if($user != null)
+							$this->addError('username', Yii::t('phrase', 'Username already in use'));
+					} else
+						$this->addError('username', Yii::t('phrase', 'Username cannot be blank.'));
 				}
 
 				// Random password
@@ -755,12 +764,12 @@ class Users extends CActiveRecord
 			 *
 			 */			
 			if($setting->site_type == 1 && $this->reference_id_i != 0) {
-				$queue = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
-					'select' => 'queue_id, reference_id',
+				$newsletter = UserNewsletter::model()->findByAttributes(array('email' => strtolower($this->email)), array(
+					'select' => 'newsletter_id, reference_id',
 				));
-				if($queue != null && $queue->reference_id == 0 && $queue->view->user_id != 0) {
-					$queue->reference_id = $this->reference_id_i;
-					$queue->update();
+				if($newsletter != null && $newsletter->reference_id == 0 && $newsletter->view->user_id != 0) {
+					$newsletter->reference_id = $this->reference_id_i;
+					$newsletter->update();
 				}
 			}
 			
@@ -806,10 +815,9 @@ class Users extends CActiveRecord
 			// Send New Account to Email Administrator
 			if($setting->signup_adminemail == 1)
 				SupportMailSetting::sendEmail(null, null, 'New Member', 'informasi member terbaru');
-			
+				
 		} else {
 			// Send Account Information
-			//if($this->enabled == 1) {}
 			if($controller == 'password') {
 				$account_search = array(
 					'{$baseURL}', '{$displayname}', '{$site_support_email}',
@@ -828,7 +836,6 @@ class Users extends CActiveRecord
 
 			if($controller == 'verify')
 				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success');
-
 		}
 	}
 

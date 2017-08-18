@@ -164,4 +164,21 @@ class UserOption extends CActiveRecord
 		parent::afterConstruct();
 	}
 
+	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::model()->findByPk($id,array(
+				'select' => $column
+			));
+			return $model->$column;
+			
+		} else {
+			$model = self::model()->findByPk($id);
+			return $model;			
+		}
+	}
+
 }

@@ -42,6 +42,7 @@ class UserInviteHistory extends CActiveRecord
 	public $email_search;
 	public $userlevel_search;
 	public $user_search;
+	public $expired_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -79,7 +80,7 @@ class UserInviteHistory extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, invite_id, code, invite_date, invite_ip, expired_date, 
-				displayname_search, email_search, userlevel_search, user_search', 'safe', 'on'=>'search'),
+				displayname_search, email_search, userlevel_search, user_search, expired_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -91,6 +92,7 @@ class UserInviteHistory extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'view' => array(self::BELONGS_TO, 'ViewUserInviteHistory', 'id'),
 			'invite' => array(self::BELONGS_TO, 'UserInvites', 'invite_id'),
 		);
 	}
@@ -111,6 +113,7 @@ class UserInviteHistory extends CActiveRecord
 			'email_search' => Yii::t('attribute', 'Email'),
 			'userlevel_search' => Yii::t('attribute', 'Level Inviter'),
 			'user_search' => Yii::t('attribute', 'Inviter'),
+			'expired_search' => Yii::t('attribute', 'Expired'),
 		);
 	}
 
@@ -134,20 +137,23 @@ class UserInviteHistory extends CActiveRecord
 
 		// Custom Search
 		$criteria->with = array(
+			'view' => array(
+				'alias'=>'view',
+			),
 			'invite' => array(
 				'alias'=>'invite',
-				'select'=>'queue_id, user_id'
+				'select'=>'newsletter_id, user_id'
 			),
-			'invite.queue' => array(
-				'alias'=>'invite_queue',
-				'select'=>'queue_id, displayname, email'
+			'invite.newsletter' => array(
+				'alias'=>'invite_newsletter',
+				'select'=>'newsletter_id, email'
 			),
-			'invite.queue.view' => array(
-				'alias'=>'invite_queue_view',
+			'invite.newsletter.view' => array(
+				'alias'=>'invite_newsletter_view',
 				'select'=>'user_id'
 			),
-			'invite.queue.view.user' => array(
-				'alias'=>'invite_queue_view_user',
+			'invite.newsletter.view.user' => array(
+				'alias'=>'invite_newsletter_view_user',
 				'select'=>'displayname'
 			),
 			'invite.user' => array(
@@ -156,7 +162,7 @@ class UserInviteHistory extends CActiveRecord
 			),
 		);
 		
-		$criteria->compare('t.id',strtolower($this->id),true);
+		$criteria->compare('t.id',$this->id);
 		if(isset($_GET['invite']))
 			$criteria->compare('t.invite_id',$_GET['invite']);
 		else
@@ -168,13 +174,12 @@ class UserInviteHistory extends CActiveRecord
 		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.expired_date)',date('Y-m-d', strtotime($this->expired_date)));
 
-		if($this->invite->queue->view->user_id)
-			$criteria->compare('invite_queue_view_user.displayname',strtolower($this->displayname_search),true);
-		else
-			$criteria->compare('invite_queue.displayname',strtolower($this->displayname_search),true);
-		$criteria->compare('invite_queue.email',strtolower($this->email_search),true);
+		if($this->invite->newsletter->view->user_id)
+			$criteria->compare('invite_newsletter_view_user.displayname',strtolower($this->displayname_search),true);
+		$criteria->compare('invite_newsletter.email',strtolower($this->email_search),true);
 		$criteria->compare('invite_user.level_id',$this->userlevel_search);
 		$criteria->compare('invite_user.displayname',strtolower($this->user_search),true);
+		$criteria->compare('view.publish',$this->expired_search);
 
 		if(!isset($_GET['UserInviteHistory_sort']))
 			$criteria->order = 't.id DESC';
@@ -235,12 +240,18 @@ class UserInviteHistory extends CActiveRecord
 			);
 			if(!isset($_GET['invite'])) {
 				$this->defaultColumns[] = array(
-					'name' => 'displayname_search',
-					'value' => '$data->invite->queue->view->user_id ? $data->invite->queue->view->user->displayname : ($data->invite->queue->displayname ? $data->invite->queue->displayname : \'-\')',
+					'name' => 'email_search',
+					'value' => '$data->invite->newsletter->email',
 				);
 				$this->defaultColumns[] = array(
-					'name' => 'email_search',
-					'value' => '$data->invite->queue->email',
+					'name' => 'user_search',
+					'value' => '$data->invite->user_id ? $data->invite->user->displayname : \'-\'',
+				);
+				$this->defaultColumns[] = array(
+					'name' => 'userlevel_search',
+					'value' => '$data->invite->user_id ? Phrase::trans($data->invite->user->level->name) : \'-\'',
+					'filter'=>UserLevel::getUserLevel(),
+					'type' => 'raw',
 				);
 			}
 			$this->defaultColumns[] = array(
@@ -249,7 +260,7 @@ class UserInviteHistory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'invite_date',
-				'value' => 'Utility::dateFormat($data->invite_date)',
+				'value' => 'Utility::dateFormat($data->invite_date, true)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -276,7 +287,23 @@ class UserInviteHistory extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'name' => 'invite_ip',
 				'value' => '$data->invite_ip',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
+			$this->defaultColumns[] = array(
+				'name' => 'expired_search',
+				'value' => '$data->view->publish == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
+			);
+			/*
 			$this->defaultColumns[] = array(
 				'name' => 'expired_date',
 				'value' => 'Utility::dateFormat($data->expired_date)',
@@ -303,37 +330,9 @@ class UserInviteHistory extends CActiveRecord
 					),
 				), true),
 			);
+			*/
 		}
 		parent::afterConstruct();
-	}
-
-	// Get plugin list
-	public static function getInvite($email, $code, $order=null)
-	{
-		$criteria=new CDbCriteria;
-		$criteria->with = array(
-			'queue' => array(
-				'alias'=>'queue',
-				'select'=>'queue_id, publish, email'
-			),
-			'queue.view' => array(
-				'alias'=>'queue_view',
-				'select'=>'user_id'
-			),
-			'histories' => array(
-				'alias'=>'histories',
-				'together'=>true,
-			),
-		);
-		$criteria->compare('t.publish',1);
-		$criteria->compare('queue.publish',1);
-		$criteria->compare('queue.email',strtolower($email));
-		$criteria->compare('histories.code',$code);
-		$criteria->compare('histories.expired_date','>='.date('Y-m-d H:i:s'));
-		$criteria->order = $order == null || $order == 'DESC' ? 't.invite_id DESC' : 't.invite_id ASC';
-		$model = UserInvites::model()->find($criteria);
-		
-		return $model;
 	}
 
 	/**

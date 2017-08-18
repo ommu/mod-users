@@ -33,12 +33,6 @@ plugin_menu		:
 			- urlTitle: Invites
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/invite/manage, attr: -, icon: -}
-			- urlTitle: Queues
-				urlRules: {siteType: 1, userLevel: "1,2"}
-				urlPath: {url: o/queue/manage, attr: -, icon: -}
-			- urlTitle: Devices
-				urlRules: {siteType: 1, userLevel: "1,2"}
-				urlPath: {url: o/device/manage, attr: -, icon: -}
 			- urlTitle: Forgot Passwords
 				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/forgot/manage, attr: -, icon: -}
@@ -130,11 +124,6 @@ content_menu	:
 # controller o/invitehistory
 	- urlTitle: Back to Invites
 		urlRules: {users, o/invitehistory, "manage", siteType: 1, userLevel: "1,2"}
-		urlPath: {url: o/invite/manage, attr: -, icon: -}
-        
-# controller o/queue
-	- urlTitle: Back to Invite
-		urlRules: {users, o/queue, "manage", siteType: 1, userLevel: "1,2"}
 		urlPath: {url: o/invite/manage, attr: -, icon: -}
 
 # controller o/forgot

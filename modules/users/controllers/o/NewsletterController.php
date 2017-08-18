@@ -138,24 +138,24 @@ class NewsletterController extends Controller
 	 */
 	public function actionAdd() 
 	{
-        $model=new UserNewsletter;
+		$model=new UserNewsletter;
 
-        // Uncomment the following line if AJAX validation is needed
-        $this->performAjaxValidation($model);
+		// Uncomment the following line if AJAX validation is needed
+		$this->performAjaxValidation($model);
 
-        if(isset($_POST['UserNewsletter'])) {
-            $model->attributes=$_POST['UserNewsletter'];
+		if(isset($_POST['UserNewsletter'])) {
+			$model->attributes=$_POST['UserNewsletter'];
 			if($model->multiple_email_i == 0)
 				$model->scenario = 'singleEmailForm';
 			
 			$result = array();
 			
-            $jsonError = CActiveForm::validate($model);
-            if(strlen($jsonError) > 2) {
-                echo $jsonError;
+			$jsonError = CActiveForm::validate($model);
+			if(strlen($jsonError) > 2) {
+				echo $jsonError;
 
-            } else {
-                if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+			} else {
+				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
 					if($model->multiple_email_i == 1) {
 						if($model->validate()) {
 							$email_i = Utility::formatFileType($model->email_i);
@@ -166,14 +166,14 @@ class NewsletterController extends Controller
 								else if($condition == 1)
 									$result[] = Yii::t('phrase', '$email (success)', array('$email'=>$email));
 								else if($condition == 2)
-									$result[] = Yii::t('phrase', '$email (error)', array('$email'=>$email));									
+									$result[] = Yii::t('phrase', '$email (error)', array('$email'=>$email));
 							}
 							echo CJSON::encode(array(
 								'type' => 5,
 								'get' => Yii::app()->controller->createUrl('manage'),
 								'id' => 'partial-support-newsletter',
 								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Newsletter $result success created.', array('$result'=>Utility::formatFileType($result, false))).'</strong></div>',
-							));							
+							));
 						} else
 							print_r($model->getErrors());
 						
@@ -188,10 +188,10 @@ class NewsletterController extends Controller
 						} else
 							print_r($model->getErrors());
 					}
-                }
-            }
-            Yii::app()->end();
-        }
+				}
+			}
+			Yii::app()->end();
+		}
 
 		$this->dialogDetail = true;
 		$this->dialogWidth = 600;

@@ -356,7 +356,7 @@ class UserForgot extends CActiveRecord
 	 */
 	public static function getUniqueCode() {
 		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		srand((double)microtime()*1000000);
+		srand((double)microtime()*time());
 		$i = 0;
 		$code = '' ;
 
@@ -390,7 +390,7 @@ class UserForgot extends CActiveRecord
 						));
 					}					
 					if($user == null)
-						$this->addError('email_i', 'Incorrect email address');					
+						$this->addError('email_i', Yii::t('phrase', 'Incorrect email address'));
 					else
 						$this->user_id = $user->user_id;
 				}

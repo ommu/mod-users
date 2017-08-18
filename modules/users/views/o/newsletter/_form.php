@@ -15,26 +15,26 @@
 ?>
 
 <?php $form=$this->beginWidget('application.components.system.OActiveForm', array( 
-    'id'=>'support-newsletter-form', 
-    'enableAjaxValidation'=>true, 
-    //'htmlOptions' => array('enctype' => 'multipart/form-data') 
+	'id'=>'support-newsletter-form', 
+	'enableAjaxValidation'=>true, 
+	//'htmlOptions' => array('enctype' => 'multipart/form-data') 
 )); ?>
 <div class="dialog-content">
 	<fieldset>		
 		<div class="clearfix">
 			<label><?php echo $model->getAttributeLabel('email_i');?> <span class="required">*</span></label>
 			<div class="desc">
-			    <?php echo $form->textArea($model,'email_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
-			    <?php echo $form->error($model,'email_i'); ?>
+				<?php echo $form->textArea($model,'email_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
+				<?php echo $form->error($model,'email_i'); ?>
 			</div>
 		</div>
 		
 		<div class="clearfix publish">
 			<?php echo $form->labelEx($model,'multiple_email_i'); ?>
 			<div class="desc">
-			    <?php echo $form->checkBox($model,'multiple_email_i'); ?>
+				<?php echo $form->checkBox($model,'multiple_email_i'); ?>
 				<?php echo $form->labelEx($model,'multiple_email_i'); ?>
-			    <?php echo $form->error($model,'multiple_email_i'); ?>
+				<?php echo $form->error($model,'multiple_email_i'); ?>
 			</div>
 		</div>
 		
@@ -44,8 +44,8 @@
 	</fieldset>
 </div>
 <div class="dialog-submit">
-    <?php echo CHtml::submitButton(Yii::t('phrase', 'Subscribe'), array('onclick' => 'setEnableSave()')); ?>
-    <?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>
+	<?php echo CHtml::submitButton(Yii::t('phrase', 'Subscribe'), array('onclick' => 'setEnableSave()')); ?>
+	<?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>
 </div>
 
 <?php $this->endWidget(); ?>

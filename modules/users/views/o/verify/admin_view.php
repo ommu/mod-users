@@ -33,6 +33,11 @@
 				'type'=>'raw',
 			),
 			array(
+				'name'=>'expired_search',
+				'value'=>$model->view->publish == '1' ? Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/publish.png') : Chtml::image(Yii::app()->theme->baseUrl.'/images/icons/unpublish.png'),
+				'type'=>'raw',
+			),
+			array(
 				'name'=>'user_id',
 				'value'=>$model->user_id ? $model->user->displayname : '-',
 			),

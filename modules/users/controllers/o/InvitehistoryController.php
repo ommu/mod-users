@@ -108,9 +108,9 @@ class InvitehistoryController extends Controller
 		$pageTitle = Yii::t('phrase', 'User Invite Data');
 		if($invite != null) {
 			$data = UserInvites::model()->findByPk($invite);
-			$pageTitle = Yii::t('phrase', 'User Invite Data: $invite_email invite by Guest', array ('$invite_email'=>$data->queue->email));
+			$pageTitle = Yii::t('phrase', 'User Invite Data: $invite_email invite by Guest', array ('$invite_email'=>$data->newsletter->email));
 			if($data->user->displayname)
-				$pageTitle = Yii::t('phrase', 'User Invite Data: $invite_email invite by $user_displayname', array ('$invite_email'=>$data->queue->email, '$user_displayname'=>$data->user->displayname));
+				$pageTitle = Yii::t('phrase', 'User Invite Data: $invite_email invite by $user_displayname', array ('$invite_email'=>$data->newsletter->email, '$user_displayname'=>$data->user->displayname));
 		}
 		
 		$model=new UserInviteHistory('search');
@@ -164,9 +164,9 @@ class InvitehistoryController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by Guest', array('$invite_email'=>$model->invite->queue->email));
+			$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by Guest', array('$invite_email'=>$model->invite->newsletter->email));
 			if($model->invite->user->displayname)
-				$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by $user_displayname', array ('$invite_email'=>$model->invite->queue->email, '$user_displayname'=>$model->invite->user->displayname));
+				$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by $user_displayname', array ('$invite_email'=>$model->invite->newsletter->email, '$user_displayname'=>$model->invite->user->displayname));
 			$this->pageTitle = $pageTitle;
 			$this->pageDescription = '';
 			$this->pageMeta = '';

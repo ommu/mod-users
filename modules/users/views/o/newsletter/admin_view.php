@@ -31,14 +31,6 @@
 				'type' => 'raw',
 			),
 			array(
-				'name'=>'level_search',
-				'value'=>$model->user->displayname ? Phrase::trans($model->user->level->name) : '-',
-			),
-			array(
-				'name'=>'user_id',
-				'value'=>$model->user_id ? $model->user->displayname : ($model->displayname ? $model->displayname : '-'),
-			),
-			array(
 				'name'=>'email',
 				'value'=>$model->email,
 			),

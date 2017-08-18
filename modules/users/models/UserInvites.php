@@ -24,7 +24,7 @@
  * The followings are the available columns in table 'ommu_user_invites':
  * @property string $invite_id
  * @property integer $publish
- * @property string $queue_id
+ * @property string $newsletter_id
  * @property string $user_id
  * @property string $code
  * @property integer $invites
@@ -35,15 +35,18 @@
  * @property string $updated_date
  *
  * The followings are the available model relations:
- * @property UserInviteQueue $queue
+ * @property UserNewsletter $newsletter
  */
 class UserInvites extends CActiveRecord
 {
 	public $defaultColumns = array();	
-	public $displayname;
-	public $email;
+	public $email_i;
+	public $multiple_email_i;
 	
 	// Variable Search
+	public $newsletter_user_search;
+	public $newsletter_email_search;
+	public $register_search;
 	public $userlevel_search;
 	public $user_search;
 	public $modified_search;
@@ -74,23 +77,23 @@ class UserInvites extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, code,
-				email', 'required'),
-			array('queue_id, user_id, invites, modified_id', 'numerical', 'integerOnly'=>true),
-			array('queue_id, user_id, invites, modified_id', 'length', 'max'=>11),
+			array('user_id, code', 'required'),
+			array('
+				email_i', 'required', 'on'=>'singleEmailForm'),
+			array('newsletter_id, user_id, invites, modified_id,
+				multiple_email_i', 'numerical', 'integerOnly'=>true),
+			array('newsletter_id, user_id, invites, modified_id', 'length', 'max'=>11),
 			array('code', 'length', 'max'=>16),
 			array('invite_ip', 'length', 'max'=>20),
+			array('', 'length', 'max'=>64),
 			array('
-				email', 'length', 'max'=>32),
+				email_i', 'email', 'on'=>'singleEmailForm'),
 			array('
-				displayname', 'length', 'max'=>64),
-			array('
-				displayname, email', 'email'),
-			array('invite_date, invite_ip', 'safe'),
+				email_i, multiple_email_i', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('invite_id, queue_id, user_id, code, invites, invite_date, invite_ip, modified_date, modified_id, updated_date,
-				displayname, email, userlevel_search, user_search, modified_search', 'safe', 'on'=>'search'),
+			array('invite_id, newsletter_id, user_id, code, invites, invite_date, invite_ip, modified_date, modified_id, updated_date,
+				email_i, newsletter_user_search, newsletter_email_search, register_search, userlevel_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -102,7 +105,7 @@ class UserInvites extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'queue' => array(self::BELONGS_TO, 'UserInviteQueue', 'queue_id'),
+			'newsletter' => array(self::BELONGS_TO, 'UserNewsletter', 'newsletter_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'histories' => array(self::HAS_MANY, 'UserInviteHistory', 'invite_id'),
@@ -117,7 +120,7 @@ class UserInvites extends CActiveRecord
 		return array(
 			'invite_id' => Yii::t('attribute', 'Invite'),
 			'publish' => Yii::t('attribute', 'Publish'),
-			'queue_id' => Yii::t('attribute', 'Queue'),
+			'newsletter_id' => Yii::t('attribute', 'Newsletter'),
 			'user_id' => Yii::t('attribute', 'Inviter'),
 			'code' => Yii::t('attribute', 'Invite Code'),
 			'invites' => Yii::t('attribute', 'Invites'),
@@ -126,8 +129,11 @@ class UserInvites extends CActiveRecord
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'updated_date' => Yii::t('attribute', 'Updated Date'),
-			'displayname' => Yii::t('attribute', 'Displayname'),
-			'email' => Yii::t('attribute', 'Email'),
+			'email_i' => Yii::t('attribute', 'Email'),
+			'multiple_email_i' => Yii::t('attribute', 'Multiple Email'),
+			'newsletter_user_search' => Yii::t('attribute', 'Displayname'),
+			'newsletter_email_search' => Yii::t('attribute', 'Email'),
+			'register_search' => Yii::t('attribute', 'Register'),
 			'userlevel_search' => Yii::t('attribute', 'Level Inviter'),
 			'user_search' => Yii::t('attribute', 'Inviter'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
@@ -147,16 +153,20 @@ class UserInvites extends CActiveRecord
 		
 		// Custom Search
 		$criteria->with = array(
-			'queue' => array(
-				'alias'=>'queue',
-				'select'=>'queue_id, displayname, email'
+			'newsletter' => array(
+				'alias'=>'newsletter',
+				'select'=>'newsletter_id, user_id, email'
 			),
-			'queue.view' => array(
-				'alias'=>'queue_view',
-				'select'=>'user_id'
+			'newsletter.view' => array(
+				'alias'=>'newsletter_view',
+				'select'=>'user_id, register'
 			),
-			'queue.view.user' => array(
-				'alias'=>'queue_view_user',
+			'newsletter.view.user' => array(
+				'alias'=>'newsletter_view_user',
+				'select'=>'displayname'
+			),
+			'newsletter.user' => array(
+				'alias'=>'newsletter_user',
 				'select'=>'displayname'
 			),
 			'user' => array(
@@ -170,10 +180,10 @@ class UserInvites extends CActiveRecord
 		);
 
 		$criteria->compare('t.invite_id',$this->invite_id);
-		if(isset($_GET['queue']))
-			$criteria->compare('t.queue_id',$_GET['queue']);
+		if(isset($_GET['newsletter']))
+			$criteria->compare('t.newsletter_id',$_GET['newsletter']);
 		else
-			$criteria->compare('t.queue_id',$this->queue_id);
+			$criteria->compare('t.newsletter_id',$this->newsletter_id);
 		if(isset($_GET['user']))
 			$criteria->compare('t.user_id',$_GET['user']);
 		else
@@ -192,11 +202,12 @@ class UserInvites extends CActiveRecord
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		
-		if($this->queue->view->user_id)
-			$criteria->compare('queue_view_user.displayname',strtolower($this->displayname),true);
+		if($this->newsletter->view->user_id)
+			$criteria->compare('newsletter_view_user.displayname',strtolower($this->newsletter_user_search),true);
 		else
-			$criteria->compare('queue.displayname',strtolower($this->displayname),true);
-		$criteria->compare('queue.email',strtolower($this->email),true);
+			$criteria->compare('newsletter_user.displayname',strtolower($this->newsletter_user_search),true);
+		$criteria->compare('newsletter.email',strtolower($this->newsletter_email_search),true);
+		$criteria->compare('newsletter_view.register',$this->register_search);
 		$criteria->compare('user.level_id',$this->userlevel_search);
 		$criteria->compare('user.displayname',strtolower($this->user_search),true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
@@ -229,7 +240,7 @@ class UserInvites extends CActiveRecord
 		}else {
 			//$this->defaultColumns[] = 'invite_id';
 			$this->defaultColumns[] = 'publish';
-			$this->defaultColumns[] = 'queue_id';
+			$this->defaultColumns[] = 'newsletter_id';
 			$this->defaultColumns[] = 'user_id';
 			$this->defaultColumns[] = 'code';
 			$this->defaultColumns[] = 'invites';
@@ -252,14 +263,14 @@ class UserInvites extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['queue'])) {
+			if(!isset($_GET['newsletter'])) {
 				$this->defaultColumns[] = array(
-					'name' => 'displayname',
-					'value' => '$data->queue->view->user_id ? $data->queue->view->user->displayname : ($data->queue->displayname ? $data->queue->displayname : \'-\')',
+					'name' => 'newsletter_email_search',
+					'value' => '$data->newsletter->email',
 				);
 				$this->defaultColumns[] = array(
-					'name' => 'email',
-					'value' => '$data->queue->email',
+					'name' => 'newsletter_user_search',
+					'value' => '$data->newsletter->view->user_id ? $data->newsletter->view->user->displayname : ($data->newsletter->user_id ? $data->newsletter->user->displayname : \'-\')',
 				);
 			}
 			if(!isset($_GET['user'])) {
@@ -308,6 +319,18 @@ class UserInvites extends CActiveRecord
 				),
 				'type' => 'raw',
 			);
+			$this->defaultColumns[] = array(
+				'name' => 'register_search',
+				'value' => '$data->newsletter->view->register == 1 ? Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Chtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter'=>array(
+					1=>Yii::t('phrase', 'Yes'),
+					0=>Yii::t('phrase', 'No'),
+				),
+				'type' => 'raw',
+			);
 			if(!isset($_GET['type'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
@@ -348,7 +371,7 @@ class UserInvites extends CActiveRecord
 	 */
 	public static function getUniqueCode() {
 		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		srand((double)microtime()*1000000);
+		srand((double)microtime()*time());
 		$i = 0;
 		$salt = '' ;
 
@@ -363,25 +386,101 @@ class UserInvites extends CActiveRecord
 	}
 
 	// Get plugin list
-	public static function getInvite($email, $order=null) 
+	public static function getInvite($email) 
 	{
 		$criteria=new CDbCriteria;
 		$criteria->with = array(
-			'queue' => array(
-				'alias'=>'queue',
-				'select'=>'queue_id, publish, email',
+			'newsletter' => array(
+				'alias'=>'newsletter',
+				'select'=>'newsletter_id, email',
 			),
 		);
 		$criteria->compare('t.publish',1);
 		$criteria->compare('t.user_id','<>0');
-		$criteria->compare('queue.publish',1);
-		$criteria->compare('queue.email',strtolower($email));
-		$criteria->order = $order == null || $order == 'DESC' ? 't.invite_id DESC' : 't.invite_id ASC';
+		$criteria->compare('newsletter.email',strtolower($email));
+		$criteria->order ='t.invite_id DESC';
 		$model = self::model()->find($criteria);
 		
 		return $model;
 	}
 
+	// Get plugin list
+	public static function getInviteWithCode($email, $code)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->with = array(
+			'newsletter' => array(
+				'alias'=>'newsletter',
+				'select'=>'newsletter_id, status, email'
+			),
+			'newsletter.view' => array(
+				'alias'=>'newsletter_view',
+				'select'=>'user_id'
+			),
+			'histories' => array(
+				'alias'=>'histories',
+				'together'=>true,
+			),
+		);
+		$criteria->compare('t.publish',1);
+		$criteria->compare('newsletter.status',1);
+		$criteria->compare('newsletter.email',strtolower($email));
+		$criteria->compare('histories.code',$code);
+		$criteria->compare('histories.expired_date','>='.date('Y-m-d H:i:s'));
+		$criteria->order = 't.invite_id DESC';
+		$model = self::model()->find($criteria);
+		
+		return $model;
+	}
+
+	/**
+	 * User get information
+	 * condition
+	 ** 0 = newsletter not null
+	 ** 1 = newsletter save
+	 ** 2 = newsletter not save
+	 */
+	public static function insertInvite($email, $user_id)
+	{
+		$criteria=new CDbCriteria;
+		$criteria->compare('email',strtolower($email));
+		$newsletterFind = UserNewsletter::model()->find($criteria);
+
+		if($newsletterFind == null) {
+			$newsletter = new UserNewsletter;
+			$newsletter->email = $email;
+			if($newsletter->save())
+				$newsletter_id = $newsletter->newsletter_id;
+		} else
+			$newsletter_id = $newsletterFind->newsletter_id;
+		
+		$condition = 0;
+		if($newsletter->view->user_id == 0) {
+			$criteriaInvite=new CDbCriteria;
+			$criteriaInvite->compare('publish',1);
+			$criteriaInvite->compare('newsletter_id',$newsletter_id);
+			$criteriaInvite->compare('user_id',$user_id);
+			$model = self::model()->find($criteriaInvite);
+			
+			if($model == null) {
+				$model = new UserInvites;
+				$model->newsletter_id = $newsletter_id;
+				$model->user_id = $user_id;
+				if($model->save())
+					$condition = 1;
+				else
+					$condition = 2;
+
+			} else {
+				$model->invites = $model->invites+1;
+				if($model->save())
+					$condition = 1;
+			}
+		}
+		
+		return $condition;
+	}
+ 
 	/**
 	 * before validate attributes
 	 */
@@ -390,50 +489,41 @@ class UserInvites extends CActiveRecord
 		$module = strtolower(Yii::app()->controller->module->id);
 		$controller = strtolower(Yii::app()->controller->id);
 		
-		if(parent::beforeValidate()) {			
-			if($this->isNewRecord)
-				$this->user_id = Yii::app()->user->id;
-			else
-				$this->modified_id = Yii::app()->user->id;
-			
-			if($this->email != '') {
-				$model = UserInviteQueue::model()->findByAttributes(array('email' => strtolower($this->email)), array(
-					'select' => 'queue_id, user_id',
-				));
-				if($model == null) {														// email belum masuk daftar queue
-					$queue = new UserInviteQueue;
-					if($this->displayname != '')
-						$queue->displayname = $this->displayname;
-					$queue->email = $this->email;
-					if($queue->save())
-						$this->queue_id = $queue->queue_id;
+		if(parent::beforeValidate()) {
+			if($this->isNewRecord) {
+				if($this->multiple_email_i == 1) {
+					if($this->email_i == '')
+						$this->addError('email_i', Yii::t('phrase', 'Email cannot be blank.'));
 					
-				} else {																	// email sudah dalam daftar invite
-					$this->queue_id = $model->queue_id;
-					if(($module != null && $module == 'users') && $controller == 'invite') {
-						if($model->user_id != 0)											// email sudah menjadi member
-							$this->addError('email', Yii::t('phrase', 'Email sudah terdaftar sebagai user'));
-							
-						else {																// email belum menjadi member
-							$invite = self::model()->with('queue')->find(array(
-								'select' => 'invite_id, publish, queue_id, user_id, invites',
-								'condition' => 't.publish = :publish AND t.user_id = :user AND queue.email = :email',
-								'params' => array(
-									':publish' => '1',
-									':user' => !Yii::app()->user->isGuest ? Yii::app()->user->id : '0',
-									':email' => strtolower($this->email),
-								),
-							));
-							if($invite == null)											// email sudah invite sebelumnya
-								$this->addError('email', Yii::t('phrase', 'Email sudah di invite sebelumnya'));
-						}
+				} else {
+					if($controller == 'o/invite' && $this->email_i != '') {
+						$newsletterFind = UserNewsletter::model()->findByAttributes(array('email'=>strtolower($this->email_i)), array(
+							'select' => 'newsletter_id',
+						));
+						if($newsletterFind == null) {
+							$newsletter = new UserNewsletter;
+							$newsletter->email = $this->email_i;
+							if($newsletter->save())
+								$this->newsletter_id = $newsletter->newsletter_id;
+						} else
+							$this->newsletter_id = $newsletterFind->newsletter_id;
+
+						if($newsletterFind->view->user_id != 0 || $newsletter->view->user_id != 0)
+							$this->addError('email_i', Yii::t('phrase', 'Email sudah terdaftar sebagai user'));
 					}
 				}
+				if($this->user_id == 0)
+					$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+
+			} else {
+				if($controller == 'o/invite')
+					$this->modified_id = Yii::app()->user->id;
 			}
 			
 			$this->code = self::getUniqueCode();
 			$this->invite_ip = $_SERVER['REMOTE_ADDR'];
 		}
+		
 		return true;
 	}
 	
@@ -442,15 +532,15 @@ class UserInvites extends CActiveRecord
 	 */
 	protected function afterSave() {
 		parent::afterSave();
-		if($this->isNewRecord && $this->queue->user_id == 0) {
+		if($this->isNewRecord && $this->newsletter->view->user_id == 0) {
 			$setting = OmmuSettings::model()->findByPk(1, array(
 				'select' => 'signup_checkemail',
 			));
 			if($setting->signup_checkemail == 1)
-				SupportMailSetting::sendEmail($this->queue->email, $this->queue->email, 'User Invite', 'Silahkan bergabung dan masukkan code invite');
+				SupportMailSetting::sendEmail($this->newsletter->email, $this->newsletter->email, 'User Invite', 'Silahkan bergabung dan masukkan code invite');
 			
 			else
-				SupportMailSetting::sendEmail($this->queue->email, $this->queue->email, 'User Invite', 'Silahkan bergabung');
+				SupportMailSetting::sendEmail($this->newsletter->email, $this->newsletter->email, 'User Invite', 'Silahkan bergabung');
 		}
 	}
 
