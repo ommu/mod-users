@@ -563,15 +563,16 @@ class Users extends CActiveRecord
 				$this->salt = self::getUniqueCode();
 				
 				// User Reference
-				$this->reference_id_i = 0;				
+				$this->reference_id_i = 0;
 				if($this->email != '') {
 					$settingUser = UserSetting::model()->findByPk(1, array(
 						'select' => 'invite_order',
 					));
 					$invite = UserInvites::getInvite(strtolower($this->email));
 					if($invite != null && $invite->newsletter->view->user_id == 0) {
-						$reference_id_i = $settingUser && $settingUser->invite_order == 'asc' ? $invite->newsletter->view->first_invite_user_id : $invite->newsletter->view->last_invite_user_id;					}
+						$reference_id_i = $settingUser && $settingUser->invite_order == 'asc' ? $invite->newsletter->view->first_invite_user_id : $invite->newsletter->view->last_invite_user_id;
 						$this->reference_id_i = $reference_id_i;
+					}
 				}
 				
 				if(in_array($controller, array('o/admin','o/member'))) {
