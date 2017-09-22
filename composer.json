@@ -1,0 +1,36 @@
+{
+	"name": "ommu/mod-users",
+	"description": "Module User for Ommu Platform",
+	"keywords": [
+		"module",
+		"users",
+		"ommu",
+		"platform",
+		"ommu platform"
+	],
+	"homepage": "https://github.com/ommu/ommu-users",
+	"type": "ommu-module",
+	"license": "Apache-2.0",
+	"support": {
+		"issues": "https://github.com/ommu/ommu-users/issues",
+		"wiki": "https://github.com/ommu/ommu-users/wiki",
+		"source": "https://github.com/ommu/ommu-users"
+	},
+	"repository": {
+	  "type": "git",
+	  "url": "https://github.com/ommu/ommu-users.git"
+	},
+	"authors": [
+		{
+			"name": "Putra Sudaryanto",
+			"email": "putra@sudaryanto.id",
+			"homepage": "https://putra.sudaryanto.id",
+			"role": "Creator"
+		}
+	],
+	"require": {
+		"php": ">=5.3.2",
+		"ommu/core": "1.1.16",
+		"yiisoft/yii": "1.1.16"
+	},
+}
