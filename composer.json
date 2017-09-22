@@ -18,7 +18,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ommu/ommu-users.git",
+		"url": "https://github.com/ommu/ommu-users.git"
 	},
 	"authors": [
 		{
