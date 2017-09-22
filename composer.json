@@ -17,8 +17,8 @@
 		"source": "https://github.com/ommu/ommu-users"
 	},
 	"repository": {
-	  "type": "git",
-	  "url": "https://github.com/ommu/ommu-users.git"
+		"type": "git",
+		"url": "https://github.com/ommu/ommu-users.git"
 	},
 	"authors": [
 		{
@@ -28,8 +28,4 @@
 			"role": "Creator"
 		}
 	],
-	"require": {
-		"php": ">=5.3.2",
-		"yiisoft/yii": "1.1.16"
-	},
 }
