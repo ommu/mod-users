@@ -1,2 +1,0 @@
-mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\LICENSE" "D:\htdocs\_project_ommu_module_users\LICENSE"
-mklink /H "D:\htdocs\_project_ommu_module_users\modules\users\controllers\api\LICENSE" "D:\htdocs\_project_ommu_module_users\LICENSE"
