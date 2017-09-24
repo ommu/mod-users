@@ -11,12 +11,8 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-namespace application\modules\users;
-
 class UsersModule extends \CWebModule
 {
-	public $controllerNamespace = '\application\modules\users\controllers';
-
 	public $defaultController = 'account';
 	
 	// getAssetsUrl()
