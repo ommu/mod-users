@@ -11,8 +11,14 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
+namespace ommu\users;
+
+use Yii;
+use Utility;
+
 class UsersModule extends \CWebModule
 {
+	
 	public $defaultController = 'account';
 	
 	// getAssetsUrl()
