@@ -28,6 +28,7 @@ class UsersModule extends CWebModule
 		// import the module-level models and components
 		$this->setImport(array(
 			'users.models.*',
+			'users.models.view.*',
 			'users.components.*',
 			//'personal.models.*',
 		));
