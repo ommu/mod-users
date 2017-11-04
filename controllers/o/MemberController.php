@@ -9,7 +9,6 @@
  *
  * TOC :
  *	Index
- *	Suggest
  *	Manage
  *	Add
  *	Edit
@@ -17,6 +16,7 @@
  *	Delete
  *	Enable
  *	Verify
+ *	Suggest
  *
  *	LoadModel
  *	performAjaxValidation
@@ -74,27 +74,14 @@ class MemberController extends Controller
 	public function accessRules() 
 	{
 		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index'),
-				'users'=>array('*'),
-			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('suggest'),
 				'users'=>array('@'),
-				'expression'=>'isset(Yii::app()->user->level)',
-				//'expression'=>'isset(Yii::app()->user->level) && (Yii::app()->user->level != 1)',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','edit','view','delete','enable','verify'),
+				'actions'=>array('index','manage','add','edit','view','delete','enable','verify'),
 				'users'=>array('@'),
-				'expression'=>'isset(Yii::app()->user->level) && in_array(Yii::app()->user->level, array(1,2))',
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array(),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
+				'expression'=>'in_array($user->level, array(1,2))',
 			),
 		);
 	}
@@ -105,36 +92,6 @@ class MemberController extends Controller
 	public function actionIndex() 
 	{
 		$this->redirect(array('manage'));
-	}
-	
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionSuggest($limit=10) 
-	{
-		if(Yii::app()->request->isAjaxRequest) {
-			if(isset($_GET['term'])) {
-				$criteria = new CDbCriteria;
-				$criteria->condition = 'enabled = 1 AND displayname LIKE :displayname';
-				$criteria->select = "user_id, displayname";
-				$criteria->limit = $limit;
-				$criteria->order = "user_id ASC";
-				$criteria->params = array(':displayname' => '%' . strtolower($_GET['term']) . '%');
-				$model = Users::model()->findAll($criteria);
-
-				if($model) {
-					foreach($model as $items) {
-						$result[] = array('id' => $items->user_id, 'value' => $items->displayname);
-					}
-				}
-			}
-			echo CJSON::encode($result);
-			Yii::app()->end();
-			
-		} else
-			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 	}
 
 	/**
@@ -423,6 +380,36 @@ class MemberController extends Controller
 				'model'=>$model,
 			));
 		}
+	}
+	
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionSuggest($limit=10) 
+	{
+		if(Yii::app()->request->isAjaxRequest) {
+			if(isset($_GET['term'])) {
+				$criteria = new CDbCriteria;
+				$criteria->condition = 'enabled = 1 AND displayname LIKE :displayname';
+				$criteria->select = "user_id, displayname";
+				$criteria->limit = $limit;
+				$criteria->order = "user_id ASC";
+				$criteria->params = array(':displayname' => '%' . strtolower($_GET['term']) . '%');
+				$model = Users::model()->findAll($criteria);
+
+				if($model) {
+					foreach($model as $items) {
+						$result[] = array('id' => $items->user_id, 'value' => $items->displayname);
+					}
+				}
+			}
+			echo CJSON::encode($result);
+			Yii::app()->end();
+			
+		} else
+			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
 	}
 
 	/**
