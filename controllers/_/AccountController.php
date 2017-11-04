@@ -64,6 +64,9 @@ class AccountController extends /*SBaseController*/ Controller
 				'actions'=>array('index','login'),
 				'users'=>array('*'),
 			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
 		);
 	}
 	

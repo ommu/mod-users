@@ -67,6 +67,9 @@ class ForgotController extends Controller
 				'actions'=>array('index','code','post','get'),
 				'users'=>array('*'),
 			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
 		);
 	}
 	
