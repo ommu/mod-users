@@ -264,7 +264,7 @@ class UserInviteHistory extends CActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
+				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'invite_date',
 					'language' => 'en',
@@ -310,7 +310,7 @@ class UserInviteHistory extends CActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter' => Yii::app()->controller->widget('application.components.system.CJuiDatePicker', array(
+				'filter' => Yii::app()->controller->widget('application.libraries.core.components.system.CJuiDatePicker', array(
 					'model'=>$this,
 					'attribute'=>'expired_date',
 					'language' => 'en',
