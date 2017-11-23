@@ -30,24 +30,18 @@
 	<fieldset>
 
 		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('title_i');?> <span class="required">*</span></label>
+			<label><?php echo $model->getAttributeLabel('name_i');?> <span class="required">*</span></label>
 			<div class="desc">
-				<?php
-				if(!$model->getErrors())
-					$model->title_i = Phrase::trans($model->name);
-				echo $form->textField($model,'title_i',array('maxlength'=>32, 'class'=>'span-7')); ?>
-				<?php echo $form->error($model,'title_i'); ?>
+				<?php echo $form->textField($model,'name_i',array('maxlength'=>32, 'class'=>'span-7')); ?>
+				<?php echo $form->error($model,'name_i'); ?>
 			</div>
 		</div>
 
 		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('description_i');?> <span class="required">*</span></label>
+			<label><?php echo $model->getAttributeLabel('desc_i');?> <span class="required">*</span></label>
 			<div class="desc">
-				<?php
-				if(!$model->getErrors())
-					$model->description_i = Phrase::trans($model->desc);
-				echo $form->textArea($model,'description_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-9 smaller')); ?>
-				<?php echo $form->error($model,'description_i'); ?>
+				<?php echo $form->textArea($model,'desc_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-9 smaller')); ?>
+				<?php echo $form->error($model,'desc_i'); ?>
 			</div>
 		</div>
 

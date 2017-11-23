@@ -54,8 +54,8 @@
 class UserLevel extends CActiveRecord
 {
 	public $defaultColumns = array();
-	public $title_i;
-	public $description_i;
+	public $name_i;
+	public $desc_i;
 	
 	// Variable Search
 	public $creation_search;
@@ -90,18 +90,18 @@ class UserLevel extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('
-				title_i, description_i', 'required', 'on'=>'info'),
+				name_i, desc_i', 'required', 'on'=>'info'),
 			array('profile_block, profile_search, profile_privacy, profile_comments, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow, photo_size, photo_exts', 'required', 'on'=>'user'),
 			array('message_allow, message_limit', 'required', 'on'=>'message'),
 			array('default, signup, message_allow, profile_block, profile_search, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow', 'numerical', 'integerOnly'=>true),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
 			array('
-				title_i', 'length', 'max'=>32),
+				name_i', 'length', 'max'=>32),
 			array('', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('level_id, name, desc, default, signup, message_allow, message_limit, profile_block, profile_search, profile_privacy, profile_comments, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow, photo_size, photo_exts, creation_date, creation_id, modified_date, modified_id,
-				title_i, description_i, creation_search, modified_search, user_search', 'safe', 'on'=>'search'),
+				name_i, desc_i, creation_search, modified_search, user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -114,8 +114,8 @@ class UserLevel extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewUserLevel', 'level_id'),
-			'title' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'name'),
-			'description' => array(self::BELONGS_TO, 'OmmuSystemPhrase', 'desc'),
+			'title' => array(self::BELONGS_TO, 'SourceMessage', 'name'),
+			'description' => array(self::BELONGS_TO, 'SourceMessage', 'desc'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 			'users' => array(self::HAS_MANY, 'Users', 'level_id'),
@@ -153,8 +153,8 @@ class UserLevel extends CActiveRecord
 			'creation_id' => Yii::t('attribute', 'Creation'),
 			'modified_date' => Yii::t('attribute', 'Modified Date'),
 			'modified_id' => Yii::t('attribute', 'Modified'),
-			'title_i' => Yii::t('attribute', 'Level'),
-			'description_i' => Yii::t('attribute', 'Description'),
+			'name_i' => Yii::t('attribute', 'Level'),
+			'desc_i' => Yii::t('attribute', 'Description'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 			'user_search' => Yii::t('attribute', 'Users'),
@@ -180,23 +180,17 @@ class UserLevel extends CActiveRecord
 		$criteria=new CDbCriteria;
 		
 		// Custom Search
-		$defaultLang = OmmuLanguages::getDefault('code');
-		if(isset(Yii::app()->session['language']))
-			$language = Yii::app()->session['language'];
-		else 
-			$language = $defaultLang;
-		
 		$criteria->with = array(
 			'view' => array(
 				'alias'=>'view',
 			),
 			'title' => array(
 				'alias'=>'title',
-				'select'=>$language,
+				'select'=>'message',
 			),
 			'description' => array(
 				'alias'=>'description',
-				'select'=>$language,
+				'select'=>'message',
 			),
 			'creation' => array(
 				'alias'=>'creation',
@@ -242,8 +236,8 @@ class UserLevel extends CActiveRecord
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
 		
-		$criteria->compare('title.'.$language,strtolower($this->title_i),true);
-		$criteria->compare('description.'.$language,strtolower($this->description_i),true);
+		$criteria->compare('title.message', strtolower($this->name_i), true);
+		$criteria->compare('description.message', strtolower($this->desc_i), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 		$criteria->compare('view.users',$this->user_search);
@@ -317,12 +311,12 @@ class UserLevel extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'title_i',
-				'value' => 'Phrase::trans($data->name)',
+				'name' => 'name_i',
+				'value' => '$data->title->message',
 			);
 			$this->defaultColumns[] = array(
-				'name' => 'description_i',
-				'value' => 'Phrase::trans($data->desc)',
+				'name' => 'desc_i',
+				'value' => '$data->description->message',
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'creation_search',
@@ -416,11 +410,22 @@ class UserLevel extends CActiveRecord
 		$items = array();
 		if($model != null) {
 			foreach($model as $key => $val)
-				$items[$val->level_id] = Phrase::trans($val->name);
+				$items[$val->level_id] = $val->title->message;
 		
 			return $items;
 		} else
 			return false;
+	}
+
+	/**
+	 * This is invoked when a record is populated with data from a find() call.
+	 */
+	protected function afterFind()
+	{
+		$this->name_i = $this->title->message;
+		$this->desc_i = $this->description->message;
+		
+		parent::afterFind();
 	}
 
 	/**
@@ -449,37 +454,42 @@ class UserLevel extends CActiveRecord
 	 */
 	protected function beforeSave() 
 	{
-		$currentModule = strtolower(Yii::app()->controller->module->id.'/'.Yii::app()->controller->id);
-		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
-		$location = Utility::getUrlTitle($currentModule);
+		$module = strtolower(Yii::app()->controller->module->id);
+		$controller = strtolower(Yii::app()->controller->id);
+		$action = strtolower(Yii::app()->controller->action->id);
+		$currentAction = strtolower($controller.'/'.$action);
+
+		$location = $module.' '.$controller;
 		
 		if(parent::beforeSave()) {
-			if($this->isNewRecord || (!$this->isNewRecord && $this->name == 0)) {
-				$title=new OmmuSystemPhrase;
-				$title->location = $location.'_title';
-				$title->en_us = $this->title_i;
-				if($title->save())
-					$this->name = $title->phrase_id;
+			if($this->isNewRecord || (!$this->isNewRecord && !$this->name)) {
+				$name=new SourceMessage;
+				$name->message = $this->name_i;
+				$name->location = $location.'_title';
+				if($name->save())
+					$this->name = $name->id;
+				
+				$this->slug = Utility::getUrlTitle($this->name_i);
 				
 			} else {
 				if($currentAction == 'o/level/edit') {
-					$title = OmmuSystemPhrase::model()->findByPk($this->name);
-					$title->en_us = $this->title_i;
-					$title->save();
+					$name = SourceMessage::model()->findByPk($this->name);
+					$name->message = $this->name_i;
+					$name->save();
 				}
 			}
 			
-			if($this->isNewRecord || (!$this->isNewRecord && $this->desc == 0)) {
-				$desc=new OmmuSystemPhrase;
+			if($this->isNewRecord || (!$this->isNewRecord && !$this->desc)) {
+				$desc=new SourceMessage;
+				$desc->message = $this->desc_i;
 				$desc->location = $location.'_description';
-				$desc->en_us = $this->description_i;
 				if($desc->save())
-					$this->desc = $desc->phrase_id;
-
+					$this->desc = $desc->id;
+				
 			} else {
 				if($currentAction == 'o/level/edit') {
-					$desc = OmmuSystemPhrase::model()->findByPk($this->desc);
-					$desc->en_us = $this->description_i;
+					$desc = SourceMessage::model()->findByPk($this->desc);
+					$desc->message = $this->desc_i;
 					$desc->save();
 				}
 			}
@@ -487,7 +497,7 @@ class UserLevel extends CActiveRecord
 			// set to default modules
 			if($this->default == 1) {
 				self::model()->updateAll(array(
-					'default' => 0,	
+					'default' => 0,
 				));
 				$this->default = 1;
 			}

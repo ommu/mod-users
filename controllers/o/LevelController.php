@@ -216,7 +216,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
+			$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name', array('$level_name'=>$model->title->message));
 			$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 			$this->pageMeta = '';
 			$this->render('admin_edit',array(
@@ -233,7 +233,7 @@ class LevelController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		$this->pageTitle = Yii::t('phrase', 'View Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
+		$this->pageTitle = Yii::t('phrase', 'View Level: $level_name', array('$level_name'=>$model->title->message));
 		$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 		$this->pageMeta = '';
 		$this->render('admin_view',array(
@@ -268,7 +268,7 @@ class LevelController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
+			$this->pageTitle = Yii::t('phrase', 'Delete Level: $level_name', array('$level_name'=>$model->title->message));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
@@ -305,7 +305,7 @@ class LevelController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Default Level: $level_name', array('$level_name'=>Phrase::trans($model->name)));
+			$this->pageTitle = Yii::t('phrase', 'Default Level: $level_name', array('$level_name'=>$model->title->message));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_default',array(
@@ -360,7 +360,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name User', array('$level_name'=>Phrase::trans($model->name)));
+			$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name User', array('$level_name'=>$model->title->message));
 			$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 			$this->pageMeta = '';
 			$this->render('admin_user',array(
@@ -415,7 +415,7 @@ class LevelController extends Controller
 			Yii::app()->end();
 
 		} else {
-			$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name Message', array('$level_name'=>Phrase::trans($model->name)));
+			$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name Message', array('$level_name'=>$model->title->message));
 			$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 			$this->pageMeta = '';
 			$this->render('admin_message',array(

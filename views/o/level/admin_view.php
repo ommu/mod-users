@@ -39,12 +39,12 @@
 				'type'=>'raw',
 			),
 			array(
-				'name'=>'title_i',
-				'value'=>$model->name ? Phrase::trans($model->name) : '-',
+				'name'=>'name_i',
+				'value'=>$model->name ? $model->title->message : '-',
 			),
 			array(
-				'name'=>'description_i',
-				'value'=>$model->desc ? Phrase::trans($model->desc) : '-',
+				'name'=>'desc_i',
+				'value'=>$model->desc ? $model->description->message : '-',
 			),
 			array(
 				'name'=>'message_allow',
