@@ -275,7 +275,7 @@ class UserNewsletter extends CActiveRecord
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
-					'value' => '$data->view->user_id ? Phrase::trans($data->view->user->level->name) : ($data->user_id ? Phrase::trans($data->user->level->name) : \'-\')',
+					'value' => '$data->view->user_id ? $data->view->user->level->title->message : ($data->user_id ? $data->user->level->title->message : \'-\')',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);

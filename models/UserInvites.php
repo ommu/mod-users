@@ -280,7 +280,7 @@ class UserInvites extends CActiveRecord
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'userlevel_search',
-					'value' => '$data->user_id ? Phrase::trans($data->user->level->name) : \'-\'',
+					'value' => '$data->user_id ? $data->user->level->title->message : \'-\'',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);

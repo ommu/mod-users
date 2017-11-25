@@ -102,7 +102,7 @@ class SiteController extends ControllerApi
 						$return['token'] = $record->view->token_password;
 						$return['oauth'] = $record->view->token_oauth;
 						$return['userlevel_id'] = $record->level_id;
-						$return['userlevel'] = Phrase::trans($record->level->name);
+						$return['userlevel'] = $record->level->title->message;
 						$return['email'] = $record->email;
 						$return['username'] = $record->username;
 						$return['first_name'] = $record->first_name;

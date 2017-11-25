@@ -40,7 +40,7 @@
 			),
 			array(
 				'name'=>'userlevel_search',
-				'value'=>$model->user_id ? Phrase::trans($model->user->level->name) : '-',
+				'value'=>$model->user_id ? $model->user->level->title->message : '-',
 			),
 			array(
 				'name'=>'code',

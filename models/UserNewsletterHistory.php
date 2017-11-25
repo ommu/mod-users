@@ -201,7 +201,7 @@ class UserNewsletterHistory extends CActiveRecord
 			if(!isset($_GET['newsletter'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
-					'value' => '$data->newsletter->user_id ? Phrase::trans($data->newsletter->user->level->name) : \'-\'',
+					'value' => '$data->newsletter->user_id ? $data->newsletter->user->level->title->message : \'-\'',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);

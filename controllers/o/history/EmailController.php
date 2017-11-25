@@ -94,7 +94,7 @@ class EmailController extends Controller
 		$pageTitle = Yii::t('phrase', 'History Emails');
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'History Email: $user_displayname level $level_name', array ('$user_displayname'=>$data->displayname,'$level_name'=>Phrase::trans($data->level->name)));
+			$pageTitle = Yii::t('phrase', 'History Email: $user_displayname level $level_name', array ('$user_displayname'=>$data->displayname,'$level_name'=>$data->level->title->message));
 		}
 		
 		$model=new UserHistoryEmail('search');
@@ -147,7 +147,7 @@ class EmailController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete History Email: $user_displayname level $level_name', array('$user_displayname'=>$model->user->displayname,'$level_name'=>Phrase::trans($model->user->level->name)));
+			$this->pageTitle = Yii::t('phrase', 'Delete History Email: $user_displayname level $level_name', array('$user_displayname'=>$model->user->displayname,'$level_name'=>$model->user->level->title->message));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');

@@ -195,7 +195,7 @@ class UserHistoryLogin extends CActiveRecord
 			if(!isset($_GET['user'])) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
-					'value' => 'Phrase::trans($data->user->level->name)',
+					'value' => '$data->user->level->title->message',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);

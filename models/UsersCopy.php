@@ -335,7 +335,7 @@ class UsersCopy extends CActiveRecord
 			if(!in_array($controller, array('o/admin'))) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_id',
-					'value' => 'Phrase::trans($data->level_relation->name)',
+					'value' => '$data->level_relation->title->message',
 					'htmlOptions' => array(
 						//'class' => 'center',
 					),

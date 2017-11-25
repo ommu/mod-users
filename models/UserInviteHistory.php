@@ -249,7 +249,7 @@ class UserInviteHistory extends CActiveRecord
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'userlevel_search',
-					'value' => '$data->invite->user_id ? Phrase::trans($data->invite->user->level->name) : \'-\'',
+					'value' => '$data->invite->user_id ? $data->invite->user->level->title->message : \'-\'',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);

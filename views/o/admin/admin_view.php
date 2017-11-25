@@ -38,7 +38,7 @@
 			),
 			array(
 				'name'=>'level_id',
-				'value'=>Phrase::trans($model->level->name),
+				'value'=>$model->level->title->message,
 			),
 			array(
 				'name'=>'language_id',

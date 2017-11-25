@@ -104,7 +104,7 @@ class MemberController extends Controller
 		$pageTitle = Yii::t('phrase', 'Members');
 		if($level != null) {
 			$data = UserLevel::model()->findByPk($level);
-			$pageTitle = Yii::t('phrase', 'Members: level $level_name', array ('$level_name'=>Phrase::trans($data->name)));
+			$pageTitle = Yii::t('phrase', 'Members: level $level_name', array ('$level_name'=>$data->title->message));
 		}
 		
 		$model=new Users('search');

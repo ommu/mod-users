@@ -94,7 +94,7 @@ class PasswordController extends Controller
 		$pageTitle = Yii::t('phrase', 'History Passwords');
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'History Password: $user_displayname level $level_name', array ('$user_displayname'=>$data->displayname,'$level_name'=>Phrase::trans($data->level->name)));
+			$pageTitle = Yii::t('phrase', 'History Password: $user_displayname level $level_name', array ('$user_displayname'=>$data->displayname,'$level_name'=>$data->level->title->message));
 		}
 		
 		$model=new UserHistoryPassword('search');
@@ -147,7 +147,7 @@ class PasswordController extends Controller
 			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 			$this->dialogWidth = 350;
 
-			$this->pageTitle = Yii::t('phrase', 'Delete History Password: $user_displayname level $level_name', array('$user_displayname'=>$model->user->displayname,'$level_name'=>Phrase::trans($model->user->level->name)));
+			$this->pageTitle = Yii::t('phrase', 'Delete History Password: $user_displayname level $level_name', array('$user_displayname'=>$model->user->displayname,'$level_name'=>$model->user->level->title->message));
 			$this->pageDescription = '';
 			$this->pageMeta = '';
 			$this->render('admin_delete');
