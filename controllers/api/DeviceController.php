@@ -17,7 +17,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
  * @created date 9 April 2016, 06:37 WIB
- * @link https://github.com/ommu/mod-users
+ * @link https://github.com/ommu/ommu-users
  * @contact (+62)856-299-4114
  *
  *----------------------------------------------------------------------------------------------------------
