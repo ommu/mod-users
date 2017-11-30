@@ -1,36 +1,32 @@
 <?php
 /**
- * ViewUserLevel
+ * ViewUserNewsletterUser
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
- * @link https://github.com/ommu/ommu-users
+ * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @created date 30 November 2017, 07:37 WIB
+ * @link http://opensource.ommu.co
  *
- * This is the model class for table "_view_user_level".
+ * This is the model class for table "_view_user_newsletter_user".
  *
- * The followings are the available columns in table '_view_user_level':
- * @property integer $level_id
- * @property string $users
- * @property string $user_pending
- * @property string $user_noverified
- * @property string $user_blocked
- * @property string $user_all
+ * The followings are the available columns in table '_view_user_newsletter_user':
+ * @property string $newsletter_id
+ * @property string $user_id
+ * @property string $register_date
  */
-class ViewUserLevel extends CActiveRecord
+class ViewUserNewsletterUser extends CActiveRecord
 {
 	public $defaultColumns = array();
 	public $templateColumns = array();
 	public $gridForbiddenColumn = array();
 
-	// Variable Search
-
 	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ViewUserLevel the static model class
+	 * @return ViewUserNewsletterUser the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -43,7 +39,7 @@ class ViewUserLevel extends CActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_user_level';
+		return $matches[1].'._view_user_newsletter_user';
 	}
 
 	/**
@@ -51,7 +47,7 @@ class ViewUserLevel extends CActiveRecord
 	 */
 	public function primaryKey()
 	{
-		return 'level_id';
+		return 'newsletter_id';
 	}
 
 	/**
@@ -62,12 +58,11 @@ class ViewUserLevel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('level_id', 'numerical', 'integerOnly'=>true),
-			array('users, user_pending, user_noverified, user_blocked', 'length', 'max'=>23),
-			array('user_all', 'length', 'max'=>21),
+			array('newsletter_id, user_id', 'length', 'max'=>11),
+			array('register_date', 'length', 'max'=>19),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('level_id, users, user_pending, user_noverified, user_blocked, user_all', 'safe', 'on'=>'search'),
+			array('newsletter_id, user_id, register_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,6 +74,7 @@ class ViewUserLevel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 		);
 	}
 
@@ -88,12 +84,9 @@ class ViewUserLevel extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'level_id' => Yii::t('attribute', 'Level'),
-			'users' => Yii::t('attribute', 'Users'),
-			'user_pending' => Yii::t('attribute', 'Pending'),
-			'user_noverified' => Yii::t('attribute', 'No Verified'),
-			'user_blocked' => Yii::t('attribute', 'Blocked'),
-			'user_all' => Yii::t('attribute', 'User All'),
+			'newsletter_id' => Yii::t('attribute', 'Newsletter'),
+			'user_id' => Yii::t('attribute', 'User'),
+			'register_date' => Yii::t('attribute', 'Register Date'),
 		);
 	}
 
@@ -114,16 +107,13 @@ class ViewUserLevel extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
+		
+		$criteria->compare('t.newsletter_id', strtolower($this->newsletter_id), true);
+		$criteria->compare('t.user_id', isset($_GET['user']) ? $_GET['user'] : $this->user_id);
+		$criteria->compare('t.register_date', strtolower($this->register_date), true);
 
-		$criteria->compare('t.level_id', $this->level_id);
-		$criteria->compare('t.users', strtolower($this->users), true);
-		$criteria->compare('t.user_pending', strtolower($this->user_pending), true);
-		$criteria->compare('t.user_noverified', strtolower($this->user_noverified), true);
-		$criteria->compare('t.user_blocked', strtolower($this->user_blocked), true);
-		$criteria->compare('t.user_all', strtolower($this->user_all), true);
-
-		if(!isset($_GET['ViewUserLevel_sort']))
-			$criteria->order = 't.level_id DESC';
+		if(!isset($_GET['ViewUserNewsletterUser_sort']))
+			$criteria->order = 't.newsletter_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -215,29 +205,17 @@ class ViewUserLevel extends CActiveRecord
 					'class' => 'center',
 				),
 			);
-			$this->templateColumns['level_id'] = array(
-				'name' => 'level_id',
-				'value' => '$data->level_id',
+			$this->templateColumns['newsletter_id'] = array(
+				'name' => 'newsletter_id',
+				'value' => '$data->newsletter_id',
 			);
-			$this->templateColumns['users'] = array(
-				'name' => 'users',
-				'value' => '$data->users',
+			$this->templateColumns['user_id'] = array(
+				'name' => 'user_id',
+				'value' => '$data->user_id',
 			);
-			$this->templateColumns['user_pending'] = array(
-				'name' => 'user_pending',
-				'value' => '$data->user_pending',
-			);
-			$this->templateColumns['user_noverified'] = array(
-				'name' => 'user_noverified',
-				'value' => '$data->user_noverified',
-			);
-			$this->templateColumns['user_blocked'] = array(
-				'name' => 'user_blocked',
-				'value' => '$data->user_blocked',
-			);
-			$this->templateColumns['user_all'] = array(
-				'name' => 'user_all',
-				'value' => '$data->user_all',
+			$this->templateColumns['register_date'] = array(
+				'name' => 'register_date',
+				'value' => '$data->register_date',
 			);
 		}
 		parent::afterConstruct();

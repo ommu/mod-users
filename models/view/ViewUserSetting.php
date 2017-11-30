@@ -4,21 +4,10 @@
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 3 August 2017, 14:34 WIB
  * @link https://github.com/ommu/ommu-users
- * @contact (+62)856-299-4114
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "_view_user_setting".
  *
@@ -31,8 +20,10 @@
 class ViewUserSetting extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $templateColumns = array();
+	public $gridForbiddenColumn = array();
 
-	// Variable Search	
+	// Variable Search
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -119,10 +110,10 @@ class ViewUserSetting extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.id',$this->id);
-		$criteria->compare('t.forgot_difference_hours',$this->forgot_difference_hours);
-		$criteria->compare('t.verify_difference_hours',$this->verify_difference_hours);
-		$criteria->compare('t.invite_difference_hours',$this->invite_difference_hours);
+		$criteria->compare('t.id', $this->id);
+		$criteria->compare('t.forgot_difference_hours', $this->forgot_difference_hours);
+		$criteria->compare('t.verify_difference_hours', $this->verify_difference_hours);
+		$criteria->compare('t.invite_difference_hours', $this->invite_difference_hours);
 
 		if(!isset($_GET['ViewUserSetting_sort']))
 			$criteria->order = 't.id DESC';
@@ -135,55 +126,101 @@ class ViewUserSetting extends CActiveRecord
 		));
 	}
 
-
 	/**
-	 * Get column for CGrid View
+	 * Get kolom untuk Grid View
+	 *
+	 * @param array $columns kolom dari view
+	 * @return array dari grid yang aktif
 	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
+	public function getGridColumn($columns=null) 
+	{
+		// Jika $columns kosong maka isi defaultColumns dg templateColumns
+		if(empty($columns) || $columns == null) {
+			array_splice($this->defaultColumns, 0);
+			foreach($this->templateColumns as $key => $val) {
+				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
+					$this->defaultColumns[] = $val;
 			}
-		} else {
-			$this->defaultColumns[] = 'id';
-			$this->defaultColumns[] = 'forgot_difference_hours';
-			$this->defaultColumns[] = 'verify_difference_hours';
-			$this->defaultColumns[] = 'invite_difference_hours';
+			return $this->defaultColumns;
 		}
 
+		foreach($columns as $val) {
+			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
+				$col = $this->getTemplateColumn($val);
+				if($col != null)
+					$this->defaultColumns[] = $col;
+			}
+		}
+
+		array_unshift($this->defaultColumns, array(
+			'header' => Yii::t('app', 'No'),
+			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+			'htmlOptions' => array(
+				'class' => 'center',
+			),
+		));
+
+		array_unshift($this->defaultColumns, array(
+			'class' => 'CCheckBoxColumn',
+			'name' => 'id',
+			'selectableRows' => 2,
+			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+		));
+
 		return $this->defaultColumns;
+	}
+
+	/**
+	 * Get kolom template berdasarkan id pengenal
+	 *
+	 * @param string $name nama pengenal
+	 * @return mixed
+	 */
+	public function getTemplateColumn($name) 
+	{
+		$data = null;
+		if(trim($name) == '') return $data;
+
+		foreach($this->templateColumns as $key => $item) {
+			if($name == $key) {
+				$data = $item;
+				break;
+			}
+		}
+		return $data;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->templateColumns['id'] = array(
 				'name' => 'id',
 				'value' => '$data->id',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['forgot_difference_hours'] = array(
 				'name' => 'forgot_difference_hours',
 				'value' => '$data->forgot_difference_hours',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['verify_difference_hours'] = array(
 				'name' => 'verify_difference_hours',
 				'value' => '$data->verify_difference_hours',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['invite_difference_hours'] = array(
 				'name' => 'invite_difference_hours',
 				'value' => '$data->invite_difference_hours',
 			);
@@ -204,7 +241,7 @@ class ViewUserSetting extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 

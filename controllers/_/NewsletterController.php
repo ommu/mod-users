@@ -130,10 +130,10 @@ class NewsletterController extends Controller
 		
 		$this->dialogFixed = true;
 		$setting = OmmuSettings::model()->findByPk(1,array(
-			'select' => 'online, construction_date',
+			'select' => 'id, online',
 		));
 
-		if($setting->online == 0 && date('Y-m-d', strtotime($setting->construction_date)) > date('Y-m-d')) {
+		if($setting->view->online == 0) {
 			$launch = 0;
 			$title = (isset($_GET['name']) && isset($_GET['email'])) ? Yii::t('phrase', 'You will be notified when we launch. Thank You!') : Yii::t('phrase', 'We will be back soon!');
 			$desc = (isset($_GET['name']) && isset($_GET['email'])) ? '' : Yii::t('phrase', 'Enter your email to be notified when more info is available.');

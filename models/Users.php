@@ -449,7 +449,7 @@ class Users extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 
@@ -497,6 +497,25 @@ class Users extends CActiveRecord
 	public static function hashPassword($salt, $password)
 	{
 		return md5($salt.$password);
+	}
+
+	/**
+	 * User email from token
+	 */
+	public static function getToken2Email($token, $type='oauth')
+	{
+		if($type='oauth')
+			$column = 'token_oauth';
+		else if($type='password')
+			$column = 'token_password';
+		else if($type='key')
+			$column = 'token_key';
+
+		$user = ViewUsers::model()->findByAttributes(array($column => $token));
+		if($user != null)
+			return $user->user->email;
+
+		return false;
 	}
 
 	/**

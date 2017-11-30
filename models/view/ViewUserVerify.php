@@ -4,35 +4,26 @@
  * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 3 August 2017, 14:22 WIB
  * @link https://github.com/ommu/ommu-users
- * @contact (+62)856-299-4114
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "_view_user_verify".
  *
  * The followings are the available columns in table '_view_user_verify':
  * @property string $verify_id
- * @property integer $publish
+ * @property integer $expired
  * @property string $verify_day_left
  * @property string $verify_hour_left
  */
 class ViewUserVerify extends CActiveRecord
 {
 	public $defaultColumns = array();
+	public $templateColumns = array();
+	public $gridForbiddenColumn = array();
 
-	// Variable Search	
+	// Variable Search
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -70,12 +61,12 @@ class ViewUserVerify extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('publish', 'numerical', 'integerOnly'=>true),
+			array('expired', 'numerical', 'integerOnly'=>true),
 			array('verify_id', 'length', 'max'=>11),
 			array('verify_day_left, verify_hour_left', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('verify_id, publish, verify_day_left, verify_hour_left', 'safe', 'on'=>'search'),
+			array('verify_id, expired, verify_day_left, verify_hour_left', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -97,9 +88,9 @@ class ViewUserVerify extends CActiveRecord
 	{
 		return array(
 			'verify_id' => Yii::t('attribute', 'Verify'),
-			'publish' => Yii::t('attribute', 'Publish'),
-			'verify_day_left' => Yii::t('attribute', 'Day Left'),
-			'verify_hour_left' => Yii::t('attribute', 'Hour Left'),
+			'expired' => Yii::t('attribute', 'Expired'),
+			'verify_day_left' => Yii::t('attribute', 'Verify Day Left'),
+			'verify_hour_left' => Yii::t('attribute', 'Verify Hour Left'),
 		);
 	}
 
@@ -121,10 +112,10 @@ class ViewUserVerify extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.verify_id',$this->verify_id);
-		$criteria->compare('t.publish',$this->publish);
-		$criteria->compare('t.verify_day_left',$this->verify_day_left);
-		$criteria->compare('t.verify_hour_left',$this->verify_hour_left);
+		$criteria->compare('t.verify_id', strtolower($this->verify_id), true);
+		$criteria->compare('t.expired', $this->expired);
+		$criteria->compare('t.verify_day_left', strtolower($this->verify_day_left), true);
+		$criteria->compare('t.verify_hour_left', strtolower($this->verify_hour_left), true);
 
 		if(!isset($_GET['ViewUserVerify_sort']))
 			$criteria->order = 't.verify_id DESC';
@@ -137,65 +128,103 @@ class ViewUserVerify extends CActiveRecord
 		));
 	}
 
-
 	/**
-	 * Get column for CGrid View
+	 * Get kolom untuk Grid View
+	 *
+	 * @param array $columns kolom dari view
+	 * @return array dari grid yang aktif
 	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
+	public function getGridColumn($columns=null) 
+	{
+		// Jika $columns kosong maka isi defaultColumns dg templateColumns
+		if(empty($columns) || $columns == null) {
+			array_splice($this->defaultColumns, 0);
+			foreach($this->templateColumns as $key => $val) {
+				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
+					$this->defaultColumns[] = $val;
 			}
-		} else {
-			$this->defaultColumns[] = 'verify_id';
-			$this->defaultColumns[] = 'publish';
-			$this->defaultColumns[] = 'verify_day_left';
-			$this->defaultColumns[] = 'verify_hour_left';
+			return $this->defaultColumns;
 		}
 
+		foreach($columns as $val) {
+			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
+				$col = $this->getTemplateColumn($val);
+				if($col != null)
+					$this->defaultColumns[] = $col;
+			}
+		}
+
+		array_unshift($this->defaultColumns, array(
+			'header' => Yii::t('app', 'No'),
+			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+			'htmlOptions' => array(
+				'class' => 'center',
+			),
+		));
+
+		array_unshift($this->defaultColumns, array(
+			'class' => 'CCheckBoxColumn',
+			'name' => 'id',
+			'selectableRows' => 2,
+			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+		));
+
 		return $this->defaultColumns;
+	}
+
+	/**
+	 * Get kolom template berdasarkan id pengenal
+	 *
+	 * @param string $name nama pengenal
+	 * @return mixed
+	 */
+	public function getTemplateColumn($name) 
+	{
+		$data = null;
+		if(trim($name) == '') return $data;
+
+		foreach($this->templateColumns as $key => $item) {
+			if($name == $key) {
+				$data = $item;
+				break;
+			}
+		}
+		return $data;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			$this->defaultColumns[] = array(
-				'name' => 'verify_id',
-				'value' => '$data->verify_id',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'verify_day_left',
-				'value' => '$data->verify_day_left',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'verify_hour_left',
-				'value' => '$data->verify_hour_left',
-			);
-			$this->defaultColumns[] = array(
-				'name' => 'publish',
-				'value' => '$data->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter'=>array(
-					1=>Yii::t('phrase', 'Yes'),
-					0=>Yii::t('phrase', 'No'),
-				),
-				'type' => 'raw',
+			);
+			$this->templateColumns['verify_id'] = array(
+				'name' => 'verify_id',
+				'value' => '$data->verify_id',
+			);
+			$this->templateColumns['expired'] = array(
+				'name' => 'expired',
+				'value' => '$data->expired',
+			);
+			$this->templateColumns['verify_day_left'] = array(
+				'name' => 'verify_day_left',
+				'value' => '$data->verify_day_left',
+			);
+			$this->templateColumns['verify_hour_left'] = array(
+				'name' => 'verify_hour_left',
+				'value' => '$data->verify_hour_left',
 			);
 		}
 		parent::afterConstruct();
@@ -214,7 +243,7 @@ class ViewUserVerify extends CActiveRecord
 			
 		} else {
 			$model = self::model()->findByPk($id);
-			return $model;			
+			return $model;
 		}
 	}
 

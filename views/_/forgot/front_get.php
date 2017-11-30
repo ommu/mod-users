@@ -14,13 +14,13 @@
  */
  
 	$this->breadcrumbs=array(
-	'User Forgots'=>array('manage'),
+		'User Forgots'=>array('manage'),
 		'Create',
 	);
 
 if(isset($_GET['name']) && isset($_GET['email'])) {
 	if(isset($_GET['type']) && $_GET['type'] == 'success') {
-		echo '<a class="button" href="'.Yii::app()->createUrl('site/login').'" title="'.Phrase::trans(1006,2).'">'.Phrase::trans(1006,2).'</a>';
+		echo '<a class="button" href="'.Yii::app()->createUrl('site/login').'" title="'.Yii::t('phrase', 'Login').'">'.Yii::t('phrase', 'Login').'</a>';
 	}
 	
 } else {
