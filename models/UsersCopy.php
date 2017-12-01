@@ -102,7 +102,7 @@ class UsersCopy extends CActiveRecord
 			array('
 				oldPassword', 'required', 'on'=>'formChangePassword'),
 			array('
-				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetpassword'),
+				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetPassword'),
 			array('level_id, language_id, photo_id, enabled, verified, deactivate, search, invisible, show_profile, privacy, comments, locale_id, timezone_id', 'numerical', 'integerOnly'=>true),
 			array('photo_id, status_id, modified_id', 'length', 'max'=>11),
 			array('
@@ -615,7 +615,12 @@ class UsersCopy extends CActiveRecord
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_type, signup_welcome, signup_adminemail',
 		));
-		$_assetsUrl = Yii::app()->assetManager->publish(Yii::getPathOfAlias('users.assets'));
+
+		$assets = Yii::getPathOfAlias('users.assets');
+		if(!file_exists($assets))
+			$assets = Yii::getPathOfAlias('ommu.users.assets');
+		$_assetsUrl = Yii::app()->assetManager->publish($assets);
+		
 		parent::afterSave();
 
 		// Generate Verification Code
@@ -682,7 +687,7 @@ class UsersCopy extends CActiveRecord
 				);
 				$welcome_template = 'user_welcome';
 				$welcome_title = 'Welcome to SSO-GTP by BPAD Yogyakarta';
-				$welcome_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$welcome_template.'.php');
+				$welcome_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$welcome_template.'.php');
 				$welcome_ireplace = str_ireplace($welcome_search, $welcome_replace, $welcome_message);
 				SupportMailSetting::sendEmail($this->email, $this->displayname, $welcome_title, $welcome_ireplace);		
 			}
@@ -700,7 +705,7 @@ class UsersCopy extends CActiveRecord
 			);
 			$account_template = 'user_welcome_account';
 			$account_title = 'SSO-GTP Account ('.$this->displayname.')';
-			$account_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$account_template.'.php');
+			$account_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php');
 			$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
 			SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
 
@@ -723,7 +728,7 @@ class UsersCopy extends CActiveRecord
 				);
 				$account_template = 'user_forgot_new_password';
 				$account_title = 'Your password changed';
-				$account_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$account_template.'.php');
+				$account_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php');
 				$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
 				SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
 			}

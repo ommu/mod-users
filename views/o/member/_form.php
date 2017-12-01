@@ -48,6 +48,16 @@
 		</div>
 
 		<div class="clearfix">
+			<label><?php echo $model->getAttributeLabel('displayname')?> <span class="required">*</span></label>
+			<div class="desc">
+				<?php echo $form->textField($model,'displayname',array('maxlength'=>64,'class'=>'span-7')); ?>
+				<?php echo $form->error($model,'displayname'); ?>
+				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+		</div>
+
+		<?php if(!$model->isNewRecord) {?>
+		<div class="clearfix">
 			<label><?php echo $model->getAttributeLabel('first_name')?> <span class="required">*</span></label>
 			<div class="desc">
 				<?php echo $form->textField($model,'first_name',array('maxlength'=>32,'class'=>'span-7')); ?>
@@ -60,16 +70,6 @@
 			<div class="desc">
 				<?php echo $form->textField($model,'last_name',array('maxlength'=>32,'class'=>'span-7')); ?>
 				<?php echo $form->error($model,'last_name'); ?>
-			</div>
-		</div>
-
-		<?php if(!$model->isNewRecord) {?>
-		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('displayname')?> <span class="required">*</span></label>
-			<div class="desc">
-				<?php echo $form->textField($model,'displayname',array('maxlength'=>64,'class'=>'span-7')); ?>
-				<?php echo $form->error($model,'displayname'); ?>
-				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
 		</div>
 		<?php }?>

@@ -44,6 +44,7 @@ class UserForgot extends CActiveRecord
 	// Variable Search
 	public $level_search;
 	public $user_search;
+	public $email_search;
 	public $expired_search;
 	public $modified_search;
 
@@ -73,7 +74,7 @@ class UserForgot extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('code', 'required'),
+			array('user_id, code', 'required'),
 			array('email_i', 'required', 'on'=>'getForm'),
 			array('publish, modified_id', 'numerical', 'integerOnly'=>true),
 			array('user_id, modified_id', 'length', 'max'=>11),
@@ -87,7 +88,7 @@ class UserForgot extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('forgot_id, publish, user_id, code, forgot_date, forgot_ip, expired_date, modified_date, modified_id, deleted_date,
-				level_search, user_search, expired_search, modified_search', 'safe', 'on'=>'search'),
+				level_search, user_search, email_search, expired_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -124,6 +125,7 @@ class UserForgot extends CActiveRecord
 			'email_i' => Yii::t('attribute', 'Email'),
 			'level_search' => Yii::t('attribute', 'level'),
 			'user_search' => Yii::t('attribute', 'User'),
+			'email_search' => Yii::t('attribute', 'Email'),
 			'expired_search' => Yii::t('attribute', 'Expired'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -147,7 +149,7 @@ class UserForgot extends CActiveRecord
 			),
 			'user' => array(
 				'alias'=>'user',
-				'select'=>'level_id, displayname'
+				'select'=>'level_id, email, displayname'
 			),
 			'modified' => array(
 				'alias'=>'modified',
@@ -187,6 +189,7 @@ class UserForgot extends CActiveRecord
 		
 		$criteria->compare('user.level_id',$this->level_search);
 		$criteria->compare('user.displayname',strtolower($this->user_search),true);
+		$criteria->compare('user.email',strtolower($this->email_search),true);
 		$criteria->compare('view.publish',$this->expired_search);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 
@@ -246,6 +249,10 @@ class UserForgot extends CActiveRecord
 					'value' => '$data->user->level->title->message',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
+				);
+				$this->defaultColumns[] = array(
+					'name' => 'email_search',
+					'value' => '$data->user->emai',
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
@@ -354,7 +361,8 @@ class UserForgot extends CActiveRecord
 	/**
 	 * User forgot password codes
 	 */
-	public static function getUniqueCode() {
+	public static function getUniqueCode() 
+	{
 		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		srand((double)microtime()*time());
 		$i = 0;
@@ -377,9 +385,9 @@ class UserForgot extends CActiveRecord
 	{
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
 		
-		if(parent::beforeValidate()) {		
+		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-				if(in_array($currentAction, array('password/forgot','o/forgot/add')) && $this->email_i != '') {
+				if(in_array($currentAction, array('account/forgot','o/forgot/add')) && $this->email_i != '') {
 					if(preg_match('/@/',$this->email_i)) {
 						$user = Users::model()->findByAttributes(array('email' => strtolower($this->email_i)), array(
 							'select' => 'user_id, email',
@@ -388,7 +396,7 @@ class UserForgot extends CActiveRecord
 						$user = Users::model()->findByAttributes(array('username' => strtolower($this->email_i)), array(
 							'select' => 'user_id, email',
 						));
-					}					
+					}
 					if($user == null)
 						$this->addError('email_i', Yii::t('phrase', 'Incorrect email address'));
 					else
@@ -407,13 +415,18 @@ class UserForgot extends CActiveRecord
 	/**
 	 * After save attributes
 	 */
-	protected function afterSave() {			
+	protected function afterSave() 
+	{
 		parent::afterSave();
 		
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_title',
 		));
-		$_assetsUrl = Yii::app()->assetManager->publish(Yii::getPathOfAlias('users.assets'));
+
+		$assets = Yii::getPathOfAlias('users.assets');
+		if(!file_exists($assets))
+			$assets = Yii::getPathOfAlias('ommu.users.assets');
+		$_assetsUrl = Yii::app()->assetManager->publish($assets);
 		
 		if($this->isNewRecord) {
 			// Send Email to Member
@@ -423,11 +436,14 @@ class UserForgot extends CActiveRecord
 			);
 			$forgot_replace = array(
 				Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->user->displayname, SupportMailSetting::getInfo('mail_contact'),
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('users/password/verify',array('key'=>$this->code, 'secret'=>$this->user->salt)),
+				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('account/reset',array('token'=>$this->code)),
 			);
 			$forgot_template = 'user_forgot_password';
 			$forgot_title = $setting->site_title.' Password Assistance';
-			$forgot_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$forgot_template.'.php');
+			$forgot_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$forgot_template.'.php';
+			if(!file_exists($forgot_file))
+				$forgot_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$forgot_template.'.php';
+			$forgot_message = file_get_contents($forgot_file);
 			$forgot_ireplace = str_ireplace($forgot_search, $forgot_replace, $forgot_message);
 			SupportMailSetting::sendEmail($this->user->email, $this->user->displayname, $forgot_title, $forgot_ireplace);
 
@@ -437,7 +453,7 @@ class UserForgot extends CActiveRecord
 			$criteria->compare('publish',1);
 			$criteria->compare('user_id',$this->user_id);
 
-			self::model()->updateAll(array('publish'=>0), $criteria);			
+			self::model()->updateAll(array('publish'=>0), $criteria);
 		}
 	}
 

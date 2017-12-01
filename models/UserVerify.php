@@ -44,6 +44,7 @@ class UserVerify extends CActiveRecord
 	// Variable Search
 	public $level_search;
 	public $user_search;
+	public $email_search;
 	public $expired_search;
 	public $modified_search;
 
@@ -73,7 +74,7 @@ class UserVerify extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('code', 'required'),
+			array('user_id, code', 'required'),
 			array('email_i', 'required', 'on'=>'getForm'),
 			array('publish, modified_id', 'numerical', 'integerOnly'=>true),
 			array('user_id, modified_id', 'length', 'max'=>11),
@@ -87,7 +88,7 @@ class UserVerify extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('verify_id, publish, user_id, code, verify_date, verify_ip, expired_date, modified_date, modified_id, deleted_date,
-				level_search, user_search, expired_search, modified_search', 'safe', 'on'=>'search'),
+				level_search, user_search, email_search, expired_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -124,6 +125,7 @@ class UserVerify extends CActiveRecord
 			'email_i' => Yii::t('attribute', 'Email'),
 			'level_search' => Yii::t('attribute', 'level'),
 			'user_search' => Yii::t('attribute', 'User'),
+			'email_search' => Yii::t('attribute', 'Email'),
 			'expired_search' => Yii::t('attribute', 'Expired'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
 		);
@@ -147,7 +149,7 @@ class UserVerify extends CActiveRecord
 			),
 			'user' => array(
 				'alias'=>'user',
-				'select'=>'level_id, displayname'
+				'select'=>'level_id, email, displayname'
 			),
 			'modified' => array(
 				'alias'=>'modified',
@@ -187,6 +189,7 @@ class UserVerify extends CActiveRecord
 		
 		$criteria->compare('user.level_id',$this->level_search);
 		$criteria->compare('user.displayname',strtolower($this->user_search),true);
+		$criteria->compare('user.email',strtolower($this->email_search),true);
 		$criteria->compare('view.publish',$this->expired_search);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
 
@@ -246,6 +249,10 @@ class UserVerify extends CActiveRecord
 					'value' => '$data->user->level->title->message',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
+				);
+				$this->defaultColumns[] = array(
+					'name' => 'email_search',
+					'value' => '$data->user->emai',
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
@@ -379,18 +386,18 @@ class UserVerify extends CActiveRecord
 		
 		if(parent::beforeValidate()) {		
 			if($this->isNewRecord) {
-				if(in_array($currentAction, array('verify/generate','o/verify/add')) && $this->email_i != '') {
+				if(in_array($currentAction, array('account/verify','o/verify/add')) && $this->email_i != '') {
 					if(preg_match('/@/',$this->email_i)) {
 						$user = Users::model()->findByAttributes(array('email' => strtolower($this->email_i)), array(
-							'select' => 'user_id, email, verified',
+							'select' => 'user_id, email',
 						));
 					} else {
 						$user = Users::model()->findByAttributes(array('username' => strtolower($this->email_i)), array(
-							'select' => 'user_id, email, verified',
+							'select' => 'user_id, email',
 						));
 					}
 					if($user == null)
-						$this->addError('email_i', Yii::t('phrase', 'Incorrect email address / username'));					
+						$this->addError('email_i', Yii::t('phrase', 'Incorrect email address / username'));
 					else {
 						if($user->verified == 1)
 							$this->addError('email_i', Yii::t('phrase', 'Your account verified'));
@@ -417,7 +424,11 @@ class UserVerify extends CActiveRecord
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_title',
 		));
-		$_assetsUrl = Yii::app()->assetManager->publish(Yii::getPathOfAlias('users.assets'));
+
+		$assets = Yii::getPathOfAlias('users.assets');
+		if(!file_exists($assets))
+			$assets = Yii::getPathOfAlias('ommu.users.assets');
+		$_assetsUrl = Yii::app()->assetManager->publish($assets);
 
 		if($this->isNewRecord) {
 			// Send Email to Member
@@ -427,11 +438,14 @@ class UserVerify extends CActiveRecord
 			);
 			$verify_replace = array(
 				Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->user->displayname, SupportMailSetting::getInfo('mail_contact'),
-				$setting->site_title, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('users/verify/code',array('key'=>$this->code, 'secret'=>$this->user->salt)),
+				$setting->site_title, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('account/email',array('token'=>$this->code)),
 			);
 			$verify_template = 'user_verify_email';
 			$verify_title = 'Please verify your '.$setting->site_title.' account';
-			$verify_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$verify_template.'.php');
+			$verify_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$verify_template.'.php';
+			if(!file_exists($verify_file))
+				$verify_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$verify_template.'.php';
+			$verify_message = file_get_contents($verify_file);
 			$verify_ireplace = str_ireplace($verify_search, $verify_replace, $verify_message);
 			SupportMailSetting::sendEmail($this->user->email, $this->user->displayname, $verify_title, $verify_ireplace);
 

@@ -166,7 +166,7 @@ class ForgotController extends Controller
 
 		if(isset($_POST['Users'])) {
 			$model->attributes=$_POST['Users'];
-			$model->scenario = 'resetpassword';
+			$model->scenario = 'resetPassword';
 
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {

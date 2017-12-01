@@ -96,12 +96,12 @@ class Users extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('level_id, email, first_name, last_name', 'required'),
+			array('level_id, email, displayname', 'required'),
 			array('enabled, verified, language_id', 'required', 'on'=>'formEdit'),
 			array('
 				oldPassword', 'required', 'on'=>'formChangePassword'),
 			array('
-				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetpassword'),
+				newPassword, confirmPassword', 'required', 'on'=>'formAdd, formChangePassword, resetPassword'),
 			array('enabled, verified, level_id, language_id, deactivate, search, invisible, privacy, comments,
 				reference_id_i', 'numerical', 'integerOnly'=>true),
 			array('modified_id', 'length', 'max'=>11),
@@ -110,7 +110,7 @@ class Users extends CActiveRecord
 			array('creation_ip, lastlogin_ip, update_ip', 'length', 'max'=>20),
 			array('email, username, first_name, last_name, password, salt, 
 				oldPassword, newPassword, confirmPassword', 'length', 'max'=>32),
-			array('enabled, verified, level_id, language_id, username, displayname, password, photos, deactivate, invisible,
+			array('enabled, verified, level_id, language_id, username, first_name, last_name, displayname, password, photos, deactivate, invisible,
 				old_photos_i, oldPassword, newPassword, confirmPassword, invite_code_i, reference_id_i', 'safe'),
 			array('oldPassword', 'filter', 'filter'=>array($this,'validatePassword')),
 			array('email', 'email'),
@@ -158,7 +158,7 @@ class Users extends CActiveRecord
 			'username' => Yii::t('attribute', 'Username'),
 			'first_name' => Yii::t('attribute', 'First Name'),
 			'last_name' => Yii::t('attribute', 'Last Name'),
-			'displayname' => Yii::t('attribute', 'Displayname'),
+			'displayname' => Yii::t('attribute', 'Fullname'),
 			'password' => Yii::t('attribute', 'Password'),
 			'photos' => Yii::t('attribute', 'Photos'),
 			'salt' => Yii::t('attribute', 'Salt'),
@@ -541,8 +541,7 @@ class Users extends CActiveRecord
 	 */
 	protected function beforeValidate() 
 	{
-		print_r($this->dbConnection->connectionString);
-		exit();
+		//print_r($this->dbConnection->connectionString);
 		$controller = strtolower(Yii::app()->controller->id);
 		$action = strtolower(Yii::app()->controller->action->id);
 		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
@@ -737,7 +736,11 @@ class Users extends CActiveRecord
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_type, site_title, signup_welcome, signup_adminemail',
 		));
-		$_assetsUrl = Yii::app()->assetManager->publish(Yii::getPathOfAlias('users.assets'));
+
+		$assets = Yii::getPathOfAlias('users.assets');
+		if(!file_exists($assets))
+			$assets = Yii::getPathOfAlias('ommu.users.assets');
+		$_assetsUrl = Yii::app()->assetManager->publish($assets);
 
 		parent::afterSave();
 
@@ -812,7 +815,10 @@ class Users extends CActiveRecord
 				);
 				$welcome_template = 'user_welcome';
 				$welcome_title = 'Welcome to '.$setting->site_title;
-				$welcome_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$welcome_template.'.php');
+				$welcome_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$welcome_template.'.php';
+				if(!file_exists($welcome_file))
+					$welcome_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$welcome_template.'.php';
+				$welcome_message = file_get_contents($welcome_file);
 				$welcome_ireplace = str_ireplace($welcome_search, $welcome_replace, $welcome_message);
 				SupportMailSetting::sendEmail($this->email, $this->displayname, $welcome_title, $welcome_ireplace);
 			}
@@ -828,7 +834,10 @@ class Users extends CActiveRecord
 			);
 			$account_template = 'user_welcome_account';
 			$account_title = $setting->site_title.' Account ('.$this->displayname.')';
-			$account_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$account_template.'.php');
+			$account_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$account_template.'.php';
+			if(!file_exists($account_file))
+				$account_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php';
+			$account_message = file_get_contents($account_file);
 			$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
 			SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
 
@@ -839,19 +848,22 @@ class Users extends CActiveRecord
 		} else {
 			// Send Account Information
 			if($controller == 'password') {
-				$account_search = array(
+				$password_search = array(
 					'{$baseURL}', '{$displayname}', '{$site_support_email}',
 					'{$site_title}', '{$email}', '{$password}', '{$login}',
 				);
-				$account_replace = array(
+				$password_replace = array(
 					Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'),
 					$setting->site_title, $this->email, $this->newPassword, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
 				);
-				$account_template = 'user_forgot_new_password';
-				$account_title = 'Your password changed';
-				$account_message = file_get_contents(YiiBase::getPathOfAlias('application.modules.users.components.templates').'/'.$account_template.'.php');
-				$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
-				SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
+				$password_template = 'user_forgot_new_password';
+				$password_title = 'Your password changed';
+				$password_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$password_template.'.php';
+				if(!file_exists($password_file))
+					$password_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$password_template.'.php';
+				$password_message = file_get_contents($password_file);
+				$password_ireplace = str_ireplace($password_search, $password_replace, $password_message);
+				SupportMailSetting::sendEmail($this->email, $this->displayname, $password_title, $password_ireplace);
 			}
 
 			if($controller == 'verify')
