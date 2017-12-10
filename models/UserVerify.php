@@ -252,7 +252,7 @@ class UserVerify extends CActiveRecord
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'email_search',
-					'value' => '$data->user->emai',
+					'value' => '$data->user->email',
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
@@ -313,7 +313,7 @@ class UserVerify extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'expired_search',
-				'value' => '$data->view->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'value' => '$data->view->expired == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
