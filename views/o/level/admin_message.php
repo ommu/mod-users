@@ -40,22 +40,22 @@
 				<?php echo Yii::t('phrase', 'Facilitating user interactivity is the key to developing a successful social network. Allowing private messages between users is an excellent way to increase interactivity. From this page, you can enable the private messaging feature and configure its settings.');?>
 			</div>
 
-			<div class="clearfix">
-				<?php echo $form->labelEx($model,'message_allow'); ?>
-				<div class="desc">
+			<div class="form-group row">
+				<?php echo $form->labelEx($model,'message_allow', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-8 col-md-9 col-sm-12">
 					<span class="small-px"><?php echo Yii::t('phrase', 'If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.');?></span>
 					<?php echo $form->radioButtonList($model, 'message_allow', array(
 						2 => Yii::t('phrase', 'Everyone - users can send private messages to anyone.'),
 						1 => Yii::t('phrase', 'Friends only - users can send private messages to their friends only.'),
 						0 => Yii::t('phrase', 'Nobody - users cannot send private messages.'),
-					)); ?>
+					), array('class'=>'form-control')); ?>
 					<?php echo $form->error($model,'message_allow'); ?>
 				</div>
 			</div>
 
-			<div class="clearfix">
-				<label><?php echo Yii::t('phrase', 'Inbox/Outbox Capacity');?></label>
-				<div class="desc">
+			<div class="form-group row">
+				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo Yii::t('phrase', 'Inbox/Outbox Capacity');?></label>
+				<div class="col-lg-8 col-md-9 col-sm-12">
 					<span class="small-px"><?php echo Yii::t('phrase', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.');?></span>
 					<?php 
 					if(!$model->getErrors())
@@ -70,7 +70,7 @@
 						100 => 100,
 						200 => 200,
 						500 => 500,
-					)); ?>
+					), array('class'=>'form-control')); ?>
 					<?php echo Yii::t('phrase', 'conversations in inbox folder.');?>
 					<?php echo $form->error($model,'message_limit[inbox]'); ?>
 					<br/>
@@ -84,15 +84,15 @@
 						100 => 100,
 						200 => 200,
 						500 => 500,
-					)); ?>
+					), array('class'=>'form-control')); ?>
 					<?php echo Yii::t('phrase', 'conversations in outbox folder.');?>
 					<?php echo $form->error($model,'message_limit[outbox]'); ?>
 				</div>
 			</div>
 
-			<div class="submit clearfix">
-				<label>&nbsp;</label>
-				<div class="desc">
+			<div class="form-group row submit">
+				<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
+				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()')); ?>
 				</div>
 			</div>

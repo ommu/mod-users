@@ -21,19 +21,18 @@
 )); ?>
 <div class="dialog-content">
 	<fieldset>		
-		<div class="clearfix">
-			<label><?php echo $model->getAttributeLabel('email_i');?> <span class="required">*</span></label>
-			<div class="desc">
-				<?php echo $form->textArea($model,'email_i',array('rows'=>6, 'cols'=>50, 'class'=>'span-10 smaller')); ?>
+		<div class="form-group row">
+			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('email_i');?> <span class="required">*</span></label>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->textArea($model,'email_i',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'email_i'); ?>
 			</div>
 		</div>
 		
-		<div class="clearfix publish">
-			<?php echo $form->labelEx($model,'multiple_email_i'); ?>
-			<div class="desc">
-				<?php echo $form->checkBox($model,'multiple_email_i'); ?>
-				<?php echo $form->labelEx($model,'multiple_email_i'); ?>
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'multiple_email_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->checkBox($model,'multiple_email_i', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'multiple_email_i'); ?>
 			</div>
 		</div>

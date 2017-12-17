@@ -31,9 +31,9 @@
 <div class="dialog-content">
 	<fieldset>
 
-		<div class="clearfix">
-			<?php echo $form->labelEx($model,'photos'); ?>
-			<div class="desc">
+		<div class="form-group row">
+			<?php echo $form->labelEx($model,'photos', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
 				if(!$model->getErrors())
 					$model->old_photos_i = $model->photos;
@@ -42,7 +42,7 @@
 					$photo = Yii::app()->request->baseUrl.'/public/users/'.$model->user_id.'/'.$model->old_photos_i;?>
 						<img class="mb-10" src="<?php echo Utility::getTimThumb($photo, 300, 300, 3);?>" alt="">
 				<?php }?>
-				<?php echo $form->fileField($model,'photos'); ?>
+				<?php echo $form->fileField($model,'photos', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'photos'); ?>
 				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($photo_exts, false);?></span>
 			</div>
