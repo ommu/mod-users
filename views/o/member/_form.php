@@ -123,10 +123,11 @@
 		<?php }?>
 
 		<?php if(($model->isNewRecord && $setting->signup_approve == 0) || !$model->isNewRecord) {?>
-		<div class="form-group row">
+		<div class="form-group row publish">
 			<?php echo $form->labelEx($model,'enabled', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'enabled', array('class'=>'form-control')); ?>
+				<?php echo $form->labelEx($model, 'enabled'); ?>
 				<?php echo $form->error($model,'enabled'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -134,10 +135,11 @@
 		<?php }?>
 
 		<?php if(($model->isNewRecord && $setting->signup_verifyemail == 1) || !$model->isNewRecord) {?>
-		<div class="form-group row">
+		<div class="form-group row publish">
 			<?php echo $form->labelEx($model,'verified', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'verified', array('class'=>'form-control')); ?>
+				<?php echo $form->labelEx($model, 'verified'); ?>
 				<?php echo $form->error($model,'verified'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>

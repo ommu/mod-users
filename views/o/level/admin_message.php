@@ -57,35 +57,42 @@
 				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo Yii::t('phrase', 'Inbox/Outbox Capacity');?></label>
 				<div class="col-lg-8 col-md-9 col-sm-12">
 					<span class="small-px"><?php echo Yii::t('phrase', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.');?></span>
-					<?php 
-					if(!$model->getErrors())
-						$model->message_limit = unserialize($model->message_limit);
-					echo $form->dropDownList($model, 'message_limit[inbox]', array(
-						5 => 5,
-						10 => 10,
-						20 => 20,
-						30 => 30,
-						40 => 40,
-						50 => 50,
-						100 => 100,
-						200 => 200,
-						500 => 500,
-					), array('class'=>'form-control')); ?>
-					<?php echo Yii::t('phrase', 'conversations in inbox folder.');?>
+					<div class="row">
+						<div class="col-sm-4">
+							<?php 
+							if(!$model->getErrors())
+								$model->message_limit = unserialize($model->message_limit);
+							echo $form->dropDownList($model, 'message_limit[inbox]', array(
+								5 => 5,
+								10 => 10,
+								20 => 20,
+								30 => 30,
+								40 => 40,
+								50 => 50,
+								100 => 100,
+								200 => 200,
+								500 => 500,
+							), array('class'=>'form-control')); ?>
+						</div>
+						<div class="col-sm-8"><?php echo Yii::t('phrase', 'conversations in inbox folder.');?></div>
+					</div>
 					<?php echo $form->error($model,'message_limit[inbox]'); ?>
-					<br/>
-					<?php echo $form->dropDownList($model, 'message_limit[outbox]', array(
-						5 => 5,
-						10 => 10,
-						20 => 20,
-						30 => 30,
-						40 => 40,
-						50 => 50,
-						100 => 100,
-						200 => 200,
-						500 => 500,
-					), array('class'=>'form-control')); ?>
-					<?php echo Yii::t('phrase', 'conversations in outbox folder.');?>
+					<div class="row">
+						<div class="col-sm-4">
+							<?php echo $form->dropDownList($model, 'message_limit[outbox]', array(
+								5 => 5,
+								10 => 10,
+								20 => 20,
+								30 => 30,
+								40 => 40,
+								50 => 50,
+								100 => 100,
+								200 => 200,
+								500 => 500,
+							), array('class'=>'form-control')); ?>
+						</div>
+						<div class="col-sm-8"><?php echo Yii::t('phrase', 'conversations in outbox folder.');?></div>
+					</div>
 					<?php echo $form->error($model,'message_limit[outbox]'); ?>
 				</div>
 			</div>

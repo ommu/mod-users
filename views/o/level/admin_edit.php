@@ -56,10 +56,11 @@
 				</div>
 			</div>
 
-			<div class="form-group row">
+			<div class="form-group row publish">
 				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('default');?> <span class="required">*</span></label>
 				<div class="col-lg-8 col-md-9 col-sm-12">
 					<?php echo $form->checkBox($model,'default', array('class'=>'form-control')); ?>
+					<?php echo $form->labelEx($model, 'default'); ?>
 					<?php echo $form->error($model,'default'); ?>
 				</div>
 			</div>

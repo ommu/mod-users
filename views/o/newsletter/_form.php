@@ -29,10 +29,11 @@
 			</div>
 		</div>
 		
-		<div class="form-group row">
+		<div class="form-group row publish">
 			<?php echo $form->labelEx($model,'multiple_email_i', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'multiple_email_i', array('class'=>'form-control')); ?>
+				<?php echo $form->labelEx($model, 'multiple_email_i'); ?>
 				<?php echo $form->error($model,'multiple_email_i'); ?>
 			</div>
 		</div>
