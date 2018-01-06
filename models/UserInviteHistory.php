@@ -1,13 +1,12 @@
 <?php
 /**
  * UserInviteHistory
- * version: 0.0.1
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 5 August 2017, 17:41 WIB
  * @link https://github.com/ommu/ommu-users
- * @contact (+62)856-299-4114
  *
  * This is the template for generating the model class of a specified table.
  * - $this: the ModelCode object
