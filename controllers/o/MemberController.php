@@ -264,27 +264,25 @@ class MemberController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member success deleted.').'</strong></div>',
-					));
-				}
+			if($model->delete()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-users',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member success deleted.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Delete Member: $displayname', array('$displayname'=>$model->displayname));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Delete Member: $displayname', array('$displayname'=>$model->displayname));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
@@ -306,33 +304,31 @@ class MemberController extends Controller
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->enabled = $replace;
+			//change value active or publish
+			$model->enabled = $replace;
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member success updated.').'</strong></div>',
-					));
-				}
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-users',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member success updated.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_enabled',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_enabled',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**
@@ -354,33 +350,31 @@ class MemberController extends Controller
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->verified = $replace;
+			//change value active or publish
+			$model->verified = $replace;
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member success updated.').'</strong></div>',
-					));
-				}
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-users',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member success updated.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_verify',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_verify',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 	
 	/**

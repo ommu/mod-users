@@ -136,7 +136,6 @@ class InviteController extends Controller
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			if($model->delete()) {
-				
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
@@ -144,20 +143,20 @@ class InviteController extends Controller
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Invite History success deleted.').'</strong></div>',
 				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by Guest', array('$invite_email'=>$model->invite->newsletter->email));
-			if($model->invite->user->displayname)
-				$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by $user_displayname', array ('$invite_email'=>$model->invite->newsletter->email, '$user_displayname'=>$model->invite->user->displayname));
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by Guest', array('$invite_email'=>$model->invite->newsletter->email));
+		if($model->invite->user->displayname)
+			$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by $user_displayname', array ('$invite_email'=>$model->invite->newsletter->email, '$user_displayname'=>$model->invite->user->displayname));
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**

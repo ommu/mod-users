@@ -295,17 +295,17 @@ class InviteController extends Controller
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Invite success deleted.').'</strong></div>',
 				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
@@ -333,24 +333,24 @@ class InviteController extends Controller
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Invite success updated.').'</strong></div>',
 				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-		
-			$pageTitle = Yii::t('phrase', '$title Invite: $newsletter_email by Guest', array('$title'=>$title, '$newsletter_email'=>$model->newsletter->email));
-			if($model->user_id)
-				$pageTitle = Yii::t('phrase', '$title Invite: $newsletter_email by $inviter_displayname', array('$title'=>$title, '$newsletter_email'=>$model->newsletter->email, '$inviter_displayname'=>$model->user->displayname));
-
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_publish',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+	
+		$pageTitle = Yii::t('phrase', '$title Invite: $newsletter_email by Guest', array('$title'=>$title, '$newsletter_email'=>$model->newsletter->email));
+		if($model->user_id)
+			$pageTitle = Yii::t('phrase', '$title Invite: $newsletter_email by $inviter_displayname', array('$title'=>$title, '$newsletter_email'=>$model->newsletter->email, '$inviter_displayname'=>$model->user->displayname));
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_publish',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**

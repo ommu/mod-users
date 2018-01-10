@@ -268,17 +268,15 @@ class AdminController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success deleted.').'</strong></div>',
-					));
-				}
-				Yii::app()->end();
+			if($model->delete()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-users',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success deleted.').'</strong></div>',
+				));
 			}
+			Yii::app()->end();
 		}
 
 		$this->dialogDetail = true;
@@ -321,20 +319,20 @@ class AdminController extends Controller
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success updated.').'</strong></div>',
 				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_enabled',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_enabled',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**
@@ -351,33 +349,31 @@ class AdminController extends Controller
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->verified = $replace;
+			//change value active or publish
+			$model->verified = $replace;
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-users',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success updated.').'</strong></div>',
-					));
-				}
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-users',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Administrator success updated.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', '$title Administrator: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_verify',array(
-				'title'=>$title,
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', '$title Administrator: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_verify',array(
+			'title'=>$title,
+			'model'=>$model,
+		));
 	}
 
 	/**

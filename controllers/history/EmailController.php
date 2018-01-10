@@ -140,17 +140,17 @@ class EmailController extends Controller
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'History Email success deleted.').'</strong></div>',
 				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Delete History Email: $user_displayname level $level_name', array('$user_displayname'=>$model->user->displayname,'$level_name'=>$model->user->level->title->message));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Delete History Email: $user_displayname level $level_name', array('$user_displayname'=>$model->user->displayname,'$level_name'=>$model->user->level->title->message));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**

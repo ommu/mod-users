@@ -251,27 +251,25 @@ class LevelController extends Controller
 		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				if($model->delete()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-user-level',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success deleted.').'</strong></div>',
-					));
-				}
+			if($model->delete()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-user-level',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success deleted.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Delete Level: $level_name', array('$level_name'=>$model->title->message));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Delete Level: $level_name', array('$level_name'=>$model->title->message));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
@@ -285,32 +283,30 @@ class LevelController extends Controller
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
-			if(isset($id)) {
-				//change value active or publish
-				$model->default = 1;
+			//change value active or publish
+			$model->default = 1;
 
-				if($model->update()) {
-					echo CJSON::encode(array(
-						'type' => 5,
-						'get' => Yii::app()->controller->createUrl('manage'),
-						'id' => 'partial-user-level',
-						'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success updated.').'</strong></div>',
-					));
-				}
+			if($model->update()) {
+				echo CJSON::encode(array(
+					'type' => 5,
+					'get' => Yii::app()->controller->createUrl('manage'),
+					'id' => 'partial-user-level',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User level success updated.').'</strong></div>',
+				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-
-			$this->pageTitle = Yii::t('phrase', 'Default Level: $level_name', array('$level_name'=>$model->title->message));
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_default',array(
-				'model'=>$model,
-			));
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+
+		$this->pageTitle = Yii::t('phrase', 'Default Level: $level_name', array('$level_name'=>$model->title->message));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_default',array(
+			'model'=>$model,
+		));
 	}
 
 	/**

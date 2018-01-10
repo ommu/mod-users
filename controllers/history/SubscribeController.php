@@ -144,23 +144,23 @@ class SubscribeController extends Controller
 					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'History Subscribe/Unsubscribe success deleted.').'</strong></div>',
 				));
 			}
-
-		} else {
-			$this->dialogDetail = true;
-			$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-			$this->dialogWidth = 350;
-			
-			$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_email', array ('$newsletter_email'=>$model->newsletter->email));
-			if($model->newsletter->displayname)
-				$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_displayname ($newsletter_email)', array ('$newsletter_displayname'=>$model->newsletter->displayname, '$newsletter_email'=>$model->newsletter->email));
-			if($model->newsletter->user_id)
-				$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_displayname ($newsletter_email)', array ('$newsletter_displayname'=>$model->newsletter->user->displayname, '$newsletter_email'=>$model->newsletter->user->email));
-
-			$this->pageTitle = $pageTitle;
-			$this->pageDescription = '';
-			$this->pageMeta = '';
-			$this->render('admin_delete');
+			Yii::app()->end();
 		}
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 350;
+		
+		$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_email', array ('$newsletter_email'=>$model->newsletter->email));
+		if($model->newsletter->displayname)
+			$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_displayname ($newsletter_email)', array ('$newsletter_displayname'=>$model->newsletter->displayname, '$newsletter_email'=>$model->newsletter->email));
+		if($model->newsletter->user_id)
+			$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_displayname ($newsletter_email)', array ('$newsletter_displayname'=>$model->newsletter->user->displayname, '$newsletter_email'=>$model->newsletter->user->email));
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_delete');
 	}
 
 	/**
