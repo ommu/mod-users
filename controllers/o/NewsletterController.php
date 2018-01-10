@@ -258,6 +258,7 @@ class NewsletterController extends Controller
 			// we only allow deletion via POST request
 			//change value active or publish
 			$model->status = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
 			if($model->update()) {
 				echo CJSON::encode(array(

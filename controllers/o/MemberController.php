@@ -293,19 +293,15 @@ class MemberController extends Controller
 	public function actionEnable($id) 
 	{
 		$model=$this->loadModel($id);
-		if($model->enabled == 1) {
-			$title = Yii::t('phrase', 'Disabled');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Enabled');
-			$replace = 1;
-		}
-		$pageTitle = Yii::t('phrase', '$title Member: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
+		
+		$title = $model->enabled == 1 ? Yii::t('phrase', 'Disabled') : Yii::t('phrase', 'Enabled');
+		$replace = $model->enabled == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			//change value active or publish
 			$model->enabled = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
 			if($model->update()) {
 				echo CJSON::encode(array(
@@ -322,7 +318,7 @@ class MemberController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = $pageTitle;
+		$this->pageTitle = Yii::t('phrase', '$title Member: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_enabled',array(
@@ -339,19 +335,15 @@ class MemberController extends Controller
 	public function actionVerify($id) 
 	{
 		$model=$this->loadModel($id);
-		if($model->verified == 1) {
-			$title = Yii::t('phrase', 'Unverified');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Verified');
-			$replace = 1;
-		}
-		$pageTitle = Yii::t('phrase', '$title Member: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
+		
+		$title = $model->verified == 1 ? Yii::t('phrase', 'Unverified') : Yii::t('phrase', 'Verified');
+		$replace = $model->verified == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			//change value active or publish
 			$model->verified = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
 			if($model->update()) {
 				echo CJSON::encode(array(
@@ -368,7 +360,7 @@ class MemberController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = $pageTitle;
+		$this->pageTitle = Yii::t('phrase', '$title Member: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_verify',array(

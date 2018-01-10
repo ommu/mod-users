@@ -297,19 +297,15 @@ class AdminController extends Controller
 	public function actionEnable($id) 
 	{
 		$model=$this->loadModel($id);
-		if($model->enabled == 1) {
-			$title = Yii::t('phrase', 'Disabled');
-			$replace = 0;
-		} else {
-			$title = Yii::t('phrase', 'Enabled');
-			$replace = 1;
-		}
-		$pageTitle = Yii::t('phrase', '$title Administrator: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
+		
+		$title = $model->enabled == 1 ? Yii::t('phrase', 'Disabled') : Yii::t('phrase', 'Enabled');
+		$replace = $model->enabled == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			//change value active or publish
 			$model->enabled = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
 			if($model->update()) {
 				echo CJSON::encode(array(
@@ -326,7 +322,7 @@ class AdminController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = $pageTitle;
+		$this->pageTitle = Yii::t('phrase', '$title Administrator: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_enabled',array(
@@ -351,6 +347,7 @@ class AdminController extends Controller
 			// we only allow deletion via POST request
 			//change value active or publish
 			$model->verified = $replace;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
 			if($model->update()) {
 				echo CJSON::encode(array(

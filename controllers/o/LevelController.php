@@ -285,6 +285,7 @@ class LevelController extends Controller
 			// we only allow deletion via POST request
 			//change value active or publish
 			$model->default = 1;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
 
 			if($model->update()) {
 				echo CJSON::encode(array(
