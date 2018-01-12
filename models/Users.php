@@ -731,6 +731,8 @@ class Users extends CActiveRecord
 	 */
 	protected function afterSave() 
 	{
+		Yii::import('ext.phpmailer.Mailer');
+		
 		$controller = strtolower(Yii::app()->controller->id);
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_type, site_title, signup_welcome, signup_adminemail',
@@ -819,7 +821,7 @@ class Users extends CActiveRecord
 					$welcome_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$welcome_template.'.php';
 				$welcome_message = file_get_contents($welcome_file);
 				$welcome_ireplace = str_ireplace($welcome_search, $welcome_replace, $welcome_message);
-				SupportMailSetting::sendEmail($this->email, $this->displayname, $welcome_title, $welcome_ireplace);
+				Mailer::send($this->email, $this->displayname, $welcome_title, $welcome_ireplace);
 			}
 
 			// Send Account Information
@@ -838,11 +840,11 @@ class Users extends CActiveRecord
 				$account_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php';
 			$account_message = file_get_contents($account_file);
 			$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
-			SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
+			Mailer::send($this->email, $this->displayname, $account_title, $account_ireplace);
 
 			// Send New Account to Email Administrator
 			if($setting->signup_adminemail == 1)
-				SupportMailSetting::sendEmail(null, null, 'New Member', 'informasi member terbaru');
+				Mailer::send(null, null, 'New Member', 'informasi member terbaru');
 				
 		} else {
 			// Send Account Information
@@ -862,11 +864,11 @@ class Users extends CActiveRecord
 					$password_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$password_template.'.php';
 				$password_message = file_get_contents($password_file);
 				$password_ireplace = str_ireplace($password_search, $password_replace, $password_message);
-				SupportMailSetting::sendEmail($this->email, $this->displayname, $password_title, $password_ireplace);
+				Mailer::send($this->email, $this->displayname, $password_title, $password_ireplace);
 			}
 
 			if($controller == 'verify')
-				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success');
+				Mailer::send($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success');
 		}
 	}
 

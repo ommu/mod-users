@@ -142,10 +142,10 @@ class ViewUserNewsletter extends CActiveRecord
 		$criteria->compare('t.invite_all', strtolower($this->invite_all), true);
 		$criteria->compare('t.invite_users', strtolower($this->invite_users), true);
 		$criteria->compare('t.invite_user_all', strtolower($this->invite_user_all), true);
-		if($this->first_invite_date != null && !in_array($this->first_invite_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->first_invite_date != null && !in_array($this->first_invite_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.first_invite_date)', date('Y-m-d', strtotime($this->first_invite_date)));
 		$criteria->compare('t.first_invite_user_id', strtolower($this->first_invite_user_id), true);
-		if($this->last_invite_date != null && !in_array($this->last_invite_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->last_invite_date != null && !in_array($this->last_invite_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.last_invite_date)', date('Y-m-d', strtotime($this->last_invite_date)));
 		$criteria->compare('t.last_invite_user_id', strtolower($this->last_invite_user_id), true);
 

@@ -417,8 +417,9 @@ class UserVerify extends CActiveRecord
 	/**
 	 * After save attributes
 	 */
-	protected function afterSave() {
-		parent::afterSave();
+	protected function afterSave() 
+	{
+		Yii::import('ext.phpmailer.Mailer');
 		
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_title',
@@ -428,6 +429,8 @@ class UserVerify extends CActiveRecord
 		if(!file_exists($assets))
 			$assets = Yii::getPathOfAlias('ommu.users.assets');
 		$_assetsUrl = Yii::app()->assetManager->publish($assets);
+		
+		parent::afterSave();
 
 		if($this->isNewRecord) {
 			// Send Email to Member
@@ -446,7 +449,7 @@ class UserVerify extends CActiveRecord
 				$verify_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$verify_template.'.php';
 			$verify_message = file_get_contents($verify_file);
 			$verify_ireplace = str_ireplace($verify_search, $verify_replace, $verify_message);
-			SupportMailSetting::sendEmail($this->user->email, $this->user->displayname, $verify_title, $verify_ireplace);
+			Mailer::send($this->user->email, $this->user->displayname, $verify_title, $verify_ireplace);
 
 			// Update all history
 			$criteria=new CDbCriteria;

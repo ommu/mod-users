@@ -529,17 +529,21 @@ class UserInvites extends CActiveRecord
 	/**
 	 * After save attributes
 	 */
-	protected function afterSave() {
+	protected function afterSave() 
+	{
+		Yii::import('ext.phpmailer.Mailer');
+		
 		parent::afterSave();
+		
 		if($this->isNewRecord && $this->newsletter->view->user_id == 0) {
 			$setting = OmmuSettings::model()->findByPk(1, array(
 				'select' => 'signup_checkemail',
 			));
 			if($setting->signup_checkemail == 1)
-				SupportMailSetting::sendEmail($this->newsletter->email, $this->newsletter->email, 'User Invite', 'Silahkan bergabung dan masukkan code invite');
+				Mailer::send($this->newsletter->email, $this->newsletter->email, 'User Invite', 'Silahkan bergabung dan masukkan code invite');
 			
 			else
-				SupportMailSetting::sendEmail($this->newsletter->email, $this->newsletter->email, 'User Invite', 'Silahkan bergabung');
+				Mailer::send($this->newsletter->email, $this->newsletter->email, 'User Invite', 'Silahkan bergabung');
 		}
 	}
 

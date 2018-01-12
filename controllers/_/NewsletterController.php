@@ -167,6 +167,7 @@ class NewsletterController extends Controller
 		 * secret = salt[Users]
 		 * email = email[Users]
 		 */
+		Yii::import('ext.phpmailer.Mailer');
 		 
 		 $renderError = 0;
 		 if(isset($_GET['success']) || (isset($_GET['email']) || isset($_GET['secret']))) {
@@ -257,7 +258,7 @@ class NewsletterController extends Controller
 								}
 								// Send Email to Member
 								$ticket = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('users/newsletter/unsubscribe', array('email'=>$email,'secret'=>$secret));
-								SupportMailSetting::sendEmail($email, $displayname, 'Unsubscribe Ticket', $ticket);
+								Mailer::send($email, $displayname, 'Unsubscribe Ticket', $ticket);
 								
 								$url = Yii::app()->controller->createUrl('unsubscribe', array('success'=>$email));
 							

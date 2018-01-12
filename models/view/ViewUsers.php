@@ -149,22 +149,22 @@ class ViewUsers extends CActiveRecord
 		$criteria->compare('t.token_password', strtolower($this->token_password), true);
 		$criteria->compare('t.token_oauth', strtolower($this->token_oauth), true);
 		$criteria->compare('t.emails', strtolower($this->emails), true);
-		if($this->email_lastchange_date != null && !in_array($this->email_lastchange_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->email_lastchange_date != null && !in_array($this->email_lastchange_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.email_lastchange_date)', date('Y-m-d', strtotime($this->email_lastchange_date)));
 		$criteria->compare('t.email_lastchange_days', strtolower($this->email_lastchange_days), true);
 		$criteria->compare('t.email_lastchange_hours', strtolower($this->email_lastchange_hours), true);
 		$criteria->compare('t.usernames', strtolower($this->usernames), true);
-		if($this->username_lastchange_date != null && !in_array($this->username_lastchange_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->username_lastchange_date != null && !in_array($this->username_lastchange_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.username_lastchange_date)', date('Y-m-d', strtotime($this->username_lastchange_date)));
 		$criteria->compare('t.username_lastchange_days', strtolower($this->username_lastchange_days), true);
 		$criteria->compare('t.username_lastchange_hours', strtolower($this->username_lastchange_hours), true);
 		$criteria->compare('t.passwords', strtolower($this->passwords), true);
-		if($this->password_lastchange_date != null && !in_array($this->password_lastchange_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->password_lastchange_date != null && !in_array($this->password_lastchange_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.password_lastchange_date)', date('Y-m-d', strtotime($this->password_lastchange_date)));
 		$criteria->compare('t.password_lastchange_days', strtolower($this->password_lastchange_days), true);
 		$criteria->compare('t.password_lastchange_hours', strtolower($this->password_lastchange_hours), true);
 		$criteria->compare('t.logins', strtolower($this->logins), true);
-		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00', '1970-01-01 00:00:00')))
+		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')))
 			$criteria->compare('date(t.lastlogin_date)', date('Y-m-d', strtotime($this->lastlogin_date)));
 		$criteria->compare('t.lastlogin_days', strtolower($this->lastlogin_days), true);
 		$criteria->compare('t.lastlogin_hours', strtolower($this->lastlogin_hours), true);

@@ -610,6 +610,8 @@ class UsersCopy extends CActiveRecord
 	 */
 	protected function afterSave() 
 	{
+		Yii::import('ext.phpmailer.Mailer');
+		
 		$controller = strtolower(Yii::app()->controller->id);
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_type, signup_welcome, signup_adminemail',
@@ -688,7 +690,7 @@ class UsersCopy extends CActiveRecord
 				$welcome_title = 'Welcome to SSO-GTP by BPAD Yogyakarta';
 				$welcome_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$welcome_template.'.php');
 				$welcome_ireplace = str_ireplace($welcome_search, $welcome_replace, $welcome_message);
-				SupportMailSetting::sendEmail($this->email, $this->displayname, $welcome_title, $welcome_ireplace);		
+				Mailer::send($this->email, $this->displayname, $welcome_title, $welcome_ireplace);		
 			}
 
 			// Send Account Information
@@ -706,11 +708,11 @@ class UsersCopy extends CActiveRecord
 			$account_title = 'SSO-GTP Account ('.$this->displayname.')';
 			$account_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php');
 			$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
-			SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
+			Mailer::send($this->email, $this->displayname, $account_title, $account_ireplace);
 
 			// Send New Account to Email Administrator
 			if($setting->signup_adminemail == 1)
-				SupportMailSetting::sendEmail($this->email, $this->displayname, 'New Member', 'informasi member terbaru', 0);
+				Mailer::send($this->email, $this->displayname, 'New Member', 'informasi member terbaru', 0);
 			
 		} else {
 			// Send Account Information
@@ -729,11 +731,11 @@ class UsersCopy extends CActiveRecord
 				$account_title = 'Your password changed';
 				$account_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php');
 				$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
-				SupportMailSetting::sendEmail($this->email, $this->displayname, $account_title, $account_ireplace);
+				Mailer::send($this->email, $this->displayname, $account_title, $account_ireplace);
 			}
 
 			if($controller == 'verify')
-				SupportMailSetting::sendEmail($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success');
+				Mailer::send($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success');
 		}
 	}
 

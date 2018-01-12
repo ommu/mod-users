@@ -416,7 +416,7 @@ class UserForgot extends CActiveRecord
 	 */
 	protected function afterSave() 
 	{
-		parent::afterSave();
+		Yii::import('ext.phpmailer.Mailer');
 		
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_title',
@@ -426,6 +426,8 @@ class UserForgot extends CActiveRecord
 		if(!file_exists($assets))
 			$assets = Yii::getPathOfAlias('ommu.users.assets');
 		$_assetsUrl = Yii::app()->assetManager->publish($assets);
+
+		parent::afterSave();
 		
 		if($this->isNewRecord) {
 			// Send Email to Member
@@ -444,7 +446,7 @@ class UserForgot extends CActiveRecord
 				$forgot_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$forgot_template.'.php';
 			$forgot_message = file_get_contents($forgot_file);
 			$forgot_ireplace = str_ireplace($forgot_search, $forgot_replace, $forgot_message);
-			SupportMailSetting::sendEmail($this->user->email, $this->user->displayname, $forgot_title, $forgot_ireplace);
+			Mailer::send($this->user->email, $this->user->displayname, $forgot_title, $forgot_ireplace);
 
 			// Update all history
 			$criteria=new CDbCriteria;

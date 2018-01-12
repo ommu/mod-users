@@ -456,7 +456,7 @@ class UserNewsletter extends CActiveRecord
 				$displayname = $this->email;
 				
 				$message = 'Subscribe Success';
-				SupportMailSetting::sendEmail($email, $displayname, 'Subscribe Success', $message);
+				Mailer::send($email, $displayname, 'Subscribe Success', $message);
 			}
 			
 		} else {
@@ -471,7 +471,7 @@ class UserNewsletter extends CActiveRecord
 			
 			if($this->status == 0) {
 				$message = 'Unsubscribe Success';
-				SupportMailSetting::sendEmail($email, $displayname, 'Unsubscribe Success', $message);
+				Mailer::send($email, $displayname, 'Unsubscribe Success', $message);
 			}
 		}
 	}
