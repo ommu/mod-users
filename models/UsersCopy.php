@@ -688,9 +688,11 @@ class UsersCopy extends CActiveRecord
 				);
 				$welcome_template = 'user_welcome';
 				$welcome_title = 'Welcome to SSO-GTP by BPAD Yogyakarta';
-				$welcome_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$welcome_template.'.php');
-				$welcome_ireplace = str_ireplace($welcome_search, $welcome_replace, $welcome_message);
-				Mailer::send($this->email, $this->displayname, $welcome_title, $welcome_ireplace);		
+				$welcome_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$welcome_template.'.php';
+				if(!file_exists($welcome_file))
+					$welcome_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$welcome_template.'.php';
+				$welcome_message = Utility::getEmailTemplate(str_ireplace($welcome_search, $welcome_replace, file_get_contents($welcome_file)));
+				Mailer::send($this->email, $this->displayname, $welcome_title, $welcome_message);
 			}
 
 			// Send Account Information
@@ -706,9 +708,11 @@ class UsersCopy extends CActiveRecord
 			);
 			$account_template = 'user_welcome_account';
 			$account_title = 'SSO-GTP Account ('.$this->displayname.')';
-			$account_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php');
-			$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
-			Mailer::send($this->email, $this->displayname, $account_title, $account_ireplace);
+			$account_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$account_template.'.php';
+			if(!file_exists($account_file))
+				$account_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php';
+			$account_message = Utility::getEmailTemplate(str_ireplace($account_search, $account_replace, file_get_contents($account_file)));
+			Mailer::send($this->email, $this->displayname, $account_title, $account_message);
 
 			// Send New Account to Email Administrator
 			if($setting->signup_adminemail == 1)
@@ -729,9 +733,11 @@ class UsersCopy extends CActiveRecord
 				);
 				$account_template = 'user_forgot_new_password';
 				$account_title = 'Your password changed';
-				$account_message = file_get_contents(YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php');
-				$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
-				Mailer::send($this->email, $this->displayname, $account_title, $account_ireplace);
+				$account_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$account_template.'.php';
+				if(!file_exists($account_file))
+					$account_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php';
+				$account_message = Utility::getEmailTemplate(str_ireplace($account_search, $account_replace, file_get_contents($account_file)));
+				Mailer::send($this->email, $this->displayname, $account_title, $account_message);
 			}
 
 			if($controller == 'verify')

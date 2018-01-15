@@ -819,9 +819,8 @@ class Users extends CActiveRecord
 				$welcome_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$welcome_template.'.php';
 				if(!file_exists($welcome_file))
 					$welcome_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$welcome_template.'.php';
-				$welcome_message = file_get_contents($welcome_file);
-				$welcome_ireplace = str_ireplace($welcome_search, $welcome_replace, $welcome_message);
-				Mailer::send($this->email, $this->displayname, $welcome_title, $welcome_ireplace);
+				$welcome_message = Utility::getEmailTemplate(str_ireplace($welcome_search, $welcome_replace, file_get_contents($welcome_file)));
+				Mailer::send($this->email, $this->displayname, $welcome_title, $welcome_message);
 			}
 
 			// Send Account Information
@@ -838,9 +837,8 @@ class Users extends CActiveRecord
 			$account_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$account_template.'.php';
 			if(!file_exists($account_file))
 				$account_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php';
-			$account_message = file_get_contents($account_file);
-			$account_ireplace = str_ireplace($account_search, $account_replace, $account_message);
-			Mailer::send($this->email, $this->displayname, $account_title, $account_ireplace);
+			$account_message = Utility::getEmailTemplate(str_ireplace($account_search, $account_replace, file_get_contents($account_file)));
+			Mailer::send($this->email, $this->displayname, $account_title, $account_message);
 
 			// Send New Account to Email Administrator
 			if($setting->signup_adminemail == 1)
@@ -862,9 +860,8 @@ class Users extends CActiveRecord
 				$password_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$password_template.'.php';
 				if(!file_exists($password_file))
 					$password_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$password_template.'.php';
-				$password_message = file_get_contents($password_file);
-				$password_ireplace = str_ireplace($password_search, $password_replace, $password_message);
-				Mailer::send($this->email, $this->displayname, $password_title, $password_ireplace);
+				$password_message = Utility::getEmailTemplate(str_ireplace($password_search, $password_replace, file_get_contents($password_file)));
+				Mailer::send($this->email, $this->displayname, $password_title, $password_message);
 			}
 
 			if($controller == 'verify')
