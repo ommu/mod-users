@@ -432,15 +432,16 @@ class UserForgot extends CActiveRecord
 		if($this->isNewRecord) {
 			// Send Email to Member
 			$forgot_search = array(
-				'{$baseURL}', '{$displayname}', '{$site_support_email}',
-				'{$forgot_link}',
+				'{displayname}', '{site_title}', 
+				'{forgot_link}',
 			);
+			$forgot_link = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('account/reset',array('token'=>$this->code));
 			$forgot_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->user->displayname, SupportMailSetting::getInfo('mail_contact'),
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('account/reset',array('token'=>$this->code)),
+				$this->user->displayname, $setting->site_title,
+				CHtml::link($forgot_link, $forgot_link),
 			);
 			$forgot_template = 'user_forgot_password';
-			$forgot_title = $setting->site_title.' Password Assistance';
+			$forgot_title = Yii::t('phrase', '{site_title} Password Assistance', array('{site_title}'=>$setting->site_title));
 			$forgot_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$forgot_template.'.php';
 			if(!file_exists($forgot_file))
 				$forgot_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$forgot_template.'.php';

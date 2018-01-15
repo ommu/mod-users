@@ -732,8 +732,11 @@ class Users extends CActiveRecord
 	protected function afterSave() 
 	{
 		Yii::import('ext.phpmailer.Mailer');
-		
+
 		$controller = strtolower(Yii::app()->controller->id);
+		$action = strtolower(Yii::app()->controller->action->id);
+		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
+
 		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'site_type, site_title, signup_welcome, signup_adminemail',
 		));
@@ -807,15 +810,13 @@ class Users extends CActiveRecord
 			// Send Welcome Email
 			if($setting->signup_welcome == 1) {
 				$welcome_search = array(
-					'{$baseURL}', '{$displayname}', '{$site_support_email}',
-					'{$site_title}', '{$index}',
+					'{displayname}', '{site_title}',
 				);
 				$welcome_replace = array(
-					Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'), 
-					$setting->site_title, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/index'),
+					$this->displayname, $setting->site_title,
 				);
 				$welcome_template = 'user_welcome';
-				$welcome_title = 'Welcome to '.$setting->site_title;
+				$welcome_title = Yii::t('phrase', 'Welcome to {site_title}', array('{site_title}'=>$setting->site_title));
 				$welcome_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$welcome_template.'.php';
 				if(!file_exists($welcome_file))
 					$welcome_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$welcome_template.'.php';
@@ -825,15 +826,13 @@ class Users extends CActiveRecord
 
 			// Send Account Information
 			$account_search = array(
-				'{$baseURL}', '{$displayname}', '{$site_support_email}',
-				'{$site_title}', '{$email}', '{$password}', '{$login}'
+				'{displayname}', '{site_title}', '{email}', '{password}',
 			);
 			$account_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'),
-				$setting->site_title, $this->email, $this->newPassword, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
+				$this->displayname, $setting->site_title, $this->email, $this->newPassword, 
 			);
 			$account_template = 'user_welcome_account';
-			$account_title = $setting->site_title.' Account ('.$this->displayname.')';
+			$account_title = Yii::t('phrase', '{site_title} Account ({displayname})', array('{site_title}'=>$setting->site_title, '{displayname}'=>$this->displayname));
 			$account_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$account_template.'.php';
 			if(!file_exists($account_file))
 				$account_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$account_template.'.php';
@@ -846,17 +845,15 @@ class Users extends CActiveRecord
 				
 		} else {
 			// Send Account Information
-			if($controller == 'password') {
+			if(in_array($currentAction, array('account/reset','o/member/edit','o/admin/password') || $controller == 'password')) {
 				$password_search = array(
-					'{$baseURL}', '{$displayname}', '{$site_support_email}',
-					'{$site_title}', '{$email}', '{$password}', '{$login}',
+					'{displayname}', '{site_title}', '{email}', '{password}',
 				);
 				$password_replace = array(
-					Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->displayname, SupportMailSetting::getInfo('mail_contact'),
-					$setting->site_title, $this->email, $this->newPassword, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/login'),
+					$this->displayname, $setting->site_title, $this->email, $this->newPassword, 
 				);
 				$password_template = 'user_forgot_new_password';
-				$password_title = 'Your password changed';
+				$password_title = Yii::t('phrase', 'Your password was changed successfully');
 				$password_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$password_template.'.php';
 				if(!file_exists($password_file))
 					$password_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$password_template.'.php';
@@ -864,8 +861,21 @@ class Users extends CActiveRecord
 				Mailer::send($this->email, $this->displayname, $password_title, $password_message);
 			}
 
-			if($controller == 'verify')
-				Mailer::send($this->email, $this->displayname, 'Verify Email Success', 'Verify Email Success');
+			if(in_array($currentAction, array('account/email'))) {
+				$verify_search = array(
+					'{displayname}', 
+				);
+				$verify_replace = array(
+					$this->displayname, 
+				);
+				$verify_template = 'user_verify_success';
+				$verify_title = Yii::t('phrase', 'Email verification succeeded');
+				$verify_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$verify_template.'.php';
+				if(!file_exists($verify_file))
+					$verify_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$verify_template.'.php';
+				$verify_message = Utility::getEmailTemplate(str_ireplace($verify_search, $verify_replace, file_get_contents($verify_file)));
+				Mailer::send($this->email, $this->displayname, $verify_title, $verify_message);
+			}
 		}
 	}
 

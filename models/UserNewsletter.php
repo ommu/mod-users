@@ -407,10 +407,10 @@ class UserNewsletter extends CActiveRecord
 					if($this->email_i == '')
 						$this->addError('email_i', Yii::t('phrase', 'Email cannot be blank.'));
 					
-				} else {				
+				} else {
+					$this->email = $this->email_i;
 					if($controller == 'o/newsletter' && $this->email_i != '') {
-						$this->email = $this->email_i;
-						$newsletter = self::model()->findByAttributes(array('email' => $this->email), array(
+						$newsletter = self::model()->findByAttributes(array('email' => strtolower($this->email)), array(
 							'select' => 'email',
 						));
 						if($newsletter == null) {
@@ -420,7 +420,7 @@ class UserNewsletter extends CActiveRecord
 							if($this->unsubscribe_i == 0)
 								$this->addError('email_i', Yii::t('phrase', 'Anda Sudah terdaftar dalam newsletter.'));
 						}
-					}					
+					}
 				}
 				if($this->subscribe_id == 0)
 					$this->subscribe_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
@@ -447,16 +447,31 @@ class UserNewsletter extends CActiveRecord
 	/**
 	 * After save attributes
 	 */
-	protected function afterSave() {
+	protected function afterSave() 
+	{
+		Yii::import('ext.phpmailer.Mailer');
+		
 		parent::afterSave();
+
 		if($this->isNewRecord) {
 			// Guest Subscribe
 			if($this->user_id == 0 && $this->status == 1) {
-				$email = $this->email;
-				$displayname = $this->email;
-				
-				$message = 'Subscribe Success';
-				Mailer::send($email, $displayname, 'Subscribe Success', $message);
+				$email = $displayname = $this->email;
+
+				$subscribe_search = array(
+					 '{displayname}',
+				);
+				$subscribe_replace = array(
+					$displayname,
+				);
+
+				$subscribe_template = 'user_newsletter_subscribe';
+				$subscribe_title = Yii::t('phrase', 'Subscribe Success');
+				$subscribe_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$subscribe_template.'.php';
+				if(!file_exists($subscribe_file))
+					$subscribe_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$subscribe_template.'.php';
+				$subscribe_message = Utility::getEmailTemplate(str_ireplace($subscribe_search, $subscribe_replace, file_get_contents($subscribe_file)));
+				Mailer::send($email, $displayname, $subscribe_title, $subscribe_message);
 			}
 			
 		} else {
@@ -468,10 +483,22 @@ class UserNewsletter extends CActiveRecord
 				$email = $this->view->user->email;
 				$displayname = $this->view->user->displayname;
 			}
+
+			$unsubscribe_search = array(
+				 '{displayname}',
+			);
+			$unsubscribe_replace = array(
+				$displayname,
+			);
 			
 			if($this->status == 0) {
-				$message = 'Unsubscribe Success';
-				Mailer::send($email, $displayname, 'Unsubscribe Success', $message);
+				$unsubscribe_template = 'user_newsletter_unsubscribe';
+				$unsubscribe_title = Yii::t('phrase', 'Unsubscribe Success');
+				$unsubscribe_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$unsubscribe_template.'.php';
+				if(!file_exists($unsubscribe_file))
+					$unsubscribe_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$unsubscribe_template.'.php';
+				$unsubscribe_message = Utility::getEmailTemplate(str_ireplace($unsubscribe_search, $unsubscribe_replace, file_get_contents($unsubscribe_file)));
+				Mailer::send($email, $displayname, $unsubscribe_title, $unsubscribe_message);
 			}
 		}
 	}

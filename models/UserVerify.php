@@ -435,15 +435,16 @@ class UserVerify extends CActiveRecord
 		if($this->isNewRecord) {
 			// Send Email to Member
 			$verify_search = array(
-				'{$baseURL}', '{$displayname}', '{$site_support_email}',
-				'{$site_title}', '{$verify_link}',
+				'{displayname}', '{site_title}',
+				'{verify_link}',
 			);
+			$verify_link = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('account/email',array('token'=>$this->code));
 			$verify_replace = array(
-				Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl, $this->user->displayname, SupportMailSetting::getInfo('mail_contact'),
-				$setting->site_title, Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('account/email',array('token'=>$this->code)),
+				$this->user->displayname, $setting->site_title,
+				CHtml::link($verify_link, $verify_link),
 			);
 			$verify_template = 'user_verify_email';
-			$verify_title = 'Please verify your '.$setting->site_title.' account';
+			$verify_title = Yii::t('phrase', 'Please verify your {site_title} account', array('{site_title}'=>$setting->site_title));
 			$verify_file = YiiBase::getPathOfAlias('users.components.templates').'/'.$verify_template.'.php';
 			if(!file_exists($verify_file))
 				$verify_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$verify_template.'.php';
@@ -456,7 +457,7 @@ class UserVerify extends CActiveRecord
 			$criteria->compare('publish',1);
 			$criteria->compare('user_id',$this->user_id);
 
-			self::model()->updateAll(array('publish'=>0), $criteria);			
+			self::model()->updateAll(array('publish'=>0), $criteria);
 		}
 	}
 
