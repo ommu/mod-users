@@ -41,7 +41,7 @@
 				if($userlevel != null)
 					echo $form->dropDownList($model,'level_id', $userlevel, array('prompt'=>Yii::t('phrase', 'Select User Level'), 'class'=>'form-control'));
 				else
-					echo $form->dropDownList($model,'level_id', array('prompt'=>Yii::t('phrase', 'Select User Level'), 'class'=>'form-control'));?>
+					echo $form->dropDownList($model,'level_id', array('prompt'=>Yii::t('phrase', 'Select User Level')), array('class'=>'form-control'));?>
 				<?php echo $form->error($model,'level_id'); ?>
 			</div>
 		</div>
