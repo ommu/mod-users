@@ -845,7 +845,7 @@ class Users extends CActiveRecord
 				
 		} else {
 			// Send Account Information
-			if(in_array($currentAction, array('account/reset','o/member/edit','o/admin/password') || $controller == 'password')) {
+			if(in_array($currentAction, array('account/reset','o/member/edit','o/admin/password')) || $controller == 'password') {
 				$password_search = array(
 					'{displayname}', '{site_title}', '{email}', '{password}',
 				);
