@@ -38,7 +38,7 @@ class AccountController extends /*SBaseController*/ Controller
 		$arrThemes = Utility::getCurrentTemplate('public');
 		Yii::app()->theme = $arrThemes['folder'];
 		$this->layout = $arrThemes['layout'];
-	}	
+	}
 
 	/**
 	 * @return array action filters
@@ -153,7 +153,7 @@ class AccountController extends /*SBaseController*/ Controller
 				$this->dialogFixedClosed=array(
 					Yii::t('phrase', 'Forgot your password')=>Yii::app()->createUrl('users/forgot/get'),
 				);
-			}		
+			}
 			
 			$this->pageTitle = Yii::t('phrase', 'Login');
 			$this->pageDescription = '';

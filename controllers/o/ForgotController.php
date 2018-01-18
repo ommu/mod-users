@@ -172,7 +172,7 @@ class ForgotController extends Controller
 		$this->render('admin_add',array(
 			'model'=>$model,
 		));
-	}	
+	}
 	
 	/**
 	 * Displays a particular model.
@@ -192,7 +192,7 @@ class ForgotController extends Controller
 		$this->render('admin_view',array(
 			'model'=>$model,
 		));
-	}	
+	}
 
 	/**
 	 * Displays a particular model.

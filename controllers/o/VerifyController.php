@@ -124,7 +124,7 @@ class VerifyController extends Controller
 			'model'=>$model,
 			'columns' => $columns,
 		));
-	}	
+	}
 	
 	/**
 	 * Creates a new model.
@@ -192,7 +192,7 @@ class VerifyController extends Controller
 		$this->render('admin_view',array(
 			'model'=>$model,
 		));
-	}	
+	}
 
 	/**
 	 * Displays a particular model.

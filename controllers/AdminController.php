@@ -40,7 +40,7 @@ class AdminController extends /*SBaseController*/ Controller
 		Yii::app()->theme = $arrThemes['folder'];
 		$this->layout = $arrThemes['layout'];
 		Utility::applyViewPath(__dir__);
-	}	
+	}
 
 	/**
 	 * @return array action filters
@@ -178,7 +178,7 @@ class AdminController extends /*SBaseController*/ Controller
 					'lastlogin_from'=>Yii::app()->params['product_access_system'],
 				));
 				$this->redirect(in_array(Yii::app()->user->level, array(1,2)) ? Yii::app()->createUrl('admin/index') : Yii::app()->user->returnUrl);
-			}			
+			}
 			
 		} else
 			echo '0';

@@ -208,7 +208,7 @@ class NewsletterController extends Controller
 		$this->render('admin_view',array(
 			'model'=>$model,
 		));
-	}	
+	}
 	
 	/**
 	 * Deletes a particular model.

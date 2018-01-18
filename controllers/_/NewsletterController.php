@@ -215,7 +215,7 @@ class NewsletterController extends Controller
 									'{email}'=>$newsletter->email, 
 									'{date}'=>Utility::dateFormat($newsletter->updated_date),
 								));
-							}					
+							}
 						} else {
 							$renderError = 1;
 							$title = Yii::t('phrase', 'Unsubscribe Not Valid');
