@@ -23,7 +23,7 @@ if(isset($_GET['name']) && isset($_GET['email'])) {?>
 		<?php if(isset($_GET['type']) && $_GET['type'] == 'success') {
 			echo '<a class="button blue-button" href="'.Yii::app()->createUrl('site/login').'" title="'.Yii::t('phrase', 'Login').'">'.Yii::t('phrase', 'Login').'</a>';
 		}?>
-	</div>	
+	</div>
 
 <?php } else {
 	echo $this->renderPartial('_form', array(

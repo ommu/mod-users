@@ -17,7 +17,7 @@
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
 )); ?>
-	<ul>		
+	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('newsletter_id'); ?><br/>
 			<?php echo $form->textField($model,'newsletter_id'); ?>

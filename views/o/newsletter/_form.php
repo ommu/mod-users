@@ -19,7 +19,7 @@
 	//'htmlOptions' => array('enctype' => 'multipart/form-data') 
 )); ?>
 <div class="dialog-content">
-	<fieldset>		
+	<fieldset>
 		<div class="form-group row">
 			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('email_i');?> <span class="required">*</span></label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
