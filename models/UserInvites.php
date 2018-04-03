@@ -512,7 +512,7 @@ class UserInvites extends CActiveRecord
 					}
 				}
 				if($this->user_id == 0)
-					$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+					$this->user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
 			} else {
 				if($controller == 'o/invite')

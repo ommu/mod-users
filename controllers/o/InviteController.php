@@ -151,7 +151,7 @@ class InviteController extends Controller
 					if($model->multiple_email_i == 1) {
 						if($model->validate()) {
 							$email_i = Utility::formatFileType($model->email_i);
-							$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+							$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 							foreach ($email_i as $email) {
 								$condition = UserInvites::insertInvite($email, $user_id);
 								if($condition == 0)
@@ -285,7 +285,7 @@ class InviteController extends Controller
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			$model->publish = 2;
-			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
 			if($model->update()) {
 				echo CJSON::encode(array(
@@ -324,7 +324,7 @@ class InviteController extends Controller
 			// we only allow deletion via POST request
 			//change value active or publish
 			$model->publish = $replace;
-			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
 			if($model->update()) {
 				echo CJSON::encode(array(

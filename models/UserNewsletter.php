@@ -423,7 +423,7 @@ class UserNewsletter extends CActiveRecord
 					}
 				}
 				if($this->subscribe_id == 0)
-					$this->subscribe_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+					$this->subscribe_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 				
 			} else {
 				if($controller == 'o/newsletter')

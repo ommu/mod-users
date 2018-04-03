@@ -602,7 +602,7 @@ class Users extends CActiveRecord
 						$this->verified = 1;
 				
 					// Generate user by admin
-					$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : 0;
+					$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 					
 				} else {
 					$this->level_id = UserLevel::getDefault();
