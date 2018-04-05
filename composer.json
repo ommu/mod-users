@@ -1,24 +1,23 @@
 {
 	"name": "ommu/users",
-	"description": "Users Module for Ommu Platform",
+	"description": "Users Module from Ommu Platform",
 	"keywords": [
 		"module",
 		"users",
 		"ommu",
-		"platform",
 		"ommu platform"
 	],
-	"homepage": "https://github.com/ommu/ommu-users",
+	"homepage": "https://github.com/ommu/mod-users",
 	"type": "ommu-module",
 	"license": "Apache-2.0",
 	"support": {
-		"issues": "https://github.com/ommu/ommu-users/issues",
-		"wiki": "https://github.com/ommu/ommu-users/wiki",
-		"source": "https://github.com/ommu/ommu-users"
+		"issues": "https://github.com/ommu/mod-users/issues",
+		"wiki": "https://github.com/ommu/mod-users/wiki",
+		"source": "https://github.com/ommu/mod-users"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ommu/ommu-users.git"
+		"url": "https://github.com/ommu/mod-users.git"
 	},
 	"authors": [
 		{
