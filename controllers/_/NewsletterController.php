@@ -105,7 +105,7 @@ class NewsletterController extends Controller
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
 			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->save()) {
 						if($model->user_id == 0) {
 							$get = Yii::app()->controller->createUrl('subscribe', array('name'=>$model->email, 'email'=>$model->email));
@@ -245,7 +245,7 @@ class NewsletterController extends Controller
 					echo $jsonError;
 					
 				} else {
-					if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+					if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 						if($model->validate()) {
 							if($model->status == 1) {
 								if($model->user_id != 0) {

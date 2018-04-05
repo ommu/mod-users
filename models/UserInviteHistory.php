@@ -162,7 +162,7 @@ class UserInviteHistory extends CActiveRecord
 		);
 		
 		$criteria->compare('t.id',$this->id);
-		if(isset($_GET['invite']))
+		if(Yii::app()->getRequest()->getParam('invite'))
 			$criteria->compare('t.invite_id',$_GET['invite']);
 		else
 			$criteria->compare('t.invite_id',$this->invite_id);
@@ -237,7 +237,7 @@ class UserInviteHistory extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['invite'])) {
+			if(!Yii::app()->getRequest()->getParam('invite')) {
 				$this->defaultColumns[] = array(
 					'name' => 'email_search',
 					'value' => '$data->invite->newsletter->email',

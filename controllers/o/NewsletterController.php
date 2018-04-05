@@ -139,7 +139,7 @@ class NewsletterController extends Controller
 				echo $jsonError;
 
 			} else {
-				if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 					if($model->multiple_email_i == 1) {
 						if($model->validate()) {
 							$email_i = Utility::formatFileType($model->email_i);

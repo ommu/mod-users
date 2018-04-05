@@ -114,7 +114,7 @@ class AdminController extends /*SBaseController*/ Controller
 					echo $jsonError;
 
 				} else {
-					if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+					if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 						// validate user input and redirect to the previous page if valid
 						if($model->validate() && $model->login()) {
 							Users::model()->updateByPk(Yii::app()->user->id, array(

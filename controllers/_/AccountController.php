@@ -108,7 +108,7 @@ class AccountController extends /*SBaseController*/ Controller
 					echo $jsonError;
 
 				} else {
-					if(isset($_GET['enablesave']) && $_GET['enablesave'] == 1) {
+					if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
 						if(!isset($_GET['email'])) {
 							if($model->validate()) {
 								echo CJSON::encode(array(
