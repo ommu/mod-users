@@ -1,2 +1,0 @@
-Dear {displayname}
-<p></p>
