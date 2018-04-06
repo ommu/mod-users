@@ -5,7 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
- * @link https://github.com/ommu/ommu-users
+ * @link https://github.com/ommu/mod-users
  *
  * LoginForm class.
  * LoginForm is the data structure for keeping

@@ -18,7 +18,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
  * @created date 10 August 2017, 13:50 WIB
- * @link https://github.com/ommu/ommu-users
+ * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
  */
