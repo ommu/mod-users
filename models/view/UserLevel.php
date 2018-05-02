@@ -3,9 +3,9 @@
  * UserLevel
  * version: 0.0.1
  *
- * This is the model class for table "_view_user_level".
+ * This is the model class for table "_user_level".
  *
- * The followings are the available columns in table "_view_user_level":
+ * The followings are the available columns in table "_user_level":
  * @property integer $level_id
  * @property string $users
  * @property string $user_pending
@@ -35,7 +35,7 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '_view_user_level';
+		return '_user_level';
 	}
 
 	/**

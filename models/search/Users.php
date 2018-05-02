@@ -27,10 +27,10 @@ class Users extends UsersModel
 	public function rules()
 	{
 		return [
-            [['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate',
-                'search', 'invisible', 'privacy', 'modified_id', '_id'], 'integer'],
-            [['email', 'username', 'first_name', 'last_name', 'displayname', 'photos'],
-                'safe'],
+			[['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate',
+				'search', 'invisible', 'privacy', 'modified_id', '_id'], 'integer'],
+			[['email', 'username', 'first_name', 'last_name', 'displayname', 'photos'],
+				'safe'],
 		];
 	}
 
@@ -64,9 +64,9 @@ class Users extends UsersModel
 		$query->joinWith(['modified modified']);
 
 		$dataParams = ['query' => $query];
-        if(isset($params['pagination']) && $params['pagination'] == 0) {
-            $dataParams['pagination'] = false;
-        }
+		if(isset($params['pagination']) && $params['pagination'] == 0) {
+			$dataParams['pagination'] = false;
+		}
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);

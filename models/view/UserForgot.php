@@ -3,9 +3,9 @@
  * UserForgot
  * version: 0.0.1
  *
- * This is the model class for table "_view_user_forgot".
+ * This is the model class for table "_user_forgot".
  *
- * The followings are the available columns in table "_view_user_forgot":
+ * The followings are the available columns in table "_user_forgot":
  * @property integer $forgot_id
  * @property integer $expired
  * @property integer $forgot_day_left
@@ -33,7 +33,7 @@ class UserForgot extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '_view_user_forgot';
+		return '_user_forgot';
 	}
 
 	/**

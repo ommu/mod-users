@@ -7,18 +7,18 @@ namespace app\modules\user;
  */
 class Module extends \app\components\Module
 {
-    /**
-     * @inheritdoc
-     */
-    public $controllerNamespace = 'app\modules\user\controllers';
+	/**
+	 * @inheritdoc
+	 */
+	public $controllerNamespace = 'app\modules\user\controllers';
 
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
+	/**
+	 * @inheritdoc
+	 */
+	public function init()
+	{
+		parent::init();
 
-        // custom initialization code goes here
-    }
+		// custom initialization code goes here
+	}
 }

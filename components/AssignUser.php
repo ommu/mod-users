@@ -7,15 +7,15 @@ use Yii;
 
 class AssignUser extends Behavior
 {
-    public function events() {
-        return [
-            ActiveRecord::EVENT_AFTER_INSERT => 'afterInsert',
-        ];
-    }
+	public function events() {
+		return [
+			ActiveRecord::EVENT_AFTER_INSERT => 'afterInsert',
+		];
+	}
 
-    public function afterInsert($event) {
-        $manager = Yii::$app->authManager;
-        $item    = $manager->getRole('user');
-        $manager->assign($item, $this->owner->id);
-    }
+	public function afterInsert($event) {
+		$manager = Yii::$app->authManager;
+		$item	= $manager->getRole('user');
+		$manager->assign($item, $this->owner->id);
+	}
 }

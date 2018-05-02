@@ -11,18 +11,18 @@ use \yii\data\ActiveDataProvider;
 
 class User extends \app\modules\user\models\User
 {
-    public $groupName;
+	public $groupName;
 
-    public function rules() {
-        return [
-            [['id'], 'integer'],
-            [['username', 'name', 'email', 'groupName'], 'safe'],
-        ];
-    }
+	public function rules() {
+		return [
+			[['id'], 'integer'],
+			[['username', 'name', 'email', 'groupName'], 'safe'],
+		];
+	}
 
-    public function scenarios() {
-        return Model::scenarios();
-    }
+	public function scenarios() {
+		return Model::scenarios();
+	}
 
 	/**
 	 * Tambahkan fungsi beforeValidate ini pada model search untuk menumpuk validasi pd model induk. 
@@ -34,37 +34,37 @@ class User extends \app\modules\user\models\User
 		return true;
 	}
 
-    public function search($params) {
-        $query = \app\modules\user\models\User::find();
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query
-        ]);
-        $dataProvider->setSort([
-            'attributes' => [
-                'id',
-                'username',
-                'name',
-                'email',
-                'groupName' => [
-                    'asc'   => ['swt_user_group.name' => SORT_ASC],
-                    'desc'  => ['swt_user_group.name' => SORT_DESC],
-                    'label' => 'Group Name',
-                ],
-            ]
-        ]);
+	public function search($params) {
+		$query = \app\modules\user\models\User::find();
+		$dataProvider = new ActiveDataProvider([
+			'query' => $query
+		]);
+		$dataProvider->setSort([
+			'attributes' => [
+				'id',
+				'username',
+				'name',
+				'email',
+				'groupName' => [
+					'asc'   => ['swt_user_group.name' => SORT_ASC],
+					'desc'  => ['swt_user_group.name' => SORT_DESC],
+					'label' => 'Group Name',
+				],
+			]
+		]);
 
-        if(!($this->load($params) && $this->validate())) {
-            $query->joinWith(['userGroup']);
-            return $dataProvider;
-        }
+		if(!($this->load($params) && $this->validate())) {
+			$query->joinWith(['userGroup']);
+			return $dataProvider;
+		}
 
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'email', $this->email]);
-        $query->joinWith(['userGroup' => function($q) {
-            $q->where('swt_user_group.name LIKE "%' . $this->groupName . '%"');
-        }]);
+		$query->andFilterWhere(['like', 'username', $this->username])
+			->andFilterWhere(['like', 'name', $this->name])
+			->andFilterWhere(['like', 'email', $this->email]);
+		$query->joinWith(['userGroup' => function($q) {
+			$q->where('swt_user_group.name LIKE "%' . $this->groupName . '%"');
+		}]);
 
-        return $dataProvider;
-    }
+		return $dataProvider;
+	}
 }

@@ -3,9 +3,9 @@
  * UserVerify
  * version: 0.0.1
  *
- * This is the model class for table "_view_user_verify".
+ * This is the model class for table "_user_verify".
  *
- * The followings are the available columns in table "_view_user_verify":
+ * The followings are the available columns in table "_user_verify":
  * @property integer $verify_id
  * @property integer $expired
  * @property integer $verify_day_left
@@ -33,7 +33,7 @@ class UserVerify extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '_view_user_verify';
+		return '_user_verify';
 	}
 
 	/**

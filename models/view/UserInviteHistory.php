@@ -3,9 +3,9 @@
  * UserInviteHistory
  * version: 0.0.1
  *
- * This is the model class for table "_view_user_invite_history".
+ * This is the model class for table "_user_invite_history".
  *
- * The followings are the available columns in table "_view_user_invite_history":
+ * The followings are the available columns in table "_user_invite_history":
  * @property integer $id
  * @property integer $expired
  * @property integer $invite_id
@@ -34,7 +34,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '_view_user_invite_history';
+		return '_user_invite_history';
 	}
 
 	/**
