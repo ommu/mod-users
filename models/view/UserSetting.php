@@ -1,22 +1,20 @@
 <?php
 /**
- * UserInviteHistory
+ * UserSetting
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @created date 23 October 2017, 09:38 WIB
- * @modified date 2 May 2018, 13:17 WIB
+ * @copyright Copyright (c) 2018 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 2 May 2018, 13:19 WIB
  * @link https://ecc.ft.ugm.ac.id
  *
- * This is the model class for table "_user_invite_history".
+ * This is the model class for table "_user_setting".
  *
- * The followings are the available columns in table "_user_invite_history":
+ * The followings are the available columns in table "_user_setting":
  * @property integer $id
- * @property integer $expired
- * @property integer $invite_id
- * @property integer $verify_day_left
- * @property integer $verify_hour_left
+ * @property integer $forgot_difference_hours
+ * @property integer $verify_difference_hours
+ * @property integer $invite_difference_hours
  *
  */
 
@@ -26,7 +24,7 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-class UserInviteHistory extends \app\components\ActiveRecord
+class UserSetting extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
@@ -35,7 +33,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '_user_invite_history';
+		return '_user_setting';
 	}
 
 	/**
@@ -60,8 +58,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['invite_id'], 'required'],
-			[['id', 'expired', 'invite_id', 'verify_day_left', 'verify_hour_left'], 'integer'],
+			[['id', 'forgot_difference_hours', 'verify_difference_hours', 'invite_difference_hours'], 'integer'],
 		];
 	}
 
@@ -72,10 +69,9 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	{
 		return [
 			'id' => Yii::t('app', 'ID'),
-			'expired' => Yii::t('app', 'Expired'),
-			'invite_id' => Yii::t('app', 'Invite'),
-			'verify_day_left' => Yii::t('app', 'Verify Day Left'),
-			'verify_hour_left' => Yii::t('app', 'Verify Hour Left'),
+			'forgot_difference_hours' => Yii::t('app', 'Forgot Difference Hour'),
+			'verify_difference_hours' => Yii::t('app', 'Verify Difference Hour'),
+			'invite_difference_hours' => Yii::t('app', 'Invite Difference Hour'),
 		];
 	}
 
@@ -97,28 +93,22 @@ class UserInviteHistory extends \app\components\ActiveRecord
 				return $model->id;
 			},
 		];
-		$this->templateColumns['expired'] = [
-			'attribute' => 'expired',
+		$this->templateColumns['forgot_difference_hours'] = [
+			'attribute' => 'forgot_difference_hours',
 			'value' => function($model, $key, $index, $column) {
-				return $model->expired;
+				return $model->forgot_difference_hours;
 			},
 		];
-		$this->templateColumns['invite_id'] = [
-			'attribute' => 'invite_id',
+		$this->templateColumns['verify_difference_hours'] = [
+			'attribute' => 'verify_difference_hours',
 			'value' => function($model, $key, $index, $column) {
-				return $model->invite_id;
+				return $model->verify_difference_hours;
 			},
 		];
-		$this->templateColumns['verify_day_left'] = [
-			'attribute' => 'verify_day_left',
+		$this->templateColumns['invite_difference_hours'] = [
+			'attribute' => 'invite_difference_hours',
 			'value' => function($model, $key, $index, $column) {
-				return $model->verify_day_left;
-			},
-		];
-		$this->templateColumns['verify_hour_left'] = [
-			'attribute' => 'verify_hour_left',
-			'value' => function($model, $key, $index, $column) {
-				return $model->verify_hour_left;
+				return $model->invite_difference_hours;
 			},
 		];
 	}

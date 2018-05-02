@@ -1,7 +1,13 @@
 <?php
 /**
  * UserLevel
- * version: 0.0.1
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 22 October 2017, 14:41 WIB
+ * @modified date 2 May 2018, 13:16 WIB
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "_user_level".
  *
@@ -12,12 +18,6 @@
  * @property string $user_noverified
  * @property string $user_blocked
  * @property integer $user_all
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 22 October 2017, 14:41 WIB
- * @contact (+62)856-299-4114
  *
  */
 
@@ -25,6 +25,7 @@ namespace app\modules\user\models\view;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 class UserLevel extends \app\components\ActiveRecord
 {
@@ -41,7 +42,8 @@ class UserLevel extends \app\components\ActiveRecord
 	/**
 	 * @return string the primarykey column
 	 */
-	public static function primaryKey() {
+	public static function primaryKey()
+	{
 		return ['level_id'];
 	}
 
@@ -78,7 +80,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'user_all' => Yii::t('app', 'User All'),
 		];
 	}
-	
+
 	/**
 	 * Set default columns to display
 	 */
@@ -91,22 +93,59 @@ class UserLevel extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['level_id'] = 'level_id';
-		$this->templateColumns['users'] = 'users';
-		$this->templateColumns['user_pending'] = 'user_pending';
-		$this->templateColumns['user_noverified'] = 'user_noverified';
-		$this->templateColumns['user_blocked'] = 'user_blocked';
-		$this->templateColumns['user_all'] = 'user_all';
+		$this->templateColumns['level_id'] = [
+			'attribute' => 'level_id',
+			'value' => function($model, $key, $index, $column) {
+				return $model->level_id;
+			},
+		];
+		$this->templateColumns['users'] = [
+			'attribute' => 'users',
+			'value' => function($model, $key, $index, $column) {
+				return $model->users;
+			},
+		];
+		$this->templateColumns['user_pending'] = [
+			'attribute' => 'user_pending',
+			'value' => function($model, $key, $index, $column) {
+				return $model->user_pending;
+			},
+		];
+		$this->templateColumns['user_noverified'] = [
+			'attribute' => 'user_noverified',
+			'value' => function($model, $key, $index, $column) {
+				return $model->user_noverified;
+			},
+		];
+		$this->templateColumns['user_blocked'] = [
+			'attribute' => 'user_blocked',
+			'value' => function($model, $key, $index, $column) {
+				return $model->user_blocked;
+			},
+		];
+		$this->templateColumns['user_all'] = [
+			'attribute' => 'user_all',
+			'value' => function($model, $key, $index, $column) {
+				return $model->user_all;
+			},
+		];
 	}
 
 	/**
-	 * before validate attributes
+	 * User get information
 	 */
-	public function beforeValidate() 
+	public static function getInfo($id, $column=null)
 	{
-		if(parent::beforeValidate()) {
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['level_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
 		}
-		return true;
 	}
-
 }

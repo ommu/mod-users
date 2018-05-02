@@ -1,7 +1,13 @@
 <?php
 /**
  * UserForgot
- * version: 0.0.1
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 22 October 2017, 08:14 WIB
+ * @modified date 2 May 2018, 13:16 WIB
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "_user_forgot".
  *
@@ -10,12 +16,6 @@
  * @property integer $expired
  * @property integer $forgot_day_left
  * @property integer $forgot_hour_left
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 22 October 2017, 08:14 WIB
- * @contact (+62)856-299-4114
  *
  */
 
@@ -23,6 +23,7 @@ namespace app\modules\user\models\view;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 class UserForgot extends \app\components\ActiveRecord
 {
@@ -39,7 +40,8 @@ class UserForgot extends \app\components\ActiveRecord
 	/**
 	 * @return string the primarykey column
 	 */
-	public static function primaryKey() {
+	public static function primaryKey()
+	{
 		return ['forgot_id'];
 	}
 
@@ -73,7 +75,7 @@ class UserForgot extends \app\components\ActiveRecord
 			'forgot_hour_left' => Yii::t('app', 'Forgot Hour Left'),
 		];
 	}
-	
+
 	/**
 	 * Set default columns to display
 	 */
@@ -86,10 +88,47 @@ class UserForgot extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['forgot_id'] = 'forgot_id';
-		$this->templateColumns['expired'] = 'expired';
-		$this->templateColumns['forgot_day_left'] = 'forgot_day_left';
-		$this->templateColumns['forgot_hour_left'] = 'forgot_hour_left';
+		$this->templateColumns['forgot_id'] = [
+			'attribute' => 'forgot_id',
+			'value' => function($model, $key, $index, $column) {
+				return $model->forgot_id;
+			},
+		];
+		$this->templateColumns['expired'] = [
+			'attribute' => 'expired',
+			'value' => function($model, $key, $index, $column) {
+				return $model->expired;
+			},
+		];
+		$this->templateColumns['forgot_day_left'] = [
+			'attribute' => 'forgot_day_left',
+			'value' => function($model, $key, $index, $column) {
+				return $model->forgot_day_left;
+			},
+		];
+		$this->templateColumns['forgot_hour_left'] = [
+			'attribute' => 'forgot_hour_left',
+			'value' => function($model, $key, $index, $column) {
+				return $model->forgot_hour_left;
+			},
+		];
 	}
 
+	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['forgot_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
+		}
+	}
 }
