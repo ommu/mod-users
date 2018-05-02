@@ -20,7 +20,7 @@
  *
  */
 
-namespace app\coremodules\user\models\view;
+namespace app\modules\user\models\view;
 
 use Yii;
 use yii\helpers\Url;

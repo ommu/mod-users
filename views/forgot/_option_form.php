@@ -2,8 +2,8 @@
 /**
  * User Forgots (user-forgot)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\ForgotController
- * @var $model app\coremodules\user\models\search\UserForgot
+ * @var $this app\modules\user\controllers\ForgotController
+ * @var $model app\modules\user\models\search\UserForgot
  * @var $form yii\widgets\ActiveForm
  * version: 0.0.1
  *

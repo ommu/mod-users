@@ -1,5 +1,5 @@
 <?php
-namespace app\coremodules\user\components;
+namespace app\modules\user\components;
 
 use yii\db\ActiveRecord;
 use yii\base\Behavior;

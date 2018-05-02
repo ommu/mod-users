@@ -2,7 +2,7 @@
 /**
  * VerifyController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserVerify
+ * @var $model app\modules\user\models\UserVerify
  * version: 0.0.1
  *
  * VerifyController implements the CRUD actions for UserVerify model.
@@ -24,11 +24,11 @@
  *
  */
 
-namespace app\coremodules\user\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
-use app\coremodules\user\models\UserVerify;
-use app\coremodules\user\models\search\UserVerify as UserVerifySearch;
+use app\modules\user\models\UserVerify;
+use app\modules\user\models\search\UserVerify as UserVerifySearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

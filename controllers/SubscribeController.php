@@ -2,7 +2,7 @@
 /**
  * SubscribeController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserNewsletter
+ * @var $model app\modules\user\models\UserNewsletter
  * version: 0.0.1
  *
  * SubscribeController implements the CRUD actions for UserNewsletter model.
@@ -24,11 +24,11 @@
  *
  */
  
-namespace app\coremodules\user\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
-use app\coremodules\user\models\UserNewsletter;
-use app\coremodules\user\models\search\UserNewsletter as UserNewsletterSearch;
+use app\modules\user\models\UserNewsletter;
+use app\modules\user\models\search\UserNewsletter as UserNewsletterSearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

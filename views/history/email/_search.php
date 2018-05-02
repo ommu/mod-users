@@ -2,8 +2,8 @@
 /**
  * User History Emails (user-history-email)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\history\EmailController
- * @var $model app\coremodules\user\models\search\UserHistoryEmail
+ * @var $this app\modules\user\controllers\history\EmailController
+ * @var $model app\modules\user\models\search\UserHistoryEmail
  * @var $form yii\widgets\ActiveForm
  * version: 0.0.1
  *

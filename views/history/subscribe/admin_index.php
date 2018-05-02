@@ -2,8 +2,8 @@
 /**
  * User Newsletter Histories (user-newsletter-history)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\history\SubscribeController
- * @var $model app\coremodules\user\models\UserNewsletterHistory
+ * @var $this app\modules\user\controllers\history\SubscribeController
+ * @var $model app\modules\user\models\UserNewsletterHistory
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)

@@ -2,8 +2,8 @@
 /**
  * User Levels (user-level)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\LevelController
- * @var $model app\coremodules\user\models\UserLevel
+ * @var $this app\modules\user\controllers\LevelController
+ * @var $model app\modules\user\models\UserLevel
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)

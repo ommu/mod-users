@@ -2,8 +2,8 @@
 /**
  * User Levels (user-level)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\LevelController
- * @var $model app\coremodules\user\models\search\UserLevel
+ * @var $this app\modules\user\controllers\LevelController
+ * @var $model app\modules\user\models\search\UserLevel
  * @var $form yii\widgets\ActiveForm
  * version: 0.0.1
  *

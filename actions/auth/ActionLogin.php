@@ -1,11 +1,11 @@
 <?php
 
-namespace app\coremodules\user\actions\auth;
+namespace app\modules\user\actions\auth;
 
 use Yii;
-use app\coremodules\user\models\LoginForm;
-use app\coremodules\user\components\User;
-use app\coremodules\user\models\User as UserModel;
+use app\modules\user\models\LoginForm;
+use app\modules\user\components\User;
+use app\modules\user\models\User as UserModel;
 
 class ActionLogin extends \app\components\api\Action
 {

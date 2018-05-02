@@ -1,10 +1,10 @@
 <?php
-use app\coremodules\user\Events;
-use app\coremodules\user\components\User;
+use app\modules\user\Events;
+use app\modules\user\components\User;
 
 return [
     'id'           => 'user',
-    'class'        => \app\coremodules\user\Module::className(),
+    'class'        => \app\modules\user\Module::className(),
     'isCoreModule' => true,
     'events' => [
         ['class' => User::className(), 'event' => User::EVENT_INVALIDATE_CACHE,

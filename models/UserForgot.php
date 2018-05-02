@@ -28,13 +28,13 @@
  *
  */
 
-namespace app\coremodules\user\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 use app\libraries\grid\GridView;
-use app\coremodules\user\models\view\UserForgot as UserForgotView;
+use app\modules\user\models\view\UserForgot as UserForgotView;
 
 class UserForgot extends \app\components\ActiveRecord
 {

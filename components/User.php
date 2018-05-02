@@ -1,8 +1,8 @@
 <?php
-namespace app\coremodules\user\components;
+namespace app\modules\user\components;
 
 use Yii;
-use app\coremodules\user\models\User as UserModel;
+use app\modules\user\models\User as UserModel;
 
 class User extends \yii\web\User
 {

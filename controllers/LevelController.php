@@ -2,7 +2,7 @@
 /**
  * LevelController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserLevel
+ * @var $model app\modules\user\models\UserLevel
  * version: 0.0.1
  *
  * LevelController implements the CRUD actions for UserLevel model.
@@ -27,11 +27,11 @@
  *
  */
  
-namespace app\coremodules\user\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
-use app\coremodules\user\models\UserLevel;
-use app\coremodules\user\models\search\UserLevel as UserLevelSearch;
+use app\modules\user\models\UserLevel;
+use app\modules\user\models\search\UserLevel as UserLevelSearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

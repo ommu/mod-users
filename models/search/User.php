@@ -4,12 +4,12 @@
  *
  * @author Agus Susilo <smartgdi@gmail.com>
  */
-namespace app\coremodules\user\models\search;
+namespace app\modules\user\models\search;
 
 use \yii\base\Model;
 use \yii\data\ActiveDataProvider;
 
-class User extends \app\coremodules\user\models\User
+class User extends \app\modules\user\models\User
 {
     public $groupName;
 
@@ -35,7 +35,7 @@ class User extends \app\coremodules\user\models\User
 	}
 
     public function search($params) {
-        $query = \app\coremodules\user\models\User::find();
+        $query = \app\modules\user\models\User::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query
         ]);

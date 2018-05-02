@@ -24,11 +24,11 @@
  *
  */
 
-namespace app\coremodules\user\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
-use app\coremodules\user\models\view\UserInviteHistory as UserInviteHistoryView;
+use app\modules\user\models\view\UserInviteHistory as UserInviteHistoryView;
 use app\libraries\grid\GridView;
 
 class UserInviteHistory extends \app\components\ActiveRecord

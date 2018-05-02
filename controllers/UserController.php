@@ -1,8 +1,8 @@
 <?php
-namespace app\coremodules\user\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
-use app\coremodules\user\models\search\User as UserSearch;
+use app\modules\user\models\search\User as UserSearch;
 
 class UserController extends \app\components\Controller
 {

@@ -2,7 +2,7 @@
 /**
  * ForgotController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserForgot
+ * @var $model app\modules\user\models\UserForgot
  * version: 0.0.1
  *
  * ForgotController implements the CRUD actions for UserForgot model.
@@ -24,11 +24,11 @@
  *
  */
  
-namespace app\coremodules\user\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
-use app\coremodules\user\models\UserForgot;
-use app\coremodules\user\models\search\UserForgot as UserForgotSearch;
+use app\modules\user\models\UserForgot;
+use app\modules\user\models\search\UserForgot as UserForgotSearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

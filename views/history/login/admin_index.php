@@ -2,8 +2,8 @@
 /**
  * User History Logins (user-history-login)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\history\LoginController
- * @var $model app\coremodules\user\models\UserHistoryLogin
+ * @var $this app\modules\user\controllers\history\LoginController
+ * @var $model app\modules\user\models\UserHistoryLogin
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)

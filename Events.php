@@ -1,5 +1,5 @@
 <?php
-namespace app\coremodules\user;
+namespace app\modules\user;
 
 use yii\base\Event;
 use Yii;

@@ -2,8 +2,8 @@
 /**
  * User Invites (user-invites)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\InviteController
- * @var $model app\coremodules\user\models\UserInvites
+ * @var $this app\modules\user\controllers\InviteController
+ * @var $model app\modules\user\models\UserInvites
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)

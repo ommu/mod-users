@@ -1,12 +1,12 @@
 <?php
 
-namespace app\coremodules\user\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\base\NotSupportException;
 use yii\web\IdentityInterface;
-use app\coremodules\user\models\UserGroup;
-use app\coremodules\user\components\User as UserIdentity;
+use app\modules\user\models\UserGroup;
+use app\modules\user\components\User as UserIdentity;
 // use yii\filters\RateLimitInterface;
 
 /**
@@ -264,7 +264,7 @@ class User extends \app\components\ActiveRecord implements IdentityInterface//, 
         $data = Yii::$app->jwt->getValidationData();
         $data->setIssuer(UserIdentity::JWT_ISSUER);
         $data->setAudience(UserIdentity::JWT_AUDIENCE);
-        $data->setId(\app\coremodules\user\components\User::JWT_UNIQ_ID);
+        $data->setId(\app\modules\user\components\User::JWT_UNIQ_ID);
         return $token->validate($data);
     }
     // implementasi rate limit untuk api. lihat dokumen guide tentang rest api

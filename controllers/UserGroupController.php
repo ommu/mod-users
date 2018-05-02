@@ -1,5 +1,5 @@
 <?php
-namespace app\coremodules\user\controllers;
+namespace app\modules\user\controllers;
 
 class UserGroupController extends \app\components\Controller
 {

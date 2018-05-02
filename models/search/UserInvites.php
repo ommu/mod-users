@@ -3,7 +3,7 @@
  * UserInvites
  * version: 0.0.1
  *
- * UserInvites represents the model behind the search form about `app\coremodules\user\models\UserInvites`.
+ * UserInvites represents the model behind the search form about `app\modules\user\models\UserInvites`.
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
@@ -13,14 +13,14 @@
  *
  */
 
-namespace app\coremodules\user\models\search;
+namespace app\modules\user\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\coremodules\user\models\UserInvites as UserInvitesModel;
-//use app\coremodules\user\models\UserNewsletter;
-//use app\coremodules\user\models\Users;
+use app\modules\user\models\UserInvites as UserInvitesModel;
+//use app\modules\user\models\UserNewsletter;
+//use app\modules\user\models\Users;
 
 class UserInvites extends UserInvitesModel
 {

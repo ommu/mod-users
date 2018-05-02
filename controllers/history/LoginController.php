@@ -2,7 +2,7 @@
 /**
  * LoginController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserHistoryLogin
+ * @var $model app\modules\user\models\UserHistoryLogin
  * version: 0.0.1
  *
  * LoginController implements the CRUD actions for UserHistoryLogin model.
@@ -21,11 +21,11 @@
  *
  */
  
-namespace app\coremodules\user\controllers\history;
+namespace app\modules\user\controllers\history;
 
 use Yii;
-use app\coremodules\user\models\UserHistoryLogin;
-use app\coremodules\user\models\search\UserHistoryLogin as UserHistoryLoginSearch;
+use app\modules\user\models\UserHistoryLogin;
+use app\modules\user\models\search\UserHistoryLogin as UserHistoryLoginSearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

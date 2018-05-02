@@ -2,7 +2,7 @@
 /**
  * SettingController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserSetting
+ * @var $model app\modules\user\models\UserSetting
  * version: 0.0.1
  *
  * SettingController implements the CRUD actions for UserSetting model.
@@ -21,15 +21,15 @@
  *
  */
  
-namespace app\coremodules\user\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
-use app\coremodules\user\models\UserSetting;
+use app\modules\user\models\UserSetting;
 use yii\data\ActiveDataProvider;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\coremodules\user\models\search\UserLevel as UserLevelSearch;
+use app\modules\user\models\search\UserLevel as UserLevelSearch;
 
 class SettingController extends Controller
 {

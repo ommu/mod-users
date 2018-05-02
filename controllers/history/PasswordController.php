@@ -2,7 +2,7 @@
 /**
  * PasswordController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserHistoryPassword
+ * @var $model app\modules\user\models\UserHistoryPassword
  * version: 0.0.1
  *
  * PasswordController implements the CRUD actions for UserHistoryPassword model.
@@ -21,11 +21,11 @@
  *
  */
  
-namespace app\coremodules\user\controllers\history;
+namespace app\modules\user\controllers\history;
 
 use Yii;
-use app\coremodules\user\models\UserHistoryPassword;
-use app\coremodules\user\models\search\UserHistoryPassword as UserHistoryPasswordSearch;
+use app\modules\user\models\UserHistoryPassword;
+use app\modules\user\models\search\UserHistoryPassword as UserHistoryPasswordSearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

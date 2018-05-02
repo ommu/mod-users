@@ -44,16 +44,16 @@
  *
  */
 
-namespace app\coremodules\user\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
 use yii\behaviors\SluggableBehavior;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 use app\components\Utility;
 use app\models\SourceMessage;
 use app\libraries\grid\GridView;
-use app\coremodules\user\models\view\UserLevel as UserLevelView;
+use app\modules\user\models\view\UserLevel as UserLevelView;
 
 class UserLevel extends \app\components\ActiveRecord
 {

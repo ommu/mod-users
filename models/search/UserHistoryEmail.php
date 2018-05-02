@@ -3,7 +3,7 @@
  * UserHistoryEmail
  * version: 0.0.1
  *
- * UserHistoryEmail represents the model behind the search form about `app\coremodules\user\models\UserHistoryEmail`.
+ * UserHistoryEmail represents the model behind the search form about `app\modules\user\models\UserHistoryEmail`.
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
@@ -13,13 +13,13 @@
  *
  */
 
-namespace app\coremodules\user\models\search;
+namespace app\modules\user\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\coremodules\user\models\UserHistoryEmail as UserHistoryEmailModel;
-//use app\coremodules\user\models\Users;
+use app\modules\user\models\UserHistoryEmail as UserHistoryEmailModel;
+//use app\modules\user\models\Users;
 
 class UserHistoryEmail extends UserHistoryEmailModel
 {

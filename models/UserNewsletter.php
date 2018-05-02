@@ -30,11 +30,11 @@
  *
  */
 
-namespace app\coremodules\user\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 
 class UserNewsletter extends \app\components\ActiveRecord
 {

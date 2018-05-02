@@ -2,8 +2,8 @@
 /**
  * User Settings (user-setting)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\SettingController
- * @var $model app\coremodules\user\models\UserSetting
+ * @var $this app\modules\user\controllers\SettingController
+ * @var $model app\modules\user\models\UserSetting
  * @var $form yii\widgets\ActiveForm
  * version: 0.0.1
  *

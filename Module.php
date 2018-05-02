@@ -1,6 +1,6 @@
 <?php
 
-namespace app\coremodules\user;
+namespace app\modules\user;
 
 /**
  * user module definition class
@@ -10,7 +10,7 @@ class Module extends \app\components\Module
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = 'app\coremodules\user\controllers';
+    public $controllerNamespace = 'app\modules\user\controllers';
 
     /**
      * @inheritdoc

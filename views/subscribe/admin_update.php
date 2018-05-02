@@ -2,8 +2,8 @@
 /**
  * User Newsletters (user-newsletter)
  * @var $this yii\web\View
- * @var $this app\coremodules\user\controllers\SubscribeController
- * @var $model app\coremodules\user\models\UserNewsletter
+ * @var $this app\modules\user\controllers\SubscribeController
+ * @var $model app\modules\user\models\UserNewsletter
  * @var $form yii\widgets\ActiveForm
  * version: 0.0.1
  *

@@ -53,11 +53,11 @@
  *
  */
 
-namespace app\coremodules\user\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 use app\models\CoreLanguages;
 
 class Users extends \app\components\ActiveRecord

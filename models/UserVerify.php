@@ -28,13 +28,13 @@
  *
  */
 
-namespace app\coremodules\user\models;
+namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
-use app\coremodules\user\models\Users;
+use app\modules\user\models\Users;
 use app\libraries\grid\GridView;
-use app\coremodules\user\models\view\UserVerify as UserVerifyView;
+use app\modules\user\models\view\UserVerify as UserVerifyView;
 
 class UserVerify extends \app\components\ActiveRecord
 {

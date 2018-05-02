@@ -2,7 +2,7 @@
 /**
  * InviteController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserInviteHistory
+ * @var $model app\modules\user\models\UserInviteHistory
  * version: 0.0.1
  *
  * InviteController implements the CRUD actions for UserInviteHistory model.
@@ -22,11 +22,11 @@
  *
  */
  
-namespace app\coremodules\user\controllers\history;
+namespace app\modules\user\controllers\history;
 
 use Yii;
-use app\coremodules\user\models\UserInviteHistory;
-use app\coremodules\user\models\search\UserInviteHistory as UserInviteHistorySearch;
+use app\modules\user\models\UserInviteHistory;
+use app\modules\user\models\search\UserInviteHistory as UserInviteHistorySearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

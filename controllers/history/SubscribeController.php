@@ -2,7 +2,7 @@
 /**
  * SubscribeController
  * @var $this yii\web\View
- * @var $model app\coremodules\user\models\UserNewsletterHistory
+ * @var $model app\modules\user\models\UserNewsletterHistory
  * version: 0.0.1
  *
  * SubscribeController implements the CRUD actions for UserNewsletterHistory model.
@@ -21,11 +21,11 @@
  *
  */
  
-namespace app\coremodules\user\controllers\history;
+namespace app\modules\user\controllers\history;
 
 use Yii;
-use app\coremodules\user\models\UserNewsletterHistory;
-use app\coremodules\user\models\search\UserNewsletterHistory as UserNewsletterHistorySearch;
+use app\modules\user\models\UserNewsletterHistory;
+use app\modules\user\models\search\UserNewsletterHistory as UserNewsletterHistorySearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
