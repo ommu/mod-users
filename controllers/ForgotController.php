@@ -3,7 +3,6 @@
  * ForgotController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserForgot
- * version: 0.0.1
  *
  * ForgotController implements the CRUD actions for UserForgot model.
  * Reference start
@@ -13,25 +12,28 @@
  *	View
  *	Delete
  *	RunAction
+ *	Publish
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 17 October 2017, 15:01 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 17 October 2017, 15:01 WIB
+ * @modified date 3 May 2018, 14:11 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\user\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\user\models\UserForgot;
 use app\modules\user\models\search\UserForgot as UserForgotSearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 class ForgotController extends Controller
 {
@@ -41,10 +43,14 @@ class ForgotController extends Controller
 	public function behaviors()
 	{
 		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
 					'delete' => ['POST'],
+					'publish' => ['POST'],
 				],
 			],
 		];
@@ -75,7 +81,7 @@ class ForgotController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
 		]);
 	}
 
@@ -88,19 +94,21 @@ class ForgotController extends Controller
 	{
 		$model = new UserForgot();
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->forgot_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Forgot success created.'));
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Create User Forgot');
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_create', [
-				'model' => $model,
-			]);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success created.'));
+				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id' => $model->forgot_id]);
+			} 
 		}
+
+		$this->view->title = Yii::t('app', 'Create User Forgot');
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_create', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -112,7 +120,7 @@ class ForgotController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {forgot_id}', ['modelClass' => 'User Forgot', 'forgot_id' => $model->forgot_id]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'User Forgot', 'user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -131,9 +139,27 @@ class ForgotController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if ($model->save(false, ['publish'])) {
+		if($model->save(false, ['publish'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success deleted.'));
+			return $this->redirect(['index']);
 			//return $this->redirect(['view', 'id' => $model->forgot_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Forgot success deleted.'));
+		}
+	}
+
+	/**
+	 * actionPublish an existing UserForgot model.
+	 * If publish is successful, the browser will be redirected to the 'index' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionPublish($id)
+	{
+		$model = $this->findModel($id);
+		$replace = $model->publish == 1 ? 0 : 1;
+		$model->publish = $replace;
+
+		if($model->save(false, ['publish'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success updated.'));
 			return $this->redirect(['index']);
 		}
 	}
@@ -147,7 +173,7 @@ class ForgotController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserForgot::findOne($id)) !== null) 
+		if(($model = UserForgot::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

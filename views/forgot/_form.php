@@ -5,19 +5,18 @@
  * @var $this app\modules\user\controllers\ForgotController
  * @var $model app\modules\user\models\UserForgot
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 17 October 2017, 15:01 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 17 October 2017, 15:01 WIB
+ * @modified date 3 May 2018, 14:11 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\jui\DatePicker;
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -25,6 +24,9 @@ use yii\jui\DatePicker;
 		'class' => 'form-horizontal form-label-left',
 		//'enctype' => 'multipart/form-data',
 	],
+	'enableClientValidation' => true,
+	'enableAjaxValidation' => false,
+	//'enableClientScript' => true,
 ]); ?>
 
 <?php //echo $form->errorSummary($model);?>

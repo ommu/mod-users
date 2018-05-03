@@ -224,7 +224,7 @@ class UserForgot extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['expired_search'] = [
 			'attribute' => 'expired_search',
-			'filter' => GridView::getFilterYesNo(),
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $model->view->expired ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},

@@ -1,15 +1,15 @@
 <?php
 /**
  * UserForgot
- * version: 0.0.1
  *
  * UserForgot represents the model behind the search form about `app\modules\user\models\UserForgot`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 17 October 2017, 15:01 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 17 October 2017, 15:01 WIB
+ * @modified date 3 May 2018, 14:11 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,7 +19,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\user\models\UserForgot as UserForgotModel;
-//use app\modules\user\models\Users;
 
 class UserForgot extends UserForgotModel
 {
@@ -30,7 +29,8 @@ class UserForgot extends UserForgotModel
 	{
 		return [
 			[['forgot_id', 'publish', 'user_id', 'modified_id'], 'integer'],
-			[['code', 'forgot_date', 'forgot_ip', 'expired_date', 'modified_date', 'deleted_date', 'user_search', 'modified_search', 'email_search', 'expired_search', 'level_search'], 'safe'],
+			[['code', 'forgot_date', 'forgot_ip', 'expired_date', 'modified_date', 'deleted_date',
+				'level_search', 'user_search', 'email_search', 'modified_search', 'expired_search'], 'safe'],
 		];
 	}
 
@@ -62,7 +62,12 @@ class UserForgot extends UserForgotModel
 	public function search($params)
 	{
 		$query = UserForgotModel::find()->alias('t');
-		$query->joinWith(['user user', 'modified modified', 'view view', 'user.level.title level_title']);
+		$query->joinWith([
+			'view view', 
+			'user user', 
+			'user.level.title level', 
+			'modified modified'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -70,6 +75,10 @@ class UserForgot extends UserForgotModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['level_search'] = [
+			'asc' => ['level.message' => SORT_ASC],
+			'desc' => ['level.message' => SORT_DESC],
+		];
 		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
@@ -86,10 +95,6 @@ class UserForgot extends UserForgotModel
 			'asc' => ['view.expired' => SORT_ASC],
 			'desc' => ['view.expired' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
-			'asc' => ['level_title.message' => SORT_ASC],
-			'desc' => ['level_title.message' => SORT_DESC],
-		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['forgot_id' => SORT_DESC],
@@ -97,7 +102,7 @@ class UserForgot extends UserForgotModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -106,21 +111,24 @@ class UserForgot extends UserForgotModel
 		// grid filtering conditions
 		$query->andFilterWhere([
 			't.forgot_id' => $this->forgot_id,
-			't.publish' => $this->publish,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.forgot_date as date)' => $this->forgot_date,
 			'cast(t.expired_date as date)' => $this->expired_date,
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.deleted_date as date)' => $this->deleted_date,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
 			'view.expired' => $this->expired_search,
-			'user.level_id' => $this->level_search,
 		]);
 
-		if(!isset($params['trash']))
-			$query->andFilterWhere(['IN', 't.publish', [0,1]]);
-		else
+		if(isset($params['trash']))
 			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+		else {
+			if(!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == ''))
+				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
+			else
+				$query->andFilterWhere(['t.publish' => $this->publish]);
+		}
 
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.forgot_ip', $this->forgot_ip])

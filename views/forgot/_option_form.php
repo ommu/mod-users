@@ -5,13 +5,13 @@
  * @var $this app\modules\user\controllers\ForgotController
  * @var $model app\modules\user\models\search\UserForgot
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 17 October 2017, 15:01 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 17 October 2017, 15:01 WIB
+ * @modified date 3 May 2018, 14:11 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -39,11 +39,9 @@ JS;
 <div class="grid-form">
 	<?php echo Html::beginForm(Url::to(['/'.$route]), 'get', ['name' => 'gridoption']);
 		$columns = [];
-
 		foreach($model->templateColumns as $key => $column) {
 			if($key == '_no')
 				continue;
-			
 			$columns[$key] = $key;
 		}
 	?>
@@ -55,6 +53,5 @@ JS;
 			</li>
 			<?php endforeach; ?>
 		</ul>
-		<div class="clear"></div>
 	<?php echo Html::endForm(); ?>
 </div>
