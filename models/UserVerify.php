@@ -40,12 +40,12 @@ class UserVerify extends \app\components\ActiveRecord
 {
 	use \app\components\traits\GridViewSystem;
 
-	public $gridForbiddenColumn = [];
+	public $gridForbiddenColumn = ['code','verify_ip','modified_date','modified_search','deleted_date'];
+	public $email_i;
 
 	// Variable Search
 	public $level_search;
 	public $user_search;
-	public $email_search;
 	public $modified_search;
 	public $expired_search;
 
@@ -71,10 +71,12 @@ class UserVerify extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['code', 'verify_ip'], 'required'],
+			[['code',
+				'email_i'], 'required'],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
 			[['user_id', 'verify_date', 'expired_date', 'modified_date', 'deleted_date'], 'safe'],
 			[['code'], 'string', 'max' => 64],
+			[['email_i'], 'string', 'max' => 32],
 			[['verify_ip'], 'string', 'max' => 20],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -98,7 +100,7 @@ class UserVerify extends \app\components\ActiveRecord
 			'deleted_date' => Yii::t('app', 'Deleted Date'),
 			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),
-			'email_search' => Yii::t('app', 'Email'),
+			'email_i' => Yii::t('app', 'Email'),
 			'modified_search' => Yii::t('app', 'Modified'),
 			'expired_search' => Yii::t('app', 'Expired'),
 		];
@@ -163,8 +165,8 @@ class UserVerify extends \app\components\ActiveRecord
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
 			];
-			$this->templateColumns['email_search'] = [
-				'attribute' => 'email_search',
+			$this->templateColumns['email_i'] = [
+				'attribute' => 'email_i',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->email : '-';
 				},
@@ -290,7 +292,22 @@ class UserVerify extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+				if(preg_match('/@/',$this->email_i)) {
+					$user = Users::find()
+						->select(['user_id','email'])
+						->where(['email' => $this->email_i])
+						->one();
+				} else {
+					$user = Users::find()
+						->select(['user_id','username'])
+						->where(['username' => $this->email_i])
+						->one();
+				}
+				if($user === null)
+					$this->addError('email_i', Yii::t('app', '{attribute} {email-i} belum terdaftar sebagai member.', ['attribute'=>$this->getAttributeLabel('email_i'), 'email-i'=>$this->email_i]));
+				else
+					$this->user_id = $user->user_id;
+
 				$this->code = self::getUniqueCode();
 				$this->verify_ip = $_SERVER['REMOTE_ADDR'];
 			} else

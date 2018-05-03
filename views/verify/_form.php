@@ -31,25 +31,9 @@ use yii\widgets\ActiveForm;
 
 <?php //echo $form->errorSummary($model);?>
 
-<?php echo $form->field($model, 'user_id', ['template' => '{label}<div class="col-md-6 col-sm-6 col-xs-12">{input}{error}</div>'])
-	->textInput(['type' => 'number'])
-	->label($model->getAttributeLabel('user_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-
-<?php echo $form->field($model, 'code', ['template' => '{label}<div class="col-md-6 col-sm-6 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'email_i', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
 	->textInput(['maxlength' => true])
-	->label($model->getAttributeLabel('code'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-
-<?php echo $form->field($model, 'verify_ip', ['template' => '{label}<div class="col-md-6 col-sm-6 col-xs-12">{input}{error}</div>'])
-	->textInput(['maxlength' => true])
-	->label($model->getAttributeLabel('verify_ip'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-
-<?php echo $form->field($model, 'expired_date', ['template' => '{label}<div class="col-md-6 col-sm-6 col-xs-12">{input}{error}</div>'])
-	->widget(DatePicker::classname(), ['dateFormat' => Yii::$app->formatter->dateFormat, 'options' => ['class' => 'form-control']])
-	->label($model->getAttributeLabel('expired_date'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-
-<?php echo $form->field($model, 'publish', ['template' => '{label}<div class="col-md-6 col-sm-6 col-xs-12 checkbox">{input}{error}</div>'])
-	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('publish'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('email_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <div class="ln_solid"></div>
 <div class="form-group">

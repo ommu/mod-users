@@ -30,7 +30,7 @@ class UserVerify extends UserVerifyModel
 		return [
 			[['verify_id', 'publish', 'user_id', 'modified_id'], 'integer'],
 			[['code', 'verify_date', 'verify_ip', 'expired_date', 'modified_date', 'deleted_date',
-				'level_search', 'user_search', 'email_search', 'modified_search', 'expired_search'], 'safe'],
+				'level_search', 'user_search', 'email_i', 'modified_search', 'expired_search'], 'safe'],
 		];
 	}
 
@@ -83,7 +83,7 @@ class UserVerify extends UserVerifyModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['email_search'] = [
+		$attributes['email_i'] = [
 			'asc' => ['user.email' => SORT_ASC],
 			'desc' => ['user.email' => SORT_DESC],
 		];
@@ -133,7 +133,7 @@ class UserVerify extends UserVerifyModel
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.verify_ip', $this->verify_ip])
 			->andFilterWhere(['like', 'user.displayname', $this->user_search])
-			->andFilterWhere(['like', 'user.email', $this->email_search])
+			->andFilterWhere(['like', 'user.email', $this->email_i])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
