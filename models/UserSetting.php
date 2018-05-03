@@ -1,7 +1,13 @@
 <?php
 /**
  * UserSetting
- * version: 0.0.1
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 9 October 2017, 11:21 WIB
+ * @modified date 2 May 2018, 13:34 WIB
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_user_setting".
  *
@@ -20,12 +26,9 @@
  * @property string $invite_order
  * @property string $modified_date
  * @property integer $modified_id
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 9 October 2017, 11:21 WIB
- * @contact (+62)856-299-4114
+ *
+ * The followings are the available model relations:
+ * @property Users $modified
  *
  */
 
@@ -33,10 +36,13 @@ namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
-use app\modules\user\models\Users;
+use yii\helpers\Html;
+use app\modules\user\models\view\UserSetting as UserSettingView;
 
 class UserSetting extends \app\components\ActiveRecord
 {
+	use \app\components\traits\GridViewSystem;
+
 	public $gridForbiddenColumn = [];
 
 	// Variable Search
@@ -64,20 +70,12 @@ class UserSetting extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['license', 'permission', 'meta_keyword', 'meta_description', 'forgot_diff_type', 'forgot_difference', 'verify_diff_type', 'verify_difference', 'invite_diff_type', 'invite_difference', 'modified_id'], 'required'],
+			[['license', 'permission', 'meta_keyword', 'meta_description', 'forgot_diff_type', 'forgot_difference', 'verify_diff_type', 'verify_difference', 'invite_diff_type', 'invite_difference'], 'required'],
 			[['permission', 'forgot_difference', 'verify_difference', 'invite_difference', 'modified_id'], 'integer'],
 			[['meta_keyword', 'meta_description', 'forgot_diff_type', 'verify_diff_type', 'invite_diff_type', 'invite_order'], 'string'],
 			[['modified_date'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getModified()
-	{
-		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
 	}
 
 	/**
@@ -103,7 +101,23 @@ class UserSetting extends \app\components\ActiveRecord
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
-	
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getModified()
+	{
+		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(UserSettingView::className(), ['id' => 'id']);
+	}
+
 	/**
 	 * Set default columns to display
 	 */
@@ -116,27 +130,73 @@ class UserSetting extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['license'] = 'license';
-		$this->templateColumns['meta_keyword'] = 'meta_keyword';
-		$this->templateColumns['meta_description'] = 'meta_description';
-		$this->templateColumns['forgot_diff_type'] = 'forgot_diff_type';
-		$this->templateColumns['forgot_difference'] = 'forgot_difference';
-		$this->templateColumns['verify_diff_type'] = 'verify_diff_type';
-		$this->templateColumns['verify_difference'] = 'verify_difference';
-		$this->templateColumns['invite_diff_type'] = 'invite_diff_type';
-		$this->templateColumns['invite_difference'] = 'invite_difference';
-		$this->templateColumns['invite_order'] = 'invite_order';
+		$this->templateColumns['license'] = [
+			'attribute' => 'license',
+			'value' => function($model, $key, $index, $column) {
+				return $model->license;
+			},
+		];
+		$this->templateColumns['meta_keyword'] = [
+			'attribute' => 'meta_keyword',
+			'value' => function($model, $key, $index, $column) {
+				return $model->meta_keyword;
+			},
+		];
+		$this->templateColumns['meta_description'] = [
+			'attribute' => 'meta_description',
+			'value' => function($model, $key, $index, $column) {
+				return $model->meta_description;
+			},
+		];
+		$this->templateColumns['forgot_diff_type'] = [
+			'attribute' => 'forgot_diff_type',
+			'value' => function($model, $key, $index, $column) {
+				return $model->forgot_diff_type;
+			},
+		];
+		$this->templateColumns['forgot_difference'] = [
+			'attribute' => 'forgot_difference',
+			'value' => function($model, $key, $index, $column) {
+				return $model->forgot_difference;
+			},
+		];
+		$this->templateColumns['verify_diff_type'] = [
+			'attribute' => 'verify_diff_type',
+			'value' => function($model, $key, $index, $column) {
+				return $model->verify_diff_type;
+			},
+		];
+		$this->templateColumns['verify_difference'] = [
+			'attribute' => 'verify_difference',
+			'value' => function($model, $key, $index, $column) {
+				return $model->verify_difference;
+			},
+		];
+		$this->templateColumns['invite_diff_type'] = [
+			'attribute' => 'invite_diff_type',
+			'value' => function($model, $key, $index, $column) {
+				return $model->invite_diff_type;
+			},
+		];
+		$this->templateColumns['invite_difference'] = [
+			'attribute' => 'invite_difference',
+			'value' => function($model, $key, $index, $column) {
+				return $model->invite_difference;
+			},
+		];
+		$this->templateColumns['invite_order'] = [
+			'attribute' => 'invite_order',
+			'value' => function($model, $key, $index, $column) {
+				return $model->invite_order;
+			},
+		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'modified_date',
-				'model'	 => $this,
-			]),
+			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
 			$this->templateColumns['modified_search'] = [
@@ -148,11 +208,30 @@ class UserSetting extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['permission'] = [
 			'attribute' => 'permission',
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->permission;
+				return $model->permission ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function getInfo($column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['id' => 1])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne(1);
+			return $model;
+		}
 	}
 
 	/**
@@ -189,7 +268,7 @@ class UserSetting extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if(!$this->isNewRecord)
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
+				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}
 		return true;
 	}
