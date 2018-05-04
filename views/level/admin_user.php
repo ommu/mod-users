@@ -107,11 +107,11 @@ echo $form->field($model, 'profile_block', ['template' => '{label}<div class="co
 
 		<span class="small-px mb-10"><?php echo Yii::t('app', 'If you have selected "Yes" above, please input the maximum dimensions for the user photos. If your users upload a photo that is larger than these dimensions, the server will attempt to scale them down automatically. This feature requires that your PHP server is compiled with support for the GD Libraries.'); ?></span>
 		<?php echo $form->field($model, 'photo_size[width]', ['template' => '<div class="col-md-3 col-sm-3 checkbox">'.Yii::t('app', 'Maximum Width:').'</div><div class="col-md-3 col-sm-3">{input}</div><div class="col-md-6 col-sm-6 checkbox">in pixels, between 1 and 999</div><div class="clearfix"></div>{error}', 'options' => ['class' => 'row']])
-			->textInput(['type' => 'number', 'maxlength' => true])
+			->textInput(['type' => 'number', 'min'=>0, 'maxlength' => true])
 			->label($model->getAttributeLabel('photo_size'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 		<?php echo $form->field($model, 'photo_size[height]', ['template' => '<div class="col-md-3 col-sm-3 checkbox">'.Yii::t('app', 'Maximum Height:').'</div><div class="col-md-3 col-sm-3">{input}</div><div class="col-md-6 col-sm-6 checkbox">in pixels, between 1 and 999</div><div class="clearfix"></div>{error}', 'options' => ['class' => 'row']])
-			->textInput(['type'=>'number','maxlength' => true])
+			->textInput(['type'=>'number', 'min'=>0,'maxlength' => true])
 			->label($model->getAttributeLabel('photo_size'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 		<?php echo $form->field($model, 'photo_exts', ['template' => '<span class="small-px mb-10">'.Yii::t('app', 'What file types do you want to allow for user photos (gif, jpg, jpeg, or png)? Separate file types with commas, i.e. jpg, jpeg, gif, png').'</span>{input}{error}'])
