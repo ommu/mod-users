@@ -1,15 +1,15 @@
 <?php
 /**
- * User History Passwords (user-history-password)
+ * User History Usernames (user-history-username)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\history\PasswordController
- * @var $model app\modules\user\models\UserHistoryPassword
+ * @var $this app\modules\user\controllers\history\HistoryUsernameController
+ * @var $model app\modules\user\models\UserHistoryUsername
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 05:39 WIB
+ * @created date 8 October 2017, 05:40 WIB
  * @contact (+62)856-299-4114
  *
  */
@@ -76,16 +76,16 @@ $this->params['menu']['option'] = [
 				'buttons' => [
 					'view' => function ($url, $model, $key) {
 						$url = Url::to(['view', 'id'=>$model->primaryKey]);
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View User History Password')]);
+						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View User History Username')]);
 					},
 					'update' => function ($url, $model, $key) {
 						$url = Url::to(['update', 'id'=>$model->primaryKey]);
-						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User History Password')]);
+						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User History Username')]);
 					},
 					'delete' => function ($url, $model, $key) {
 						$url = Url::to(['delete', 'id'=>$model->primaryKey]);
 						return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-							'title' => Yii::t('app', 'Delete User History Password'),
+							'title' => Yii::t('app', 'Delete User History Username'),
 							'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
 							'data-method'  => 'post',
 						]);

@@ -2,7 +2,7 @@
 /**
  * User History Logins (user-history-login)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\history\LoginController
+ * @var $this app\modules\user\controllers\history\HistoryLoginController
  * @var $model app\modules\user\models\search\UserHistoryLogin
  * @var $form yii\widgets\ActiveForm
  * version: 0.0.1

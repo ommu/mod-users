@@ -1,11 +1,11 @@
 <?php
 /**
- * LoginController
+ * HistoryLoginController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserHistoryLogin
  * version: 0.0.1
  *
- * LoginController implements the CRUD actions for UserHistoryLogin model.
+ * HistoryLoginController implements the CRUD actions for UserHistoryLogin model.
  * Reference start
  * TOC :
  *	Index
@@ -30,7 +30,7 @@ use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-class LoginController extends Controller
+class HistoryLoginController extends Controller
 {
 	/**
 	 * @inheritdoc

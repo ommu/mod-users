@@ -1,11 +1,11 @@
 <?php
 /**
- * PasswordController
+ * HistoryUsernameController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserHistoryPassword
+ * @var $model app\modules\user\models\UserHistoryUsername
  * version: 0.0.1
  *
- * PasswordController implements the CRUD actions for UserHistoryPassword model.
+ * HistoryUsernameController implements the CRUD actions for UserHistoryUsername model.
  * Reference start
  * TOC :
  *	Index
@@ -16,7 +16,7 @@
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 05:39 WIB
+ * @created date 8 October 2017, 05:40 WIB
  * @contact (+62)856-299-4114
  *
  */
@@ -24,13 +24,13 @@
 namespace app\modules\user\controllers\history;
 
 use Yii;
-use app\modules\user\models\UserHistoryPassword;
-use app\modules\user\models\search\UserHistoryPassword as UserHistoryPasswordSearch;
+use app\modules\user\models\UserHistoryUsername;
+use app\modules\user\models\search\UserHistoryUsername as UserHistoryUsernameSearch;
 use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-class PasswordController extends Controller
+class HistoryUsernameController extends Controller
 {
 	/**
 	 * @inheritdoc
@@ -48,12 +48,12 @@ class PasswordController extends Controller
 	}
 
 	/**
-	 * Lists all UserHistoryPassword models.
+	 * Lists all UserHistoryUsername models.
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new UserHistoryPasswordSearch();
+		$searchModel = new UserHistoryUsernameSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -66,7 +66,7 @@ class PasswordController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User History Passwords');
+		$this->view->title = Yii::t('app', 'User History Usernames');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -77,7 +77,7 @@ class PasswordController extends Controller
 	}
 
 	/**
-	 * Deletes an existing UserHistoryPassword model.
+	 * Deletes an existing UserHistoryUsername model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -86,20 +86,20 @@ class PasswordController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User History Password success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'User History Username success deleted.'));
 		return $this->redirect(['index']);
 	}
 
 	/**
-	 * Finds the UserHistoryPassword model based on its primary key value.
+	 * Finds the UserHistoryUsername model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return UserHistoryPassword the loaded model
+	 * @return UserHistoryUsername the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserHistoryPassword::findOne($id)) !== null) 
+		if (($model = UserHistoryUsername::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

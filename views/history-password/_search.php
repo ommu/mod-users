@@ -2,7 +2,7 @@
 /**
  * User History Passwords (user-history-password)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\history\PasswordController
+ * @var $this app\modules\user\controllers\history\HistoryPasswordController
  * @var $model app\modules\user\models\search\UserHistoryPassword
  * @var $form yii\widgets\ActiveForm
  * version: 0.0.1

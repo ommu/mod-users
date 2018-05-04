@@ -1,9 +1,9 @@
 <?php
 /**
- * User History Logins (user-history-login)
+ * User History Passwords (user-history-password)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\history\LoginController
- * @var $model app\modules\user\models\UserHistoryLogin
+ * @var $this app\modules\user\controllers\history\HistoryPasswordController
+ * @var $model app\modules\user\models\UserHistoryPassword
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
@@ -76,16 +76,16 @@ $this->params['menu']['option'] = [
 				'buttons' => [
 					'view' => function ($url, $model, $key) {
 						$url = Url::to(['view', 'id'=>$model->primaryKey]);
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View User History Login')]);
+						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View User History Password')]);
 					},
 					'update' => function ($url, $model, $key) {
 						$url = Url::to(['update', 'id'=>$model->primaryKey]);
-						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User History Login')]);
+						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User History Password')]);
 					},
 					'delete' => function ($url, $model, $key) {
 						$url = Url::to(['delete', 'id'=>$model->primaryKey]);
 						return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-							'title' => Yii::t('app', 'Delete User History Login'),
+							'title' => Yii::t('app', 'Delete User History Password'),
 							'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
 							'data-method'  => 'post',
 						]);

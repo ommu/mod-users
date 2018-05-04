@@ -1,15 +1,15 @@
 <?php
 /**
- * User History Usernames (user-history-username)
+ * User History Emails (user-history-email)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\history\UsernameController
- * @var $model app\modules\user\models\UserHistoryUsername
+ * @var $this app\modules\user\controllers\history\HistoryEmailController
+ * @var $model app\modules\user\models\UserHistoryEmail
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 05:40 WIB
+ * @created date 8 October 2017, 05:36 WIB
  * @contact (+62)856-299-4114
  *
  */
@@ -76,16 +76,16 @@ $this->params['menu']['option'] = [
 				'buttons' => [
 					'view' => function ($url, $model, $key) {
 						$url = Url::to(['view', 'id'=>$model->primaryKey]);
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View User History Username')]);
+						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View User History Email')]);
 					},
 					'update' => function ($url, $model, $key) {
 						$url = Url::to(['update', 'id'=>$model->primaryKey]);
-						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User History Username')]);
+						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User History Email')]);
 					},
 					'delete' => function ($url, $model, $key) {
 						$url = Url::to(['delete', 'id'=>$model->primaryKey]);
 						return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-							'title' => Yii::t('app', 'Delete User History Username'),
+							'title' => Yii::t('app', 'Delete User History Email'),
 							'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
 							'data-method'  => 'post',
 						]);
