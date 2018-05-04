@@ -38,7 +38,7 @@ use app\modules\user\models\view\UserForgot as UserForgotView;
 
 class UserForgot extends \app\components\ActiveRecord
 {
-	use \app\components\traits\GridViewSystem;
+	use \ommu\traits\GridViewTrait;
 
 	public $gridForbiddenColumn = ['code','forgot_ip','modified_date','modified_search','deleted_date'];
 	public $email_i;

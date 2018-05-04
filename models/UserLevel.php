@@ -59,8 +59,8 @@ use app\modules\user\models\view\UserLevel as UserLevelView;
 
 class UserLevel extends \app\components\ActiveRecord
 {
-	use \app\components\traits\GridViewSystem;
-	use \app\components\traits\FileSystem;
+	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','slug','modified_date','modified_search'];
 	public $name_i;
@@ -511,7 +511,7 @@ class UserLevel extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 		$action = strtolower(Yii::$app->controller->action->id);
 
-		$location = $this->getUrlTitle($module.' '.$controller);
+		$location = $this->urlTitle($module.' '.$controller);
 
 		if(parent::beforeSave($insert)) {
 			if($insert || (!$insert && !$this->name)) {

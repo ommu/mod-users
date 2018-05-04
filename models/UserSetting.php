@@ -41,7 +41,7 @@ use app\modules\user\models\view\UserSetting as UserSettingView;
 
 class UserSetting extends \app\components\ActiveRecord
 {
-	use \app\components\traits\GridViewSystem;
+	use \ommu\traits\GridViewTrait;
 
 	public $gridForbiddenColumn = [];
 

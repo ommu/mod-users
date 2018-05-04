@@ -38,7 +38,7 @@ use app\modules\user\models\view\UserVerify as UserVerifyView;
 
 class UserVerify extends \app\components\ActiveRecord
 {
-	use \app\components\traits\GridViewSystem;
+	use \ommu\traits\GridViewTrait;
 
 	public $gridForbiddenColumn = ['code','verify_ip','modified_date','modified_search','deleted_date'];
 	public $email_i;
