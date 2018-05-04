@@ -110,7 +110,6 @@ class UserLevel extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			//[['name_i', 'desc_i', 'message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], 'required'],
 			[['default', 'message_allow', 'message_limit', 'profile_block', 'profile_search', 'profile_privacy', 'profile_comments', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'photo_size', 'photo_exts', 'name_i', 'desc_i'], 'required'],
 			[['name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
 			[['photo_exts', 'name_i', 'desc_i'], 'string'],
