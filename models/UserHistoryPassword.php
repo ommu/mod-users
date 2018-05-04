@@ -1,7 +1,13 @@
 <?php
 /**
  * UserHistoryPassword
- * version: 0.0.1
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 05:37 WIB
+ * @modified date 5 May 2018, 02:02 WIB
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_user_history_password".
  *
@@ -13,12 +19,6 @@
  *
  * The followings are the available model relations:
  * @property Users $user
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 05:37 WIB
- * @contact (+62)856-299-4114
  *
  */
 
@@ -26,6 +26,7 @@ namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use app\modules\user\models\Users;
 
 class UserHistoryPassword extends \app\components\ActiveRecord
@@ -58,20 +59,12 @@ class UserHistoryPassword extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['user_id', 'password'], 'required'],
+			[['password'], 'required'],
 			[['user_id'], 'integer'],
 			[['update_date'], 'safe'],
 			[['password'], 'string', 'max' => 32],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getUser()
-	{
-		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
 	}
 
 	/**
@@ -88,7 +81,15 @@ class UserHistoryPassword extends \app\components\ActiveRecord
 			'user_search' => Yii::t('app', 'User'),
 		];
 	}
-	
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUser()
+	{
+		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
+	}
+
 	/**
 	 * Set default columns to display
 	 */
@@ -106,7 +107,7 @@ class UserHistoryPassword extends \app\components\ActiveRecord
 				'attribute' => 'level_search',
 				'filter' => UserLevel::getLevel(),
 				'value' => function($model, $key, $index, $column) {
-					return $model->user->level->title->message;
+					return isset($model->user->level) ? $model->user->level->title->message : '-';
 				},
 			];
 			$this->templateColumns['user_search'] = [
@@ -116,18 +117,49 @@ class UserHistoryPassword extends \app\components\ActiveRecord
 				},
 			];
 		}
-		$this->templateColumns['password'] = 'password';
+		$this->templateColumns['password'] = [
+			'attribute' => 'password',
+			'value' => function($model, $key, $index, $column) {
+				return $model->password;
+			},
+		];
 		$this->templateColumns['update_date'] = [
 			'attribute' => 'update_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'update_date',
-				'model'	 => $this,
-			]),
+			'filter' => Html::input('date', 'update_date', Yii::$app->request->get('update_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'datetime') : '-';
+				return !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
+		}
+	}
+
+	/**
+	 * before validate attributes
+	 */
+	public function beforeValidate() 
+	{
+		if(parent::beforeValidate()) {
+			if($this->isNewRecord)
+				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+		}
+		return true;
 	}
 }
