@@ -3,7 +3,6 @@
  * LevelController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserLevel
- * version: 0.0.1
  *
  * LevelController implements the CRUD actions for UserLevel model.
  * Reference start
@@ -13,28 +12,31 @@
  *	Update
  *	View
  *	Delete
+ *	Default
+ *	Signup
  *	User
  *	Message
- *	Default
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 07:46 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 07:46 WIB
+ * @modified date 4 May 2018, 09:02 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\user\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\user\models\UserLevel;
 use app\modules\user\models\search\UserLevel as UserLevelSearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 class LevelController extends Controller
 {
@@ -44,11 +46,15 @@ class LevelController extends Controller
 	public function behaviors()
 	{
 		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
 					'delete' => ['POST'],
 					'default' => ['POST'],
+					'signup' => ['POST'],
 				],
 			],
 		];
@@ -79,7 +85,7 @@ class LevelController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
 		]);
 	}
 
@@ -93,19 +99,20 @@ class LevelController extends Controller
 		$model = new UserLevel();
 		$model->scenario = 'info';
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->level_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Level success created.'));
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Create User Level');
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_create', [
-				'model' => $model,
-			]);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success created.'));
+				return $this->redirect(['update', 'id' => $model->level_id]);
+			} 
 		}
+
+		$this->view->title = Yii::t('app', 'Create User Level');
+		$this->view->description = Yii::t('app', 'To create this user level, complete the following form.');
+		$this->view->keywords = '';
+		return $this->render('admin_create', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -119,18 +126,21 @@ class LevelController extends Controller
 		$model = $this->findModel($id);
 		$model->scenario = 'info';
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Level success updated.'));
-			return $this->redirect(['update', 'id' => $model->level_id]);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
 
-		} else {
-			$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
-			$this->view->description = Yii::t('app', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
-			$this->view->keywords = '';
-			return $this->render('admin_update', [
-				'model' => $model,
-			]);
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
+				return $this->redirect(['update', 'id' => $model->level_id]);
+			}
 		}
+
+		$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
+		$this->view->description = Yii::t('app', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
+		$this->view->keywords = '';
+		return $this->render('admin_update', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -142,7 +152,7 @@ class LevelController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'User Level', 'name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -160,8 +170,44 @@ class LevelController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User Level success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'User level success deleted.'));
 		return $this->redirect(['index']);
+	}
+
+	/**
+	 * actionDefault an existing UserLevel model.
+	 * If default is successful, the browser will be redirected to the 'index' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionDefault($id)
+	{
+		$model = $this->findModel($id);
+		$replace = $model->default == 1 ? 0 : 1;
+		$model->default = $replace;
+		
+		if($model->save(false, ['default'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
+			return $this->redirect(['index']);
+		}
+	}
+
+	/**
+	 * actionSignup an existing UserLevel model.
+	 * If signup is successful, the browser will be redirected to the 'index' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionSignup($id)
+	{
+		$model = $this->findModel($id);
+		$replace = $model->signup == 1 ? 0 : 1;
+		$model->signup = $replace;
+		
+		if($model->save(false, ['signup'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
+			return $this->redirect(['index']);
+		}
 	}
 
 	/**
@@ -174,19 +220,22 @@ class LevelController extends Controller
 	{
 		$model = $this->findModel($id);
 		$model->scenario = 'user';
+		
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Level success updated.'));
-			return $this->redirect(['user', 'id' => $model->level_id]);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
-			$this->view->description = Yii::t('app', 'This page contains various settings that affect your users\' accounts.');
-			$this->view->keywords = '';
-			return $this->render('admin_user', [
-				'model' => $model,
-			]);
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
+				return $this->redirect(['user', 'id' => $model->level_id]);
+			}
 		}
+	
+		$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
+		$this->view->description = Yii::t('app', 'This page contains various settings that affect your users\' accounts.');
+		$this->view->keywords = '';
+		return $this->render('admin_user', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -199,36 +248,22 @@ class LevelController extends Controller
 	{
 		$model = $this->findModel($id);
 		$model->scenario = 'message';
+		
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Level success updated.'));
-			return $this->redirect(['message', 'id' => $model->level_id]);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
-			$this->view->description = Yii::t('app', 'Facilitating user interactivity is the key to developing a successful social network. Allowing private messages between users is an excellent way to increase interactivity. From this page, you can enable the private messaging feature and configure its settings.');
-			$this->view->keywords = '';
-			return $this->render('admin_messsge', [
-				'model' => $model,
-			]);
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
+				return $this->redirect(['message', 'id' => $model->level_id]);
+			}
 		}
-	}
-
-	/**
-	 * Publish/Unpublish an existing CoreTags model.
-	 * If publish/unpublish is successful, the browser will be redirected to the 'index' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionDefault($id)
-	{
-		$model = $this->findModel($id);
-		$model->default = 1;
-
-		if ($model->save()) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Level success updated.'));
-			return $this->redirect(['index']);
-		}
+	
+		$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
+		$this->view->description = Yii::t('app', 'Facilitating user interactivity is the key to developing a successful social network. Allowing private messages between users is an excellent way to increase interactivity. From this page, you can enable the private messaging feature and configure its settings.');
+		$this->view->keywords = '';
+		return $this->render('admin_messsge', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -240,7 +275,7 @@ class LevelController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserLevel::findOne($id)) !== null) 
+		if(($model = UserLevel::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

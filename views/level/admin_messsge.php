@@ -5,13 +5,13 @@
  * @var $this app\modules\user\controllers\LevelController
  * @var $model app\modules\user\models\UserLevel
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 07:46 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 07:46 WIB
+ * @modified date 4 May 2018, 09:02 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -35,32 +35,17 @@ $this->params['menu']['content'] = [
 ];
 ?>
 
-<div class="col-md-12 col-sm-12 col-xs-12">
-	<?php if(Yii::$app->session->hasFlash('success'))
-		echo Utility::flashMessage(Yii::$app->session->getFlash('success'));
-	else if(Yii::$app->session->hasFlash('error'))
-		echo Utility::flashMessage(Yii::$app->session->getFlash('error'), 'danger');?>
+<?php $form = ActiveForm::begin([
+	'options' => [
+		'class' => 'form-horizontal form-label-left',
+		//'enctype' => 'multipart/form-data',
+	],
+	'enableClientValidation' => true,
+	'enableAjaxValidation' => false,
+	//'enableClientScript' => true,
+]); ?>
 
-	<div class="x_panel">
-		<div class="x_title">
-			<?php if($this->params['menu']['content']):
-			echo MenuContent::widget(['items' => $this->params['menu']['content']]);
-			endif;?>
-			<ul class="nav navbar-right panel_toolbox">
-				<li><a href="#" title="<?php echo Yii::t('app', 'Toggle');?>" class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-				<li><a href="#" title="<?php echo Yii::t('app', 'Close');?>" class="close-link"><i class="fa fa-close"></i></a></li>
-			</ul>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content">
-			<?php $form = ActiveForm::begin([
-				'options' => [
-					'class' => 'form-horizontal form-label-left',
-					//'enctype' => 'multipart/form-data',
-				],
-			]); ?>
-			
-			<?php //echo $form->errorSummary($model);?>
+<?php //echo $form->errorSummary($model);?>
 
 <?php 
 $message_allow = [
@@ -68,15 +53,16 @@ $message_allow = [
 	1 => Yii::t('app', 'Friends only - users can send private messages to their friends only.'),
 	0 => Yii::t('app', 'Nobody - users cannot send private messages.'),
 ];
-echo $form->field($model, 'message_allow', ['template' => '{label}<div class="col-md-6 col-sm-6 col-xs-12"><span class="small-px">'.Yii::t('app', '
+echo $form->field($model, 'message_allow', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', '
 If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.').'</span>{input}{error}</div>'])
 	->radioList($message_allow, ['class'=>'desc pt-10', 'separator' => '<br />'])
 	->label($model->getAttributeLabel('message_allow'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-<div class="form-group">
-	<?php echo $form->field($model, 'message_limit', ['template' => '{label}', 'options' => ['tag' => null]])
-		->label($model->getAttributeLabel('message_limit'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-	<div class="col-md-6 col-sm-6 col-xs-12">
+<div class="form-group field-message_limit">
+	<?php echo $form->field($model, 'message_limit[i]', ['template' => '{label}', 'options' => ['tag' => null]])
+		->label($model->getAttributeLabel('message_limit[i]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	<div class="col-md-9 col-sm-9 col-xs-12">
+		<span class="small-px mb-10"><?php echo Yii::t('app', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.'); ?></span>
 		<?php 
 		$message_limit = [
 			5 => 5,
@@ -89,15 +75,13 @@ If set to "nobody", none of the other settings on this page will apply. Otherwis
 			200 => 200,
 			500 => 500,
 		];
-		if(!$model->getErrors())
-			$model->message_limit = unserialize($model->message_limit);
-		echo $form->field($model, 'message_limit[inbox]', ['template' => '<span class="small-px mb-10">'.Yii::t('app', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.').'</span><div class="col-md-4 col-sm-4">{input}{error}</div><div class="col-md-8 col-sm-8 checkbox">'.Yii::t('app', 'conversations in inbox folder.	').'</div>'])
-			->dropDownList($message_limit, ['prompt' => ''], ['class'=>'desc pt-10', 'separator' => '<br />'])
-			->label($model->getAttributeLabel('message_limit'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+		echo $form->field($model, 'message_limit[inbox]', ['template' => '<div class="col-md-4 col-sm-4">{input}</div><div class="col-md-8 col-sm-8 checkbox">'.Yii::t('app', 'conversations in inbox folder.').'</div><div class="clearfix"></div>{error}', 'options' => ['class' => 'row']])
+			->dropDownList($message_limit, ['prompt' => ''])
+			->label($model->getAttributeLabel('message_limit[inbox]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-		<?php echo $form->field($model, 'message_limit[outbox]', ['template' => '<div class="col-md-4 col-sm-4">{input}{error}</div><div class="col-md-8 col-sm-8 checkbox">'.Yii::t('app', 'conversations in outbox folder.').'</div>'])
-			->dropDownList($message_limit, ['prompt' => ''], ['class'=>'desc pt-10', 'separator' => '<br />'])
-			->label($model->getAttributeLabel('message_limit'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+		<?php echo $form->field($model, 'message_limit[outbox]', ['template' => '<div class="col-md-4 col-sm-4">{input}</div><div class="col-md-8 col-sm-8 checkbox">'.Yii::t('app', 'conversations in outbox folder.').'</div><div class="clearfix"></div>{error}', 'options' => ['class' => 'row']])
+			->dropDownList($message_limit, ['prompt' => ''])
+			->label($model->getAttributeLabel('message_limit[outbox]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 	</div>
 </div>
 
@@ -108,7 +92,4 @@ If set to "nobody", none of the other settings on this page will apply. Otherwis
 	</div>
 </div>
 
-			<?php ActiveForm::end(); ?>
-		</div>
-	</div>
-</div>
+<?php ActiveForm::end(); ?>

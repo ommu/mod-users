@@ -1,15 +1,15 @@
 <?php
 /**
  * UserLevel
- * version: 0.0.1
  *
  * UserLevel represents the model behind the search form about `app\modules\user\models\UserLevel`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 07:45 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 07:45 WIB
+ * @modified date 4 May 2018, 09:02 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,7 +19,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\user\models\UserLevel as UserLevelModel;
-//use app\modules\user\models\Users;
 
 class UserLevel extends UserLevelModel
 {
@@ -30,7 +29,8 @@ class UserLevel extends UserLevelModel
 	{
 		return [
 			[['level_id', 'name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
-			[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts', 'creation_date', 'modified_date', 'slug', 'creation_search', 'modified_search', 'name_i', 'desc_i'], 'safe'],
+			[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts', 'creation_date', 'modified_date', 'slug',
+				'name_i', 'desc_i', 'creation_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -62,7 +62,12 @@ class UserLevel extends UserLevelModel
 	public function search($params)
 	{
 		$query = UserLevelModel::find()->alias('t');
-		$query->joinWith(['creation creation', 'modified modified', 'title title', 'description description']);
+		$query->joinWith([
+			'title title', 
+			'description description', 
+			'creation creation', 
+			'modified modified'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -70,14 +75,6 @@ class UserLevel extends UserLevelModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['creation_search'] = [
-			'asc' => ['creation.displayname' => SORT_ASC],
-			'desc' => ['creation.displayname' => SORT_DESC],
-		];
-		$attributes['modified_search'] = [
-			'asc' => ['modified.displayname' => SORT_ASC],
-			'desc' => ['modified.displayname' => SORT_DESC],
-		];
 		$attributes['name_i'] = [
 			'asc' => ['title.message' => SORT_ASC],
 			'desc' => ['title.message' => SORT_DESC],
@@ -86,6 +83,14 @@ class UserLevel extends UserLevelModel
 			'asc' => ['description.message' => SORT_ASC],
 			'desc' => ['description.message' => SORT_DESC],
 		];
+		$attributes['creation_search'] = [
+			'asc' => ['creation.displayname' => SORT_ASC],
+			'desc' => ['creation.displayname' => SORT_DESC],
+		];
+		$attributes['modified_search'] = [
+			'asc' => ['modified.displayname' => SORT_ASC],
+			'desc' => ['modified.displayname' => SORT_DESC],
+		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['level_id' => SORT_DESC],
@@ -93,7 +98,7 @@ class UserLevel extends UserLevelModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -129,10 +134,10 @@ class UserLevel extends UserLevelModel
 			->andFilterWhere(['like', 't.photo_size', $this->photo_size])
 			->andFilterWhere(['like', 't.photo_exts', $this->photo_exts])
 			->andFilterWhere(['like', 't.slug', $this->slug])
-			->andFilterWhere(['like', 'creation.displayname', $this->creation_search])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search])
 			->andFilterWhere(['like', 'title.message', $this->name_i])
-			->andFilterWhere(['like', 'description.message', $this->desc_i]);
+			->andFilterWhere(['like', 'description.message', $this->desc_i])
+			->andFilterWhere(['like', 'creation.displayname', $this->creation_search])
+			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
 	}

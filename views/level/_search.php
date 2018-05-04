@@ -5,13 +5,13 @@
  * @var $this app\modules\user\controllers\LevelController
  * @var $model app\modules\user\models\search\UserLevel
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 07:46 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 07:46 WIB
+ * @modified date 4 May 2018, 09:02 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -24,57 +24,70 @@ use yii\widgets\ActiveForm;
 		'action' => ['index'],
 		'method' => 'get',
 	]); ?>
-		<?= $form->field($model, 'level_id') ?>
+		<?php echo $form->field($model, 'name_i');?>
 
-		<?= $form->field($model, 'name') ?>
+		<?php echo $form->field($model, 'desc_i');?>
 
-		<?= $form->field($model, 'desc') ?>
+		<?php echo $form->field($model, 'default')
+			->checkbox();?>
 
-		<?= $form->field($model, 'default') ?>
+		<?php echo $form->field($model, 'signup')
+			->checkbox();?>
 
-		<?= $form->field($model, 'signup') ?>
+		<?php echo $form->field($model, 'message_allow')
+			->checkbox();?>
 
-		<?= $form->field($model, 'message_allow') ?>
+		<?php echo $form->field($model, 'message_limit');?>
 
-		<?= $form->field($model, 'message_limit') ?>
+		<?php echo $form->field($model, 'profile_block')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_block') ?>
+		<?php echo $form->field($model, 'profile_search')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_search') ?>
+		<?php echo $form->field($model, 'profile_privacy');?>
 
-		<?= $form->field($model, 'profile_privacy') ?>
+		<?php echo $form->field($model, 'profile_comments');?>
 
-		<?= $form->field($model, 'profile_comments') ?>
+		<?php echo $form->field($model, 'profile_style')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_style') ?>
+		<?php echo $form->field($model, 'profile_style_sample')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_style_sample') ?>
+		<?php echo $form->field($model, 'profile_status')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_status') ?>
+		<?php echo $form->field($model, 'profile_invisible')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_invisible') ?>
+		<?php echo $form->field($model, 'profile_views')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_views') ?>
+		<?php echo $form->field($model, 'profile_change')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_change') ?>
+		<?php echo $form->field($model, 'profile_delete')
+			->checkbox();?>
 
-		<?= $form->field($model, 'profile_delete') ?>
+		<?php echo $form->field($model, 'photo_allow')
+			->checkbox();?>
 
-		<?= $form->field($model, 'photo_allow') ?>
+		<?php echo $form->field($model, 'photo_size');?>
 
-		<?= $form->field($model, 'photo_size') ?>
+		<?php echo $form->field($model, 'photo_exts');?>
 
-		<?= $form->field($model, 'photo_exts') ?>
+		<?php echo $form->field($model, 'creation_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'creation_date') ?>
+		<?php echo $form->field($model, 'creation_search');?>
 
-		<?= $form->field($model, 'creation_id') ?>
+		<?php echo $form->field($model, 'modified_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'modified_date') ?>
+		<?php echo $form->field($model, 'modified_search');?>
 
-		<?= $form->field($model, 'modified_id') ?>
-
-		<?= $form->field($model, 'slug') ?>
+		<?php echo $form->field($model, 'slug');?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
