@@ -454,8 +454,8 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public static function getLevel($array=true) 
 	{
-		$model = self::find()->alias('t');
-		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
+		$model = self::find()->alias('t')
+			->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
 		$model = $model->orderBy('title.message ASC')->all();
 
 		if($array == true) {
