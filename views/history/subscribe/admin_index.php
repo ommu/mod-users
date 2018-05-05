@@ -2,7 +2,7 @@
 /**
  * User Newsletter Histories (user-newsletter-history)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\history\SubscribeController
+ * @var $this app\modules\user\controllers\SubscribeController
  * @var $model app\modules\user\models\UserNewsletterHistory
  * version: 0.0.1
  *

@@ -1,15 +1,15 @@
 <?php
 /**
- * User Invite Histories (user-invite-history)
+ * User History Emails (user-history-email)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\InviteController
- * @var $model app\modules\user\models\UserInviteHistory
+ * @var $this app\modules\user\controllers\HistoryEmailController
+ * @var $model app\modules\user\models\UserHistoryEmail
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:28 WIB
+ * @created date 8 October 2017, 05:36 WIB
  * @contact (+62)856-299-4114
  *
  */
@@ -25,8 +25,9 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Invites'), 'url' => Url::to(['invite/index']), 'icon' => 'table'],
+	['label' => Yii::t('app', 'Back To Personal'), 'url' => Url::to(['member/index']), 'icon' => 'table'],
 ];
+
 $this->params['menu']['option'] = [
 	// ['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
 	['label' => Yii::t('app', 'Grid Options'), 'url' => 'javascript:void(0);'],
@@ -75,22 +76,22 @@ $this->params['menu']['option'] = [
 				'buttons' => [
 					'view' => function ($url, $model, $key) {
 						$url = Url::to(['view', 'id'=>$model->primaryKey]);
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View User Invite History')]);
+						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'View User History Email')]);
 					},
 					'update' => function ($url, $model, $key) {
 						$url = Url::to(['update', 'id'=>$model->primaryKey]);
-						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User Invite History')]);
+						return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User History Email')]);
 					},
 					'delete' => function ($url, $model, $key) {
 						$url = Url::to(['delete', 'id'=>$model->primaryKey]);
 						return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-							'title' => Yii::t('app', 'Delete User Invite History'),
+							'title' => Yii::t('app', 'Delete User History Email'),
 							'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
 							'data-method'  => 'post',
 						]);
 					},
 				],
-				'template' => '{view}{delete}',
+				'template' => '{delete}',
 			]);
 			
 			echo GridView::widget([

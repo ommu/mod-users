@@ -3,34 +3,32 @@
  * HistoryLoginController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserHistoryLogin
+ * version: 0.0.1
  *
  * HistoryLoginController implements the CRUD actions for UserHistoryLogin model.
  * Reference start
  * TOC :
  *	Index
- *	View
  *	Delete
  *
  *	findModel
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @link http://ecc.ft.ugm.ac.id
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @created date 8 October 2017, 05:39 WIB
- * @modified date 5 May 2018, 02:17 WIB
- * @link http://opensource.ommu.co
+ * @contact (+62)856-299-4114
  *
  */
  
 namespace app\modules\user\controllers;
 
 use Yii;
-use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
-use app\components\Controller;
-use mdm\admin\components\AccessControl;
 use app\modules\user\models\UserHistoryLogin;
 use app\modules\user\models\search\UserHistoryLogin as UserHistoryLoginSearch;
+use app\components\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 class HistoryLoginController extends Controller
 {
@@ -40,9 +38,6 @@ class HistoryLoginController extends Controller
 	public function behaviors()
 	{
 		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
@@ -77,24 +72,7 @@ class HistoryLoginController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns' => $columns,
-		]);
-	}
-
-	/**
-	 * Displays a single UserHistoryLogin model.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionView($id)
-	{
-		$model = $this->findModel($id);
-
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'User History Login', 'user-id' => $model->user->username]);
-		$this->view->description = '';
-		$this->view->keywords = '';
-		return $this->render('admin_view', [
-			'model' => $model,
+			'columns'	  => $columns,
 		]);
 	}
 
@@ -108,7 +86,7 @@ class HistoryLoginController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User history login success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'User History Login success deleted.'));
 		return $this->redirect(['index']);
 	}
 
@@ -121,7 +99,7 @@ class HistoryLoginController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserHistoryLogin::findOne($id)) !== null) 
+		if (($model = UserHistoryLogin::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

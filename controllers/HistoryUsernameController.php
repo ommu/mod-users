@@ -3,32 +3,34 @@
  * HistoryUsernameController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserHistoryUsername
- * version: 0.0.1
  *
  * HistoryUsernameController implements the CRUD actions for UserHistoryUsername model.
  * Reference start
  * TOC :
  *	Index
+ *	View
  *	Delete
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 05:40 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 05:40 WIB
+ * @modified date 5 May 2018, 02:18 WIB
+ * @link http://opensource.ommu.co
  *
  */
  
-namespace app\modules\user\controllers\history;
+namespace app\modules\user\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\user\models\UserHistoryUsername;
 use app\modules\user\models\search\UserHistoryUsername as UserHistoryUsernameSearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 class HistoryUsernameController extends Controller
 {
@@ -38,6 +40,9 @@ class HistoryUsernameController extends Controller
 	public function behaviors()
 	{
 		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
@@ -72,7 +77,24 @@ class HistoryUsernameController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
+		]);
+	}
+
+	/**
+	 * Displays a single UserHistoryUsername model.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionView($id)
+	{
+		$model = $this->findModel($id);
+
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {username}', ['model-class' => 'User History Username', 'username' => $model->username]);
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_view', [
+			'model' => $model,
 		]);
 	}
 
@@ -86,7 +108,7 @@ class HistoryUsernameController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User History Username success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'User history username success deleted.'));
 		return $this->redirect(['index']);
 	}
 
@@ -99,7 +121,7 @@ class HistoryUsernameController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserHistoryUsername::findOne($id)) !== null) 
+		if(($model = UserHistoryUsername::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

@@ -21,7 +21,7 @@
  *
  */
  
-namespace app\modules\user\controllers\history;
+namespace app\modules\user\controllers;
 
 use Yii;
 use app\modules\user\models\UserNewsletterHistory;

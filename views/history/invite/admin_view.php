@@ -2,7 +2,7 @@
 /**
  * User Invite Histories (user-invite-history)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\history\InviteController
+ * @var $this app\modules\user\controllers\InviteController
  * @var $model app\modules\user\models\UserInviteHistory
  * version: 0.0.1
  *

@@ -1,15 +1,15 @@
 <?php
 /**
  * UserHistoryEmail
- * version: 0.0.1
  *
  * UserHistoryEmail represents the model behind the search form about `app\modules\user\models\UserHistoryEmail`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 05:36 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 05:36 WIB
+ * @modified date 5 May 2018, 02:17 WIB
+ * @link http://opensource.ommu.co
  *
  */
 
@@ -19,7 +19,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\user\models\UserHistoryEmail as UserHistoryEmailModel;
-//use app\modules\user\models\Users;
 
 class UserHistoryEmail extends UserHistoryEmailModel
 {
@@ -30,7 +29,8 @@ class UserHistoryEmail extends UserHistoryEmailModel
 	{
 		return [
 			[['id', 'user_id'], 'integer'],
-			[['email', 'update_date', 'user_search', 'level_search'], 'safe'],
+			[['email', 'update_date',
+				'level_search', 'user_search'], 'safe'],
 		];
 	}
 
@@ -62,7 +62,10 @@ class UserHistoryEmail extends UserHistoryEmailModel
 	public function search($params)
 	{
 		$query = UserHistoryEmailModel::find()->alias('t');
-		$query->joinWith(['user user', 'user.level.title level_title']);
+		$query->joinWith([
+			'user user',
+			'user.level.title level',
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -70,13 +73,13 @@ class UserHistoryEmail extends UserHistoryEmailModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['level_search'] = [
+			'asc' => ['level.message' => SORT_ASC],
+			'desc' => ['level.message' => SORT_DESC],
+		];
 		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
-		];
-		$attributes['level_search'] = [
-			'asc' => ['level_title.message' => SORT_ASC],
-			'desc' => ['level_title.message' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -85,7 +88,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -96,7 +99,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 			't.id' => $this->id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.update_date as date)' => $this->update_date,
-			'user.level_id' => $this->level_search,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
 		]);
 
 		$query->andFilterWhere(['like', 't.email', $this->email])

@@ -1,38 +1,36 @@
 <?php
 /**
- * HistoryLoginController
+ * HistoryEmailController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserHistoryLogin
+ * @var $model app\modules\user\models\UserHistoryEmail
+ * version: 0.0.1
  *
- * HistoryLoginController implements the CRUD actions for UserHistoryLogin model.
+ * HistoryEmailController implements the CRUD actions for UserHistoryEmail model.
  * Reference start
  * TOC :
  *	Index
- *	View
  *	Delete
  *
  *	findModel
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @created date 8 October 2017, 05:39 WIB
- * @modified date 5 May 2018, 02:17 WIB
- * @link http://opensource.ommu.co
+ * @link http://ecc.ft.ugm.ac.id
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @created date 8 October 2017, 05:36 WIB
+ * @contact (+62)856-299-4114
  *
  */
  
 namespace app\modules\user\controllers;
 
 use Yii;
-use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
+use app\modules\user\models\UserHistoryEmail;
+use app\modules\user\models\search\UserHistoryEmail as UserHistoryEmailSearch;
 use app\components\Controller;
-use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserHistoryLogin;
-use app\modules\user\models\search\UserHistoryLogin as UserHistoryLoginSearch;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
-class HistoryLoginController extends Controller
+class HistoryEmailController extends Controller
 {
 	/**
 	 * @inheritdoc
@@ -40,9 +38,6 @@ class HistoryLoginController extends Controller
 	public function behaviors()
 	{
 		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
@@ -53,12 +48,12 @@ class HistoryLoginController extends Controller
 	}
 
 	/**
-	 * Lists all UserHistoryLogin models.
+	 * Lists all UserHistoryEmail models.
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new UserHistoryLoginSearch();
+		$searchModel = new UserHistoryEmailSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -71,35 +66,18 @@ class HistoryLoginController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User History Logins');
+		$this->view->title = Yii::t('app', 'User History Emails');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns' => $columns,
+			'columns'	  => $columns,
 		]);
 	}
 
 	/**
-	 * Displays a single UserHistoryLogin model.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionView($id)
-	{
-		$model = $this->findModel($id);
-
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'User History Login', 'user-id' => $model->user->username]);
-		$this->view->description = '';
-		$this->view->keywords = '';
-		return $this->render('admin_view', [
-			'model' => $model,
-		]);
-	}
-
-	/**
-	 * Deletes an existing UserHistoryLogin model.
+	 * Deletes an existing UserHistoryEmail model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -108,20 +86,20 @@ class HistoryLoginController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User history login success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'User History Email success deleted.'));
 		return $this->redirect(['index']);
 	}
 
 	/**
-	 * Finds the UserHistoryLogin model based on its primary key value.
+	 * Finds the UserHistoryEmail model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return UserHistoryLogin the loaded model
+	 * @return UserHistoryEmail the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserHistoryLogin::findOne($id)) !== null) 
+		if (($model = UserHistoryEmail::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

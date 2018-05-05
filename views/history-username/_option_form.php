@@ -2,16 +2,16 @@
 /**
  * User History Usernames (user-history-username)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\history\HistoryUsernameController
+ * @var $this app\modules\user\controllers\HistoryUsernameController
  * @var $model app\modules\user\models\search\UserHistoryUsername
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 05:40 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 05:40 WIB
+ * @modified date 5 May 2018, 02:18 WIB
+ * @link http://opensource.ommu.co
  *
  */
 
@@ -39,11 +39,9 @@ JS;
 <div class="grid-form">
 	<?php echo Html::beginForm(Url::to(['/'.$route]), 'get', ['name' => 'gridoption']);
 		$columns = [];
-
 		foreach($model->templateColumns as $key => $column) {
 			if($key == '_no')
 				continue;
-			
 			$columns[$key] = $key;
 		}
 	?>
@@ -55,6 +53,5 @@ JS;
 			</li>
 			<?php endforeach; ?>
 		</ul>
-		<div class="clear"></div>
 	<?php echo Html::endForm(); ?>
 </div>
