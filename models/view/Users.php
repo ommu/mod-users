@@ -160,7 +160,7 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'email_lastchange_date',
 			'filter' => Html::input('date', 'email_lastchange_date', Yii::$app->request->get('email_lastchange_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->email_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->email_lastchange_date, 'datetime') : '-';
+				return !in_array($model->email_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->email_lastchange_date, 'datetime') : '-';
 			},
 			'format' => 'html',
 		];
@@ -186,7 +186,7 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'username_lastchange_date',
 			'filter' => Html::input('date', 'username_lastchange_date', Yii::$app->request->get('username_lastchange_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->username_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->username_lastchange_date, 'datetime') : '-';
+				return !in_array($model->username_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->username_lastchange_date, 'datetime') : '-';
 			},
 			'format' => 'html',
 		];
@@ -212,7 +212,7 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'password_lastchange_date',
 			'filter' => Html::input('date', 'password_lastchange_date', Yii::$app->request->get('password_lastchange_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->password_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->password_lastchange_date, 'datetime') : '-';
+				return !in_array($model->password_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->password_lastchange_date, 'datetime') : '-';
 			},
 			'format' => 'html',
 		];
@@ -238,7 +238,7 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'lastlogin_date',
 			'filter' => Html::input('date', 'lastlogin_date', Yii::$app->request->get('lastlogin_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
+				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
 			},
 			'format' => 'html',
 		];

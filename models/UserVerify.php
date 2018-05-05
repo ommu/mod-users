@@ -71,7 +71,7 @@ class UserVerify extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['code',
+			[['code', 'expired_date',
 				'email_i'], 'required'],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
 			[['user_id', 'verify_date', 'expired_date', 'modified_date', 'deleted_date'], 'safe'],
@@ -182,7 +182,7 @@ class UserVerify extends \app\components\ActiveRecord
 			'attribute' => 'verify_date',
 			'filter' => Html::input('date', 'verify_date', Yii::$app->request->get('verify_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->verify_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->verify_date, 'datetime') : '-';
+				return !in_array($model->verify_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->verify_date, 'datetime') : '-';
 			},
 			'format' => 'html',
 		];
@@ -196,7 +196,7 @@ class UserVerify extends \app\components\ActiveRecord
 			'attribute' => 'expired_date',
 			'filter' => Html::input('date', 'expired_date', Yii::$app->request->get('expired_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->expired_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->expired_date, 'datetime') : '-';
+				return !in_array($model->expired_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->expired_date, 'datetime') : '-';
 			},
 			'format' => 'html',
 		];
@@ -204,7 +204,7 @@ class UserVerify extends \app\components\ActiveRecord
 			'attribute' => 'modified_date',
 			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
+				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
 			'format' => 'html',
 		];
@@ -220,7 +220,7 @@ class UserVerify extends \app\components\ActiveRecord
 			'attribute' => 'deleted_date',
 			'filter' => Html::input('date', 'deleted_date', Yii::$app->request->get('deleted_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->deleted_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 00:00:00','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->deleted_date, 'datetime') : '-';
+				return !in_array($model->deleted_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->deleted_date, 'datetime') : '-';
 			},
 			'format' => 'html',
 		];
@@ -313,6 +313,19 @@ class UserVerify extends \app\components\ActiveRecord
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
+			$this->expired_date = '0000-00-00 00:00:00';
+
+		}
+		return true;
+	}
+
+	/**
+	 * before save attributes
+	 */
+	public function beforeSave($insert)
+	{
+		if(parent::beforeSave($insert)) {
+			$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d H:i:s');
 		}
 		return true;
 	}
