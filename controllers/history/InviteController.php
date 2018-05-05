@@ -22,7 +22,7 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace app\modules\user\controllers\history;
 
 use Yii;
 use app\modules\user\models\UserInviteHistory;
