@@ -37,6 +37,7 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 	// Variable Search
 	public $level_search;
 	public $user_search;
+	public $email_search;
 
 	/**
 	 * @return string the associated database table name
@@ -81,6 +82,7 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 			'lastlogin_from' => Yii::t('app', 'Lastlogin From'),
 			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),
+			'email_search' => Yii::t('app', 'Email'),
 		];
 	}
 
@@ -116,6 +118,12 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 				'attribute' => 'user_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
+				},
+			];
+			$this->templateColumns['email_search'] = [
+				'attribute' => 'email_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->email : '-';
 				},
 			];
 		}

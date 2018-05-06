@@ -30,7 +30,7 @@ class UserHistoryLogin extends UserHistoryLoginModel
 		return [
 			[['id', 'user_id'], 'integer'],
 			[['lastlogin_date', 'lastlogin_ip', 'lastlogin_from',
-				'level_search', 'user_search'], 'safe'],
+				'level_search', 'user_search', 'email_search'], 'safe'],
 		];
 	}
 
@@ -81,6 +81,10 @@ class UserHistoryLogin extends UserHistoryLoginModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
+		$attributes['email_search'] = [
+			'asc' => ['user.email' => SORT_ASC],
+			'desc' => ['user.email' => SORT_DESC],
+		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['id' => SORT_DESC],
@@ -104,7 +108,8 @@ class UserHistoryLogin extends UserHistoryLoginModel
 
 		$query->andFilterWhere(['like', 't.lastlogin_ip', $this->lastlogin_ip])
 			->andFilterWhere(['like', 't.lastlogin_from', $this->lastlogin_from])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'user.email', $this->email_search]);
 
 		return $dataProvider;
 	}

@@ -71,7 +71,7 @@ class UserVerify extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['code', 'expired_date',
+			[['code', 'verify_ip',
 				'email_i'], 'required'],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
 			[['user_id', 'verify_date', 'expired_date', 'modified_date', 'deleted_date'], 'safe'],
@@ -312,9 +312,6 @@ class UserVerify extends \app\components\ActiveRecord
 				$this->verify_ip = $_SERVER['REMOTE_ADDR'];
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-
-			$this->expired_date = '0000-00-00 00:00:00';
-
 		}
 		return true;
 	}
@@ -325,7 +322,7 @@ class UserVerify extends \app\components\ActiveRecord
 	public function beforeSave($insert)
 	{
 		if(parent::beforeSave($insert)) {
-			$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d H:i:s');
+			//$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d H:i:s');
 		}
 		return true;
 	}

@@ -30,7 +30,7 @@ class UserHistoryPassword extends UserHistoryPasswordModel
 		return [
 			[['id', 'user_id'], 'integer'],
 			[['password', 'update_date',
-				'level_search', 'user_search'], 'safe'],
+				'level_search', 'user_search', 'email_search'], 'safe'],
 		];
 	}
 
@@ -81,6 +81,10 @@ class UserHistoryPassword extends UserHistoryPasswordModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
+		$attributes['email_search'] = [
+			'asc' => ['user.email' => SORT_ASC],
+			'desc' => ['user.email' => SORT_DESC],
+		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['id' => SORT_DESC],
@@ -103,7 +107,8 @@ class UserHistoryPassword extends UserHistoryPasswordModel
 		]);
 
 		$query->andFilterWhere(['like', 't.password', $this->password])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'user.email', $this->email_search]);
 
 		return $dataProvider;
 	}

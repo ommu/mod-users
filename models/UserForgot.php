@@ -71,7 +71,7 @@ class UserForgot extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['code',
+			[['code', 'forgot_ip',
 				'email_i'], 'required'],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
 			[['user_id', 'forgot_date', 'expired_date', 'modified_date', 'deleted_date'], 'safe'],
@@ -312,6 +312,17 @@ class UserForgot extends \app\components\ActiveRecord
 				$this->forgot_ip = $_SERVER['REMOTE_ADDR'];
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+		}
+		return true;
+	}
+
+	/**
+	 * before save attributes
+	 */
+	public function beforeSave($insert)
+	{
+		if(parent::beforeSave($insert)) {
+			//$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d H:i:s');
 		}
 		return true;
 	}

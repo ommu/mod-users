@@ -100,7 +100,7 @@ class VerifyController extends Controller
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User verify success created.'));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id' => $model->verify_id]);
-			} 
+			}
 		}
 
 		$this->view->title = Yii::t('app', 'Create User Verify');
