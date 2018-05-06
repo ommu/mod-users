@@ -2,6 +2,7 @@
 	"name": "ommu/users",
 	"description": "Users Module from Ommu Platform",
 	"keywords": [
+		"yii2",
 		"module",
 		"users",
 		"ommu",
