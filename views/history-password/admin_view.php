@@ -9,7 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 5 May 2018, 02:18 WIB
- * @link http://opensource.ommu.co
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 

@@ -18,7 +18,7 @@
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @created date 8 October 2017, 05:36 WIB
  * @modified date 5 May 2018, 02:17 WIB
- * @link http://opensource.ommu.co
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  

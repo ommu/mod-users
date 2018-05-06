@@ -335,6 +335,7 @@ class UserForgot extends \app\components\ActiveRecord
 		parent::afterSave($insert, $changedAttributes);
 
 		if($insert) {
+			/*
 			Yii::$app->mailer->compose()
 				->setFrom('emailasale@gmail.com')
 				->setTo($model->user->email)
@@ -342,6 +343,7 @@ class UserForgot extends \app\components\ActiveRecord
 				->setTextBody(Yii::t('app', 'Plain text content'))
 				->setHtmlBody('')
 				->send();
+			*/
 
 			//Update all forgot password history
 			self::updateAll(['publish' => 0], 'forgot_id <> :forgot_id and publish = :publish and user_id = :user_id',  [':forgot_id'=>$this->forgot_id, ':publish'=>1, ':user_id'=>$this->user_id]);
