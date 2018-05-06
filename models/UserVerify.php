@@ -326,4 +326,25 @@ class UserVerify extends \app\components\ActiveRecord
 		}
 		return true;
 	}
+
+	/**
+	 * After save attributes
+	 */
+	public function afterSave($insert, $changedAttributes) 
+	{
+		parent::afterSave($insert, $changedAttributes);
+
+		if($insert) {
+			Yii::$app->mailer->compose()
+				->setFrom('emailasale@gmail.com')
+				->setTo($model->user->email)
+				->setSubject(Yii::t('app', ''))
+				->setTextBody(Yii::t('app', 'Plain text content'))
+				->setHtmlBody('')
+				->send();
+
+			//Update all verify email history
+			self::updateAll(['publish' => 0], 'verify_id <> :verify_id and publish = :publish and user_id = :user_id',  [':verify_id'=>$this->verify_id, ':publish'=>1, ':user_id'=>$this->user_id]);
+		}
+	}
 }
