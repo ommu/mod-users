@@ -3,36 +3,55 @@
  * SettingController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserSetting
- * version: 0.0.1
  *
  * SettingController implements the CRUD actions for UserSetting model.
  * Reference start
  * TOC :
  *	Index
  *	Update
+ *	Delete
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 9 October 2017, 11:22 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 9 October 2017, 11:22 WIB
+ * @modified date 6 May 2018, 20:24 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\user\controllers;
 
 use Yii;
-use app\modules\user\models\UserSetting;
-use yii\data\ActiveDataProvider;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
+use app\modules\user\models\UserSetting;
 use app\modules\user\models\search\UserLevel as UserLevelSearch;
 
 class SettingController extends Controller
 {
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
+			'verbs' => [
+				'class' => VerbFilter::className(),
+				'actions' => [
+					'delete' => ['POST'],
+				],
+			],
+		];
+	}
+
 	/**
 	 * Lists all UserSetting models.
 	 * @return mixed
@@ -50,6 +69,8 @@ class SettingController extends Controller
 	 */
 	public function actionUpdate()
 	{
+		$this->layout = 'admin_default';
+		
 		$searchModel = new UserLevelSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -64,25 +85,42 @@ class SettingController extends Controller
 		$columns = $searchModel->getGridColumn($cols);
 
 		$model = UserSetting::findOne(1);
-		if ($model === null) 
+		if($model === null)
 			$model = new UserSetting();
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Setting success updated.'));
-			return $this->redirect(['index']);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
 
-		} else {
-			$this->view->title = Yii::t('app', 'User Settings');
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_update', [
-				'model' => $model,
-				'searchModel' => $searchModel,
-				'dataProvider' => $dataProvider,
-				'columns'	  => $columns,
-			]);
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User setting success updated.'));
+				return $this->redirect(['update']);
+				//return $this->redirect(['view', 'id' => $model->id]);
+			}
 		}
+
+		$this->view->title = Yii::t('app', 'User Settings');
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_update', [
+			'searchModel' => $searchModel,
+			'dataProvider' => $dataProvider,
+			'columns' => $columns,
+			'model' => $model,
+		]);
+	}
+
+	/**
+	 * Deletes an existing UserSetting model.
+	 * If deletion is successful, the browser will be redirected to the 'index' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionDelete($id)
+	{
+		$this->findModel($id)->delete();
+		
+		Yii::$app->session->setFlash('success', Yii::t('app', 'User setting success deleted.'));
+		return $this->redirect(['index']);
 	}
 
 	/**
@@ -94,7 +132,7 @@ class SettingController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserSetting::findOne($id)) !== null) 
+		if(($model = UserSetting::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

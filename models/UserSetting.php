@@ -70,7 +70,7 @@ class UserSetting extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['license', 'permission', 'meta_keyword', 'meta_description', 'forgot_diff_type', 'forgot_difference', 'verify_diff_type', 'verify_difference', 'invite_diff_type', 'invite_difference'], 'required'],
+			[['license', 'permission', 'meta_keyword', 'meta_description', 'forgot_diff_type', 'forgot_difference', 'verify_diff_type', 'verify_difference', 'invite_diff_type', 'invite_difference', 'invite_order'], 'required'],
 			[['permission', 'forgot_difference', 'verify_difference', 'invite_difference', 'modified_id'], 'integer'],
 			[['meta_keyword', 'meta_description', 'forgot_diff_type', 'verify_diff_type', 'invite_diff_type', 'invite_order'], 'string'],
 			[['modified_date'], 'safe'],
