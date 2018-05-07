@@ -2,7 +2,7 @@
 /**
  * User Newsletters (user-newsletter)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\SubscribeController
+ * @var $this app\modules\user\controllers\NewsletterController
  * @var $model app\modules\user\models\UserNewsletter
  * version: 0.0.1
  *

@@ -1,11 +1,11 @@
 <?php
 /**
- * SubscribeController
+ * NewsletterController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserNewsletter
  * version: 0.0.1
  *
- * SubscribeController implements the CRUD actions for UserNewsletter model.
+ * NewsletterController implements the CRUD actions for UserNewsletter model.
  * Reference start
  * TOC :
  *	Index
@@ -33,7 +33,7 @@ use app\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-class SubscribeController extends Controller
+class NewsletterController extends Controller
 {
 	/**
 	 * @inheritdoc

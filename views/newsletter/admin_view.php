@@ -2,9 +2,8 @@
 /**
  * User Newsletters (user-newsletter)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\SubscribeController
+ * @var $this app\modules\user\controllers\NewsletterController
  * @var $model app\modules\user\models\UserNewsletter
- * @var $form yii\widgets\ActiveForm
  * version: 0.0.1
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
@@ -18,14 +17,14 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\libraries\MenuContent;
+use yii\widgets\DetailView;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Newsletters'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->newsletter_id, 'url' => ['view', 'id' => $model->newsletter_id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'View'), 'url' => Url::to(['view', 'id' => $model->newsletter_id]), 'icon' => 'eye'],
+	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->newsletter_id]), 'icon' => 'pencil'],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->newsletter_id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
 ];
 ?>
@@ -44,9 +43,43 @@ $this->params['menu']['content'] = [
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
-			<?php echo $this->render('_form', [
+			<?php echo DetailView::widget([
 				'model' => $model,
-			]); ?>
+				'options' => [
+					'class'=>'table table-striped detail-view',
+				],
+				'attributes' => [
+					'newsletter_id',
+					[
+						'attribute' => 'status',
+						'value' => $model->status == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+					],
+					[
+						'attribute' => 'user_search',
+						'value' => $model->user_id ? $model->user->displayname : '-',
+					],
+					'reference_id',
+					'email:email',
+					[
+						'attribute' => 'subscribe_date',
+						'value' => !in_array($model->subscribe_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->subscribe_date, 'datetime') : '-',
+					],
+					'subscribe_id',
+					[
+						'attribute' => 'modified_date',
+						'value' => !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-',
+					],
+					[
+						'attribute' => 'modified_search',
+						'value' => $model->modified_id ? $model->modified->displayname : '-',
+					],
+					[
+						'attribute' => 'updated_date',
+						'value' => !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-',
+					],
+					'updated_ip',
+				],
+			]) ?>
 		</div>
 	</div>
 </div>
