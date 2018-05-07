@@ -95,7 +95,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'view.first_invite_date',
-			'value' => isset($model->view) ? $model->view->first_invite_date : '-',
+			'value' => isset($model->view) ? (!in_array($model->view->first_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->view->first_invite_date, 'datetime') : '-') : '-',
 		],
 		[
 			'attribute' => 'view.first_invite_user_id',
@@ -103,11 +103,15 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'view.last_invite_date',
-			'value' => isset($model->view) ? $model->view->last_invite_date : '-',
+			'value' => isset($model->view) ? (!in_array($model->view->last_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->view->last_invite_date, 'datetime') : '-') : '-',
 		],
 		[
 			'attribute' => 'view.last_invite_user_id',
 			'value' => isset($model->view->lastUser) ? $model->view->lastUser->displayname : '-',
+		],
+		[
+			'attribute' => 'view.register',
+			'value' => isset($model->view) ? ($model->view->register == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No')) : '-',
 		],
 	],
 ]) ?>

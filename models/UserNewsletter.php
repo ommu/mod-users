@@ -54,6 +54,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public $user_search;
 	public $reference_search;
 	public $subscribe_search;
+	public $register_search;
 	public $modified_search;
 
 	/**
@@ -112,6 +113,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'user_search' => Yii::t('app', 'User'),
 			'reference_search' => Yii::t('app', 'Reference'),
 			'subscribe_search' => Yii::t('app', 'Subscriber'),
+			'register_search' => Yii::t('app', 'Register'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -267,6 +269,15 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return $model->updated_ip;
 			},
+		];
+		$this->templateColumns['register_search'] = [
+			'attribute' => 'register_search',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->view) ? ($model->view->register == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No')) : '-';
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
 		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',

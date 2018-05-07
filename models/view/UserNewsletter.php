@@ -12,6 +12,7 @@
  *
  * The followings are the available columns in table "_user_newsletter":
  * @property integer $newsletter_id
+ * @property integer $register
  * @property string $invite_by
  * @property string $invites
  * @property string $invite_all
@@ -68,7 +69,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['newsletter_id', 'invite_user_all', 'first_invite_user_id', 'last_invite_user_id'], 'integer'],
+			[['newsletter_id', 'register', 'invite_user_all', 'first_invite_user_id', 'last_invite_user_id'], 'integer'],
 			[['invites', 'invite_all', 'invite_users'], 'number'],
 			[['first_invite_date', 'last_invite_date'], 'safe'],
 			[['invite_by'], 'string', 'max' => 5],
@@ -82,6 +83,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	{
 		return [
 			'newsletter_id' => Yii::t('app', 'Newsletter'),
+			'register' => Yii::t('app', 'Register'),
 			'invite_by' => Yii::t('app', 'Invite By'),
 			'invites' => Yii::t('app', 'Invites'),
 			'invite_all' => Yii::t('app', 'Invite All'),
@@ -126,6 +128,12 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'attribute' => 'newsletter_id',
 			'value' => function($model, $key, $index, $column) {
 				return $model->newsletter_id;
+			},
+		];
+		$this->templateColumns['register'] = [
+			'attribute' => 'register',
+			'value' => function($model, $key, $index, $column) {
+				return $model->register == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 		];
 		$this->templateColumns['invite_by'] = [

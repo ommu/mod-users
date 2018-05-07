@@ -30,7 +30,7 @@ class UserNewsletter extends UserNewsletterModel
 		return [
 			[['newsletter_id', 'status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id'], 'integer'],
 			[['email', 'subscribe_date', 'modified_date', 'updated_date', 'updated_ip',
-				'level_search', 'user_search', 'reference_search', 'subscribe_search', 'modified_search'], 'safe'],
+				'level_search', 'user_search', 'reference_search', 'subscribe_search', 'register_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -63,6 +63,7 @@ class UserNewsletter extends UserNewsletterModel
 	{
 		$query = UserNewsletterModel::find()->alias('t');
 		$query->joinWith([
+			'view view', 
 			'user user', 
 			'user.level.title level', 
 			'reference reference', 
@@ -91,6 +92,10 @@ class UserNewsletter extends UserNewsletterModel
 		$attributes['subscribe_search'] = [
 			'asc' => ['subscribe.displayname' => SORT_ASC],
 			'desc' => ['subscribe.displayname' => SORT_DESC],
+		];
+		$attributes['register_search'] = [
+			'asc' => ['view.register' => SORT_ASC],
+			'desc' => ['view.register' => SORT_DESC],
 		];
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
@@ -121,6 +126,7 @@ class UserNewsletter extends UserNewsletterModel
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
 			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'view.register' => $this->register_search,
 		]);
 
 		$query->andFilterWhere(['like', 't.email', $this->email])
