@@ -43,8 +43,11 @@ use app\modules\user\models\view\UserNewsletter as UserNewsletterView;
 class UserNewsletter extends \app\components\ActiveRecord
 {
 	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip'];
+	public $email_i;
+	public $multiple_email_i;
 
 	// Variable Search
 	public $level_search;
@@ -75,9 +78,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email', 'subscribe_id', 'updated_ip'], 'required'],
-			[['status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id'], 'integer'],
-			[['subscribe_date', 'modified_date', 'updated_date'], 'safe'],
+			[['email_i'], 'required'],
+			[['status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id', 'multiple_email_i'], 'integer'],
+			[['email_i'], 'string'],
+			[['email', 'subscribe_date', 'subscribe_id', 'modified_date', 'updated_date', 'updated_ip', 'multiple_email_i'], 'safe'],
 			[['email'], 'string', 'max' => 32],
 			[['updated_ip'], 'string', 'max' => 20],
 			[['reference_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['reference_id' => 'user_id']],
@@ -102,6 +106,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'updated_ip' => Yii::t('app', 'Updated Ip'),
+			'email_i' => Yii::t('app', 'Email'),
+			'multiple_email_i' => Yii::t('app', 'Multiple Email'),
 			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),
 			'reference_search' => Yii::t('app', 'Reference'),
@@ -293,14 +299,57 @@ class UserNewsletter extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * User get information
+	 * condition
+	 ** 0 = newsletter not null
+	 ** 1 = newsletter save
+	 ** 2 = newsletter not save
+	 */
+	public static function insertNewsletter($email)
+	{
+		$email = strtolower($email);
+		$model = self::find()
+			->select(['newsletter_id','email'])
+			->where(['email' => $email])
+			->one();
+		
+		$condition = 0;
+		if($model == null) {
+			$newsletter = new UserNewsletter();
+			$newsletter->email_i = $email;
+			$newsletter->multiple_email_i = 0;
+			if($newsletter->save())
+				$condition = 1;
+			else
+				$condition = 2;
+		}
+		
+		return $condition;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	public function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
-			if($this->isNewRecord)
-				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			else
+			if($this->isNewRecord) {
+				if(!$this->multiple_email_i && $this->email_i != '') {
+					$email_i = $this->formatFileType($this->email_i);
+					if(count($email_i) > 1)
+						$this->addError('email_i', Yii::t('app', 'Form newsletter menggunakan tipe single'));
+					else {
+						$this->email = strtolower($this->email_i);
+						$newsletter = self::find()
+							->select(['newsletter_id','email'])
+							->where(['email' => $this->email])
+							->one();
+						if($newsletter != null)
+							$this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar pada newsletter.', ['email'=>$this->email]));
+					}
+				}
+				$this->subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
 			$this->updated_ip = $_SERVER['REMOTE_ADDR'];
