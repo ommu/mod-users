@@ -90,7 +90,7 @@ class HistoryNewsletterController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'User Newsletter History', 'newsletter-id' => $model->newsletter->user->username]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'User Newsletter History', 'newsletter-id' => $model->newsletter->email]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [

@@ -29,7 +29,8 @@ class UserInviteHistory extends UserInviteHistoryModel
 	{
 		return [
 			[['id', 'invite_id'], 'integer'],
-			[['code', 'invite_date', 'invite_ip', 'expired_date', 'invite_search'], 'safe'],
+			[['code', 'invite_date', 'invite_ip', 'expired_date',
+				'user_search', 'email_search', 'level_search', 'inviter_search', 'expired_search'], 'safe'],
 		];
 	}
 
@@ -62,7 +63,12 @@ class UserInviteHistory extends UserInviteHistoryModel
 	{
 		$query = UserInviteHistoryModel::find()->alias('t');
 		$query->joinWith([
-			'invite.newsletter.user invite'
+			'view view',
+			'invite invite',
+			'invite.newsletter newsletter',
+			'invite.newsletter.user user',
+			'invite.user inviter',
+			'invite.user.level.title level',
 		]);
 
 		// add conditions that should always apply here
@@ -71,9 +77,25 @@ class UserInviteHistory extends UserInviteHistoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['invite_search'] = [
-			'asc' => ['invite.username' => SORT_ASC],
-			'desc' => ['invite.username' => SORT_DESC],
+		$attributes['user_search'] = [
+			'asc' => ['user.displayname' => SORT_ASC],
+			'desc' => ['user.displayname' => SORT_DESC],
+		];
+		$attributes['email_search'] = [
+			'asc' => ['newsletter.email' => SORT_ASC],
+			'desc' => ['newsletter.email' => SORT_DESC],
+		];
+		$attributes['inviter_search'] = [
+			'asc' => ['inviter.displayname' => SORT_ASC],
+			'desc' => ['inviter.displayname' => SORT_DESC],
+		];
+		$attributes['level_search'] = [
+			'asc' => ['level.message' => SORT_ASC],
+			'desc' => ['level.message' => SORT_DESC],
+		];
+		$attributes['expired_search'] = [
+			'asc' => ['view.expired' => SORT_ASC],
+			'desc' => ['view.expired' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -94,11 +116,15 @@ class UserInviteHistory extends UserInviteHistoryModel
 			't.invite_id' => isset($params['invite']) ? $params['invite'] : $this->invite_id,
 			'cast(t.invite_date as date)' => $this->invite_date,
 			'cast(t.expired_date as date)' => $this->expired_date,
+			'inviter.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'view.expired' => $this->expired_search,
 		]);
 
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
-			->andFilterWhere(['like', 'invite.username', $this->invite_search]);
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'newsletter.email', $this->email_search])
+			->andFilterWhere(['like', 'inviter.displayname', $this->inviter_search]);
 
 		return $dataProvider;
 	}

@@ -48,5 +48,17 @@ $this->params['menu']['content'] = [
 			'attribute' => 'expired_date',
 			'value' => !in_array($model->expired_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->expired_date, 'datetime') : '-',
 		],
+		[
+			'attribute' => 'view.expired',
+			'value' => isset($model->view) ? ($model->view->expired == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No')) : '-',
+		],
+		[
+			'attribute' => 'view.verify_day_left',
+			'value' => isset($model->view) ? $model->view->verify_day_left : '-',
+		],
+		[
+			'attribute' => 'view.verify_hour_left',
+			'value' => isset($model->view) ? $model->view->verify_hour_left : '-',
+		],
 	],
 ]) ?>

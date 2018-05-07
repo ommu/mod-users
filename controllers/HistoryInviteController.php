@@ -90,7 +90,7 @@ class HistoryInviteController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {invite-id}', ['model-class' => 'User Invite History', 'invite-id' => $model->invite->newsletter->user->username]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {invite-id}', ['model-class' => 'User Invite History', 'invite-id' => $model->invite->newsletter->email]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [

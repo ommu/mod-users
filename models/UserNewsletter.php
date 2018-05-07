@@ -45,7 +45,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip'];
+	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip','level_search'];
 	public $email_i;
 	public $multiple_email_i;
 

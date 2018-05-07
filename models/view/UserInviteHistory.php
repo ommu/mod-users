@@ -14,7 +14,6 @@
  * The followings are the available columns in table "_user_invite_history":
  * @property integer $id
  * @property integer $expired
- * @property integer $invite_id
  * @property integer $verify_day_left
  * @property integer $verify_hour_left
  *
@@ -60,8 +59,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['invite_id'], 'required'],
-			[['id', 'expired', 'invite_id', 'verify_day_left', 'verify_hour_left'], 'integer'],
+			[['id', 'expired', 'verify_day_left', 'verify_hour_left'], 'integer'],
 		];
 	}
 
@@ -73,7 +71,6 @@ class UserInviteHistory extends \app\components\ActiveRecord
 		return [
 			'id' => Yii::t('app', 'ID'),
 			'expired' => Yii::t('app', 'Expired'),
-			'invite_id' => Yii::t('app', 'Invite'),
 			'verify_day_left' => Yii::t('app', 'Verify Day Left'),
 			'verify_hour_left' => Yii::t('app', 'Verify Hour Left'),
 		];
@@ -101,12 +98,6 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'attribute' => 'expired',
 			'value' => function($model, $key, $index, $column) {
 				return $model->expired;
-			},
-		];
-		$this->templateColumns['invite_id'] = [
-			'attribute' => 'invite_id',
-			'value' => function($model, $key, $index, $column) {
-				return $model->invite_id;
 			},
 		];
 		$this->templateColumns['verify_day_left'] = [

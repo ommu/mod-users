@@ -29,13 +29,20 @@ namespace app\modules\user\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\modules\user\models\view\UserInviteHistory as UserInviteHistoryView;
 
 class UserInviteHistory extends \app\components\ActiveRecord
 {
-	public $gridForbiddenColumn = [];
+	use \ommu\traits\GridViewTrait;
+
+	public $gridForbiddenColumn = ['code','invite_ip','expired_date'];
 
 	// Variable Search
-	public $invite_search;
+	public $user_search;
+	public $email_search;
+	public $level_search;
+	public $inviter_search;
+	public $expired_search;
 
 	/**
 	 * @return string the associated database table name
@@ -80,7 +87,11 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'invite_date' => Yii::t('app', 'Invite Date'),
 			'invite_ip' => Yii::t('app', 'Invite Ip'),
 			'expired_date' => Yii::t('app', 'Expired Date'),
-			'invite_search' => Yii::t('app', 'Invite'),
+			'user_search' => Yii::t('app', 'User'),
+			'email_search' => Yii::t('app', 'Email'),
+			'level_search' => Yii::t('app', 'Level'),
+			'inviter_search' => Yii::t('app', 'Inviter'),
+			'expired_search' => Yii::t('app', 'Expired'),
 		];
 	}
 
@@ -90,6 +101,14 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	public function getInvite()
 	{
 		return $this->hasOne(UserInvites::className(), ['invite_id' => 'invite_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(UserInviteHistoryView::className(), ['id' => 'id']);
 	}
 
 	/**
@@ -114,10 +133,29 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('invite')) {
-			$this->templateColumns['invite_search'] = [
-				'attribute' => 'invite_search',
+			$this->templateColumns['user_search'] = [
+				'attribute' => 'user_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite) ? $model->invite->invite_id : '-';
+					return isset($model->invite->newsletter->user) ? $model->invite->newsletter->user->displayname : '-';
+				},
+			];
+			$this->templateColumns['email_search'] = [
+				'attribute' => 'email_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->invite->newsletter) ? $model->invite->newsletter->email : '-';
+				},
+			];
+			$this->templateColumns['inviter_search'] = [
+				'attribute' => 'inviter_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->invite->user) ? $model->invite->user->displayname : '-';
+				},
+			];
+			$this->templateColumns['level_search'] = [
+				'attribute' => 'level_search',
+				'filter' => UserLevel::getLevel(),
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->invite->user->level) ? $model->invite->user->level->title->message : '-';
 				},
 			];
 		}
@@ -140,6 +178,15 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return $model->invite_ip;
 			},
+		];
+		$this->templateColumns['expired_search'] = [
+			'attribute' => 'expired_search',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				return $model->view->expired ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
 		];
 		$this->templateColumns['expired_date'] = [
 			'attribute' => 'expired_date',
