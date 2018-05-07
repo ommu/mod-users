@@ -23,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->invite_id]), 'icon' => 'pencil'],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->invite_id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
 ];
 ?>
@@ -41,12 +40,20 @@ $this->params['menu']['content'] = [
 			'format' => 'raw',
 		],
 		[
-			'attribute' => 'newsletter_search',
-			'value' => isset($model->newsletter) ? $model->newsletter->user->username : '-',
+			'attribute' => 'user_search',
+			'value' => isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-',
 		],
 		[
-			'attribute' => 'user_search',
+			'attribute' => 'email_search',
+			'value' => isset($model->newsletter) ? $model->newsletter->email : '-',
+		],
+		[
+			'attribute' => 'inviter_search',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
+		],
+		[
+			'attribute' => 'level_search',
+			'value' => isset($model->user->level) ? $model->user->level->title->message : '-',
 		],
 		'code',
 		'invites',

@@ -29,7 +29,8 @@ class UserInvites extends UserInvitesModel
 	{
 		return [
 			[['invite_id', 'publish', 'newsletter_id', 'user_id', 'invites', 'modified_id'], 'integer'],
-			[['code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'newsletter_search', 'inviter_search', 'modified_search'], 'safe'],
+			[['code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'newsletter_search',
+				'user_search', 'email_search', 'level_search', 'inviter_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -61,7 +62,13 @@ class UserInvites extends UserInvitesModel
 	public function search($params)
 	{
 		$query = UserInvitesModel::find()->alias('t');
-		$query->joinWith(['newsletter newsletter', 'user user', 'modified modified']);
+		$query->joinWith([
+			'newsletter newsletter', 
+			'newsletter.user user', 
+			'user inviter', 
+			'user.level.title level',
+			'modified modified',
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -69,13 +76,21 @@ class UserInvites extends UserInvitesModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['newsletter_search'] = [
-			'asc' => ['newsletter.newsletter_id' => SORT_ASC],
-			'desc' => ['newsletter.newsletter_id' => SORT_DESC],
-		];
-		$attributes['inviter_search'] = [
+		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
+		];
+		$attributes['email_search'] = [
+			'asc' => ['newsletter.email' => SORT_ASC],
+			'desc' => ['newsletter.email' => SORT_DESC],
+		];
+		$attributes['inviter_search'] = [
+			'asc' => ['inviter.displayname' => SORT_ASC],
+			'desc' => ['inviter.displayname' => SORT_DESC],
+		];
+		$attributes['level_search'] = [
+			'asc' => ['level.message' => SORT_ASC],
+			'desc' => ['level.message' => SORT_DESC],
 		];
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
@@ -105,6 +120,7 @@ class UserInvites extends UserInvitesModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
+			'inviter.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
 		]);
 
 		if(!isset($params['trash']))
@@ -114,7 +130,8 @@ class UserInvites extends UserInvitesModel
 
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
-			->andFilterWhere(['like', 'newsletter.newsletter_id', $this->newsletter_search])
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'newsletter.email', $this->email_search])
 			->andFilterWhere(['like', 'user.displayname', $this->inviter_search])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 

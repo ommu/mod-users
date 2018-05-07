@@ -43,12 +43,14 @@ class UserInvites extends \app\components\ActiveRecord
 {
 	use \ommu\traits\GridViewTrait;
 
-	public $gridForbiddenColumn = ['invite_ip','modified_date','modified_search','updated_date'];
+	public $gridForbiddenColumn = ['code','invite_ip','modified_date','modified_search','updated_date'];
 	public $email_i;
 	public $multiple_email_i;
 
 	// Variable Search
-	public $newsletter_search;
+	public $user_search;
+	public $email_search;
+	public $level_search;
 	public $inviter_search;
 	public $modified_search;
 
@@ -103,7 +105,9 @@ class UserInvites extends \app\components\ActiveRecord
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'email_i' => Yii::t('app', 'Email'),
 			'multiple_email_i' => Yii::t('app', 'Multiple Email'),
-			'newsletter_search' => Yii::t('app', 'Newsletter'),
+			'user_search' => Yii::t('app', 'User'),
+			'email_search' => Yii::t('app', 'Email'),
+			'level_search' => Yii::t('app', 'Level'),
 			'inviter_search' => Yii::t('app', 'Inviter'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
@@ -163,10 +167,16 @@ class UserInvites extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('newsletter')) {
-			$this->templateColumns['newsletter_search'] = [
-				'attribute' => 'newsletter_search',
+			$this->templateColumns['user_search'] = [
+				'attribute' => 'user_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter) ? $model->newsletter->newsletter_id : '-';
+					return isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-';
+				},
+			];
+			$this->templateColumns['email_search'] = [
+				'attribute' => 'email_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->newsletter) ? $model->newsletter->email : '-';
 				},
 			];
 		}
@@ -177,17 +187,18 @@ class UserInvites extends \app\components\ActiveRecord
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
 			];
+			$this->templateColumns['level_search'] = [
+				'attribute' => 'level_search',
+				'filter' => UserLevel::getLevel(),
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user->level) ? $model->user->level->title->message : '-';
+				},
+			];
 		}
 		$this->templateColumns['code'] = [
 			'attribute' => 'code',
 			'value' => function($model, $key, $index, $column) {
 				return $model->code;
-			},
-		];
-		$this->templateColumns['invites'] = [
-			'attribute' => 'invites',
-			'value' => function($model, $key, $index, $column) {
-				return $model->invites;
 			},
 		];
 		$this->templateColumns['invite_date'] = [
@@ -226,6 +237,15 @@ class UserInvites extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-';
 			},
+			'format' => 'html',
+		];
+		$this->templateColumns['invites'] = [
+			'attribute' => 'invites',
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['history-invite/index', 'invite'=>$model->primaryKey]);
+				return Html::a($model->invites, $url);
+			},
+			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('trash')) {
