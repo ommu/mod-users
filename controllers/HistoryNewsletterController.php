@@ -1,11 +1,10 @@
 <?php
 /**
- * InviteController
+ * HistoryNewsletterController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserInviteHistory
- * version: 0.0.1
+ * @var $model app\modules\user\models\UserNewsletterHistory
  *
- * InviteController implements the CRUD actions for UserInviteHistory model.
+ * HistoryNewsletterController implements the CRUD actions for UserNewsletterHistory model.
  * Reference start
  * TOC :
  *	Index
@@ -14,24 +13,26 @@
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:28 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:29 WIB
+ * @modified date 7 May 2018, 09:01 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
-namespace app\modules\user\controllers\history;
+namespace app\modules\user\controllers;
 
 use Yii;
-use app\modules\user\models\UserInviteHistory;
-use app\modules\user\models\search\UserInviteHistory as UserInviteHistorySearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
+use app\modules\user\models\UserNewsletterHistory;
+use app\modules\user\models\search\UserNewsletterHistory as UserNewsletterHistorySearch;
 
-class InviteController extends Controller
+class HistoryNewsletterController extends Controller
 {
 	/**
 	 * @inheritdoc
@@ -39,6 +40,9 @@ class InviteController extends Controller
 	public function behaviors()
 	{
 		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
@@ -49,12 +53,12 @@ class InviteController extends Controller
 	}
 
 	/**
-	 * Lists all UserInviteHistory models.
+	 * Lists all UserNewsletterHistory models.
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new UserInviteHistorySearch();
+		$searchModel = new UserNewsletterHistorySearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -67,18 +71,18 @@ class InviteController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User Invite Histories');
+		$this->view->title = Yii::t('app', 'User Newsletter Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
 		]);
 	}
 
 	/**
-	 * Displays a single UserInviteHistory model.
+	 * Displays a single UserNewsletterHistory model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -86,7 +90,7 @@ class InviteController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {id}', ['modelClass' => 'User Invite History', 'id' => $model->id]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'User Newsletter History', 'newsletter-id' => $model->newsletter->user->username]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -95,7 +99,7 @@ class InviteController extends Controller
 	}
 
 	/**
-	 * Deletes an existing UserInviteHistory model.
+	 * Deletes an existing UserNewsletterHistory model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -104,20 +108,20 @@ class InviteController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User Invite History success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter history success deleted.'));
 		return $this->redirect(['index']);
 	}
 
 	/**
-	 * Finds the UserInviteHistory model based on its primary key value.
+	 * Finds the UserNewsletterHistory model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return UserInviteHistory the loaded model
+	 * @return UserNewsletterHistory the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserInviteHistory::findOne($id)) !== null) 
+		if(($model = UserNewsletterHistory::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

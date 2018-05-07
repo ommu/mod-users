@@ -2,16 +2,16 @@
 /**
  * User Invite Histories (user-invite-history)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\InviteController
+ * @var $this app\modules\user\controllers\HistoryInviteController
  * @var $model app\modules\user\models\search\UserInviteHistory
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:28 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:28 WIB
+ * @modified date 7 May 2018, 09:01 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -24,17 +24,17 @@ use yii\widgets\ActiveForm;
 		'action' => ['index'],
 		'method' => 'get',
 	]); ?>
-		<?= $form->field($model, 'id') ?>
+		<?php echo $form->field($model, 'invite_search');?>
 
-		<?= $form->field($model, 'invite_id') ?>
+		<?php echo $form->field($model, 'code');?>
 
-		<?= $form->field($model, 'code') ?>
+		<?php echo $form->field($model, 'invite_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'invite_date') ?>
+		<?php echo $form->field($model, 'invite_ip');?>
 
-		<?= $form->field($model, 'invite_ip') ?>
-
-		<?= $form->field($model, 'expired_date') ?>
+		<?php echo $form->field($model, 'expired_date')
+			->input('date');?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>

@@ -2,16 +2,16 @@
 /**
  * User Invite Histories (user-invite-history)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\InviteController
+ * @var $this app\modules\user\controllers\HistoryInviteController
  * @var $model app\modules\user\models\search\UserInviteHistory
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:28 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:28 WIB
+ * @modified date 7 May 2018, 09:01 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -39,11 +39,9 @@ JS;
 <div class="grid-form">
 	<?php echo Html::beginForm(Url::to(['/'.$route]), 'get', ['name' => 'gridoption']);
 		$columns = [];
-
 		foreach($model->templateColumns as $key => $column) {
 			if($key == '_no')
 				continue;
-			
 			$columns[$key] = $key;
 		}
 	?>
@@ -55,6 +53,5 @@ JS;
 			</li>
 			<?php endforeach; ?>
 		</ul>
-		<div class="clear"></div>
 	<?php echo Html::endForm(); ?>
 </div>

@@ -1,15 +1,15 @@
 <?php
 /**
  * UserNewsletterHistory
- * version: 0.0.1
  *
  * UserNewsletterHistory represents the model behind the search form about `app\modules\user\models\UserNewsletterHistory`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:29 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:29 WIB
+ * @modified date 7 May 2018, 09:01 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,7 +19,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\user\models\UserNewsletterHistory as UserNewsletterHistoryModel;
-//use app\modules\user\models\UserNewsletter;
 
 class UserNewsletterHistory extends UserNewsletterHistoryModel
 {
@@ -30,7 +29,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	{
 		return [
 			[['id', 'status', 'newsletter_id'], 'integer'],
-			[['updated_date', 'updated_ip', 'level_search', 'user_search', 'email_search'], 'safe'],
+			[['updated_date', 'updated_ip', 'newsletter_search'], 'safe'],
 		];
 	}
 
@@ -62,7 +61,9 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	public function search($params)
 	{
 		$query = UserNewsletterHistoryModel::find()->alias('t');
-		$query->joinWith(['newsletter newsletter', 'newsletter.user user', 'newsletter.user.level.title level_title']);
+		$query->joinWith([
+			'newsletter.user newsletter'
+		]);
 
 		// add conditions that should always apply here
 		$dataProvider = new ActiveDataProvider([
@@ -70,17 +71,9 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['level_search'] = [
-			'asc' => ['level_title.message' => SORT_ASC],
-			'desc' => ['level_title.message' => SORT_DESC],
-		];
-		$attributes['user_search'] = [
-			'asc' => ['user.displayname' => SORT_ASC],
-			'desc' => ['user.displayname' => SORT_DESC],
-		];
-		$attributes['email_search'] = [
-			'asc' => ['newsletter.email' => SORT_ASC],
-			'desc' => ['newsletter.email' => SORT_DESC],
+		$attributes['newsletter_search'] = [
+			'asc' => ['newsletter.username' => SORT_ASC],
+			'desc' => ['newsletter.username' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -89,7 +82,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -97,16 +90,14 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 
 		// grid filtering conditions
 		$query->andFilterWhere([
-			't.id' => isset($params['id']) ? $params['id'] : $this->id,
+			't.id' => $this->id,
 			't.status' => $this->status,
 			't.newsletter_id' => isset($params['newsletter']) ? $params['newsletter'] : $this->newsletter_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
-			'user.level_id' => $this->level_search,
 		]);
 
 		$query->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
-			->andFilterWhere(['like', 'newsletter.email', $this->email_search]);
+			->andFilterWhere(['like', 'newsletter.username', $this->newsletter_search]);
 
 		return $dataProvider;
 	}

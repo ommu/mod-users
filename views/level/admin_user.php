@@ -17,9 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\MenuContent;
 use yii\widgets\ActiveForm;
-use app\components\Utility;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->level_id]];
