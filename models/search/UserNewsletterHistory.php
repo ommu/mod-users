@@ -29,7 +29,8 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	{
 		return [
 			[['id', 'status', 'newsletter_id'], 'integer'],
-			[['updated_date', 'updated_ip', 'newsletter_search'], 'safe'],
+			[['updated_date', 'updated_ip',
+				'level_search', 'user_search', 'email_search'], 'safe'],
 		];
 	}
 
@@ -62,7 +63,9 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	{
 		$query = UserNewsletterHistoryModel::find()->alias('t');
 		$query->joinWith([
-			'newsletter.user newsletter'
+			'newsletter newsletter', 
+			'newsletter.user user',
+			'newsletter.user.level.title level'
 		]);
 
 		// add conditions that should always apply here
@@ -71,9 +74,17 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['newsletter_search'] = [
-			'asc' => ['newsletter.username' => SORT_ASC],
-			'desc' => ['newsletter.username' => SORT_DESC],
+		$attributes['level_search'] = [
+			'asc' => ['level.message' => SORT_ASC],
+			'desc' => ['level.message' => SORT_DESC],
+		];
+		$attributes['user_search'] = [
+			'asc' => ['user.displayname' => SORT_ASC],
+			'desc' => ['user.displayname' => SORT_DESC],
+		];
+		$attributes['email_search'] = [
+			'asc' => ['newsletter.email' => SORT_ASC],
+			'desc' => ['newsletter.email' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -94,10 +105,12 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 			't.status' => $this->status,
 			't.newsletter_id' => isset($params['newsletter']) ? $params['newsletter'] : $this->newsletter_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
 		]);
 
 		$query->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
-			->andFilterWhere(['like', 'newsletter.username', $this->newsletter_search]);
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'newsletter.email', $this->email_search]);
 
 		return $dataProvider;
 	}

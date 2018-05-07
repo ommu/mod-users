@@ -36,7 +36,9 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = [];
 
 	// Variable Search
-	public $newsletter_search;
+	public $level_search;
+	public $user_search;
+	public $email_search;
 
 	/**
 	 * @return string the associated database table name
@@ -79,7 +81,9 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'newsletter_id' => Yii::t('app', 'Newsletter'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'updated_ip' => Yii::t('app', 'Updated Ip'),
-			'newsletter_search' => Yii::t('app', 'Newsletter'),
+			'level_search' => Yii::t('app', 'Level'),
+			'user_search' => Yii::t('app', 'User'),
+			'email_search' => Yii::t('app', 'Email'),
 		];
 	}
 
@@ -113,10 +117,23 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('newsletter')) {
-			$this->templateColumns['newsletter_search'] = [
-				'attribute' => 'newsletter_search',
+			$this->templateColumns['level_search'] = [
+				'attribute' => 'level_search',
+				'filter' => UserLevel::getLevel(),
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter) ? $model->newsletter->newsletter_id : '-';
+					return isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-';
+				},
+			];
+			$this->templateColumns['user_search'] = [
+				'attribute' => 'user_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-';
+				},
+			];
+			$this->templateColumns['email_search'] = [
+				'attribute' => 'email_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->newsletter) ? $model->newsletter->email : '-';
 				},
 			];
 		}
