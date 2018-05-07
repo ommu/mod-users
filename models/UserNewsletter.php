@@ -369,17 +369,6 @@ class UserNewsletter extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * after validate attributes
-	 */
-	public function afterValidate()
-	{
-		parent::afterValidate();
-		// Create action
-		
-		return true;
-	}
-
-	/**
 	 * before save attributes
 	 */
 	public function beforeSave($insert)
@@ -396,26 +385,42 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public function afterSave($insert, $changedAttributes) 
 	{
 		parent::afterSave($insert, $changedAttributes);
-		// Create action
-	}
-
-	/**
-	 * Before delete attributes
-	 */
-	public function beforeDelete() 
-	{
-		if(parent::beforeDelete()) {
-			// Create action
+		
+		if($insert) {
+			// Guest Subscribe
+			if($this->user_id == null && $this->status == 1) {
+				/*
+				Yii::$app->mailer->compose()
+					->setFrom('emailasale@gmail.com')
+					->setTo($model->user->email)
+					->setSubject(Yii::t('app', ''))
+					->setTextBody(Yii::t('app', 'Plain text content'))
+					->setHtmlBody('')
+					->send();
+				*/
+			}
+		} else {
+			if($this->status == 1) {
+				/*
+				Yii::$app->mailer->compose()
+					->setFrom('emailasale@gmail.com')
+					->setTo($model->user->email)
+					->setSubject(Yii::t('app', ''))
+					->setTextBody(Yii::t('app', 'Plain text content'))
+					->setHtmlBody('')
+					->send();
+				*/
+			} else {
+				/*
+				Yii::$app->mailer->compose()
+					->setFrom('emailasale@gmail.com')
+					->setTo($model->user->email)
+					->setSubject(Yii::t('app', ''))
+					->setTextBody(Yii::t('app', 'Plain text content'))
+					->setHtmlBody('')
+					->send();
+				*/
+			}
 		}
-		return true;
-	}
-
-	/**
-	 * After delete attributes
-	 */
-	public function afterDelete() 
-	{
-		parent::afterDelete();
-		// Create action
 	}
 }
