@@ -3,14 +3,12 @@
  * InviteController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserInvites
- * version: 0.0.1
  *
  * InviteController implements the CRUD actions for UserInvites model.
  * Reference start
  * TOC :
  *	Index
  *	Create
- *	Update
  *	View
  *	Delete
  *	RunAction
@@ -18,22 +16,24 @@
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:27 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:27 WIB
+ * @modified date 8 May 2018, 00:41 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\user\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\user\models\UserInvites;
 use app\modules\user\models\search\UserInvites as UserInvitesSearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 class InviteController extends Controller
 {
@@ -43,6 +43,9 @@ class InviteController extends Controller
 	public function behaviors()
 	{
 		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
@@ -78,7 +81,7 @@ class InviteController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
 		]);
 	}
 
@@ -91,44 +94,21 @@ class InviteController extends Controller
 	{
 		$model = new UserInvites();
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->invite_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Invites success created.'));
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Create User Invites');
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_create', [
-				'model' => $model,
-			]);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success created.'));
+				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id' => $model->invite_id]);
+			} 
 		}
-	}
 
-	/**
-	 * Updates an existing UserInvites model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionUpdate($id)
-	{
-		$model = $this->findModel($id);
-
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->invite_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Invites success updated.'));
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Update {modelClass}: {invite_id}', ['modelClass' => 'User Invites', 'invite_id' => $model->invite_id]);
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_update', [
-				'model' => $model,
-			]);
-		}
+		$this->view->title = Yii::t('app', 'Create User Invite');
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_create', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -140,7 +120,7 @@ class InviteController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {invite_id}', ['modelClass' => 'User Invites', 'invite_id' => $model->invite_id]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'User Invite', 'newsletter-id' => $model->newsletter->user->username]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -159,16 +139,16 @@ class InviteController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if ($model->save(false, ['publish'])) {
-			//return $this->redirect(['view', 'id' => $model->invite_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Invites success deleted.'));
+		if($model->save(false, ['publish'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success deleted.'));
 			return $this->redirect(['index']);
+			//return $this->redirect(['view', 'id' => $model->invite_id]);
 		}
 	}
 
 	/**
-	 * Publish/Unpublish an existing UserInvites model.
-	 * If publish/unpublish is successful, the browser will be redirected to the 'index' page.
+	 * actionPublish an existing UserInvites model.
+	 * If publish is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -178,8 +158,8 @@ class InviteController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if ($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Invites success updated.'));
+		if($model->save(false, ['publish'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success updated.'));
 			return $this->redirect(['index']);
 		}
 	}
@@ -193,7 +173,7 @@ class InviteController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserInvites::findOne($id)) !== null) 
+		if(($model = UserInvites::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

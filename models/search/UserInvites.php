@@ -1,15 +1,15 @@
 <?php
 /**
  * UserInvites
- * version: 0.0.1
  *
  * UserInvites represents the model behind the search form about `app\modules\user\models\UserInvites`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:27 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:27 WIB
+ * @modified date 8 May 2018, 00:41 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -19,8 +19,6 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\modules\user\models\UserInvites as UserInvitesModel;
-//use app\modules\user\models\UserNewsletter;
-//use app\modules\user\models\Users;
 
 class UserInvites extends UserInvitesModel
 {
@@ -31,7 +29,7 @@ class UserInvites extends UserInvitesModel
 	{
 		return [
 			[['invite_id', 'publish', 'newsletter_id', 'user_id', 'invites', 'modified_id'], 'integer'],
-			[['code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'newsletter_search', 'user_search', 'modified_search'], 'safe'],
+			[['code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'newsletter_search', 'inviter_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -75,7 +73,7 @@ class UserInvites extends UserInvitesModel
 			'asc' => ['newsletter.newsletter_id' => SORT_ASC],
 			'desc' => ['newsletter.newsletter_id' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['inviter_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -117,7 +115,7 @@ class UserInvites extends UserInvitesModel
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
 			->andFilterWhere(['like', 'newsletter.newsletter_id', $this->newsletter_search])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'user.displayname', $this->inviter_search])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;

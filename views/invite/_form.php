@@ -5,13 +5,13 @@
  * @var $this app\modules\user\controllers\InviteController
  * @var $model app\modules\user\models\UserInvites
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:27 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:27 WIB
+ * @modified date 8 May 2018, 00:41 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -24,16 +24,19 @@ use yii\widgets\ActiveForm;
 		'class' => 'form-horizontal form-label-left',
 		//'enctype' => 'multipart/form-data',
 	],
+	'enableClientValidation' => false,
+	'enableAjaxValidation' => false,
+	//'enableClientScript' => true,
 ]); ?>
 
 <?php //echo $form->errorSummary($model);?>
 
 <?php echo $form->field($model, 'newsletter_id', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textInput(['type' => 'number'])
+	->textInput(['type' => 'number', 'min' => '1'])
 	->label($model->getAttributeLabel('newsletter_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'user_id', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textInput(['type' => 'number'])
+	->textInput(['type' => 'number', 'min' => '1'])
 	->label($model->getAttributeLabel('user_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'code', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
@@ -41,7 +44,7 @@ use yii\widgets\ActiveForm;
 	->label($model->getAttributeLabel('code'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'invites', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textInput(['type' => 'number'])
+	->textInput(['type' => 'number', 'min' => '1'])
 	->label($model->getAttributeLabel('invites'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php echo $form->field($model, 'invite_ip', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12">{input}{error}</div>'])
