@@ -17,10 +17,10 @@
  * @property string $invite_all
  * @property string $invite_users
  * @property integer $invite_user_all
- * @property string $first_invite_user_id
  * @property string $first_invite_date
- * @property string $last_invite_user_id
+ * @property string $first_invite_user_id
  * @property string $last_invite_date
+ * @property string $last_invite_user_id
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -32,6 +32,7 @@ namespace app\modules\user\models\view;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\modules\user\models\Users as UsersModel;
 
 class UserNewsletter extends \app\components\ActiveRecord
 {
@@ -86,11 +87,27 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'invite_all' => Yii::t('app', 'Invite All'),
 			'invite_users' => Yii::t('app', 'Invite User'),
 			'invite_user_all' => Yii::t('app', 'Invite User All'),
-			'first_invite_user_id' => Yii::t('app', 'First Invite User'),
 			'first_invite_date' => Yii::t('app', 'First Invite Date'),
-			'last_invite_user_id' => Yii::t('app', 'Last Invite User'),
+			'first_invite_user_id' => Yii::t('app', 'First Invite User'),
 			'last_invite_date' => Yii::t('app', 'Last Invite Date'),
+			'last_invite_user_id' => Yii::t('app', 'Last Invite User'),
 		];
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getFirstUser()
+	{
+		return $this->hasOne(UsersModel::className(), ['user_id' => 'first_invite_user_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getLastUser()
+	{
+		return $this->hasOne(UsersModel::className(), ['user_id' => 'last_invite_user_id']);
 	}
 
 	/**
@@ -141,12 +158,6 @@ class UserNewsletter extends \app\components\ActiveRecord
 				return $model->invite_user_all;
 			},
 		];
-		$this->templateColumns['first_invite_user_id'] = [
-			'attribute' => 'first_invite_user_id',
-			'value' => function($model, $key, $index, $column) {
-				return $model->first_invite_user_id;
-			},
-		];
 		$this->templateColumns['first_invite_date'] = [
 			'attribute' => 'first_invite_date',
 			'filter' => Html::input('date', 'first_invite_date', Yii::$app->request->get('first_invite_date'), ['class'=>'form-control']),
@@ -155,10 +166,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
-		$this->templateColumns['last_invite_user_id'] = [
-			'attribute' => 'last_invite_user_id',
+		$this->templateColumns['first_invite_user_id'] = [
+			'attribute' => 'first_invite_user_id',
 			'value' => function($model, $key, $index, $column) {
-				return $model->last_invite_user_id;
+				return $model->first_invite_user_id;
 			},
 		];
 		$this->templateColumns['last_invite_date'] = [
@@ -168,6 +179,12 @@ class UserNewsletter extends \app\components\ActiveRecord
 				return !in_array($model->last_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->last_invite_date, 'datetime') : '-';
 			},
 			'format' => 'html',
+		];
+		$this->templateColumns['last_invite_user_id'] = [
+			'attribute' => 'last_invite_user_id',
+			'value' => function($model, $key, $index, $column) {
+				return $model->last_invite_user_id;
+			},
 		];
 	}
 

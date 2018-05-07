@@ -5,13 +5,13 @@
  * @var $this app\modules\user\controllers\NewsletterController
  * @var $model app\modules\user\models\UserNewsletter
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:28 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:28 WIB
+ * @modified date 7 May 2018, 15:59 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -24,6 +24,9 @@ use yii\widgets\ActiveForm;
 		'class' => 'form-horizontal form-label-left',
 		//'enctype' => 'multipart/form-data',
 	],
+	'enableClientValidation' => false,
+	'enableAjaxValidation' => false,
+	//'enableClientScript' => true,
 ]); ?>
 
 <?php //echo $form->errorSummary($model);?>

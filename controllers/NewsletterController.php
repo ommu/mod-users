@@ -3,35 +3,36 @@
  * NewsletterController
  * @var $this yii\web\View
  * @var $model app\modules\user\models\UserNewsletter
- * version: 0.0.1
  *
  * NewsletterController implements the CRUD actions for UserNewsletter model.
  * Reference start
  * TOC :
  *	Index
  *	Create
- *	Update
  *	View
  *	Delete
+ *	Status
  *
  *	findModel
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:28 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:28 WIB
+ * @modified date 7 May 2018, 15:59 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
  
 namespace app\modules\user\controllers;
 
 use Yii;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
+use app\components\Controller;
+use mdm\admin\components\AccessControl;
 use app\modules\user\models\UserNewsletter;
 use app\modules\user\models\search\UserNewsletter as UserNewsletterSearch;
-use app\components\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 class NewsletterController extends Controller
 {
@@ -41,10 +42,14 @@ class NewsletterController extends Controller
 	public function behaviors()
 	{
 		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
 			'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
 					'delete' => ['POST'],
+					'status' => ['POST'],
 				],
 			],
 		];
@@ -75,7 +80,7 @@ class NewsletterController extends Controller
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
-			'columns'	  => $columns,
+			'columns' => $columns,
 		]);
 	}
 
@@ -88,44 +93,21 @@ class NewsletterController extends Controller
 	{
 		$model = new UserNewsletter();
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->newsletter_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Newsletter success created.'));
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Create User Newsletter');
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_create', [
-				'model' => $model,
-			]);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter success created.'));
+				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id' => $model->newsletter_id]);
+			} 
 		}
-	}
 
-	/**
-	 * Updates an existing UserNewsletter model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionUpdate($id)
-	{
-		$model = $this->findModel($id);
-
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			//return $this->redirect(['view', 'id' => $model->newsletter_id]);
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User Newsletter success updated.'));
-			return $this->redirect(['index']);
-
-		} else {
-			$this->view->title = Yii::t('app', 'Update {modelClass}: {newsletter_id}', ['modelClass' => 'User Newsletter', 'newsletter_id' => $model->newsletter_id]);
-			$this->view->description = '';
-			$this->view->keywords = '';
-			return $this->render('admin_update', [
-				'model' => $model,
-			]);
-		}
+		$this->view->title = Yii::t('app', 'Create User Newsletter');
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_create', [
+			'model' => $model,
+		]);
 	}
 
 	/**
@@ -137,7 +119,7 @@ class NewsletterController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'View {modelClass}: {newsletter_id}', ['modelClass' => 'User Newsletter', 'newsletter_id' => $model->newsletter_id]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {email}', ['model-class' => 'User Newsletter', 'email' => $model->email]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -155,8 +137,26 @@ class NewsletterController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User Newsletter success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter success deleted.'));
 		return $this->redirect(['index']);
+	}
+
+	/**
+	 * actionStatus an existing UserNewsletter model.
+	 * If status is successful, the browser will be redirected to the 'index' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionStatus($id)
+	{
+		$model = $this->findModel($id);
+		$replace = $model->status == 1 ? 0 : 1;
+		$model->status = $replace;
+		
+		if($model->save(false, ['status'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter success updated.'));
+			return $this->redirect(['index']);
+		}
 	}
 
 	/**
@@ -168,7 +168,7 @@ class NewsletterController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if (($model = UserNewsletter::findOne($id)) !== null) 
+		if(($model = UserNewsletter::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

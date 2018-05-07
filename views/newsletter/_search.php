@@ -5,13 +5,13 @@
  * @var $this app\modules\user\controllers\NewsletterController
  * @var $model app\modules\user\models\search\UserNewsletter
  * @var $form yii\widgets\ActiveForm
- * version: 0.0.1
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
  * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 23 October 2017, 08:28 WIB
  * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 23 October 2017, 08:28 WIB
+ * @modified date 7 May 2018, 15:59 WIB
+ * @link http://ecc.ft.ugm.ac.id
  *
  */
 
@@ -24,27 +24,29 @@ use yii\widgets\ActiveForm;
 		'action' => ['index'],
 		'method' => 'get',
 	]); ?>
-		<?= $form->field($model, 'newsletter_id') ?>
+		<?php echo $form->field($model, 'status')
+			->checkbox();?>
 
-		<?= $form->field($model, 'status') ?>
+		<?php echo $form->field($model, 'user_search');?>
 
-		<?= $form->field($model, 'user_id') ?>
+		<?php echo $form->field($model, 'reference_search');?>
 
-		<?= $form->field($model, 'reference_id') ?>
+		<?php echo $form->field($model, 'email');?>
 
-		<?= $form->field($model, 'email') ?>
+		<?php echo $form->field($model, 'subscribe_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'subscribe_date') ?>
+		<?php echo $form->field($model, 'subscribe_id');?>
 
-		<?= $form->field($model, 'subscribe_id') ?>
+		<?php echo $form->field($model, 'modified_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'modified_date') ?>
+		<?php echo $form->field($model, 'modified_search');?>
 
-		<?= $form->field($model, 'modified_id') ?>
+		<?php echo $form->field($model, 'updated_date')
+			->input('date');?>
 
-		<?= $form->field($model, 'updated_date') ?>
-
-		<?= $form->field($model, 'updated_ip') ?>
+		<?php echo $form->field($model, 'updated_ip');?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
