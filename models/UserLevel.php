@@ -62,13 +62,18 @@ class UserLevel extends \app\components\ActiveRecord
 	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','slug','modified_date','modified_search'];
+	public $gridForbiddenColumn = ['desc_i','creation_search','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','slug','modified_date','modified_search'];
 	public $name_i;
 	public $desc_i;
 
 	// Variable Search
 	public $creation_search;
 	public $modified_search;
+	public $active_search;
+	public $pending_search;
+	public $noverified_search;
+	public $blocked_search;
+	public $user_search;
 
 	const SCENARIOINFO = 'info';
 	const SCENARIOUSER = 'user';
@@ -169,6 +174,11 @@ class UserLevel extends \app\components\ActiveRecord
 			'desc_i' => Yii::t('app', 'Description'),
 			'creation_search' => Yii::t('app', 'Creation'),
 			'modified_search' => Yii::t('app', 'Modified'),
+			'active_search' => Yii::t('app', 'Active'),
+			'pending_search' => Yii::t('app', 'Pending'),
+			'noverified_search' => Yii::t('app', 'Noverified'),
+			'blocked_search' => Yii::t('app', 'Blocked'),
+			'user_search' => Yii::t('app', 'Users'),
 		];
 	}
 
@@ -408,6 +418,56 @@ class UserLevel extends \app\components\ActiveRecord
 				return $model->photo_allow ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
+		];
+		$this->templateColumns['active_search'] = [
+			'attribute' => 'active_search',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'active']);
+				return Html::a($model->view->user_active, $url);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['pending_search'] = [
+			'attribute' => 'pending_search',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'pending']);
+				return Html::a($model->view->user_pending, $url);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['noverified_search'] = [
+			'attribute' => 'noverified_search',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'noverified']);
+				return Html::a($model->view->user_noverified, $url);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['blocked_search'] = [
+			'attribute' => 'blocked_search',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'blocked']);
+				return Html::a($model->view->user_blocked, $url);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['user_search'] = [
+			'attribute' => 'user_search',
+			'filter' => false,
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'all']);
+				return Html::a($model->view->user_all, $url);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
 		];
 		$this->templateColumns['default'] = [
 			'attribute' => 'default',

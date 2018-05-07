@@ -13,7 +13,7 @@
  *
  * The followings are the available columns in table "_user_level":
  * @property integer $level_id
- * @property string $users
+ * @property string $user_active
  * @property string $user_pending
  * @property string $user_noverified
  * @property string $user_blocked
@@ -62,7 +62,7 @@ class UserLevel extends \app\components\ActiveRecord
 	{
 		return [
 			[['level_id', 'user_all'], 'integer'],
-			[['users', 'user_pending', 'user_noverified', 'user_blocked'], 'number'],
+			[['user_active', 'user_pending', 'user_noverified', 'user_blocked'], 'number'],
 		];
 	}
 
@@ -73,7 +73,7 @@ class UserLevel extends \app\components\ActiveRecord
 	{
 		return [
 			'level_id' => Yii::t('app', 'Level'),
-			'users' => Yii::t('app', 'Users'),
+			'user_active' => Yii::t('app', 'User Active'),
 			'user_pending' => Yii::t('app', 'User Pending'),
 			'user_noverified' => Yii::t('app', 'User Noverified'),
 			'user_blocked' => Yii::t('app', 'User Blocked'),
@@ -99,10 +99,10 @@ class UserLevel extends \app\components\ActiveRecord
 				return $model->level_id;
 			},
 		];
-		$this->templateColumns['users'] = [
-			'attribute' => 'users',
+		$this->templateColumns['user_active'] = [
+			'attribute' => 'user_active',
 			'value' => function($model, $key, $index, $column) {
-				return $model->users;
+				return $model->user_active;
 			},
 		];
 		$this->templateColumns['user_pending'] = [

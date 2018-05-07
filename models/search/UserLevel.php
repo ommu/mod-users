@@ -30,7 +30,7 @@ class UserLevel extends UserLevelModel
 		return [
 			[['level_id', 'name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
 			[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts', 'creation_date', 'modified_date', 'slug',
-				'name_i', 'desc_i', 'creation_search', 'modified_search'], 'safe'],
+				'name_i', 'desc_i', 'creation_search', 'modified_search', 'active_search', 'pending_search', 'noverified_search', 'blocked_search', 'user_search'], 'safe'],
 		];
 	}
 
@@ -63,6 +63,7 @@ class UserLevel extends UserLevelModel
 	{
 		$query = UserLevelModel::find()->alias('t');
 		$query->joinWith([
+			'view view', 
 			'title title', 
 			'description description', 
 			'creation creation', 
@@ -90,6 +91,26 @@ class UserLevel extends UserLevelModel
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
+		];
+		$attributes['active_search'] = [
+			'asc' => ['view.user_active' => SORT_ASC],
+			'desc' => ['view.user_active' => SORT_DESC],
+		];
+		$attributes['pending_search'] = [
+			'asc' => ['view.user_pending' => SORT_ASC],
+			'desc' => ['view.user_pending' => SORT_DESC],
+		];
+		$attributes['noverified_search'] = [
+			'asc' => ['view.user_noverified' => SORT_ASC],
+			'desc' => ['view.user_noverified' => SORT_DESC],
+		];
+		$attributes['blocked_search'] = [
+			'asc' => ['view.user_blocked' => SORT_ASC],
+			'desc' => ['view.user_blocked' => SORT_DESC],
+		];
+		$attributes['user_search'] = [
+			'asc' => ['view.user_all' => SORT_ASC],
+			'desc' => ['view.user_all' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
