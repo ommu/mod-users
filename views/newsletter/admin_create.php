@@ -32,7 +32,7 @@ $this->params['menu']['content'] = [
 		'class' => 'form-horizontal form-label-left',
 		//'enctype' => 'multipart/form-data',
 	],
-	'enableClientValidation' => false,
+	'enableClientValidation' => true,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
 ]); ?>

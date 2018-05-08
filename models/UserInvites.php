@@ -42,6 +42,7 @@ use app\modules\user\models\Users;
 class UserInvites extends \app\components\ActiveRecord
 {
 	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['code','invite_ip','modified_date','modified_search','updated_date'];
 	public $email_i;
@@ -76,9 +77,10 @@ class UserInvites extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['newsletter_id', 'code', 'invite_ip'], 'required'],
-			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id'], 'integer'],
-			[['invite_date', 'modified_date', 'updated_date'], 'safe'],
+			[['email_i', 'multiple_email_i'], 'required'],
+			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id', 'multiple_email_i'], 'integer'],
+			[['email_i'], 'string'],
+			[['newsletter_id', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date'], 'safe'],
 			[['code'], 'string', 'max' => 16],
 			[['invite_ip'], 'string', 'max' => 20],
 			[['newsletter_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserNewsletter::className(), 'targetAttribute' => ['newsletter_id' => 'newsletter_id']],
@@ -281,29 +283,123 @@ class UserInvites extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * generate invite code
+	 */
+	public static function getUniqueCode() {
+		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		srand((double)microtime()*time());
+		$i = 0;
+		$salt = '' ;
+
+		while ($i <= 7) {
+			$num = rand() % 33;
+			$tmp = substr($chars, $num, 2);
+			$salt = $salt . $tmp; 
+			$i++;
+		}
+
+		return $salt;
+	}
+
+	// Get plugin list
+	public static function getInvite($email) 
+	{
+		$email = strtolower($email);
+		$model = self::find()->alias('t')
+			->leftJoin(sprintf('%s newsletter', UserNewsletter::tableName()), 't.newsletter_id=newsletter.newsletter_id')
+			->select(['t.invite_id', 't.newsletter_id'])
+			->where(['t.publish' => 1])
+			->andWhere(['is not', 't.user_id', null])
+			->andWhere(['newsletter.email' => $email])
+			->orderBy('t.invite_id DESC')
+			->one();
+		
+		return $model;
+	}
+
+	/**
+	 * insertInvite
+	 * condition
+	 ** 0 = newsletter not null
+	 ** 1 = newsletter save
+	 ** 2 = newsletter not save
+	 */
+	public static function insertInvite($email, $user_id)
+	{
+		$email = strtolower($email);
+		$newsletter = UserNewsletter::find()
+			->select(['newsletter_id', 'user_id'])
+			->where(['email' => $email])
+			->one();
+
+		if($newsletter != null)
+			$newsletter_id = $newsletter->newsletter_id;
+		else {
+			$newsletter = new UserNewsletter();
+			$newsletter->email_i = $email;
+			$newsletter->multiple_email_i = 0;
+			if($newsletter->save())
+				$newsletter_id = $newsletter->newsletter_id;
+		}
+		
+		$condition = 0;
+		if($newsletter->user_id == null) {
+			$invite = self::find()
+				->select(['invite_id', 'invites'])
+				->where(['publish' => 1])
+				->andWhere(['newsletter_id' => $newsletter_id])
+				->andWhere(['user_id' => $user_id])
+				->one();
+			
+			if($invite == null) {
+				$invite = new UserInvites();
+				$invite->newsletter_id = $newsletter_id;
+				$invite->user_id = $user_id;
+				if($invite->save())
+					$condition = 1;
+				else
+					$condition = 2;
+
+			} else {
+				$invite->invites = $invite->invites+1;
+				if($invite->save())
+					$condition = 1;
+			}
+		}
+		
+		return $condition;
+	}
+
+	/**
 	 * before validate attributes
 	 */
 	public function beforeValidate() 
 	{
 		if(parent::beforeValidate()) {
-			if($this->isNewRecord)
+			if($this->isNewRecord) {
+				$this->email_i = strtolower($this->email_i);
+				if(!$this->multiple_email_i && $this->email_i != '') {
+					$email_i = $this->formatFileType($this->email_i);
+					if(count($email_i) > 1)
+						$this->addError('email_i', Yii::t('app', 'Form invite menggunakan tipe single'));
+
+					else {
+						$newsletter = UserNewsletter::find()
+							->select(['newsletter_id', 'user_id'])
+							->where(['email' => $this->email_i])
+							->one();
+						if($newsletter != null && $newsletter->user_id != null)
+							$this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar sebagai member.', ['email'=>$this->email_i]));
+					}
+				}
 				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			else
+				$this->code = self::getUniqueCode();
+
+			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
 			$this->invite_ip = $_SERVER['REMOTE_ADDR'];
 		}
-		return true;
-	}
-
-	/**
-	 * after validate attributes
-	 */
-	public function afterValidate()
-	{
-		parent::afterValidate();
-		// Create action
-		
 		return true;
 	}
 
@@ -313,7 +409,25 @@ class UserInvites extends \app\components\ActiveRecord
 	public function beforeSave($insert)
 	{
 		if(parent::beforeSave($insert)) {
-			// Create action
+			$this->email_i = strtolower($this->email_i);
+			
+			if($insert && !$this->multiple_email_i) {
+				$newsletter = UserNewsletter::find()
+					->select(['newsletter_id'])
+					->where(['email' => $this->email_i])
+					->one();
+
+				if($newsletter != null)
+					$this->newsletter_id = $newsletter->newsletter_id;
+				else {
+					$newsletter = new UserNewsletter();
+					$newsletter->email_i = $this->email_i;
+					$newsletter->multiple_email_i = 0;
+					if($newsletter->save())
+						$this->newsletter_id = $newsletter->newsletter_id;
+				}
+
+			}
 		}
 		return true;
 	}
@@ -324,26 +438,17 @@ class UserInvites extends \app\components\ActiveRecord
 	public function afterSave($insert, $changedAttributes) 
 	{
 		parent::afterSave($insert, $changedAttributes);
-		// Create action
-	}
-
-	/**
-	 * Before delete attributes
-	 */
-	public function beforeDelete() 
-	{
-		if(parent::beforeDelete()) {
-			// Create action
+		
+		if($insert && $this->newsletter->user_id == null) {
+			/*
+			Yii::$app->mailer->compose()
+				->setFrom('emailasale@gmail.com')
+				->setTo($model->user->email)
+				->setSubject(Yii::t('app', ''))
+				->setTextBody(Yii::t('app', 'Plain text content'))
+				->setHtmlBody('')
+				->send();
+			*/
 		}
-		return true;
-	}
-
-	/**
-	 * After delete attributes
-	 */
-	public function afterDelete() 
-	{
-		parent::afterDelete();
-		// Create action
 	}
 }

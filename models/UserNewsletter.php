@@ -79,10 +79,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email_i'], 'required'],
+			[['email_i', 'multiple_email_i'], 'required'],
 			[['status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id', 'multiple_email_i'], 'integer'],
 			[['email_i'], 'string'],
-			[['email', 'subscribe_date', 'subscribe_id', 'modified_date', 'updated_date', 'updated_ip', 'multiple_email_i'], 'safe'],
+			[['email', 'subscribe_date', 'subscribe_id', 'modified_date', 'updated_date', 'updated_ip'], 'safe'],
 			[['email'], 'string', 'max' => 32],
 			[['updated_ip'], 'string', 'max' => 20],
 			[['reference_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['reference_id' => 'user_id']],
@@ -310,7 +310,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * insertNewsletter
 	 * condition
 	 ** 0 = newsletter not null
 	 ** 1 = newsletter save
@@ -319,13 +319,13 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public static function insertNewsletter($email)
 	{
 		$email = strtolower($email);
-		$model = self::find()
-			->select(['newsletter_id','email'])
+		$newsletter = self::find()
+			->select(['newsletter_id'])
 			->where(['email' => $email])
 			->one();
 		
 		$condition = 0;
-		if($model == null) {
+		if($newsletter == null) {
 			$newsletter = new UserNewsletter();
 			$newsletter->email_i = $email;
 			$newsletter->multiple_email_i = 0;
@@ -345,14 +345,16 @@ class UserNewsletter extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
+				$this->email_i = strtolower($this->email_i);
 				if(!$this->multiple_email_i && $this->email_i != '') {
 					$email_i = $this->formatFileType($this->email_i);
 					if(count($email_i) > 1)
 						$this->addError('email_i', Yii::t('app', 'Form newsletter menggunakan tipe single'));
+
 					else {
-						$this->email = strtolower($this->email_i);
+						$this->email = $this->email_i;
 						$newsletter = self::find()
-							->select(['newsletter_id','email'])
+							->select(['newsletter_id'])
 							->where(['email' => $this->email])
 							->one();
 						if($newsletter != null)

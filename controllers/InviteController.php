@@ -37,6 +37,8 @@ use app\modules\user\models\search\UserInvites as UserInvitesSearch;
 
 class InviteController extends Controller
 {
+	use \ommu\traits\FileTrait;
+
 	/**
 	 * @inheritdoc
 	 */
@@ -96,11 +98,30 @@ class InviteController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
-			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success created.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id' => $model->invite_id]);
-			} 
+			$result = [];
+			if($model->multiple_email_i) {
+				if($model->validate()) {
+					$email_i = $this->formatFileType($model->email_i);
+					$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+					foreach ($email_i as $email) {
+						$condition = UserInvites::insertInvite($email, $user_id);
+						if($condition == 0)
+							$result[] = Yii::t('app', '{email} (skip)', array('email'=>$email));
+						else if($condition == 1)
+							$result[] = Yii::t('app', '{email} (success)', array('email'=>$email));
+						else if($condition == 2)
+							$result[] = Yii::t('app', '{email} (error)', array('email'=>$email));
+					}
+					Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success created.<br/>{result}', ['result'=>$this->formatFileType($result, false, '<br/>')]));
+					return $this->redirect(['index']);
+				}
+			} else {
+				if($model->save()) {
+					Yii::$app->session->setFlash('success', Yii::t('app', 'User {email} invite success created.', ['email'=>$model->newsletter->email]));
+					return $this->redirect(['index']);
+					//return $this->redirect(['view', 'id' => $model->invite_id]);
+				}
+			}
 		}
 
 		$this->view->title = Yii::t('app', 'Create User Invite');
@@ -120,7 +141,7 @@ class InviteController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'User Invite', 'newsletter-id' => $model->newsletter->user->username]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'User Invite', 'newsletter-id' => $model->newsletter->email]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
