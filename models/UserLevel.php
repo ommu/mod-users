@@ -75,9 +75,9 @@ class UserLevel extends \app\components\ActiveRecord
 	public $blocked_search;
 	public $user_search;
 
-	const SCENARIOINFO = 'info';
-	const SCENARIOUSER = 'user';
-	const SCENARIOMESSAGE = 'message';
+	const SCENARIO_INFO = 'info';
+	const SCENARIO_USER = 'user';
+	const SCENARIO_MESSAGE = 'message';
 
 	/**
 	 * @return string the associated database table name
@@ -129,9 +129,9 @@ class UserLevel extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		return [
-			self::SCENARIOINFO => ['default','name_i','name_i'],
-			self::SCENARIOUSER => ['profile_block','profile_search','profile_privacy','profile_comments','photo_allow','photo_size','photo_exts','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete'],
-			self::SCENARIOMESSAGE => ['message_allow','message_limit'],
+			self::SCENARIO_INFO => ['default','name_i','name_i'],
+			self::SCENARIO_USER => ['profile_block','profile_search','profile_privacy','profile_comments','photo_allow','photo_size','photo_exts','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete'],
+			self::SCENARIO_MESSAGE => ['message_allow','message_limit'],
 		];
 	}
 

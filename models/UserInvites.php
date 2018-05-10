@@ -55,6 +55,8 @@ class UserInvites extends \app\components\ActiveRecord
 	public $inviter_search;
 	public $modified_search;
 
+	const SCENARIO_FORM = 'createForm';
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -77,7 +79,7 @@ class UserInvites extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email_i', 'multiple_email_i'], 'required'],
+			[['email_i', 'multiple_email_i'], 'required', 'on' => self::SCENARIO_FORM],
 			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id', 'multiple_email_i'], 'integer'],
 			[['email_i'], 'string'],
 			[['newsletter_id', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date'], 'safe'],
@@ -86,6 +88,14 @@ class UserInvites extends \app\components\ActiveRecord
 			[['newsletter_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserNewsletter::className(), 'targetAttribute' => ['newsletter_id' => 'newsletter_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
+	}
+
+	// get scenarios
+	public function scenarios()
+	{
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_FORM] = ['email_i','multiple_email_i'];
+		return $scenarios;
 	}
 
 	/**
@@ -285,7 +295,8 @@ class UserInvites extends \app\components\ActiveRecord
 	/**
 	 * generate invite code
 	 */
-	public static function getUniqueCode() {
+	public static function getUniqueCode() 
+	{
 		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		srand((double)microtime()*time());
 		$i = 0;
@@ -327,43 +338,33 @@ class UserInvites extends \app\components\ActiveRecord
 	public static function insertInvite($email, $user_id)
 	{
 		$email = strtolower($email);
-		$newsletter = UserNewsletter::find()
-			->select(['newsletter_id', 'user_id'])
-			->where(['email' => $email])
+		$invite = self::find()->alias('t')
+			->leftJoin(sprintf('%s newsletter', UserNewsletter::tableName()), 't.newsletter_id=newsletter.newsletter_id')
+			->select(['t.invite_id', 't.newsletter_id', 't.invites'])
+			->where(['t.publish' => 1])
+			->andWhere(['t.user_id' => $user_id])
+			->andWhere(['newsletter.email' => $email])
+			->orderBy('t.invite_id DESC')
 			->one();
 
-		if($newsletter != null)
-			$newsletter_id = $newsletter->newsletter_id;
-		else {
-			$newsletter = new UserNewsletter();
-			$newsletter->email_i = $email;
-			$newsletter->multiple_email_i = 0;
-			if($newsletter->save())
-				$newsletter_id = $newsletter->newsletter_id;
-		}
-		
 		$condition = 0;
-		if($newsletter->user_id == null) {
-			$invite = self::find()
-				->select(['invite_id', 'invites'])
-				->where(['publish' => 1])
-				->andWhere(['newsletter_id' => $newsletter_id])
-				->andWhere(['user_id' => $user_id])
-				->one();
-			
-			if($invite == null) {
-				$invite = new UserInvites();
-				$invite->newsletter_id = $newsletter_id;
-				$invite->user_id = $user_id;
+		if($invite == null) {
+			$invite = new UserInvites();
+			$invite->email_i = $email;
+			$invite->multiple_email_i = 0;
+			$invite->user_id = $user_id;
+			if($invite->save())
+				$condition = 1;
+			else
+				$condition = 2;
+
+		} else {
+			if($invite->newsletter->user_id == null) {
+				$invite->invites = $invite->invites+1;
 				if($invite->save())
 					$condition = 1;
 				else
 					$condition = 2;
-
-			} else {
-				$invite->invites = $invite->invites+1;
-				if($invite->save())
-					$condition = 1;
 			}
 		}
 		
@@ -392,7 +393,8 @@ class UserInvites extends \app\components\ActiveRecord
 							$this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar sebagai member.', ['email'=>$this->email_i]));
 					}
 				}
-				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+				if($this->user_id == null)
+					$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 				$this->code = self::getUniqueCode();
 
 			} else

@@ -361,7 +361,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 							$this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar pada newsletter.', ['email'=>$this->email]));
 					}
 				}
-				$this->subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+				if($this->subscribe_id == null)
+					$this->subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 

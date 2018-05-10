@@ -97,7 +97,7 @@ class LevelController extends Controller
 	public function actionCreate()
 	{
 		$model = new UserLevel();
-		$model->scenario = 'info';
+		$model->scenario = UserLevel::SCENARIO_INFO;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -124,7 +124,7 @@ class LevelController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->findModel($id);
-		$model->scenario = 'info';
+		$model->scenario = UserLevel::SCENARIO_INFO;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -219,7 +219,7 @@ class LevelController extends Controller
 	public function actionUser($id)
 	{
 		$model = $this->findModel($id);
-		$model->scenario = 'user';
+		$model->scenario = UserLevel::SCENARIO_USER;
 		
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -247,7 +247,7 @@ class LevelController extends Controller
 	public function actionMessage($id)
 	{
 		$model = $this->findModel($id);
-		$model->scenario = 'message';
+		$model->scenario = UserLevel::SCENARIO_MESSAGE;
 		
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
