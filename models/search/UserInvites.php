@@ -103,7 +103,7 @@ class UserInvites extends UserInvitesModel
 
 		$this->load($params);
 
-		if (!$this->validate()) {
+		if(!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -111,8 +111,7 @@ class UserInvites extends UserInvitesModel
 
 		// grid filtering conditions
 		$query->andFilterWhere([
-			't.invite_id' => isset($params['id']) ? $params['id'] : $this->invite_id,
-			't.publish' => isset($params['publish']) ? 1 : $this->publish,
+			't.invite_id' => $this->invite_id,
 			't.newsletter_id' => isset($params['newsletter']) ? $params['newsletter'] : $this->newsletter_id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.invites' => $this->invites,
@@ -123,10 +122,14 @@ class UserInvites extends UserInvitesModel
 			'inviter.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
 		]);
 
-		if(!isset($params['trash']))
-			$query->andFilterWhere(['IN', 't.publish', [0,1]]);
-		else
+		if(isset($params['trash']))
 			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+		else {
+			if(!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == ''))
+				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
+			else
+				$query->andFilterWhere(['t.publish' => $this->publish]);
+		}
 
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
