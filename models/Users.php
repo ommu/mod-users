@@ -65,6 +65,7 @@ use yii\helpers\Html;
 use yii\web\UploadedFile;
 use app\modules\user\models\Users;
 use app\models\CoreLanguages;
+use app\models\CoreSettings;
 
 class Users extends \app\components\ActiveRecord
 {
@@ -74,6 +75,11 @@ class Users extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = [];
 	public $old_photos_i;
+	public $oldPassword;
+	public $newPassword;
+	public $confirmPassword;
+	public $reference_id_i;
+	public $invite_code_i;
 
 	// Variable Search
 	public $level_search;
@@ -491,20 +497,20 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * User Salt
-	 */
-	public static function hashPassword($salt, $password)
-	{
-		return md5($salt.$password);
-	}
-
-	/**
 	 * @param returnAlias set true jika ingin kembaliannya path alias atau false jika ingin string
 	 * relative path. default true.
 	 */
 	public static function getUploadPath($returnAlias=true) 
 	{
 		return ($returnAlias ? Yii::getAlias('@webroot/public/user') : 'public/user');
+	}
+
+	/**
+	 * User Salt
+	 */
+	public static function hashPassword($salt, $password)
+	{
+		return md5($salt.$password);
 	}
 
 	/**
@@ -520,14 +526,149 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
+		$module = strtolower(Yii::$app->controller->module->id);
+		$controller = strtolower(Yii::$app->controller->id);
+		$action = strtolower(Yii::$app->controller->action->id);
+
+		$setting = CoreSettings::find()
+			->select(['site_oauth','site_type','signup_username','signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
+			->where(['id' => 1])
+			->one();
+
 		if(parent::beforeValidate()) {
+			$photo_exts = $this->formatFileType($this->level->photo_exts);
+			if(empty($photo_exts))
+				$photo_exts = [];
+			$photos = UploadedFile::getInstance($this, 'photos');
+
+			if($photos instanceof UploadedFile && !$photos->getHasError()) {
+				if(!in_array(strtolower($photos->getExtension()), $photo_exts)) {
+					$this->addError('photos', Yii::t('app', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}', array(
+						'{name}'=>$photos->name,
+						'{extensions}'=>$this->formatFileType($photo_exts, false),
+					)));
+				}
+			} /* else {
+				//if(!$this->isNewRecord)
+					$this->addError('photos', Yii::t('app', '{attribute} cannot be blank.', array('{attribute}'=>$this->getAttributeLabel('photos'))));
+			} */
+
 			if($this->isNewRecord) {
+				/**
+				 * Default action
+				 * = Default register member
+				 * = Random password
+				 * = Username required
+				 */
+				$oauthCondition = 0;
+				if($this->scenario == 'login' && $setting->site_oauth == 1)
+					$oauthCondition = 1;
+
 				$this->salt = $this->uniqueCode(32,1);
+				
+				// User Reference
+				$this->reference_id_i = null;
+				if($this->email != '') {
+					$settingUser = UserSetting::find()
+						->select(['invite_order'])
+						->where(['id' => 1])
+						->one();
+					$invite = UserInvites::getInvite($this->email);
+					if($invite != null && $invite->newsletter->user_id == null) {
+						$reference_id_i = $settingUser->invite_order == 'asc' ? $invite->newsletter->view->first_invite_user_id : $invite->newsletter->view->last_invite_user_id;
+						$this->reference_id_i = $reference_id_i;
+					}
+				}
+
+				if(in_array($controller, ['admin','personal'])) {
+					// Auto Approve Users
+					if($setting->signup_approve == 1)
+						$this->enabled = 1;
+				
+					// Auto Verified Email User
+					if($setting->signup_verifyemail == 0)
+						$this->verified = 1;
+				
+					// Generate user by admin
+					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+					
+				} else {
+					$this->level_id = UserLevel::getDefault();
+					$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
+					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
+
+					// Signup by Invite (Admin or User)
+					if(($setting->site_type == 1 && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
+						if($setting->signup_checkemail == 1 && $this->invite_code_i == '')
+							$this->addError('invite_code_i', Yii::t('phrase', '{attribute} tidak boleh kosong.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+						
+						if($this->email != '') {
+							if($invite != null) {
+								if($invite->newsletter->user_id != null)
+									$this->addError('email', Yii::t('phrase', '{attribute} anda sudah terdaftar sebagai user, silahkan login.', ['attribute'=>$this->getAttributeLabel('email')]));
+									
+								else {
+									if($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user')
+										$this->addError('email', Yii::t('phrase', 'Maaf invite hanya bisa dilakukan oleh admin'));
+									
+									else {
+										if($setting->signup_checkemail == 1) {
+											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->invite_code_i);
+											if($inviteCode == null)
+												$this->addError('invite_code_i', Yii::t('phrase', '{attribute} expired atau tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+											else
+												$this->reference_id_i = $inviteCode->user_id;
+										}
+									}
+								}
+							} else
+								$this->addError('email', Yii::t('phrase', '{attribute} anda belum ada dalam daftar invite.', ['attribute'=>$this->getAttributeLabel('email')]));
+							
+						} else {
+							if($setting->signup_checkemail == 1)
+								$this->addError('invite_code_i', Yii::t('phrase', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+						}
+					}
+				}
+
+				// Username required
+				if($setting->signup_username == 1 && $oauthCondition == 0) {
+					$username = strtolower($this->username);
+					if($this->username != '') {
+						$user = self::find()
+							->select(['user_id'])
+							->where(['username' => $username])
+							->one();
+						if($user != null)
+							$this->addError('username', Yii::t('phrase', '{attribute} already in use', ['attribute'=>$this->getAttributeLabel('username')]));
+					} else
+						$this->addError('username', Yii::t('phrase', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
+				}
+
+				// Random password
+				if($setting->signup_random == 1 || $oauthCondition == 1) {
+					$this->confirmPassword = $this->newPassword = $this->uniqueCode(8,1);
+					$this->verified = 1;
+				}
+
+			} else {
+				/**
+				 * Modify Mamber
+				 * = Admin modify member
+				 * = User modify
+				 */
+				
+				// Admin modify member
+				if(in_array($controller, ['admin','personal'])) {
+					$this->modified_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
+					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+				} else {
+					// User modify
+					if(!in_array($controller, array('password')))
+						$this->update_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
+					$this->update_ip = $_SERVER['REMOTE_ADDR'];
+				}
 			}
-
-
-			if(!$this->isNewRecord)
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
 		}
 		return true;
 	}
@@ -538,7 +679,10 @@ class Users extends \app\components\ActiveRecord
 	public function beforeSave($insert)
 	{
 		if(parent::beforeSave($insert)) {
-			// Create action
+			$this->email = strtolower($this->email);
+			$this->username = strtolower($this->username);
+			if($this->newPassword != '')
+				$this->password = self::hashPassword($this->salt, $this->newPassword);
 		}
 		return true;
 	}

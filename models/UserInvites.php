@@ -293,7 +293,7 @@ class UserInvites extends \app\components\ActiveRecord
 		}
 	}
 
-	// Get plugin list
+	// getInvite
 	public static function getInvite($email) 
 	{
 		$email = strtolower($email);
@@ -304,6 +304,24 @@ class UserInvites extends \app\components\ActiveRecord
 			->andWhere(['is not', 't.user_id', null])
 			->andWhere(['newsletter.email' => $email])
 			->orderBy('t.invite_id DESC')
+			->one();
+		
+		return $model;
+	}
+
+	// getInviteWithCode
+	public static function getInviteWithCode($email, $code)
+	{
+		$email = strtolower($email);
+		$model = UserInviteHistory::find()->alias('t')
+			->leftJoin(sprintf('%s invite', UserInvites::tableName()), 't.invite_id=invite.invite_id')
+			->leftJoin(sprintf('%s newsletter', UserNewsletter::tableName()), 'invite.newsletter_id=newsletter.newsletter_id')
+			->select(['t.id', 't.invite_id'])
+			->where(['t.code' => $code])
+			->andWhere(['invite.publish' => 1])
+			->andWhere(['newsletter.status' => 1])
+			->andWhere(['newsletter.email' => $email])
+			->orderBy('t.id DESC')
 			->one();
 		
 		return $model;
