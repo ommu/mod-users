@@ -1,7 +1,13 @@
 <?php
 /**
  * Users
- * version: 0.0.1
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @created date 8 October 2017, 05:31 WIB
+ * @modified date 2 May 2018, 13:29 WIB
+ * @link https://ecc.ft.ugm.ac.id
  *
  * This is the model class for table "ommu_users".
  *
@@ -40,16 +46,14 @@
  * @property UserHistoryLogin[] $logins
  * @property UserHistoryPassword[] $passwords
  * @property UserHistoryUsername[] $usernames
+ * @property UserInvites[] $invites
+ * @property UserNewsletter[] $newsletters
  * @property UserOption $option
  * @property UserVerify[] $verifies
  * @property UserLevel $level
  * @property CoreLanguages $language
-
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
- * @author Putra Sudaryanto <putra@sudaryanto.id>
- * @created date 8 October 2017, 05:31 WIB
- * @contact (+62)856-299-4114
+ * @property Users $user
+ * @property Users $modified
  *
  */
 
@@ -57,12 +61,18 @@ namespace app\modules\user\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\web\UploadedFile;
 use app\modules\user\models\Users;
 use app\models\CoreLanguages;
 
 class Users extends \app\components\ActiveRecord
 {
+	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\FileTrait;
+
 	public $gridForbiddenColumn = [];
+	public $old_photos_i;
 
 	// Variable Search
 	public $level_search;
@@ -112,6 +122,47 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * @return array customized attribute labels (name=>label)
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'user_id' => Yii::t('app', 'User'),
+			'enabled' => Yii::t('app', 'Enabled'),
+			'verified' => Yii::t('app', 'Verified'),
+			'level_id' => Yii::t('app', 'Level'),
+			'language_id' => Yii::t('app', 'Language'),
+			'email' => Yii::t('app', 'Email'),
+			'username' => Yii::t('app', 'Username'),
+			'first_name' => Yii::t('app', 'First Name'),
+			'last_name' => Yii::t('app', 'Last Name'),
+			'displayname' => Yii::t('app', 'Displayname'),
+			'password' => Yii::t('app', 'Password'),
+			'photos' => Yii::t('app', 'Photos'),
+			'salt' => Yii::t('app', 'Salt'),
+			'deactivate' => Yii::t('app', 'Deactivate'),
+			'search' => Yii::t('app', 'Search'),
+			'invisible' => Yii::t('app', 'Invisible'),
+			'privacy' => Yii::t('app', 'Privacy'),
+			'comments' => Yii::t('app', 'Comments'),
+			'creation_date' => Yii::t('app', 'Creation Date'),
+			'creation_ip' => Yii::t('app', 'Creation Ip'),
+			'modified_date' => Yii::t('app', 'Modified Date'),
+			'modified_id' => Yii::t('app', 'Modified'),
+			'lastlogin_date' => Yii::t('app', 'Lastlogin Date'),
+			'lastlogin_ip' => Yii::t('app', 'Lastlogin Ip'),
+			'lastlogin_from' => Yii::t('app', 'Lastlogin From'),
+			'update_date' => Yii::t('app', 'Update Date'),
+			'update_ip' => Yii::t('app', 'Update Ip'),
+			'old_photos_i' => Yii::t('app', 'Old Photos'),
+			'level_search' => Yii::t('app', 'Level'),
+			'language_search' => Yii::t('app', 'Language'),
+			'user_search' => Yii::t('app', 'User'),
+			'modified_search' => Yii::t('app', 'Modified'),
+		];
+	}
+
+	/**
 	 * @return \yii\db\ActiveQuery
 	 */
 	public function getForgots()
@@ -149,6 +200,22 @@ class Users extends \app\components\ActiveRecord
 	public function getUsernames()
 	{
 		return $this->hasMany(UserHistoryUsername::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getInvites()
+	{
+		return $this->hasMany(UserInvites::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getNewsletters()
+	{
+		return $this->hasMany(UserNewsletter::className(), ['reference_id' => 'user_id']);
 	}
 
 	/**
@@ -192,43 +259,12 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return array customized attribute labels (name=>label)
+	 * @inheritdoc
+	 * @return \app\modules\user\models\query\UsersQuery the active query used by this AR class.
 	 */
-	public function attributeLabels()
+	public static function find()
 	{
-		return [
-			'user_id'		 => Yii::t('app', 'User'),
-			'enabled'		 => Yii::t('app', 'Enabled'),
-			'verified'		=> Yii::t('app', 'Verified'),
-			'level_id'		=> Yii::t('app', 'Level'),
-			'language_id'	 => Yii::t('app', 'Language'),
-			'email'		   => Yii::t('app', 'Email'),
-			'username'		=> Yii::t('app', 'Username'),
-			'first_name'	  => Yii::t('app', 'First Name'),
-			'last_name'	   => Yii::t('app', 'Last Name'),
-			'displayname'	 => Yii::t('app', 'Displayname'),
-			'password'		=> Yii::t('app', 'Password'),
-			'photos'		  => Yii::t('app', 'Photos'),
-			'salt'			=> Yii::t('app', 'Salt'),
-			'deactivate'	  => Yii::t('app', 'Deactivate'),
-			'search'		  => Yii::t('app', 'Search'),
-			'invisible'	   => Yii::t('app', 'Invisible'),
-			'privacy'		 => Yii::t('app', 'Privacy'),
-			'comments'		=> Yii::t('app', 'Comments'),
-			'creation_date'   => Yii::t('app', 'Creation Date'),
-			'creation_ip'	 => Yii::t('app', 'Creation Ip'),
-			'modified_date'   => Yii::t('app', 'Modified Date'),
-			'modified_id'	 => Yii::t('app', 'Modified'),
-			'lastlogin_date'  => Yii::t('app', 'Lastlogin Date'),
-			'lastlogin_ip'	=> Yii::t('app', 'Lastlogin Ip'),
-			'lastlogin_from'  => Yii::t('app', 'Lastlogin From'),
-			'update_date'	 => Yii::t('app', 'Update Date'),
-			'update_ip'	   => Yii::t('app', 'Update Ip'),
-			'level_search'	=> Yii::t('app', 'Level'),
-			'language_search' => Yii::t('app', 'Language'),
-			'user_search'	 => Yii::t('app', 'User'),
-			'modified_search' => Yii::t('app', 'Modified'),
-		];
+		return new \app\modules\user\models\query\UsersQuery(get_called_class());
 	}
 
 	/**
@@ -247,7 +283,7 @@ class Users extends \app\components\ActiveRecord
 			$this->templateColumns['level_search'] = [
 				'attribute' => 'level_search',
 				'value' => function($model, $key, $index, $column) {
-					return $model->level->name;
+					return isset($model->level) ? $model->level->name : '-';
 				},
 			];
 		}
@@ -255,42 +291,79 @@ class Users extends \app\components\ActiveRecord
 			$this->templateColumns['language_search'] = [
 				'attribute' => 'language_search',
 				'value' => function($model, $key, $index, $column) {
-					return $model->language->name;
+					return isset($model->language) ? $model->language->name : '-';
 				},
 			];
 		}
-		$this->templateColumns['email'] = 'email';
-		$this->templateColumns['username'] = 'username';
-		$this->templateColumns['first_name'] = 'first_name';
-		$this->templateColumns['last_name'] = 'last_name';
-		$this->templateColumns['displayname'] = 'displayname';
-		$this->templateColumns['password'] = 'password';
-		$this->templateColumns['photos'] = 'photos';
-		$this->templateColumns['salt'] = 'salt';
+		$this->templateColumns['email'] = [
+			'attribute' => 'email',
+			'value' => function($model, $key, $index, $column) {
+				return $model->email;
+			},
+		];
+		$this->templateColumns['username'] = [
+			'attribute' => 'username',
+			'value' => function($model, $key, $index, $column) {
+				return $model->username;
+			},
+		];
+		$this->templateColumns['first_name'] = [
+			'attribute' => 'first_name',
+			'value' => function($model, $key, $index, $column) {
+				return $model->first_name;
+			},
+		];
+		$this->templateColumns['last_name'] = [
+			'attribute' => 'last_name',
+			'value' => function($model, $key, $index, $column) {
+				return $model->last_name;
+			},
+		];
+		$this->templateColumns['displayname'] = [
+			'attribute' => 'displayname',
+			'value' => function($model, $key, $index, $column) {
+				return $model->displayname;
+			},
+		];
+		$this->templateColumns['password'] = [
+			'attribute' => 'password',
+			'value' => function($model, $key, $index, $column) {
+				return $model->password;
+			},
+		];
+		$this->templateColumns['photos'] = [
+			'attribute' => 'photos',
+			'value' => function($model, $key, $index, $column) {
+				return $model->photos;
+			},
+		];
+		$this->templateColumns['salt'] = [
+			'attribute' => 'salt',
+			'value' => function($model, $key, $index, $column) {
+				return $model->salt;
+			},
+		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'creation_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'creation_date', Yii::$app->request->get('creation_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['creation_ip'] = 'creation_ip';
+		$this->templateColumns['creation_ip'] = [
+			'attribute' => 'creation_ip',
+			'value' => function($model, $key, $index, $column) {
+				return $model->creation_ip;
+			},
+		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'modified_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
 			$this->templateColumns['modified_search'] = [
@@ -302,80 +375,145 @@ class Users extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['lastlogin_date'] = [
 			'attribute' => 'lastlogin_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'lastlogin_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'lastlogin_date', Yii::$app->request->get('lastlogin_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['lastlogin_ip'] = 'lastlogin_ip';
-		$this->templateColumns['lastlogin_from'] = 'lastlogin_from';
+		$this->templateColumns['lastlogin_ip'] = [
+			'attribute' => 'lastlogin_ip',
+			'value' => function($model, $key, $index, $column) {
+				return $model->lastlogin_ip;
+			},
+		];
+		$this->templateColumns['lastlogin_from'] = [
+			'attribute' => 'lastlogin_from',
+			'value' => function($model, $key, $index, $column) {
+				return $model->lastlogin_from;
+			},
+		];
 		$this->templateColumns['update_date'] = [
 			'attribute' => 'update_date',
-			'filter'	=> \yii\jui\DatePicker::widget([
-				'dateFormat' => 'yyyy-MM-dd',
-				'attribute' => 'update_date',
-				'model'  => $this,
-			]),
+			'filter' => Html::input('date', 'update_date', Yii::$app->request->get('update_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'date'/*datetime*/) : '-';
+				return !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'datetime') : '-';
 			},
-			'format'	=> 'html',
+			'format' => 'html',
 		];
-		$this->templateColumns['update_ip'] = 'update_ip';
-		$this->templateColumns['enabled'] = [
-			'attribute' => 'enabled',
+		$this->templateColumns['update_ip'] = [
+			'attribute' => 'update_ip',
 			'value' => function($model, $key, $index, $column) {
-				return $model->enabled;
+				return $model->update_ip;
 			},
-			'contentOptions' => ['class'=>'center'],
-		];
-		$this->templateColumns['verified'] = [
-			'attribute' => 'verified',
-			'value' => function($model, $key, $index, $column) {
-				return $model->verified;
-			},
-			'contentOptions' => ['class'=>'center'],
-		];
-		$this->templateColumns['deactivate'] = [
-			'attribute' => 'deactivate',
-			'value' => function($model, $key, $index, $column) {
-				return $model->deactivate;
-			},
-			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['search'] = [
 			'attribute' => 'search',
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->search;
+				return $model->search ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['invisible'] = [
 			'attribute' => 'invisible',
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->invisible;
+				return $model->invisible ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['privacy'] = [
 			'attribute' => 'privacy',
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->privacy;
+				return $model->privacy ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['comments'] = [
 			'attribute' => 'comments',
+			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->comments;
+				return $model->comments ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
+		$this->templateColumns['enabled'] = [
+			'attribute' => 'enabled',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['enabled', 'id'=>$model->primaryKey]);
+				return $this->quickAction($url, $model->enabled, '0=null, 1=enable, 2=blocked');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['verified'] = [
+			'attribute' => 'verified',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['verified', 'id'=>$model->primaryKey]);
+				return $this->quickAction($url, $model->verified, 'Verified,Unverified');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['deactivate'] = [
+			'attribute' => 'deactivate',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['deactivate', 'id'=>$model->primaryKey]);
+				return $this->quickAction($url, $model->deactivate, 'Active,Deactivate');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+	}
+
+	/**
+	 * User get information
+	 */
+	public static function getInfo($id, $column=null)
+	{
+		if($column != null) {
+			$model = self::find()
+				->select([$column])
+				->where(['user_id' => $id])
+				->one();
+			return $model->$column;
+			
+		} else {
+			$model = self::findOne($id);
+			return $model;
+		}
+	}
+
+
+
+	/**
+	 * User Salt
+	 */
+	public static function hashPassword($salt, $password)
+	{
+		return md5($salt.$password);
+	}
+
+	/**
+	 * @param returnAlias set true jika ingin kembaliannya path alias atau false jika ingin string
+	 * relative path. default true.
+	 */
+	public static function getUploadPath($returnAlias=true) 
+	{
+		return ($returnAlias ? Yii::getAlias('@webroot/public/user') : 'public/user');
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind() 
+	{
+		$this->old_photos_i = $this->photos;
 	}
 
 	/**
