@@ -513,10 +513,15 @@ class UserLevel extends \app\components\ActiveRecord
 	/**
 	 * function getLevel
 	 */
-	public static function getLevel($array=true) 
+	public static function getLevel($type=null, $array=true) 
 	{
 		$model = self::find()->alias('t')
 			->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
+		if($type == 'member')
+			$model->andWhere(['not in', 't.level_id', [1]]);
+		if($type == 'admin')
+			$model->andWhere(['t.level_id' => 1]);
+
 		$model = $model->orderBy('title.message ASC')->all();
 
 		if($array == true) {
@@ -530,6 +535,19 @@ class UserLevel extends \app\components\ActiveRecord
 				return false;
 		} else 
 			return $model;
+	}
+
+	/**
+	 * function getDefault
+	 */
+	public static function getDefault() 
+	{
+		$model = self::find()
+			->select(['level_id'])
+			->where(['default' => 1])
+			->one();
+			
+		return $model->level_id;
 	}
 
 	/**
