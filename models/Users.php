@@ -68,6 +68,7 @@ use app\models\CoreLanguages;
 
 class Users extends \app\components\ActiveRecord
 {
+	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
 
@@ -489,8 +490,6 @@ class Users extends \app\components\ActiveRecord
 		}
 	}
 
-
-
 	/**
 	 * User Salt
 	 */
@@ -522,6 +521,11 @@ class Users extends \app\components\ActiveRecord
 	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
+			if($this->isNewRecord) {
+				$this->salt = $this->uniqueCode(32,1);
+			}
+
+
 			if(!$this->isNewRecord)
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : '0';
 		}

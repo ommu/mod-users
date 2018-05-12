@@ -59,6 +59,7 @@ use app\modules\user\models\view\UserLevel as UserLevelView;
 
 class UserLevel extends \app\components\ActiveRecord
 {
+	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
 

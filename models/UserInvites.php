@@ -41,6 +41,7 @@ use app\modules\user\models\Users;
 
 class UserInvites extends \app\components\ActiveRecord
 {
+	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
 
@@ -292,26 +293,6 @@ class UserInvites extends \app\components\ActiveRecord
 		}
 	}
 
-	/**
-	 * generate invite code
-	 */
-	public static function getUniqueCode() 
-	{
-		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		srand((double)microtime()*time());
-		$i = 0;
-		$salt = '' ;
-
-		while ($i <= 7) {
-			$num = rand() % 33;
-			$tmp = substr($chars, $num, 2);
-			$salt = $salt . $tmp; 
-			$i++;
-		}
-
-		return $salt;
-	}
-
 	// Get plugin list
 	public static function getInvite($email) 
 	{
@@ -395,7 +376,7 @@ class UserInvites extends \app\components\ActiveRecord
 				}
 				if($this->user_id == null)
 					$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-				$this->code = self::getUniqueCode();
+				$this->code = $this->uniqueCode(8,2);
 
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;

@@ -38,6 +38,7 @@ use app\modules\user\models\view\UserVerify as UserVerifyView;
 
 class UserVerify extends \app\components\ActiveRecord
 {
+	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
 
 	public $gridForbiddenColumn = ['code','verify_ip','modified_date','modified_search','deleted_date'];
@@ -266,26 +267,6 @@ class UserVerify extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * User forgot password codes
-	 */
-	public static function getUniqueCode()
-	{
-		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		srand((double)microtime()*time());
-		$i = 0;
-		$code = '' ;
-
-		while ($i <= 31) {
-			$num = rand() % 33;
-			$tmp = substr($chars, $num, 2);
-			$code = $code . $tmp; 
-			$i++;
-		}
-
-		return $code;
-	}
-
-	/**
 	 * before validate attributes
 	 */
 	public function beforeValidate() 
@@ -308,7 +289,7 @@ class UserVerify extends \app\components\ActiveRecord
 				else
 					$this->user_id = $user->user_id;
 
-				$this->code = self::getUniqueCode();
+				$this->code = $this->uniqueCode();
 				$this->verify_ip = $_SERVER['REMOTE_ADDR'];
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
