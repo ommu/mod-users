@@ -6,7 +6,7 @@
 		"module",
 		"users",
 		"ommu",
-		"ommu platform"
+		"ommu-platform"
 	],
 	"homepage": "https://github.com/ommu/mod-users",
 	"type": "ommu-module",
