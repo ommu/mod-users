@@ -223,13 +223,13 @@ class ForgotController extends Controller
 
 		}
 		
-		if(isset($_GET['name']) && isset($_GET['email'])) {
-			if(isset($_GET['type']) && $_GET['type'] == 'success')
+		if(Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) {
+			if(Yii::app()->getRequest()->getParam('type') == 'success')
 				$desc = Yii::t('phrase', 'You have successfully changed your password. To sign in to your account, use your email and new password at the following link:');			
 			else {
 				$desc = Yii::t('phrase', 'Hi, <strong>{name}</strong> an email with instructions for creating a new password has been sent to <strong>{email}</strong>', array(
-					'{name}'=>$_GET['name'],
-					'{email}'=>$_GET['email'],
+					'{name}'=>Yii::app()->getRequest()->getParam('name'),
+					'{email}'=>Yii::app()->getRequest()->getParam('email'),
 				));
 			}
 		} else

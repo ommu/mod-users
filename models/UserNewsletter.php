@@ -177,8 +177,8 @@ class UserNewsletter extends CActiveRecord
 
 		$criteria->compare('t.newsletter_id',$this->newsletter_id);
 		$criteria->compare('t.status',$this->status);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
+		if(Yii::app()->getRequest()->getParam('user'))
+			$criteria->compare('t.user_id',Yii::app()->getRequest()->getParam('user'));
 		else
 			$criteria->compare('t.user_id',$this->user_id);
 		if(isset($_GET['reference']))
@@ -194,7 +194,7 @@ class UserNewsletter extends CActiveRecord
 			$criteria->compare('t.subscribe_id',$this->subscribe_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
+		if(Yii::app()->getRequest()->getParam('modified'))
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
@@ -271,7 +271,7 @@ class UserNewsletter extends CActiveRecord
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
 			/*
-			if(!isset($_GET['user'])) {
+			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
 					'value' => '$data->view->user_id ? $data->view->user->level->title->message : ($data->user_id ? $data->user->level->title->message : \'-\')',
@@ -305,7 +305,7 @@ class UserNewsletter extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,

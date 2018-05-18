@@ -25,14 +25,14 @@
 	),
 )); ?>
 	<fieldset>
-		<?php if(!isset($_GET['email'])) {?>
+		<?php if(!Yii::app()->getRequest()->getParam('email')) {?>
 		<div class="clearfix">
 			<?php echo $form->textField($model,'email', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('email'))); ?><?php echo CHtml::submitButton('Check Email' ,array('onclick' => 'setEnableSave()')); ?>
 			<?php echo $form->error($model,'email'); ?>
 		</div>
 		
 		<?php } else {
-			$model->email = $_GET['email'];
+			$model->email = Yii::app()->getRequest()->getParam('email');
 			echo $form->hiddenField($model,'email');
 		?>
 		<div class="clearfix">

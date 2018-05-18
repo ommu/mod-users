@@ -17,10 +17,10 @@
 		'Create',
 	);
 
-if(isset($_GET['name']) && isset($_GET['email'])) {?>
+if(Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) {?>
 	<div class="users-forgot">
 		<div><?php echo $desc;?></div>
-		<?php if(isset($_GET['type']) && $_GET['type'] == 'success') {
+		<?php if(Yii::app()->getRequest()->getParam('type') == 'success') {
 			echo '<a class="button blue-button" href="'.Yii::app()->createUrl('site/login').'" title="'.Yii::t('phrase', 'Login').'">'.Yii::t('phrase', 'Login').'</a>';
 		}?>
 	</div>

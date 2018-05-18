@@ -19,7 +19,7 @@
 ?>
 
 <?php 
-if(isset($_GET['success']) || (isset($_GET['email']) || isset($_GET['secret']))) {
+if(isset($_GET['success']) || (Yii::app()->getRequest()->getParam('email') || isset($_GET['secret']))) {
 	if($renderError == 1)
 		echo '<a class="button" href="'.Yii::app()->controller->createUrl('contact/index').'" title="'.Yii::t('phrase', 'Feedback').'">'.Yii::t('phrase', 'Feedback').'</a>';
 } else {

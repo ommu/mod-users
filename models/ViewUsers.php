@@ -144,7 +144,7 @@ class ViewUsers extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 		
-		$criteria->compare('t.user_id', isset($_GET['user']) ? $_GET['user'] : $this->user_id);
+		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
 		$criteria->compare('t.token_key', strtolower($this->token_key), true);
 		$criteria->compare('t.token_password', strtolower($this->token_password), true);
 		$criteria->compare('t.token_oauth', strtolower($this->token_oauth), true);
@@ -300,7 +300,7 @@ class ViewUsers extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -338,7 +338,7 @@ class ViewUsers extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -376,7 +376,7 @@ class ViewUsers extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -414,7 +414,7 @@ class ViewUsers extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,

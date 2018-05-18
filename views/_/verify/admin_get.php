@@ -17,12 +17,12 @@
 		'Create',
 	);
 
-if(isset($_GET['name']) && isset($_GET['email'])) {?>
+if(Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) {?>
 	<div class="users-forgot">
 		<div>
 			<?php echo Yii::t('phrase', 'Hi, <strong>{name}</strong> sebuah code verifikasi telah kami kirimkan ke email <strong>{email}</strong>', array(
-				'{name}'=>$_GET['name'],
-				'{email}=>'$_GET['email'],
+				'{name}'=>Yii::app()->getRequest()->getParam('name'),
+				'{email}=>'Yii::app()->getRequest()->getParam('email'),
 			));?>
 		</div>
 	</div>

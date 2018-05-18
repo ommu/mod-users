@@ -98,7 +98,7 @@ class AccountController extends /*SBaseController*/ Controller
 			if(isset($_POST['LoginForm']))
 			{
 				$model->attributes=$_POST['LoginForm'];
-				if(!isset($_GET['email']))
+				if(!Yii::app()->getRequest()->getParam('email'))
 					$model->scenario = 'loginemail';
 				else
 					$model->scenario = 'loginpassword';
@@ -109,7 +109,7 @@ class AccountController extends /*SBaseController*/ Controller
 
 				} else {
 					if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
-						if(!isset($_GET['email'])) {
+						if(!Yii::app()->getRequest()->getParam('email')) {
 							if($model->validate()) {
 								echo CJSON::encode(array(
 									'type' => 5,
@@ -145,7 +145,7 @@ class AccountController extends /*SBaseController*/ Controller
 			$this->dialogGroundUrl = Yii::app()->createUrl('site/index');
 
 			$this->dialogFixed = true;
-			if(!isset($_GET['email'])) {
+			if(!Yii::app()->getRequest()->getParam('email')) {
 				$this->dialogFixedClosed=array(
 					Yii::t('phrase', 'Create Your Account')=>Yii::app()->createUrl('users/signup/index'),
 				);

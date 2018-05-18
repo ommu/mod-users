@@ -1,11 +1,12 @@
 {
-	"name": "ommu/users",
+	"name": "ommu/mod-users",
 	"description": "Users Module from Ommu Platform",
 	"keywords": [
 		"module",
 		"users",
 		"ommu",
-		"ommu platform"
+		"ommu-platform",
+		"yii"
 	],
 	"homepage": "https://github.com/ommu/mod-users",
 	"type": "ommu-module",
@@ -33,7 +34,5 @@
 		"yiisoft/yii": ">=1.1.14",
 		"ommu/yii-behavior-sluggable": "~1.0",
 		"ommu/phpmailer": "~0.1"
-	},
-	"require-dev": {
 	}
 }

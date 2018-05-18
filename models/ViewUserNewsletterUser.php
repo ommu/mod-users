@@ -108,7 +108,7 @@ class ViewUserNewsletterUser extends CActiveRecord
 		$criteria=new CDbCriteria;
 		
 		$criteria->compare('t.newsletter_id', strtolower($this->newsletter_id), true);
-		$criteria->compare('t.user_id', isset($_GET['user']) ? $_GET['user'] : $this->user_id);
+		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
 		$criteria->compare('t.register_date', strtolower($this->register_date), true);
 
 		if(!isset($_GET['ViewUserNewsletterUser_sort']))

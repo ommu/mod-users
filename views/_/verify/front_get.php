@@ -17,10 +17,10 @@
 		'Create',
 	);
 
-if(isset($_GET['name']) && isset($_GET['email'])) {
+if(Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) {
 	echo Yii::t('phrase', 'Hi, <strong>{name}</strong> an email with instructions for creating a new password has been sent to <strong>{email}</strong>', array(
-		'{name}'=>$_GET['name'],
-		'{email}'=>$_GET['email'],
+		'{name}'=>Yii::app()->getRequest()->getParam('name'),
+		'{email}'=>Yii::app()->getRequest()->getParam('email'),
 	));
 
 } else {?>

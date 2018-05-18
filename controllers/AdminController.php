@@ -122,7 +122,7 @@ class AdminController extends /*SBaseController*/ Controller
 								'lastlogin_ip'=>$_SERVER['REMOTE_ADDR'],
 								'lastlogin_from'=>Yii::app()->params['product_access_system'],
 							));
-							if(isset($_GET['type'])) {
+							if(Yii::app()->getRequest()->getParam('type')) {
 								echo CJSON::encode(array(
 									'type' => 6,
 								));

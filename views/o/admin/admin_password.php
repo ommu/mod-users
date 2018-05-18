@@ -24,7 +24,7 @@
 	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 <div class="dialog-content">
-	<?php if(!isset($_GET['type']) || (isset($_GET['type']) && $_GET['type'] != 'success')) {?>
+	<?php if(!Yii::app()->getRequest()->getParam('type') || (Yii::app()->getRequest()->getParam('type') != 'success')) {?>
 		<fieldset>
 
 			<?php echo $form->errorSummary($model); ?>
@@ -61,7 +61,7 @@
 	<?php }?>
 </div>
 <div class="dialog-submit">
-	<?php if(!isset($_GET['type']) || (isset($_GET['type']) && $_GET['type'] != 'success')) {
+	<?php if(!Yii::app()->getRequest()->getParam('type') || (Yii::app()->getRequest()->getParam('type') != 'success')) {
 		echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()'));
 	}?>
 	<?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>

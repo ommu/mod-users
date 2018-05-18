@@ -131,8 +131,8 @@ class UserHistoryLogin extends CActiveRecord
 		);
 
 		$criteria->compare('t.id',$this->id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
+		if(Yii::app()->getRequest()->getParam('user'))
+			$criteria->compare('t.user_id',Yii::app()->getRequest()->getParam('user'));
 		else
 			$criteria->compare('t.user_id',$this->user_id);
 		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00', '0000-00-00')))
@@ -191,7 +191,7 @@ class UserHistoryLogin extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['user'])) {
+			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
 					'value' => '$data->user->level->title->message',
@@ -224,7 +224,7 @@ class UserHistoryLogin extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,

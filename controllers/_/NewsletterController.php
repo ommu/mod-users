@@ -134,15 +134,15 @@ class NewsletterController extends Controller
 
 		if($setting->view->online == 0) {
 			$launch = 0;
-			$title = (isset($_GET['name']) && isset($_GET['email'])) ? Yii::t('phrase', 'You will be notified when we launch. Thank You!') : Yii::t('phrase', 'We will be back soon!');
-			$desc = (isset($_GET['name']) && isset($_GET['email'])) ? '' : Yii::t('phrase', 'Enter your email to be notified when more info is available.');
+			$title = (Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) ? Yii::t('phrase', 'You will be notified when we launch. Thank You!') : Yii::t('phrase', 'We will be back soon!');
+			$desc = (Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) ? '' : Yii::t('phrase', 'Enter your email to be notified when more info is available.');
 		} else {
 			$launch = 1;
 			$this->dialogFixedClosed=array(
 				Yii::t('phrase', 'Create Your Account')=>Yii::app()->createUrl('users/signup/index'),
 			);
-			$title = (isset($_GET['name']) && isset($_GET['email'])) ? Yii::t('phrase', 'Thanks for your subscription') : Yii::t('phrase', 'Newsletter');
-			$desc = (isset($_GET['name']) && isset($_GET['email'])) ? '' : Yii::t('phrase', 'Subscribe and we\'ll keep you updated');
+			$title = (Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) ? Yii::t('phrase', 'Thanks for your subscription') : Yii::t('phrase', 'Newsletter');
+			$desc = (Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) ? '' : Yii::t('phrase', 'Subscribe and we\'ll keep you updated');
 		}
 		
 		$this->pageTitle = $title;
@@ -170,25 +170,25 @@ class NewsletterController extends Controller
 		Yii::import('ext.phpmailer.Mailer');
 		 
 		 $renderError = 0;
-		 if(isset($_GET['success']) || (isset($_GET['email']) || isset($_GET['secret']))) {
+		 if(isset($_GET['success']) || (Yii::app()->getRequest()->getParam('email') || isset($_GET['secret']))) {
 			if(isset($_GET['success'])) {
 				if(isset($_GET['date'])) {
 					$title = Yii::t('phrase', 'Unsubscribe successful');
 					$desc = Yii::t('phrase', 'Your email <strong>{email}</strong> has been successfully unsubscribed on {date}.', array(
-						'{email}'=>$_GET['email'], 
+						'{email}'=>Yii::app()->getRequest()->getParam('email'), 
 						'{date}'=>Utility::dateFormat($_GET['date']),
 					));
 
 				} else {
 					$title = Yii::t('phrase', 'Unsubscribe Ticket Sent');
 					$desc = Yii::t('phrase', 'Hi, instructions and ticket for unsubscribe newsletter has been sent to <strong>{email}</strong>', array(
-						'{email}'=>$_GET['email'], 
+						'{email}'=>Yii::app()->getRequest()->getParam('email'), 
 					));
 				}
 				
 			} else {
-				if(isset($_GET['email']) || isset($_GET['secret'])) {
-					$newsletter = UserNewsletter::model()->findByAttributes(array('email' => $_GET['email']), array(
+				if(Yii::app()->getRequest()->getParam('email') || isset($_GET['secret'])) {
+					$newsletter = UserNewsletter::model()->findByAttributes(array('email' => Yii::app()->getRequest()->getParam('email')), array(
 						'select' => 'newsletter_id, status, user_id, email, subscribe_date, updated_date',
 					));
 					if($newsletter != null) {

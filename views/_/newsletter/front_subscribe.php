@@ -17,7 +17,7 @@
 		'Create',
 	);
 
-if(!isset($_GET['name']) && !isset($_GET['email'])) {
+if(!Yii::app()->getRequest()->getParam('name') && !Yii::app()->getRequest()->getParam('email')) {
 	echo $this->renderPartial('_form', array(
 		'model'=>$model,
 		'launch'=>$launch,

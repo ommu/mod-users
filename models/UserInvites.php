@@ -183,8 +183,8 @@ class UserInvites extends CActiveRecord
 			$criteria->compare('t.newsletter_id',$_GET['newsletter']);
 		else
 			$criteria->compare('t.newsletter_id',$this->newsletter_id);
-		if(isset($_GET['user']))
-			$criteria->compare('t.user_id',$_GET['user']);
+		if(Yii::app()->getRequest()->getParam('user'))
+			$criteria->compare('t.user_id',Yii::app()->getRequest()->getParam('user'));
 		else
 			$criteria->compare('t.user_id',$this->user_id);
 		$criteria->compare('t.code',strtolower($this->code),true);
@@ -194,7 +194,7 @@ class UserInvites extends CActiveRecord
 		$criteria->compare('t.invite_ip',strtolower($this->invite_ip),true);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
 			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		if(isset($_GET['modified']))
+		if(Yii::app()->getRequest()->getParam('modified'))
 			$criteria->compare('t.modified_id',$_GET['modified']);
 		else
 			$criteria->compare('t.modified_id',$this->modified_id);
@@ -272,7 +272,7 @@ class UserInvites extends CActiveRecord
 					'value' => '$data->newsletter->view->user_id ? $data->newsletter->view->user->displayname : ($data->newsletter->user_id ? $data->newsletter->user->displayname : \'-\')',
 				);
 			}
-			if(!isset($_GET['user'])) {
+			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
 					'value' => '$data->user_id ? $data->user->displayname : \'-\'',
@@ -301,7 +301,7 @@ class UserInvites extends CActiveRecord
 					),
 					'options'=>array(
 						'showOn' => 'focus',
-						'dateFormat' => 'dd-mm-yy',
+						'dateFormat' => 'yy-mm-dd',
 						'showOtherMonths' => true,
 						'selectOtherMonths' => true,
 						'changeMonth' => true,
@@ -330,7 +330,7 @@ class UserInvites extends CActiveRecord
 				),
 				'type' => 'raw',
 			);
-			if(!isset($_GET['type'])) {
+			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\',array(\'id\'=>$data->invite_id)), $data->publish)',
@@ -433,7 +433,7 @@ class UserInvites extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * insertInvite
 	 * condition
 	 ** 0 = newsletter not null
 	 ** 1 = newsletter save
