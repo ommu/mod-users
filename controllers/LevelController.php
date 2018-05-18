@@ -2,7 +2,7 @@
 /**
  * LevelController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserLevel
+ * @var $model ommu\users\models\UserLevel
  *
  * LevelController implements the CRUD actions for UserLevel model.
  * Reference start
@@ -28,15 +28,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserLevel;
-use app\modules\user\models\search\UserLevel as UserLevelSearch;
+use ommu\users\models\UserLevel;
+use ommu\users\models\search\UserLevel as UserLevelSearch;
 
 class LevelController extends Controller
 {

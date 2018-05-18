@@ -2,7 +2,7 @@
 /**
  * UserHistoryUsername
  *
- * UserHistoryUsername represents the model behind the search form about `app\modules\user\models\UserHistoryUsername`.
+ * UserHistoryUsername represents the model behind the search form about `ommu\users\models\UserHistoryUsername`.
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,12 +13,12 @@
  *
  */
 
-namespace app\modules\user\models\search;
+namespace ommu\users\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\user\models\UserHistoryUsername as UserHistoryUsernameModel;
+use ommu\users\models\UserHistoryUsername as UserHistoryUsernameModel;
 
 class UserHistoryUsername extends UserHistoryUsernameModel
 {

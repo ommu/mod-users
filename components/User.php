@@ -1,8 +1,8 @@
 <?php
-namespace app\modules\user\components;
+namespace ommu\users\components;
 
 use Yii;
-use app\modules\user\models\User as UserModel;
+use ommu\users\models\User as UserModel;
 
 class User extends \yii\web\User
 {

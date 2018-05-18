@@ -2,8 +2,8 @@
 /**
  * UserLevelQuery
  *
- * This is the ActiveQuery class for [[\app\modules\user\models\UserLevel]].
- * @see \app\modules\user\models\UserLevel
+ * This is the ActiveQuery class for [[\ommu\users\models\UserLevel]].
+ * @see \ommu\users\models\UserLevel
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\user\models\query;
+namespace ommu\users\models\query;
 
 class UserLevelQuery extends \yii\db\ActiveQuery
 {
@@ -26,7 +26,7 @@ class UserLevelQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserLevel[]|array
+	 * @return \ommu\users\models\UserLevel[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class UserLevelQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserLevel|array|null
+	 * @return \ommu\users\models\UserLevel|array|null
 	 */
 	public function one($db = null)
 	{

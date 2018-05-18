@@ -2,7 +2,7 @@
 /**
  * VerifyController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserVerify
+ * @var $model ommu\users\models\UserVerify
  *
  * VerifyController implements the CRUD actions for UserVerify model.
  * Reference start
@@ -25,15 +25,15 @@
  *
  */
 
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserVerify;
-use app\modules\user\models\search\UserVerify as UserVerifySearch;
+use ommu\users\models\UserVerify;
+use ommu\users\models\search\UserVerify as UserVerifySearch;
 
 class VerifyController extends Controller
 {

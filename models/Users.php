@@ -57,13 +57,13 @@
  *
  */
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\UploadedFile;
-use app\modules\user\models\Users;
+use ommu\users\models\Users;
 use app\models\CoreLanguages;
 use app\models\CoreSettings;
 
@@ -267,11 +267,11 @@ class Users extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\query\UsersQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UsersQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\user\models\query\UsersQuery(get_called_class());
+		return new \ommu\users\models\query\UsersQuery(get_called_class());
 	}
 
 	/**

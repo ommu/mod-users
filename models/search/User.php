@@ -4,12 +4,12 @@
  *
  * @author Agus Susilo <smartgdi@gmail.com>
  */
-namespace app\modules\user\models\search;
+namespace ommu\users\models\search;
 
 use \yii\base\Model;
 use \yii\data\ActiveDataProvider;
 
-class User extends \app\modules\user\models\User
+class User extends \ommu\users\models\User
 {
 	public $groupName;
 
@@ -35,7 +35,7 @@ class User extends \app\modules\user\models\User
 	}
 
 	public function search($params) {
-		$query = \app\modules\user\models\User::find();
+		$query = \ommu\users\models\User::find();
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query
 		]);

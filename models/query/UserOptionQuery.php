@@ -2,8 +2,8 @@
 /**
  * UserOptionQuery
  *
- * This is the ActiveQuery class for [[\app\modules\user\models\UserOption]].
- * @see \app\modules\user\models\UserOption
+ * This is the ActiveQuery class for [[\ommu\users\models\UserOption]].
+ * @see \ommu\users\models\UserOption
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\user\models\query;
+namespace ommu\users\models\query;
 
 class UserOptionQuery extends \yii\db\ActiveQuery
 {
@@ -26,7 +26,7 @@ class UserOptionQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserOption[]|array
+	 * @return \ommu\users\models\UserOption[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class UserOptionQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserOption|array|null
+	 * @return \ommu\users\models\UserOption|array|null
 	 */
 	public function one($db = null)
 	{

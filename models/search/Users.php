@@ -3,7 +3,7 @@
  * UserInvites
  * version: 0.0.1
  *
- * UserInvites represents the model behind the search form about `app\modules\user\models\UserInvites`.
+ * UserInvites represents the model behind the search form about `ommu\users\models\UserInvites`.
  *
  * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
  * @link http://ecc.ft.ugm.ac.id
@@ -12,12 +12,12 @@
  *
  */
 
-namespace app\modules\user\models\search;
+namespace ommu\users\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\user\models\Users as UsersModel;
+use ommu\users\models\Users as UsersModel;
 
 class Users extends UsersModel
 {

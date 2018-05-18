@@ -29,12 +29,12 @@
  *
  */
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\modules\user\models\view\UserForgot as UserForgotView;
+use ommu\users\models\view\UserForgot as UserForgotView;
 
 class UserForgot extends \app\components\ActiveRecord
 {
@@ -133,11 +133,11 @@ class UserForgot extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\query\UserForgotQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserForgotQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\user\models\query\UserForgotQuery(get_called_class());
+		return new \ommu\users\models\query\UserForgotQuery(get_called_class());
 	}
 
 	/**

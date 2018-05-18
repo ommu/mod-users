@@ -48,14 +48,14 @@
  *
  */
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
-use app\modules\user\models\view\UserLevel as UserLevelView;
+use ommu\users\models\view\UserLevel as UserLevelView;
 
 class UserLevel extends \app\components\ActiveRecord
 {
@@ -233,11 +233,11 @@ class UserLevel extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\query\UserLevelQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserLevelQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\user\models\query\UserLevelQuery(get_called_class());
+		return new \ommu\users\models\query\UserLevelQuery(get_called_class());
 	}
 
 	/**

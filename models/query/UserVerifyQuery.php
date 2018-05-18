@@ -2,8 +2,8 @@
 /**
  * UserVerifyQuery
  *
- * This is the ActiveQuery class for [[\app\modules\user\models\UserVerify]].
- * @see \app\modules\user\models\UserVerify
+ * This is the ActiveQuery class for [[\ommu\users\models\UserVerify]].
+ * @see \ommu\users\models\UserVerify
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\user\models\query;
+namespace ommu\users\models\query;
 
 class UserVerifyQuery extends \yii\db\ActiveQuery
 {
@@ -42,7 +42,7 @@ class UserVerifyQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserVerify[]|array
+	 * @return \ommu\users\models\UserVerify[]|array
 	 */
 	public function all($db = null)
 	{
@@ -51,7 +51,7 @@ class UserVerifyQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserVerify|array|null
+	 * @return \ommu\users\models\UserVerify|array|null
 	 */
 	public function one($db = null)
 	{

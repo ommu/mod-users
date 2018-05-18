@@ -2,8 +2,8 @@
 /**
  * User Newsletter Histories (user-newsletter-history)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\HistoryNewsletterController
- * @var $model app\modules\user\models\UserNewsletterHistory
+ * @var $this ommu\users\controllers\HistoryNewsletterController
+ * @var $model ommu\users\models\UserNewsletterHistory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

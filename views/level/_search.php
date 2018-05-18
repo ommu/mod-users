@@ -2,8 +2,8 @@
 /**
  * User Levels (user-level)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\LevelController
- * @var $model app\modules\user\models\search\UserLevel
+ * @var $this ommu\users\controllers\LevelController
+ * @var $model ommu\users\models\search\UserLevel
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

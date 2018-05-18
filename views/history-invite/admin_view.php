@@ -2,8 +2,8 @@
 /**
  * User Invite Histories (user-invite-history)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\HistoryInviteController
- * @var $model app\modules\user\models\UserInviteHistory
+ * @var $this ommu\users\controllers\HistoryInviteController
+ * @var $model ommu\users\models\UserInviteHistory
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

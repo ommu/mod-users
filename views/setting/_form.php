@@ -2,8 +2,8 @@
 /**
  * User Settings (user-setting)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\SettingController
- * @var $model app\modules\user\models\UserSetting
+ * @var $this ommu\users\controllers\SettingController
+ * @var $model ommu\users\models\UserSetting
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\modules\user\models\UserSetting;
+use ommu\users\models\UserSetting;
 ?>
 
 <?php $form = ActiveForm::begin([

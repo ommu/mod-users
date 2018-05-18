@@ -1,8 +1,8 @@
 <?php
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
-use app\modules\user\models\search\User as UserSearch;
+use ommu\users\models\search\User as UserSearch;
 
 class UserController extends \app\components\Controller
 {

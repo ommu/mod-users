@@ -25,7 +25,7 @@
  *
  */
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
 use yii\helpers\Url;
@@ -95,11 +95,11 @@ class UserOption extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\query\UserOptionQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserOptionQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\user\models\query\UserOptionQuery(get_called_class());
+		return new \ommu\users\models\query\UserOptionQuery(get_called_class());
 	}
 
 	/**

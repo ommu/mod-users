@@ -23,12 +23,12 @@
  *
  */
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\modules\user\models\Users;
+use ommu\users\models\Users;
 
 class UserHistoryLogin extends \app\components\ActiveRecord
 {

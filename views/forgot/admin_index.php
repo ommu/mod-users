@@ -2,8 +2,8 @@
 /**
  * User Forgots (user-forgot)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\ForgotController
- * @var $model app\modules\user\models\UserForgot
+ * @var $this ommu\users\controllers\ForgotController
+ * @var $model ommu\users\models\UserForgot
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

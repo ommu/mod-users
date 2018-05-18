@@ -19,7 +19,7 @@
  *
  */
 
-namespace app\modules\user\models\view;
+namespace ommu\users\models\view;
 
 use Yii;
 use yii\helpers\Url;

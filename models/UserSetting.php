@@ -32,12 +32,12 @@
  *
  */
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\modules\user\models\view\UserSetting as UserSettingView;
+use ommu\users\models\view\UserSetting as UserSettingView;
 
 class UserSetting extends \app\components\ActiveRecord
 {

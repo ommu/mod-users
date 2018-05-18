@@ -1,9 +1,9 @@
 <?php
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
-use app\modules\user\models\User;
+use ommu\users\models\User;
 
 /**
  * This is the model class for table "swt_users_group".

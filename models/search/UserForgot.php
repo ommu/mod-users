@@ -2,7 +2,7 @@
 /**
  * UserForgot
  *
- * UserForgot represents the model behind the search form about `app\modules\user\models\UserForgot`.
+ * UserForgot represents the model behind the search form about `ommu\users\models\UserForgot`.
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,12 +13,12 @@
  *
  */
 
-namespace app\modules\user\models\search;
+namespace ommu\users\models\search;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\user\models\UserForgot as UserForgotModel;
+use ommu\users\models\UserForgot as UserForgotModel;
 
 class UserForgot extends UserForgotModel
 {

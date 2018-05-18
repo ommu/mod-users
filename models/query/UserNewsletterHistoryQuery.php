@@ -2,8 +2,8 @@
 /**
  * UserNewsletterHistoryQuery
  *
- * This is the ActiveQuery class for [[\app\modules\user\models\UserNewsletterHistory]].
- * @see \app\modules\user\models\UserNewsletterHistory
+ * This is the ActiveQuery class for [[\ommu\users\models\UserNewsletterHistory]].
+ * @see \ommu\users\models\UserNewsletterHistory
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\user\models\query;
+namespace ommu\users\models\query;
 
 class UserNewsletterHistoryQuery extends \yii\db\ActiveQuery
 {
@@ -26,7 +26,7 @@ class UserNewsletterHistoryQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserNewsletterHistory[]|array
+	 * @return \ommu\users\models\UserNewsletterHistory[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class UserNewsletterHistoryQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserNewsletterHistory|array|null
+	 * @return \ommu\users\models\UserNewsletterHistory|array|null
 	 */
 	public function one($db = null)
 	{

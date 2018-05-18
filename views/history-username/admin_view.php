@@ -2,8 +2,8 @@
 /**
  * User History Usernames (user-history-username)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\HistoryUsernameController
- * @var $model app\modules\user\models\UserHistoryUsername
+ * @var $this ommu\users\controllers\HistoryUsernameController
+ * @var $model ommu\users\models\UserHistoryUsername
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

@@ -2,7 +2,7 @@
 /**
  * HistoryPasswordController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserHistoryPassword
+ * @var $model ommu\users\models\UserHistoryPassword
  *
  * HistoryPasswordController implements the CRUD actions for UserHistoryPassword model.
  * Reference start
@@ -22,15 +22,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserHistoryPassword;
-use app\modules\user\models\search\UserHistoryPassword as UserHistoryPasswordSearch;
+use ommu\users\models\UserHistoryPassword;
+use ommu\users\models\search\UserHistoryPassword as UserHistoryPasswordSearch;
 
 class HistoryPasswordController extends Controller
 {

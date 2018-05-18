@@ -2,8 +2,8 @@
 /**
  * UserForgotQuery
  *
- * This is the ActiveQuery class for [[\app\modules\user\models\UserForgot]].
- * @see \app\modules\user\models\UserForgot
+ * This is the ActiveQuery class for [[\ommu\users\models\UserForgot]].
+ * @see \ommu\users\models\UserForgot
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\user\models\query;
+namespace ommu\users\models\query;
 
 class UserForgotQuery extends \yii\db\ActiveQuery
 {
@@ -42,7 +42,7 @@ class UserForgotQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserForgot[]|array
+	 * @return \ommu\users\models\UserForgot[]|array
 	 */
 	public function all($db = null)
 	{
@@ -51,7 +51,7 @@ class UserForgotQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserForgot|array|null
+	 * @return \ommu\users\models\UserForgot|array|null
 	 */
 	public function one($db = null)
 	{

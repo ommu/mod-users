@@ -2,7 +2,7 @@
 /**
  * HistoryUsernameController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserHistoryUsername
+ * @var $model ommu\users\models\UserHistoryUsername
  *
  * HistoryUsernameController implements the CRUD actions for UserHistoryUsername model.
  * Reference start
@@ -22,15 +22,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserHistoryUsername;
-use app\modules\user\models\search\UserHistoryUsername as UserHistoryUsernameSearch;
+use ommu\users\models\UserHistoryUsername;
+use ommu\users\models\search\UserHistoryUsername as UserHistoryUsernameSearch;
 
 class HistoryUsernameController extends Controller
 {

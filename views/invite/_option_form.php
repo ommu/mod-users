@@ -2,8 +2,8 @@
 /**
  * User Invites (user-invites)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\InviteController
- * @var $model app\modules\user\models\search\UserInvites
+ * @var $this ommu\users\controllers\InviteController
+ * @var $model ommu\users\models\search\UserInvites
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

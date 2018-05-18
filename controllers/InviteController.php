@@ -2,7 +2,7 @@
 /**
  * InviteController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserInvites
+ * @var $model ommu\users\models\UserInvites
  *
  * InviteController implements the CRUD actions for UserInvites model.
  * Reference start
@@ -25,15 +25,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserInvites;
-use app\modules\user\models\search\UserInvites as UserInvitesSearch;
+use ommu\users\models\UserInvites;
+use ommu\users\models\search\UserInvites as UserInvitesSearch;
 
 class InviteController extends Controller
 {

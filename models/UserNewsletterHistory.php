@@ -23,7 +23,7 @@
  *
  */
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
 use yii\helpers\Url;
@@ -97,11 +97,11 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\query\UserNewsletterHistoryQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserNewsletterHistoryQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\user\models\query\UserNewsletterHistoryQuery(get_called_class());
+		return new \ommu\users\models\query\UserNewsletterHistoryQuery(get_called_class());
 	}
 
 	/**

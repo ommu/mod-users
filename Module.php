@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\user;
+namespace ommu\users;
 
 /**
  * user module definition class
@@ -10,7 +10,7 @@ class Module extends \app\components\Module
 	/**
 	 * @inheritdoc
 	 */
-	public $controllerNamespace = 'app\modules\user\controllers';
+	public $controllerNamespace = 'ommu\users\controllers';
 
 	/**
 	 * @inheritdoc

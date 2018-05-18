@@ -2,8 +2,8 @@
 /**
  * UserInviteHistoryQuery
  *
- * This is the ActiveQuery class for [[\app\modules\user\models\UserInviteHistory]].
- * @see \app\modules\user\models\UserInviteHistory
+ * This is the ActiveQuery class for [[\ommu\users\models\UserInviteHistory]].
+ * @see \ommu\users\models\UserInviteHistory
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\user\models\query;
+namespace ommu\users\models\query;
 
 class UserInviteHistoryQuery extends \yii\db\ActiveQuery
 {
@@ -26,7 +26,7 @@ class UserInviteHistoryQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserInviteHistory[]|array
+	 * @return \ommu\users\models\UserInviteHistory[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class UserInviteHistoryQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserInviteHistory|array|null
+	 * @return \ommu\users\models\UserInviteHistory|array|null
 	 */
 	public function one($db = null)
 	{

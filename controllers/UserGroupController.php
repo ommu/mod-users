@@ -1,5 +1,5 @@
 <?php
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 class UserGroupController extends \app\components\Controller
 {

@@ -28,12 +28,12 @@
  *
  */
 
-namespace app\modules\user\models\view;
+namespace ommu\users\models\view;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\modules\user\models\Users as UsersModel;
+use ommu\users\models\Users as UsersModel;
 
 class UserNewsletter extends \app\components\ActiveRecord
 {

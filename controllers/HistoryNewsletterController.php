@@ -2,7 +2,7 @@
 /**
  * HistoryNewsletterController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserNewsletterHistory
+ * @var $model ommu\users\models\UserNewsletterHistory
  *
  * HistoryNewsletterController implements the CRUD actions for UserNewsletterHistory model.
  * Reference start
@@ -22,15 +22,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserNewsletterHistory;
-use app\modules\user\models\search\UserNewsletterHistory as UserNewsletterHistorySearch;
+use ommu\users\models\UserNewsletterHistory;
+use ommu\users\models\search\UserNewsletterHistory as UserNewsletterHistorySearch;
 
 class HistoryNewsletterController extends Controller
 {

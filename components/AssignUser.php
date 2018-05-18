@@ -1,5 +1,5 @@
 <?php
-namespace app\modules\user\components;
+namespace ommu\users\components;
 
 use yii\db\ActiveRecord;
 use yii\base\Behavior;

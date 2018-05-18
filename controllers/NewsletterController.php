@@ -2,7 +2,7 @@
 /**
  * NewsletterController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserNewsletter
+ * @var $model ommu\users\models\UserNewsletter
  *
  * NewsletterController implements the CRUD actions for UserNewsletter model.
  * Reference start
@@ -24,15 +24,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserNewsletter;
-use app\modules\user\models\search\UserNewsletter as UserNewsletterSearch;
+use ommu\users\models\UserNewsletter;
+use ommu\users\models\search\UserNewsletter as UserNewsletterSearch;
 
 class NewsletterController extends Controller
 {

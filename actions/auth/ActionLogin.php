@@ -1,11 +1,11 @@
 <?php
 
-namespace app\modules\user\actions\auth;
+namespace ommu\users\actions\auth;
 
 use Yii;
-use app\modules\user\models\LoginForm;
-use app\modules\user\components\User;
-use app\modules\user\models\User as UserModel;
+use ommu\users\models\LoginForm;
+use ommu\users\components\User;
+use ommu\users\models\User as UserModel;
 
 class ActionLogin extends \app\components\api\Action
 {

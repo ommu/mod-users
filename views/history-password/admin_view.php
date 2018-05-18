@@ -2,8 +2,8 @@
 /**
  * User History Passwords (user-history-password)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\HistoryPasswordController
- * @var $model app\modules\user\models\UserHistoryPassword
+ * @var $this ommu\users\controllers\HistoryPasswordController
+ * @var $model ommu\users\models\UserHistoryPassword
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

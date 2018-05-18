@@ -2,8 +2,8 @@
 /**
  * User History Emails (user-history-email)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\HistoryEmailController
- * @var $model app\modules\user\models\UserHistoryEmail
+ * @var $this ommu\users\controllers\HistoryEmailController
+ * @var $model ommu\users\models\UserHistoryEmail
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

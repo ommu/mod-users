@@ -2,7 +2,7 @@
 /**
  * SettingController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserSetting
+ * @var $model ommu\users\models\UserSetting
  *
  * SettingController implements the CRUD actions for UserSetting model.
  * Reference start
@@ -22,15 +22,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserSetting;
-use app\modules\user\models\search\UserLevel as UserLevelSearch;
+use ommu\users\models\UserSetting;
+use ommu\users\models\search\UserLevel as UserLevelSearch;
 
 class SettingController extends Controller
 {

@@ -2,7 +2,7 @@
 /**
  * HistoryEmailController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserHistoryEmail
+ * @var $model ommu\users\models\UserHistoryEmail
  *
  * HistoryEmailController implements the CRUD actions for UserHistoryEmail model.
  * Reference start
@@ -22,15 +22,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserHistoryEmail;
-use app\modules\user\models\search\UserHistoryEmail as UserHistoryEmailSearch;
+use ommu\users\models\UserHistoryEmail;
+use ommu\users\models\search\UserHistoryEmail as UserHistoryEmailSearch;
 
 class HistoryEmailController extends Controller
 {

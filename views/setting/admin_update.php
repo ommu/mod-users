@@ -2,8 +2,8 @@
 /**
  * User Settings (user-setting)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\SettingController
- * @var $model app\modules\user\models\UserSetting
+ * @var $this ommu\users\controllers\SettingController
+ * @var $model ommu\users\models\UserSetting
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

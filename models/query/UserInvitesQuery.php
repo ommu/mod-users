@@ -2,8 +2,8 @@
 /**
  * UserInvitesQuery
  *
- * This is the ActiveQuery class for [[\app\modules\user\models\UserInvites]].
- * @see \app\modules\user\models\UserInvites
+ * This is the ActiveQuery class for [[\ommu\users\models\UserInvites]].
+ * @see \ommu\users\models\UserInvites
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\user\models\query;
+namespace ommu\users\models\query;
 
 class UserInvitesQuery extends \yii\db\ActiveQuery
 {
@@ -42,7 +42,7 @@ class UserInvitesQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserInvites[]|array
+	 * @return \ommu\users\models\UserInvites[]|array
 	 */
 	public function all($db = null)
 	{
@@ -51,7 +51,7 @@ class UserInvitesQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserInvites|array|null
+	 * @return \ommu\users\models\UserInvites|array|null
 	 */
 	public function one($db = null)
 	{

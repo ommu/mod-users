@@ -2,8 +2,8 @@
 /**
  * UserNewsletterQuery
  *
- * This is the ActiveQuery class for [[\app\modules\user\models\UserNewsletter]].
- * @see \app\modules\user\models\UserNewsletter
+ * This is the ActiveQuery class for [[\ommu\users\models\UserNewsletter]].
+ * @see \ommu\users\models\UserNewsletter
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -13,7 +13,7 @@
  *
  */
 
-namespace app\modules\user\models\query;
+namespace ommu\users\models\query;
 
 class UserNewsletterQuery extends \yii\db\ActiveQuery
 {
@@ -26,7 +26,7 @@ class UserNewsletterQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserNewsletter[]|array
+	 * @return \ommu\users\models\UserNewsletter[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class UserNewsletterQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\UserNewsletter|array|null
+	 * @return \ommu\users\models\UserNewsletter|array|null
 	 */
 	public function one($db = null)
 	{

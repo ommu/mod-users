@@ -1,15 +1,15 @@
 <?php
 
-namespace app\modules\user\controllers\v1;
+namespace ommu\users\controllers\v1;
 
 use Yii;
 use app\components\api\ActiveController;
-use app\modules\user\models\search\Users as UsersSearch;
+use ommu\users\models\search\Users as UsersSearch;
 
 class UsersController extends ActiveController
 {
-	public $modelClass = 'app\modules\user\models\Users';
-	public $searchModelClass = 'app\modules\user\models\search\Users';
+	public $modelClass = 'ommu\users\models\Users';
+	public $searchModelClass = 'ommu\users\models\search\Users';
 	public static $authType = 2;
 
 	// https://stackoverflow.com/questions/25522462/yii2-rest-query#answer-25618361

@@ -33,12 +33,12 @@
  *
  */
 
-namespace app\modules\user\models;
+namespace ommu\users\models;
 
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\modules\user\models\view\UserNewsletter as UserNewsletterView;
+use ommu\users\models\view\UserNewsletter as UserNewsletterView;
 
 class UserNewsletter extends \app\components\ActiveRecord
 {
@@ -176,11 +176,11 @@ class UserNewsletter extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \app\modules\user\models\query\UserNewsletterQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserNewsletterQuery the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \app\modules\user\models\query\UserNewsletterQuery(get_called_class());
+		return new \ommu\users\models\query\UserNewsletterQuery(get_called_class());
 	}
 
 	/**

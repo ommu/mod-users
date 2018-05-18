@@ -2,7 +2,7 @@
 /**
  * ForgotController
  * @var $this yii\web\View
- * @var $model app\modules\user\models\UserForgot
+ * @var $model ommu\users\models\UserForgot
  *
  * ForgotController implements the CRUD actions for UserForgot model.
  * Reference start
@@ -25,15 +25,15 @@
  *
  */
  
-namespace app\modules\user\controllers;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use app\modules\user\models\UserForgot;
-use app\modules\user\models\search\UserForgot as UserForgotSearch;
+use ommu\users\models\UserForgot;
+use ommu\users\models\search\UserForgot as UserForgotSearch;
 
 class ForgotController extends Controller
 {

@@ -2,8 +2,8 @@
 /**
  * User Newsletters (user-newsletter)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\NewsletterController
- * @var $model app\modules\user\models\UserNewsletter
+ * @var $this ommu\users\controllers\NewsletterController
+ * @var $model ommu\users\models\UserNewsletter
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
