@@ -40,6 +40,7 @@ class UserForgot extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['code','forgot_ip','modified_date','modified_search','deleted_date'];
 	public $email_i;
@@ -315,16 +316,24 @@ class UserForgot extends \app\components\ActiveRecord
 	{
 		parent::afterSave($insert, $changedAttributes);
 
+		$mail = \app\models\CoreMailSetting::find()
+			->select(['mail_name','mail_from'])
+			->where(['id' => 1])
+			->one();
+
 		if($insert) {
-			/*
+			$template = 'users_forgot-password';
+			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
+			$forgotlink = Url::to(['publish', 'code'=>$this->code], true);
+			$emailSubject = $this->parseMailSubject($template);
+			$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'forgotlink'=>$forgotlink]);
+			
 			Yii::$app->mailer->compose()
-				->setFrom('emailasale@gmail.com')
-				->setTo($model->user->email)
-				->setSubject(Yii::t('app', ''))
-				->setTextBody(Yii::t('app', 'Plain text content'))
-				->setHtmlBody('')
+				->setFrom($this->getMailFrom())
+				->setTo([$this->user->email => $displayname])
+				->setSubject($emailSubject)
+				->setHtmlBody($emailBody)
 				->send();
-			*/
 
 			//Update all forgot password history
 			self::updateAll(['publish' => 0], 'forgot_id <> :forgot_id and publish = :publish and user_id = :user_id',  [':forgot_id'=>$this->forgot_id, ':publish'=>1, ':user_id'=>$this->user_id]);
