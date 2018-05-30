@@ -27,6 +27,7 @@ class PasswordController extends Controller
 	 */
 	public function actionReset()
 	{
+		static::$backoffice = false;
 		$this->view->title = 'PasswordControllers';
 		$this->view->description = '';
 		$this->view->keywords = '';
