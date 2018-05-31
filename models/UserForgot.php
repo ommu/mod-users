@@ -316,11 +316,6 @@ class UserForgot extends \app\components\ActiveRecord
 	{
 		parent::afterSave($insert, $changedAttributes);
 
-		$mail = \app\models\CoreMailSetting::find()
-			->select(['mail_name','mail_from'])
-			->where(['id' => 1])
-			->one();
-
 		if($insert) {
 			$template = 'users_forgot-password';
 			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
