@@ -55,6 +55,8 @@ class UserInvites extends \app\components\ActiveRecord
 	public $inviter_search;
 	public $modified_search;
 
+	const SCENARIO_FORM = 'createForm';
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -77,7 +79,7 @@ class UserInvites extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email_i'], 'required'],
+			[['email_i'], 'required', 'on' => self::SCENARIO_FORM],
 			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id'], 'integer'],
 			[['email_i'], 'string'],
 			[['newsletter_id', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date'], 'safe'],
@@ -86,6 +88,14 @@ class UserInvites extends \app\components\ActiveRecord
 			[['newsletter_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserNewsletter::className(), 'targetAttribute' => ['newsletter_id' => 'newsletter_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
+	}
+
+	// get scenarios
+	public function scenarios()
+	{
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_FORM] = ['email_i'];
+		return $scenarios;
 	}
 
 	/**
