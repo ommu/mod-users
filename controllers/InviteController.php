@@ -95,7 +95,6 @@ class InviteController extends Controller
 	public function actionCreate()
 	{
 		$model = new UserInvites();
-		$model->scenario = UserInvites::SCENARIO_FORM;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
