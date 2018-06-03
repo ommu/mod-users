@@ -47,7 +47,6 @@ class UserInvites extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['code','invite_ip','modified_date','modified_search','updated_date'];
 	public $email_i;
-	public $multiple_email_i;
 
 	// Variable Search
 	public $user_search;
@@ -80,8 +79,8 @@ class UserInvites extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email_i', 'multiple_email_i'], 'required', 'on' => self::SCENARIO_FORM],
-			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id', 'multiple_email_i'], 'integer'],
+			[['email_i'], 'required', 'on' => self::SCENARIO_FORM],
+			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id'], 'integer'],
 			[['email_i'], 'string'],
 			[['newsletter_id', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date'], 'safe'],
 			[['code'], 'string', 'max' => 16],
@@ -95,7 +94,7 @@ class UserInvites extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_FORM] = ['email_i','multiple_email_i'];
+		$scenarios[self::SCENARIO_FORM] = ['email_i'];
 		return $scenarios;
 	}
 
@@ -117,7 +116,6 @@ class UserInvites extends \app\components\ActiveRecord
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'email_i' => Yii::t('app', 'Email'),
-			'multiple_email_i' => Yii::t('app', 'Multiple Email'),
 			'user_search' => Yii::t('app', 'User'),
 			'email_search' => Yii::t('app', 'Email'),
 			'level_search' => Yii::t('app', 'Level'),
@@ -350,7 +348,6 @@ class UserInvites extends \app\components\ActiveRecord
 		if($invite == null) {
 			$invite = new UserInvites();
 			$invite->email_i = $email;
-			$invite->multiple_email_i = 0;
 			$invite->user_id = $user_id;
 			if($invite->save())
 				$condition = 1;
@@ -378,12 +375,9 @@ class UserInvites extends \app\components\ActiveRecord
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				$this->email_i = strtolower($this->email_i);
-				if(!$this->multiple_email_i && $this->email_i != '') {
+				if($this->email_i != '') {
 					$email_i = $this->formatFileType($this->email_i);
-					if(count($email_i) > 1)
-						$this->addError('email_i', Yii::t('app', 'Form invite menggunakan tipe single'));
-
-					else {
+					if(count($email_i) == 1) {
 						$newsletter = UserNewsletter::find()
 							->select(['newsletter_id', 'user_id'])
 							->where(['email' => $this->email_i])
@@ -412,7 +406,7 @@ class UserInvites extends \app\components\ActiveRecord
 		if(parent::beforeSave($insert)) {
 			$this->email_i = strtolower($this->email_i);
 			
-			if($insert && !$this->multiple_email_i) {
+			if($insert) {
 				$newsletter = UserNewsletter::find()
 					->select(['newsletter_id'])
 					->where(['email' => $this->email_i])
@@ -423,7 +417,6 @@ class UserInvites extends \app\components\ActiveRecord
 				else {
 					$newsletter = new UserNewsletter();
 					$newsletter->email_i = $this->email_i;
-					$newsletter->multiple_email_i = 0;
 					if($newsletter->save())
 						$this->newsletter_id = $newsletter->newsletter_id;
 				}

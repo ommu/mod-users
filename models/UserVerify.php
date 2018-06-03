@@ -40,6 +40,7 @@ class UserVerify extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['code','verify_ip','modified_date','modified_search','deleted_date'];
 	public $email_i;
@@ -316,15 +317,18 @@ class UserVerify extends \app\components\ActiveRecord
 		parent::afterSave($insert, $changedAttributes);
 
 		if($insert) {
-			/*
+			$template = 'user_verify-email';
+			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
+			$verifylink = Url::to(['email/verify', 'code'=>$this->code], true);
+			$emailSubject = $this->parseMailSubject($template);
+			$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'verifylink'=>$verifylink]);
+
 			Yii::$app->mailer->compose()
-				->setFrom('emailasale@gmail.com')
-				->setTo($model->user->email)
-				->setSubject(Yii::t('app', ''))
-				->setTextBody(Yii::t('app', 'Plain text content'))
-				->setHtmlBody('')
+				->setFrom($this->getMailFrom())
+				->setTo([$this->user->email => $displayname])
+				->setSubject($emailSubject)
+				->setHtmlBody($emailBody)
 				->send();
-			*/
 
 			//Update all verify email history
 			self::updateAll(['publish' => 0], 'verify_id <> :verify_id and publish = :publish and user_id = :user_id',  [':verify_id'=>$this->verify_id, ':publish'=>1, ':user_id'=>$this->user_id]);

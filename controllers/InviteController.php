@@ -100,10 +100,10 @@ class InviteController extends Controller
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			$result = [];
-			if($model->multiple_email_i) {
-				if($model->validate()) {
-					$email_i = $this->formatFileType($model->email_i);
-					$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			if($model->validate()) {
+				$email_i = $this->formatFileType($model->email_i);
+				$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+				if(count($email_i) > 1) {
 					foreach ($email_i as $email) {
 						$condition = UserInvites::insertInvite($email, $user_id);
 						if($condition == 0)
@@ -115,12 +115,13 @@ class InviteController extends Controller
 					}
 					Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success created.<br/>{result}', ['result'=>$this->formatFileType($result, false, '<br/>')]));
 					return $this->redirect(['index']);
-				}
-			} else {
-				if($model->save()) {
-					Yii::$app->session->setFlash('success', Yii::t('app', 'User {email} invite success created.', ['email'=>$model->newsletter->email]));
-					return $this->redirect(['index']);
-					//return $this->redirect(['view', 'id' => $model->invite_id]);
+					
+				} else {
+					if($model->save()) {
+						Yii::$app->session->setFlash('success', Yii::t('app', 'User {email} invite success created.', ['email'=>$model->newsletter->email]));
+						return $this->redirect(['index']);
+						//return $this->redirect(['view', 'id' => $model->invite_id]);
+					}
 				}
 			}
 		}
