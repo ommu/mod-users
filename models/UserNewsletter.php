@@ -47,7 +47,6 @@ class UserNewsletter extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip','level_search'];
 	public $email_i;
-	public $multiple_email_i;
 
 	// Variable Search
 	public $level_search;
@@ -79,8 +78,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email_i', 'multiple_email_i'], 'required'],
-			[['status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id', 'multiple_email_i'], 'integer'],
+			[['email_i'], 'required'],
+			[['status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id'], 'integer'],
 			[['email_i'], 'string'],
 			[['email', 'subscribe_date', 'subscribe_id', 'modified_date', 'updated_date', 'updated_ip'], 'safe'],
 			[['email'], 'string', 'max' => 32],
@@ -108,7 +107,6 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'updated_ip' => Yii::t('app', 'Updated Ip'),
 			'email_i' => Yii::t('app', 'Email'),
-			'multiple_email_i' => Yii::t('app', 'Multiple Email'),
 			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),
 			'reference_search' => Yii::t('app', 'Reference'),
@@ -328,7 +326,6 @@ class UserNewsletter extends \app\components\ActiveRecord
 		if($newsletter == null) {
 			$newsletter = new UserNewsletter();
 			$newsletter->email_i = $email;
-			$newsletter->multiple_email_i = 0;
 			if($newsletter->save())
 				$condition = 1;
 			else
@@ -346,12 +343,9 @@ class UserNewsletter extends \app\components\ActiveRecord
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				$this->email_i = strtolower($this->email_i);
-				if(!$this->multiple_email_i && $this->email_i != '') {
+				if($this->email_i != '') {
 					$email_i = $this->formatFileType($this->email_i);
-					if(count($email_i) > 1)
-						$this->addError('email_i', Yii::t('app', 'Form newsletter menggunakan tipe single'));
-
-					else {
+					if(count($email_i) == 1) {
 						$this->email = $this->email_i;
 						$newsletter = self::find()
 							->select(['newsletter_id'])
