@@ -16,6 +16,7 @@
  * @property integer $publish
  * @property integer $newsletter_id
  * @property integer $user_id
+ * @property string $displayname
  * @property string $code
  * @property integer $invites
  * @property string $invite_date
@@ -38,15 +39,18 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use ommu\users\models\Users;
+use app\models\CoreSettings;
 
 class UserInvites extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
+	use \ommu\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['code','invite_ip','modified_date','modified_search','updated_date'];
 	public $email_i;
+	public $old_invites_i;
 
 	// Variable Search
 	public $user_search;
@@ -80,11 +84,12 @@ class UserInvites extends \app\components\ActiveRecord
 	{
 		return [
 			[['email_i'], 'required', 'on' => self::SCENARIO_FORM],
-			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id'], 'integer'],
+			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id', 'old_invites_i'], 'integer'],
 			[['email_i'], 'string'],
-			[['newsletter_id', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date'], 'safe'],
+			[['newsletter_id', 'displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date'], 'safe'],
 			[['code'], 'string', 'max' => 16],
 			[['invite_ip'], 'string', 'max' => 20],
+			[['displayname'], 'string', 'max' => 64],
 			[['newsletter_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserNewsletter::className(), 'targetAttribute' => ['newsletter_id' => 'newsletter_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -108,6 +113,7 @@ class UserInvites extends \app\components\ActiveRecord
 			'publish' => Yii::t('app', 'Publish'),
 			'newsletter_id' => Yii::t('app', 'Newsletter'),
 			'user_id' => Yii::t('app', 'User'),
+			'displayname' => Yii::t('app', 'Displayname'),
 			'code' => Yii::t('app', 'Code'),
 			'invites' => Yii::t('app', 'Invites'),
 			'invite_date' => Yii::t('app', 'Invite Date'),
@@ -206,10 +212,16 @@ class UserInvites extends \app\components\ActiveRecord
 				},
 			];
 		}
+		$this->templateColumns['displayname'] = [
+			'attribute' => 'displayname',
+			'value' => function($model, $key, $index, $column) {
+				return $model->displayname ? $model->displayname : '-';
+			},
+		];
 		$this->templateColumns['code'] = [
 			'attribute' => 'code',
 			'value' => function($model, $key, $index, $column) {
-				return $model->code;
+				return $model->code ? $model->code : '-';
 			},
 		];
 		$this->templateColumns['invite_date'] = [
@@ -337,7 +349,7 @@ class UserInvites extends \app\components\ActiveRecord
 		$email = strtolower($email);
 		$invite = self::find()->alias('t')
 			->leftJoin(sprintf('%s newsletter', UserNewsletter::tableName()), 't.newsletter_id=newsletter.newsletter_id')
-			->select(['t.invite_id', 't.newsletter_id', 't.invites'])
+			->select(['t.invite_id', 't.newsletter_id', 't.user_id', 't.displayname', 't.code', 't.invites'])
 			->where(['t.publish' => 1])
 			->andWhere(['t.user_id' => $user_id])
 			->andWhere(['newsletter.email' => $email])
@@ -365,6 +377,14 @@ class UserInvites extends \app\components\ActiveRecord
 		}
 		
 		return $condition;
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind() 
+	{
+		$this->old_invites_i = $this->invites;
 	}
 
 	/**
@@ -432,17 +452,43 @@ class UserInvites extends \app\components\ActiveRecord
 	public function afterSave($insert, $changedAttributes) 
 	{
 		parent::afterSave($insert, $changedAttributes);
+
+		$setting = CoreSettings::find()
+			->select(['signup_checkemail'])
+			->where(['id' => 1])
+			->one();
 		
-		if($insert && $this->newsletter->user_id == null) {
-			/*
-			Yii::$app->mailer->compose()
-				->setFrom('emailasale@gmail.com')
-				->setTo($model->user->email)
-				->setSubject(Yii::t('app', ''))
-				->setTextBody(Yii::t('app', 'Plain text content'))
-				->setHtmlBody('')
-				->send();
-			*/
+		if($this->newsletter->user_id == null) {
+			$displayname = $this->displayname ? $this->displayname : $this->newsletter->email;
+			$inviter = $this->user->displayname ? $this->user->displayname : $this->user->email;
+			$singuplink = $setting->signup_checkemail == 1 ? Url::to(['signup/index', 'code'=>$this->code], true) : Url::to(['signup/index'], true);
+			
+			if($insert) {
+				$template = $setting->signup_checkemail == 1 ? 'user_invite-code' : 'user_invite';
+				$emailSubject = $this->parseMailSubject($template);
+				$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'inviter'=>$inviter, 'singup-link'=>$singuplink, 'invite-code'=>$this->code]);
+
+				Yii::$app->mailer->compose()
+					->setFrom($this->getMailFrom())
+					->setTo([$this->newsletter->email => $displayname])
+					->setSubject($emailSubject)
+					->setHtmlBody($emailBody)
+					->send();
+
+			} else {
+				if($this->old_invites_i != $this->invites) {
+					$template = $setting->signup_checkemail == 1 ? 'user_invite-2nd-code' : 'user_invite-2nd';
+					$emailSubject = $this->parseMailSubject($template);
+					$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'invites'=>$this->invites, 'inviter'=>$inviter, 'singup-link'=>$singuplink, 'invite-code'=>$this->code]);
+	
+					Yii::$app->mailer->compose()
+						->setFrom($this->getMailFrom())
+						->setTo([$this->newsletter->email => $displayname])
+						->setSubject($emailSubject)
+						->setHtmlBody($emailBody)
+						->send();
+				}
+			}
 		}
 	}
 }

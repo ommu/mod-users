@@ -29,7 +29,7 @@ class UserInvites extends UserInvitesModel
 	{
 		return [
 			[['invite_id', 'publish', 'newsletter_id', 'user_id', 'invites', 'modified_id'], 'integer'],
-			[['code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'newsletter_search',
+			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'newsletter_search',
 				'user_search', 'email_search', 'level_search', 'inviter_search', 'modified_search'], 'safe'],
 		];
 	}
@@ -131,7 +131,8 @@ class UserInvites extends UserInvitesModel
 				$query->andFilterWhere(['t.publish' => $this->publish]);
 		}
 
-		$query->andFilterWhere(['like', 't.code', $this->code])
+		$query->andFilterWhere(['like', 't.displayname', $this->displayname])
+			->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
 			->andFilterWhere(['like', 'user.displayname', $this->user_search])
 			->andFilterWhere(['like', 'newsletter.email', $this->email_search])

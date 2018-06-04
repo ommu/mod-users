@@ -117,8 +117,10 @@ class InviteController extends Controller
 					return $this->redirect(['index']);
 					
 				} else {
-					if($model->save()) {
-						Yii::$app->session->setFlash('success', Yii::t('app', 'User {email} invite success created.', ['email'=>$model->newsletter->email]));
+					//if($model->save()) {
+					if(UserInvites::insertInvite($model->email_i, $user_id) == 1) {
+						//Yii::$app->session->setFlash('success', Yii::t('app', 'User {email} invite success created.', ['email'=>$model->newsletter->email]));
+						Yii::$app->session->setFlash('success', Yii::t('app', 'User {email} invite success created.', ['email'=>$model->email_i]));
 						return $this->redirect(['index']);
 						//return $this->redirect(['view', 'id' => $model->invite_id]);
 					}
