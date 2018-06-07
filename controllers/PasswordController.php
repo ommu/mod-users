@@ -40,7 +40,7 @@ class PasswordController extends Controller
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success created.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Forgot password success created.'));
 				return $this->redirect(['forgot']);
 				//return $this->redirect(['view', 'id' => $model->forgot_id]);
 			} 
@@ -51,6 +51,33 @@ class PasswordController extends Controller
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('front_forgot', [
+			'model' => $model,
+		]);
+	}
+
+	/**
+	 * Creates a new UserForgot model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * @return mixed
+	 */
+	public function actionReset()
+	{
+		$model = new UserForgot();
+
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'Reset password success created.'));
+				return $this->redirect(['reset']);
+				//return $this->redirect(['view', 'id' => $model->forgot_id]);
+			} 
+		}
+
+		static::$backoffice = false;
+		$this->view->title = Yii::t('app', 'Reset Password');
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('front_reset', [
 			'model' => $model,
 		]);
 	}

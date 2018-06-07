@@ -21,6 +21,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
 
+<?php if(Yii::$app->session->hasFlash('success'))
+	echo Yii::$app->session->getFlash('success');?>
+
 <?php $form = ActiveForm::begin([
 	'options' => [
 		'class' => 'form-horizontal form-label-left',
@@ -29,7 +32,7 @@ use yii\widgets\ActiveForm;
 	'enableClientValidation' => true,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
-]); ?>
+]);?>
 
 <?php //echo $form->errorSummary($model);?>
 
