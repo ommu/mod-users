@@ -99,9 +99,13 @@ class InviteController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			
+			$email_i = $this->formatFileType($model->email_i);
+			if(count($email_i) == 1)
+				$model->scenario = UserInvites::SCENARIO_SINGLE_EMAIL;
+
 			$result = [];
 			if($model->validate()) {
-				$email_i = $this->formatFileType($model->email_i);
 				$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 				if(count($email_i) > 1) {
 					foreach ($email_i as $email) {

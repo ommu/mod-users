@@ -60,6 +60,7 @@ class UserInvites extends \app\components\ActiveRecord
 	public $modified_search;
 
 	const SCENARIO_FORM = 'createForm';
+	const SCENARIO_SINGLE_EMAIL = 'singleEmail';
 
 	/**
 	 * @return string the associated database table name
@@ -84,9 +85,11 @@ class UserInvites extends \app\components\ActiveRecord
 	{
 		return [
 			[['email_i'], 'required', 'on' => self::SCENARIO_FORM],
+			[['email_i'], 'required', 'on' => self::SCENARIO_SINGLE_EMAIL],
 			[['publish', 'newsletter_id', 'user_id', 'invites', 'modified_id', 'old_invites_i'], 'integer'],
 			[['email_i'], 'string'],
 			[['newsletter_id', 'displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date'], 'safe'],
+			[['email_i'], 'email', 'on' => self::SCENARIO_SINGLE_EMAIL],
 			[['code'], 'string', 'max' => 16],
 			[['invite_ip'], 'string', 'max' => 20],
 			[['displayname'], 'string', 'max' => 64],
@@ -100,6 +103,7 @@ class UserInvites extends \app\components\ActiveRecord
 	{
 		$scenarios = parent::scenarios();
 		$scenarios[self::SCENARIO_FORM] = ['email_i'];
+		$scenarios[self::SCENARIO_SINGLE_EMAIL] = ['email_i'];
 		return $scenarios;
 	}
 
@@ -359,6 +363,7 @@ class UserInvites extends \app\components\ActiveRecord
 		$condition = 0;
 		if($invite == null) {
 			$invite = new UserInvites();
+			$invite->scenario = self::SCENARIO_SINGLE_EMAIL;
 			$invite->email_i = $email;
 			$invite->user_id = $user_id;
 			if($invite->save())

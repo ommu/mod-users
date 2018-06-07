@@ -77,6 +77,7 @@ class UserVerify extends \app\components\ActiveRecord
 				'email_i'], 'required'],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
 			[['user_id', 'verify_date', 'expired_date', 'modified_date', 'deleted_date'], 'safe'],
+			[['email_i'], 'email'],
 			[['code'], 'string', 'max' => 64],
 			[['email_i'], 'string', 'max' => 32],
 			[['verify_ip'], 'string', 'max' => 20],

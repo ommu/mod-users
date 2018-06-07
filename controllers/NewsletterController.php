@@ -97,9 +97,13 @@ class NewsletterController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+
+			$email_i = $this->formatFileType($model->email_i);
+			if(count($email_i) == 1)
+				$model->scenario = UserNewsletter::SCENARIO_SINGLE_EMAIL;
+
 			$result = [];
 			if($model->validate()) {
-				$email_i = $this->formatFileType($model->email_i);
 				if(count($email_i) > 1) {
 					foreach ($email_i as $email) {
 						$condition = UserNewsletter::insertNewsletter($email);

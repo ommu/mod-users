@@ -57,6 +57,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public $register_search;
 	public $modified_search;
 
+	const SCENARIO_SINGLE_EMAIL = 'singleEmail';
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -83,11 +85,20 @@ class UserNewsletter extends \app\components\ActiveRecord
 			[['status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id'], 'integer'],
 			[['email_i'], 'string'],
 			[['email', 'subscribe_date', 'subscribe_id', 'modified_date', 'updated_date', 'updated_ip'], 'safe'],
+			[['email_i'], 'email', 'on' => self::SCENARIO_SINGLE_EMAIL],
 			[['email'], 'string', 'max' => 32],
 			[['updated_ip'], 'string', 'max' => 20],
 			[['reference_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['reference_id' => 'user_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
+	}
+
+	// get scenarios
+	public function scenarios()
+	{
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_SINGLE_EMAIL] = ['email_i'];
+		return $scenarios;
 	}
 
 	/**
@@ -326,6 +337,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 		$condition = 0;
 		if($newsletter == null) {
 			$newsletter = new UserNewsletter();
+			$newsletter->scenario = self::SCENARIO_SINGLE_EMAIL;
 			$newsletter->email_i = $email;
 			if($newsletter->save())
 				$condition = 1;
@@ -392,7 +404,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 
 				$template = 'user_invite';
 				$emailSubject = $this->parseMailSubject($template);
-				$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'unsubscribe-link'=>$unsubscribelink);
+				$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'unsubscribe-link'=>$unsubscribelink]);
 
 				Yii::$app->mailer->compose()
 					->setFrom($this->getMailFrom())
