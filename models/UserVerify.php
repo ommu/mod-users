@@ -40,7 +40,7 @@ class UserVerify extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
-	use \ommu\traits\MailTrait;
+	use \ommu\mailer\components\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['code','verify_ip','modified_date','modified_search','deleted_date'];
 	public $email_i;

@@ -44,6 +44,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 {
 	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
+	use \ommu\mailer\components\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip','level_search'];
 	public $email_i;
@@ -385,7 +386,20 @@ class UserNewsletter extends \app\components\ActiveRecord
 		
 		if($insert) {
 			// Guest Subscribe
-			if($this->user_id == null && $this->status == 1) {
+			if($this->status == 1 && $this->user_id == null && $this->subscribe_id == null) {
+				$displayname = $this->user->displayname ? $this->user->displayname : $this->email;
+				$unsubscribelink = Url::to(['newsletter/subscribe', 'nid'=>$this->newsletter_id, 'status'=>0], true);
+
+				$template = 'user_invite';
+				$emailSubject = $this->parseMailSubject($template);
+				$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'unsubscribe-link'=>$unsubscribelink);
+
+				Yii::$app->mailer->compose()
+					->setFrom($this->getMailFrom())
+					->setTo([$this->email => $displayname])
+					->setSubject($emailSubject)
+					->setHtmlBody($emailBody)
+					->send();
 				/*
 				Yii::$app->mailer->compose()
 					->setFrom('emailasale@gmail.com')

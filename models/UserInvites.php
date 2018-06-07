@@ -46,7 +46,7 @@ class UserInvites extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
-	use \ommu\traits\MailTrait;
+	use \ommu\mailer\components\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['code','invite_ip','modified_date','modified_search','updated_date'];
 	public $email_i;
