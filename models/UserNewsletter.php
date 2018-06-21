@@ -402,7 +402,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 				$displayname = $this->user->displayname ? $this->user->displayname : $this->email;
 				$unsubscribelink = Url::to(['newsletter/subscribe', 'nid'=>$this->newsletter_id, 'status'=>0], true);
 
-				$template = 'user_invite';
+				$template = 'users_invite';
 				$emailSubject = $this->parseMailSubject($template);
 				$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'unsubscribe-link'=>$unsubscribelink]);
 

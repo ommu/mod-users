@@ -469,7 +469,7 @@ class UserInvites extends \app\components\ActiveRecord
 			$singuplink = $setting->signup_checkemail == 1 ? Url::to(['signup/index', 'code'=>$this->code], true) : Url::to(['signup/index'], true);
 			
 			if($insert) {
-				$template = $setting->signup_checkemail == 1 ? 'user_invite-code' : 'user_invite';
+				$template = $setting->signup_checkemail == 1 ? 'users_invite-code' : 'users_invite';
 				$emailSubject = $this->parseMailSubject($template);
 				$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'inviter'=>$inviter, 'singup-link'=>$singuplink, 'invite-code'=>$this->code]);
 
@@ -482,7 +482,7 @@ class UserInvites extends \app\components\ActiveRecord
 
 			} else {
 				if($this->old_invites_i != $this->invites) {
-					$template = $setting->signup_checkemail == 1 ? 'user_invite-2nd-code' : 'user_invite-2nd';
+					$template = $setting->signup_checkemail == 1 ? 'users_invite-2nd-code' : 'users_invite-2nd';
 					$emailSubject = $this->parseMailSubject($template);
 					$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'invites'=>$this->invites, 'inviter'=>$inviter, 'singup-link'=>$singuplink, 'invite-code'=>$this->code]);
 	

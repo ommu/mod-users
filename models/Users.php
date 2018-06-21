@@ -66,6 +66,7 @@ use yii\web\UploadedFile;
 use ommu\users\models\Users;
 use app\models\CoreLanguages;
 use app\models\CoreSettings;
+use ommu\users\models\view\Users as UsersView;
 
 class Users extends \app\components\ActiveRecord
 {
@@ -109,22 +110,14 @@ class Users extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible',
-				'privacy', 'comments', 'modified_id'], 'integer'],
-			[['email', 'username', 'first_name', 'last_name', 'displayname', 'password', 'photos',
-				'salt', 'creation_ip', 'modified_id', 'lastlogin_ip', 'lastlogin_from', 'update_ip'],
-				'required'],
-			[['displayname', 'photos'], 'string'],
-			[['creation_date', 'modified_date', 'lastlogin_date', 'update_date'], 'safe'],
-			[['email', 'username', 'first_name', 'last_name', 'password', 'salt', 'lastlogin_from'],
-				'string', 'max' => 32],
+			[['email', 'username', 'first_name', 'last_name', 'displayname', 'password', 'salt', 'creation_ip', 'lastlogin_ip', 'lastlogin_from', 'update_ip'], 'required'],
+			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
+			[['displayname', 'photos', 'old_photos_i'], 'string'],
+			[['photos', 'creation_date', 'modified_date', 'lastlogin_date', 'update_date', 'old_photos_i'], 'safe'],
+			[['email', 'username', 'first_name', 'last_name', 'password', 'salt', 'lastlogin_from'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
-			// [['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserLevel::className(),
-			//	 'targetAttribute' => ['level_id' => 'level_id']],
-			// [['language_id'], 'exist', 'skipOnError' => true,
-			//	 'targetClass' => CoreLanguages::className(),
-			//	 'targetAttribute' => ['language_id' => 'language_id']
-			// ],
+			[['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserLevel::className(), 'targetAttribute' => ['level_id' => 'level_id']],
+			[['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => CoreLanguages::className(), 'targetAttribute' => ['language_id' => 'language_id']],
 		];
 	}
 
@@ -263,6 +256,14 @@ class Users extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getView()
+	{
+		return $this->hasOne(UsersView::className(), ['user_id' => 'user_id']);
 	}
 
 	/**

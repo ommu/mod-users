@@ -73,8 +73,7 @@ class UserForgot extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['code', 'forgot_ip',
-				'email_i'], 'required'],
+			[['code', 'forgot_ip', 'email_i'], 'required'],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
 			[['user_id', 'forgot_date', 'expired_date', 'modified_date', 'deleted_date'], 'safe'],
 			[['email_i'], 'email'],
@@ -242,7 +241,7 @@ class UserForgot extends \app\components\ActiveRecord
 				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['publish', 'id'=>$model->primaryKey]);
-					return $this->quickAction($url, $model->publish);
+					return $model->publish == 0 ? '-' : $this->quickAction($url, $model->publish);
 				},
 				'contentOptions' => ['class'=>'center'],
 				'format' => 'raw',
@@ -320,7 +319,8 @@ class UserForgot extends \app\components\ActiveRecord
 		if($insert) {
 			$template = 'users_forgot-password';
 			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
-			$forgotlink = Url::to(['password/reset', 'code'=>$this->code], true);
+			$forgotlink = Url::to(['password/reset', 'cd'=>$this->code, 'lstlgntkn'=>$this->user->view->token_oauth], true);
+
 			$emailSubject = $this->parseMailSubject($template);
 			$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'forgot-link'=>$forgotlink]);
 

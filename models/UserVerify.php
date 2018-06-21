@@ -73,8 +73,7 @@ class UserVerify extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['code', 'verify_ip',
-				'email_i'], 'required'],
+			[['code', 'verify_ip', 'email_i'], 'required'],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
 			[['user_id', 'verify_date', 'expired_date', 'modified_date', 'deleted_date'], 'safe'],
 			[['email_i'], 'email'],
@@ -242,7 +241,7 @@ class UserVerify extends \app\components\ActiveRecord
 				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['publish', 'id'=>$model->primaryKey]);
-					return $this->quickAction($url, $model->publish);
+					return $model->publish == 0 ? '-' : $this->quickAction($url, $model->publish);
 				},
 				'contentOptions' => ['class'=>'center'],
 				'format' => 'raw',
@@ -318,7 +317,7 @@ class UserVerify extends \app\components\ActiveRecord
 		parent::afterSave($insert, $changedAttributes);
 
 		if($insert) {
-			$template = 'user_verify-email';
+			$template = 'users_verify-email';
 			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
 			$verifylink = Url::to(['email/verify', 'code'=>$this->code], true);
 			$emailSubject = $this->parseMailSubject($template);
