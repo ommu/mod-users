@@ -239,7 +239,7 @@ class UserLevel extends CActiveRecord
 		$criteria->compare('description.message', strtolower($this->desc_i), true);
 		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
-		$criteria->compare('view.users',$this->user_search);
+		$criteria->compare('view.user_active',$this->user_search);
 
 		if(!isset($_GET['UserLevel_sort']))
 			$criteria->order = 't.level_id DESC';
@@ -349,7 +349,7 @@ class UserLevel extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'user_search',
-				'value' => 'CHtml::link($data->view->users ? $data->view->users : 0, $data->level_id != 1 ? Yii::app()->controller->createUrl("o/member/manage",array("level"=>$data->level_id)) : Yii::app()->controller->createUrl("o/admin/manage",array("level"=>$data->level_id)))',
+				'value' => 'CHtml::link($data->view->user_active ? $data->view->user_active : 0, $data->level_id != 1 ? Yii::app()->controller->createUrl("o/member/manage",array("level"=>$data->level_id)) : Yii::app()->controller->createUrl("o/admin/manage",array("level"=>$data->level_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

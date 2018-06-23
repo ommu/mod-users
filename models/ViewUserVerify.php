@@ -8,9 +8,9 @@
  * @created date 3 August 2017, 14:22 WIB
  * @link https://github.com/ommu/mod-users
  *
- * This is the model class for table "_view_user_verify".
+ * This is the model class for table "_user_verify".
  *
- * The followings are the available columns in table '_view_user_verify':
+ * The followings are the available columns in table '_user_verify':
  * @property string $verify_id
  * @property integer $expired
  * @property string $verify_day_left
@@ -41,7 +41,7 @@ class ViewUserVerify extends CActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_user_verify';
+		return $matches[1].'._user_verify';
 	}
 
 	/**

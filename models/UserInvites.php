@@ -25,6 +25,7 @@
  * @property integer $publish
  * @property string $newsletter_id
  * @property string $user_id
+ * @property string $displayname
  * @property string $code
  * @property integer $invites
  * @property string $invite_date
@@ -77,21 +78,17 @@ class UserInvites extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('user_id, code', 'required'),
-			array('
-				email_i', 'required', 'on'=>'singleEmailForm'),
-			array('newsletter_id, user_id, invites, modified_id,
-				multiple_email_i', 'numerical', 'integerOnly'=>true),
+			array('email_i', 'required', 'on'=>'singleEmailForm'),
+			array('newsletter_id, user_id, invites, modified_id, multiple_email_i', 'numerical', 'integerOnly'=>true),
 			array('newsletter_id, user_id, invites, modified_id', 'length', 'max'=>11),
 			array('code', 'length', 'max'=>16),
 			array('invite_ip', 'length', 'max'=>20),
-			array('', 'length', 'max'=>64),
-			array('
-				email_i', 'email', 'on'=>'singleEmailForm'),
-			array('
-				email_i, multiple_email_i', 'safe'),
+			array('displayname', 'length', 'max'=>64),
+			array('email_i', 'email', 'on'=>'singleEmailForm'),
+			array('displayname, email_i, multiple_email_i', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('invite_id, newsletter_id, user_id, code, invites, invite_date, invite_ip, modified_date, modified_id, updated_date,
+			array('invite_id, newsletter_id, user_id, displayname, code, invites, invite_date, invite_ip, modified_date, modified_id, updated_date,
 				email_i, newsletter_user_search, newsletter_email_search, register_search, userlevel_search, user_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
@@ -121,6 +118,7 @@ class UserInvites extends CActiveRecord
 			'publish' => Yii::t('attribute', 'Publish'),
 			'newsletter_id' => Yii::t('attribute', 'Newsletter'),
 			'user_id' => Yii::t('attribute', 'Inviter'),
+			'displayname' => Yii::t('attribute', 'Displayname'),
 			'code' => Yii::t('attribute', 'Invite Code'),
 			'invites' => Yii::t('attribute', 'Invites'),
 			'invite_date' => Yii::t('attribute', 'Invite Date'),
@@ -187,6 +185,7 @@ class UserInvites extends CActiveRecord
 			$criteria->compare('t.user_id',Yii::app()->getRequest()->getParam('user'));
 		else
 			$criteria->compare('t.user_id',$this->user_id);
+		$criteria->compare('t.displayname',strtolower($this->displayname),true);
 		$criteria->compare('t.code',strtolower($this->code),true);
 		$criteria->compare('t.invites',$this->invites);
 		if($this->invite_date != null && !in_array($this->invite_date, array('0000-00-00 00:00:00', '0000-00-00')))
@@ -241,6 +240,7 @@ class UserInvites extends CActiveRecord
 			$this->defaultColumns[] = 'publish';
 			$this->defaultColumns[] = 'newsletter_id';
 			$this->defaultColumns[] = 'user_id';
+			$this->defaultColumns[] = 'displayname';
 			$this->defaultColumns[] = 'code';
 			$this->defaultColumns[] = 'invites';
 			$this->defaultColumns[] = 'invite_date';
@@ -269,7 +269,7 @@ class UserInvites extends CActiveRecord
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'newsletter_user_search',
-					'value' => '$data->newsletter->view->user_id ? $data->newsletter->view->user->displayname : ($data->newsletter->user_id ? $data->newsletter->user->displayname : \'-\')',
+					'value' => '$data->newsletter->view->user_id ? $data->newsletter->user->displayname : ($data->newsletter->user_id ? $data->newsletter->user->displayname : \'-\')',
 				);
 			}
 			if(!Yii::app()->getRequest()->getParam('user')) {

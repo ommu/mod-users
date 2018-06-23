@@ -7,9 +7,9 @@
  * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
- * This is the model class for table "_view_users".
+ * This is the model class for table "_users".
  *
- * The followings are the available columns in table '_view_users':
+ * The followings are the available columns in table '_users':
  * @property string $user_id
  * @property string $token_key
  * @property string $token_password
@@ -55,7 +55,7 @@ class ViewUsers extends CActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_users';
+		return $matches[1].'._users';
 	}
 
 	/**

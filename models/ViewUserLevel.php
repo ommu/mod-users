@@ -7,11 +7,11 @@
  * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
- * This is the model class for table "_view_user_level".
+ * This is the model class for table "_user_level".
  *
- * The followings are the available columns in table '_view_user_level':
+ * The followings are the available columns in table '_user_level':
  * @property integer $level_id
- * @property string $users
+ * @property string $user_active
  * @property string $user_pending
  * @property string $user_noverified
  * @property string $user_blocked
@@ -42,7 +42,7 @@ class ViewUserLevel extends CActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_user_level';
+		return $matches[1].'._user_level';
 	}
 
 	/**
@@ -62,11 +62,11 @@ class ViewUserLevel extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('level_id', 'numerical', 'integerOnly'=>true),
-			array('users, user_pending, user_noverified, user_blocked', 'length', 'max'=>23),
+			array('user_active, user_pending, user_noverified, user_blocked', 'length', 'max'=>23),
 			array('user_all', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('level_id, users, user_pending, user_noverified, user_blocked, user_all', 'safe', 'on'=>'search'),
+			array('level_id, user_active, user_pending, user_noverified, user_blocked, user_all', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -88,7 +88,7 @@ class ViewUserLevel extends CActiveRecord
 	{
 		return array(
 			'level_id' => Yii::t('attribute', 'Level'),
-			'users' => Yii::t('attribute', 'Users'),
+			'user_active' => Yii::t('attribute', 'Active'),
 			'user_pending' => Yii::t('attribute', 'Pending'),
 			'user_noverified' => Yii::t('attribute', 'No Verified'),
 			'user_blocked' => Yii::t('attribute', 'Blocked'),
@@ -115,7 +115,7 @@ class ViewUserLevel extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('t.level_id', $this->level_id);
-		$criteria->compare('t.users', strtolower($this->users), true);
+		$criteria->compare('t.user_active', strtolower($this->user_active), true);
 		$criteria->compare('t.user_pending', strtolower($this->user_pending), true);
 		$criteria->compare('t.user_noverified', strtolower($this->user_noverified), true);
 		$criteria->compare('t.user_blocked', strtolower($this->user_blocked), true);
@@ -218,9 +218,9 @@ class ViewUserLevel extends CActiveRecord
 				'name' => 'level_id',
 				'value' => '$data->level_id',
 			);
-			$this->templateColumns['users'] = array(
-				'name' => 'users',
-				'value' => '$data->users',
+			$this->templateColumns['user_active'] = array(
+				'name' => 'user_active',
+				'value' => '$data->user_active',
 			);
 			$this->templateColumns['user_pending'] = array(
 				'name' => 'user_pending',

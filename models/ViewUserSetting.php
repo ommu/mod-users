@@ -8,9 +8,9 @@
  * @created date 3 August 2017, 14:34 WIB
  * @link https://github.com/ommu/mod-users
  *
- * This is the model class for table "_view_user_setting".
+ * This is the model class for table "_user_setting".
  *
- * The followings are the available columns in table '_view_user_setting':
+ * The followings are the available columns in table '_user_setting':
  * @property integer $id
  * @property integer $forgot_difference_hours
  * @property integer $verify_difference_hours
@@ -41,7 +41,7 @@ class ViewUserSetting extends CActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_user_setting';
+		return $matches[1].'._user_setting';
 	}
 
 	/**

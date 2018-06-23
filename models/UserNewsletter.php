@@ -100,7 +100,7 @@ class UserNewsletter extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'view' => array(self::BELONGS_TO, 'ViewUserInviteNewsletter', 'newsletter_id'),
+			'view' => array(self::BELONGS_TO, 'ViewUserNewsletter', 'newsletter_id'),
 			'user' => array(self::BELONGS_TO, 'Users', 'user_id'),
 			'reference' => array(self::BELONGS_TO, 'Users', 'reference_id'),
 			'subscribe' => array(self::BELONGS_TO, 'Users', 'subscribe_id'),
@@ -157,10 +157,6 @@ class UserNewsletter extends CActiveRecord
 			'view' => array(
 				'alias'=>'view',
 			),
-			'view.user' => array(
-				'alias'=>'view_user',
-				'select'=>'level_id, displayname'
-			),
 			'user' => array(
 				'alias'=>'user',
 				'select'=>'level_id, displayname'
@@ -202,14 +198,8 @@ class UserNewsletter extends CActiveRecord
 			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
 		$criteria->compare('t.updated_ip',$this->updated_ip,true);
 		
-		if($this->view->user_id)
-			$criteria->compare('view_user.level_id',$this->level_search);
-		else
-			$criteria->compare('user.level_id',$this->level_search);
-		if($this->view->user_id)
-			$criteria->compare('view_user.displayname',strtolower($this->user_search),true);
-		else
-			$criteria->compare('user.displayname',strtolower($this->user_search),true);
+		$criteria->compare('user.level_id',$this->level_search);
+		$criteria->compare('user.displayname',strtolower($this->user_search),true);
 		$criteria->compare('reference.displayname',strtolower($this->reference_search),true);
 		$criteria->compare('subscribe.displayname',strtolower($this->subscribe_search),true);
 		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
@@ -274,13 +264,13 @@ class UserNewsletter extends CActiveRecord
 			if(!Yii::app()->getRequest()->getParam('user')) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
-					'value' => '$data->view->user_id ? $data->view->user->level->title->message : ($data->user_id ? $data->user->level->title->message : \'-\')',
+					'value' => '$data->view->user_id ? $data->user->level->title->message : ($data->user_id ? $data->user->level->title->message : \'-\')',
 					'filter'=>UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);
 				$this->defaultColumns[] = array(
 					'name' => 'user_search',
-					'value' => '$data->view->user_id ? $data->view->user->displayname : ($data->user_id ? $data->user->displayname : \'-\')',
+					'value' => '$data->view->user_id ? $data->user->displayname : ($data->user_id ? $data->user->displayname : \'-\')',
 				);
 			}
 			*/
@@ -479,9 +469,9 @@ class UserNewsletter extends CActiveRecord
 			$email = $this->email;
 			$displayname = $this->email;
 			// Member Unsubscribe
-			if($this->view->user_id != 0) {
-				$email = $this->view->user->email;
-				$displayname = $this->view->user->displayname;
+			if(!$this->user_id) {
+				$email = $this->user->email;
+				$displayname = $this->user->displayname;
 			}
 
 			$unsubscribe_search = array(

@@ -8,9 +8,9 @@
  * @created date 3 August 2017, 14:21 WIB
  * @link https://github.com/ommu/mod-users
  *
- * This is the model class for table "_view_user_forgot".
+ * This is the model class for table "_user_forgot".
  *
- * The followings are the available columns in table '_view_user_forgot':
+ * The followings are the available columns in table '_user_forgot':
  * @property string $forgot_id
  * @property integer $expired
  * @property string $forgot_day_left
@@ -41,7 +41,7 @@ class ViewUserForgot extends CActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_user_forgot';
+		return $matches[1].'._user_forgot';
 	}
 
 	/**

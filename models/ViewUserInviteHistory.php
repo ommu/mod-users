@@ -8,12 +8,11 @@
  * @created date 18 August 2017, 16:27 WIB
  * @link https://github.com/ommu/mod-users
  *
- * This is the model class for table "_view_user_invite_history".
+ * This is the model class for table "_user_invite_history".
  *
- * The followings are the available columns in table '_view_user_invite_history':
+ * The followings are the available columns in table '_user_invite_history':
  * @property string $id
  * @property integer $expired
- * @property string $invite_id
  * @property string $verify_day_left
  * @property string $verify_hour_left
  */
@@ -42,7 +41,7 @@ class ViewUserInviteHistory extends CActiveRecord
 	public function tableName()
 	{
 		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
-		return $matches[1].'._view_user_invite_history';
+		return $matches[1].'._user_invite_history';
 	}
 
 	/**
@@ -61,13 +60,12 @@ class ViewUserInviteHistory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('invite_id', 'required'),
 			array('expired', 'numerical', 'integerOnly'=>true),
-			array('id, invite_id', 'length', 'max'=>11),
+			array('id', 'length', 'max'=>11),
 			array('verify_day_left, verify_hour_left', 'length', 'max'=>21),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, expired, invite_id, verify_day_left, verify_hour_left', 'safe', 'on'=>'search'),
+			array('id, expired, verify_day_left, verify_hour_left', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -90,7 +88,6 @@ class ViewUserInviteHistory extends CActiveRecord
 		return array(
 			'id' => Yii::t('attribute', 'ID'),
 			'expired' => Yii::t('attribute', 'Expired'),
-			'invite_id' => Yii::t('attribute', 'Invite'),
 			'verify_day_left' => Yii::t('attribute', 'Verify Day Left'),
 			'verify_hour_left' => Yii::t('attribute', 'Verify Hour Left'),
 		);
@@ -116,7 +113,6 @@ class ViewUserInviteHistory extends CActiveRecord
 
 		$criteria->compare('t.id', strtolower($this->id), true);
 		$criteria->compare('t.expired', $this->expired);
-		$criteria->compare('t.invite_id', strtolower($this->invite_id), true);
 		$criteria->compare('t.verify_day_left', strtolower($this->verify_day_left), true);
 		$criteria->compare('t.verify_hour_left', strtolower($this->verify_hour_left), true);
 
@@ -220,10 +216,6 @@ class ViewUserInviteHistory extends CActiveRecord
 			$this->templateColumns['expired'] = array(
 				'name' => 'expired',
 				'value' => '$data->expired',
-			);
-			$this->templateColumns['invite_id'] = array(
-				'name' => 'invite_id',
-				'value' => '$data->invite_id',
 			);
 			$this->templateColumns['verify_day_left'] = array(
 				'name' => 'verify_day_left',
