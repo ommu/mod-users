@@ -13,7 +13,7 @@
  */
 
 	$register = $model->view->register == 1 ? Yii::t('phrase', 'Yes') : Yii::t('phrase', 'No');
-	$register_date = !in_array($model->view->register_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00')) ? Utility::dateFormat($model->view->register_date, true) : '-';
+	$register_date = !in_array($model->view->register_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')) ? Utility::dateFormat($model->view->register_date, true) : '-';
 	$register_name = $model->user->displayname ? $model->user->displayname : '-';
 	$level_name = $model->user_id ? $model->user->level->title->message : '-';
 ?>
