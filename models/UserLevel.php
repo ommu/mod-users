@@ -52,6 +52,8 @@
  */
 class UserLevel extends CActiveRecord
 {
+	use UtilityTrait;
+
 	public $defaultColumns = array();
 	public $name_i;
 	public $desc_i;
@@ -471,7 +473,7 @@ class UserLevel extends CActiveRecord
 				if($name->save())
 					$this->name = $name->id;
 				
-				$this->slug = Utility::getUrlTitle($this->name_i);
+				$this->slug = $this->urlTitle($this->name_i);
 				
 			} else {
 				if($currentAction == 'o/level/edit') {

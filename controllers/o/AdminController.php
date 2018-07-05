@@ -450,7 +450,7 @@ class AdminController extends Controller
 				@chmod($user_path, 0755, true);
 			
 			$userPhoto = CUploadedFile::getInstanceByName('namaFile');
-			$fileName = time().'_'.Utility::getUrlTitle($model->displayname).'.'.strtolower($userPhoto->extensionName);
+			$fileName = time().'_'.$this->urlTitle($model->displayname).'.'.strtolower($userPhoto->extensionName);
 			if($userPhoto->saveAs($user_path.'/'.$fileName)) {
 				if(Users::model()->updateByPk($model->user_id, array('photos'=>$fileName,'update_date'=>date('Y-m-d H:i:s')))) {
 					if($photos != '')

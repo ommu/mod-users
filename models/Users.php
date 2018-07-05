@@ -56,6 +56,8 @@
  */
 class Users extends CActiveRecord
 {
+	use UtilityTrait;
+
 	public $defaultColumns = array();	
 	public $old_photos_i;
 	public $oldPassword;
@@ -713,7 +715,7 @@ class Users extends CActiveRecord
 				$this->photos = CUploadedFile::getInstance($this, 'photos');
 				if($this->photos != null) {
 					if($this->photos instanceOf CUploadedFile) {
-						$fileName = time().'_'.Utility::getUrlTitle($this->displayname).'.'.strtolower($this->photos->extensionName);
+						$fileName = time().'_'.$this->urlTitle($this->displayname).'.'.strtolower($this->photos->extensionName);
 						if($this->photos->saveAs($user_path.'/'.$fileName)) {							
 							if($this->old_photos_i != '' && file_exists($user_path.'/'.$this->old_photos_i))
 								rename($user_path.'/'.$this->old_photos_i, 'public/users/verwijderen/'.$this->user_id.'_'.$this->old_photos_i);
@@ -773,7 +775,7 @@ class Users extends CActiveRecord
 			$this->photos = CUploadedFile::getInstance($this, 'photos');
 			if($this->photos != null) {
 				if($this->photos instanceOf CUploadedFile) {
-					$fileName = time().'_'.Utility::getUrlTitle($this->displayname).'.'.strtolower($this->photos->extensionName);
+					$fileName = time().'_'.$this->urlTitle($this->displayname).'.'.strtolower($this->photos->extensionName);
 					if($this->photos->saveAs($user_path.'/'.$fileName)) {
 						self::model()->updateByPk($this->user_id, array('photos'=>$fileName));
 					}
