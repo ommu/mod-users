@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the template for generating the model class of a specified table.
@@ -135,21 +135,21 @@ class UserNewsletterHistory extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',$this->id,true);
-		$criteria->compare('t.status',$this->status);
-		if(isset($_GET['newsletter']))
-			$criteria->compare('t.newsletter_id',$_GET['newsletter']);
+		$criteria->compare('t.id', $this->id,true);
+		$criteria->compare('t.status', $this->status);
+		if(Yii::app()->getRequest()->getParam('newsletter'))
+			$criteria->compare('t.newsletter_id', Yii::app()->getRequest()->getParam('newsletter'));
 		else
-			$criteria->compare('t.newsletter_id',$this->newsletter_id);
-		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
-		$criteria->compare('t.updated_ip',$this->updated_ip,true);
+			$criteria->compare('t.newsletter_id', $this->newsletter_id);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
+		$criteria->compare('t.updated_ip', $this->updated_ip,true);
 		
-		$criteria->compare('newsletter_user.level_id',$this->level_search);
-		$criteria->compare('newsletter_user.displayname',strtolower($this->user_search),true);
-		$criteria->compare('newsletter.email',strtolower($this->email_search),true);
+		$criteria->compare('newsletter_user.level_id', $this->level_search);
+		$criteria->compare('newsletter_user.displayname', strtolower($this->user_search), true);
+		$criteria->compare('newsletter.email', strtolower($this->email_search), true);
 
-		if(!isset($_GET['UserNewsletterHistory_sort']))
+		if(!Yii::app()->getRequest()->getParam('UserNewsletterHistory_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -197,7 +197,7 @@ class UserNewsletterHistory extends CActiveRecord
 				'header' => 'No',
 				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
 			);
-			if(!isset($_GET['newsletter'])) {
+			if(!Yii::app()->getRequest()->getParam('newsletter')) {
 				$this->defaultColumns[] = array(
 					'name' => 'level_search',
 					'value' => '$data->newsletter->user_id ? $data->newsletter->user->level->title->message : \'-\'',
@@ -268,7 +268,7 @@ class UserNewsletterHistory extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

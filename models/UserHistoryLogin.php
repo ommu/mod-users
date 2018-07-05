@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the template for generating the model class of a specified table.
@@ -130,20 +130,20 @@ class UserHistoryLogin extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.id',$this->id);
+		$criteria->compare('t.id', $this->id);
 		if(Yii::app()->getRequest()->getParam('user'))
 			$criteria->compare('t.user_id',Yii::app()->getRequest()->getParam('user'));
 		else
-			$criteria->compare('t.user_id',$this->user_id);
-		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.lastlogin_date)',date('Y-m-d', strtotime($this->lastlogin_date)));
-		$criteria->compare('t.lastlogin_ip',$this->lastlogin_ip,true);
-		$criteria->compare('t.lastlogin_from',$this->lastlogin_from,true);
+			$criteria->compare('t.user_id', $this->user_id);
+		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.lastlogin_date)', date('Y-m-d', strtotime($this->lastlogin_date)));
+		$criteria->compare('t.lastlogin_ip', $this->lastlogin_ip,true);
+		$criteria->compare('t.lastlogin_from', $this->lastlogin_from,true);
 		
-		$criteria->compare('user.level_id',$this->level_search);
-		$criteria->compare('user.displayname',strtolower($this->user_search),true);
+		$criteria->compare('user.level_id', $this->level_search);
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
-		if(!isset($_GET['UserHistoryLogin_sort']))
+		if(!Yii::app()->getRequest()->getParam('UserHistoryLogin_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -250,7 +250,7 @@ class UserHistoryLogin extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

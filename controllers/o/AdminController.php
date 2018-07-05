@@ -23,7 +23,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Administrators');
 		$this->pageDescription = Yii::t('phrase', 'Your social network can have more than one administrator. This is useful if you want to have a staff of admins who maintain your social network. However, the first admin to be created (upon installation) is the "superadmin" and cannot be deleted. The superadmin can create and delete other admin accounts. All admin accounts on your system are listed below.');
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -175,7 +175,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Add Administrator');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 			'setting'=>$setting,
 		));
@@ -234,7 +234,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Administrator: $displayname', array('$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('admin_edit', array(
 			'model'=>$model,
 			'setting'=>$setting,
 		));
@@ -251,7 +251,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Administrator: $displayname', array('$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -324,7 +324,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', '$title Administrator: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_enabled',array(
+		$this->render('admin_enabled', array(
 			'title'=>$title,
 			'model'=>$model,
 		));
@@ -366,7 +366,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', '$title Administrator: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_verify',array(
+		$this->render('admin_verify', array(
 			'title'=>$title,
 			'model'=>$model,
 		));
@@ -395,7 +395,7 @@ class AdminController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('password',array('type'=>'success')),
+							'get' => Yii::app()->controller->createUrl('password', array('type'=>'success')),
 						));
 					} else {
 						print_r($model->getErrors());
@@ -412,7 +412,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Change Password');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_password',array(
+		$this->render('admin_password', array(
 			'model'=>$model,
 		));
 	}
@@ -482,7 +482,7 @@ class AdminController extends Controller
 			$this->pageTitle = Yii::t('phrase', 'Photo Users');
 			$this->pageDescription = '';
 			$this->pageMeta = '';
-			$this->render('admin_photo',array(
+			$this->render('admin_photo', array(
 				'model'=>$model,
 				'photo_exts'=>$photo_exts,
 			));

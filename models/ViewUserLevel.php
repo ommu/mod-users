@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_user_level".
@@ -121,7 +121,7 @@ class ViewUserLevel extends CActiveRecord
 		$criteria->compare('t.user_blocked', strtolower($this->user_blocked), true);
 		$criteria->compare('t.user_all', strtolower($this->user_all), true);
 
-		if(!isset($_GET['ViewUserLevel_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewUserLevel_sort'))
 			$criteria->order = 't.level_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -248,7 +248,7 @@ class ViewUserLevel extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

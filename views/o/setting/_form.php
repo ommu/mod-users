@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 10 August 2017, 13:50 WIB
  * @link https://github.com/ommu/mod-users
  *
@@ -34,13 +34,11 @@
 			</label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
 				<?php 
-				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
-					$model->license = UserSetting::getLicense();
-			
-				if($model->isNewRecord || (!$model->isNewRecord && $model->license == ''))
-					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'form-control'));
-				else
-					echo $form->textField($model,'license',array('maxlength'=>32,'class'=>'form-control','disabled'=>'disabled'));?>
+				if($model->isNewRecord || (!$model->isNewRecord && $model->license == '')) {
+					$model->license = $this->licenseCode();
+					echo $form->textField($model,'license', array('maxlength'=>32,'class'=>'form-control'));
+				} else
+					echo $form->textField($model,'license', array('maxlength'=>32,'class'=>'form-control','disabled'=>'disabled'));?>
 				<?php echo $form->error($model,'license'); ?>
 				<span class="small-px"><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></span>
 			</div>
@@ -64,7 +62,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'meta_description', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textArea($model,'meta_description',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
+				<?php echo $form->textArea($model,'meta_description', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'meta_description'); ?>
 			</div>
 		</div>
@@ -72,7 +70,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'meta_keyword', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textArea($model,'meta_keyword',array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
+				<?php echo $form->textArea($model,'meta_keyword', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model,'meta_keyword'); ?>
 			</div>
 		</div>

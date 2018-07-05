@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the template for generating the model class of a specified table.
@@ -171,42 +171,42 @@ class UserNewsletter extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.newsletter_id',$this->newsletter_id);
-		$criteria->compare('t.status',$this->status);
+		$criteria->compare('t.newsletter_id', $this->newsletter_id);
+		$criteria->compare('t.status', $this->status);
 		if(Yii::app()->getRequest()->getParam('user'))
 			$criteria->compare('t.user_id',Yii::app()->getRequest()->getParam('user'));
 		else
-			$criteria->compare('t.user_id',$this->user_id);
-		if(isset($_GET['reference']))
-			$criteria->compare('t.reference_id',$_GET['reference']);
+			$criteria->compare('t.user_id', $this->user_id);
+		if(Yii::app()->getRequest()->getParam('reference'))
+			$criteria->compare('t.reference_id', Yii::app()->getRequest()->getParam('reference'));
 		else
-			$criteria->compare('t.reference_id',$this->reference_id);
-		$criteria->compare('t.email',strtolower($this->email),true);
-		if($this->subscribe_date != null && !in_array($this->subscribe_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.subscribe_date)',date('Y-m-d', strtotime($this->subscribe_date)));
-		if(isset($_GET['subscribe']))
-			$criteria->compare('t.subscribe_id',$_GET['subscribe']);
+			$criteria->compare('t.reference_id', $this->reference_id);
+		$criteria->compare('t.email', strtolower($this->email), true);
+		if($this->subscribe_date != null && !in_array($this->subscribe_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.subscribe_date)', date('Y-m-d', strtotime($this->subscribe_date)));
+		if(Yii::app()->getRequest()->getParam('subscribe'))
+			$criteria->compare('t.subscribe_id', Yii::app()->getRequest()->getParam('subscribe'));
 		else
-			$criteria->compare('t.subscribe_id',$this->subscribe_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+			$criteria->compare('t.subscribe_id', $this->subscribe_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		if(Yii::app()->getRequest()->getParam('modified'))
-			$criteria->compare('t.modified_id',$_GET['modified']);
+			$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified'));
 		else
-			$criteria->compare('t.modified_id',$this->modified_id);
-		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.updated_date)',date('Y-m-d', strtotime($this->updated_date)));
-		$criteria->compare('t.updated_ip',$this->updated_ip,true);
+			$criteria->compare('t.modified_id', $this->modified_id);
+		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
+		$criteria->compare('t.updated_ip', $this->updated_ip,true);
 		
-		$criteria->compare('user.level_id',$this->level_search);
-		$criteria->compare('user.displayname',strtolower($this->user_search),true);
-		$criteria->compare('reference.displayname',strtolower($this->reference_search),true);
-		$criteria->compare('subscribe.displayname',strtolower($this->subscribe_search),true);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
-		$criteria->compare('view.register',$this->register_search);
-		$criteria->compare('view.invites',$this->invite_search);
+		$criteria->compare('user.level_id', $this->level_search);
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);
+		$criteria->compare('reference.displayname', strtolower($this->reference_search), true);
+		$criteria->compare('subscribe.displayname', strtolower($this->subscribe_search), true);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
+		$criteria->compare('view.register', $this->register_search);
+		$criteria->compare('view.invites', $this->invite_search);
 		
-		if(!isset($_GET['UserNewsletter_sort']))
+		if(!Yii::app()->getRequest()->getParam('UserNewsletter_sort'))
 			$criteria->order = 't.newsletter_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -306,7 +306,7 @@ class UserNewsletter extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'invite_search',
-				'value' => 'CHtml::link($data->view->invites ? $data->view->invites : 0, Yii::app()->controller->createUrl("o/invite/manage",array("newsletter"=>$data->newsletter_id)))',
+				'value' => 'CHtml::link($data->view->invites ? $data->view->invites : 0, Yii::app()->controller->createUrl("o/invite/manage", array("newsletter"=>$data->newsletter_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -327,7 +327,7 @@ class UserNewsletter extends CActiveRecord
 			$this->defaultColumns[] = array(
 				'header' => Yii::t('phrase', 'Status'),
 				'name' => 'status',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("subscribe",array("id"=>$data->newsletter_id)), $data->status, 8)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("subscribe", array("id"=>$data->newsletter_id)), $data->status, 8)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -347,7 +347,7 @@ class UserNewsletter extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)
@@ -371,7 +371,7 @@ class UserNewsletter extends CActiveRecord
 	public static function insertNewsletter($email)
 	{		
 		$criteria=new CDbCriteria;
-		$criteria->compare('t.email',strtolower($email));
+		$criteria->compare('t.email', strtolower($email));
 		$model = self::model()->find($criteria);
 		
 		$condition = 0;

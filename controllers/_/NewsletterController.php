@@ -16,7 +16,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ class NewsletterController extends Controller
 		$this->dialogGroundUrl = Yii::app()->createUrl('site/index');
 		
 		$this->dialogFixed = true;
-		$setting = OmmuSettings::model()->findByPk(1,array(
+		$setting = OmmuSettings::model()->findByPk(1, array(
 			'select' => 'id, online',
 		));
 
@@ -148,7 +148,7 @@ class NewsletterController extends Controller
 		$this->pageTitle = $title;
 		$this->pageDescription = $desc;
 		$this->pageMeta = '';
-		$this->render('front_subscribe',array(
+		$this->render('front_subscribe', array(
 			'model'=>$model,
 			'launch'=>$launch,
 		));

@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the template for generating the model class of a specified table.
@@ -197,49 +197,49 @@ class UsersCopy extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.user_id',$this->user_id,true);
+		$criteria->compare('t.user_id', $this->user_id,true);
 		if($controller == 'o/member') {
-			$criteria->addNotInCondition('t.level_id',array(1));
-			$criteria->compare('t.level_id',$this->level_id);
+			$criteria->addNotInCondition('t.level_id', array(1));
+			$criteria->compare('t.level_id', $this->level_id);
 		} else if($controller == 'o/admin') {
 			$criteria->compare('t.level_id',1);
 		}
-		$criteria->addNotInCondition('t.user_id',array(1,2,3,4));
-		$criteria->compare('t.language_id',$this->language_id);
-		$criteria->compare('t.email',strtolower($this->email),true);
-		$criteria->compare('t.salt',$this->salt,true);
-		$criteria->compare('t.password',$this->password,true);
-		$criteria->compare('t.first_name',strtolower($this->first_name),true);
-		$criteria->compare('t.last_name',strtolower($this->last_name),true);
-		$criteria->compare('t.displayname',strtolower($this->displayname),true);
-		$criteria->compare('t.photo_id',$this->photo_id,true);
-		$criteria->compare('t.status_id',$this->status_id,true);
-		$criteria->compare('t.username',strtolower($this->username),true);
-		$criteria->compare('t.enabled',$this->enabled);
-		$criteria->compare('t.verified',$this->verified);
-		$criteria->compare('t.deactivate',$this->deactivate);
-		$criteria->compare('t.search',$this->search);
-		$criteria->compare('t.invisible',$this->invisible);
-		$criteria->compare('t.show_profile',$this->show_profile);
-		$criteria->compare('t.privacy',$this->privacy);
-		$criteria->compare('t.comments',$this->comments);
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		$criteria->compare('t.creation_ip',$this->creation_ip,true);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
-		$criteria->compare('t.modified_id',$this->modified_id,true);
-		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.lastlogin_date)',date('Y-m-d', strtotime($this->lastlogin_date)));
-		$criteria->compare('t.lastlogin_ip',$this->lastlogin_ip,true);
-		$criteria->compare('t.lastlogin_from',$this->lastlogin_from,true);
-		if($this->update_date != null && !in_array($this->update_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.update_date)',date('Y-m-d', strtotime($this->update_date)));
-		$criteria->compare('t.update_ip',$this->update_ip,true);
-		$criteria->compare('t.locale_id',$this->locale_id);
-		$criteria->compare('t.timezone_id',$this->timezone_id);
+		$criteria->addNotInCondition('t.user_id', array(1,2,3,4));
+		$criteria->compare('t.language_id', $this->language_id);
+		$criteria->compare('t.email', strtolower($this->email), true);
+		$criteria->compare('t.salt', $this->salt,true);
+		$criteria->compare('t.password', $this->password,true);
+		$criteria->compare('t.first_name', strtolower($this->first_name), true);
+		$criteria->compare('t.last_name', strtolower($this->last_name), true);
+		$criteria->compare('t.displayname', strtolower($this->displayname), true);
+		$criteria->compare('t.photo_id', $this->photo_id,true);
+		$criteria->compare('t.status_id', $this->status_id,true);
+		$criteria->compare('t.username', strtolower($this->username), true);
+		$criteria->compare('t.enabled', $this->enabled);
+		$criteria->compare('t.verified', $this->verified);
+		$criteria->compare('t.deactivate', $this->deactivate);
+		$criteria->compare('t.search', $this->search);
+		$criteria->compare('t.invisible', $this->invisible);
+		$criteria->compare('t.show_profile', $this->show_profile);
+		$criteria->compare('t.privacy', $this->privacy);
+		$criteria->compare('t.comments', $this->comments);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
+		$criteria->compare('t.creation_ip', $this->creation_ip,true);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
+		$criteria->compare('t.modified_id', $this->modified_id,true);
+		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.lastlogin_date)', date('Y-m-d', strtotime($this->lastlogin_date)));
+		$criteria->compare('t.lastlogin_ip', $this->lastlogin_ip,true);
+		$criteria->compare('t.lastlogin_from', $this->lastlogin_from,true);
+		if($this->update_date != null && !in_array($this->update_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.update_date)', date('Y-m-d', strtotime($this->update_date)));
+		$criteria->compare('t.update_ip', $this->update_ip,true);
+		$criteria->compare('t.locale_id', $this->locale_id);
+		$criteria->compare('t.timezone_id', $this->timezone_id);
 
-		if(!isset($_GET['Users_sort']))
+		if(!Yii::app()->getRequest()->getParam('Users_sort'))
 			$criteria->order = 't.user_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -371,7 +371,7 @@ class UsersCopy extends CActiveRecord
 			if($controller != 'o/admin') {
 				$this->defaultColumns[] = array(
 					'name' => 'verified',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("verify",array("id"=>$data->user_id)), $data->verified, 7)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("verify", array("id"=>$data->user_id)), $data->verified, 7)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -384,7 +384,7 @@ class UsersCopy extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'enabled',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("enabled",array("id"=>$data->user_id)), $data->enabled, 3)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("enabled", array("id"=>$data->user_id)), $data->enabled, 3)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -404,7 +404,7 @@ class UsersCopy extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

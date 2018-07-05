@@ -22,7 +22,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -114,7 +114,7 @@ class LevelController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'User Levels');
 		$this->pageDescription = Yii::t('phrase', 'If you want to put users into different groups with varying access to features (e.g. Bronze, Silver, and Gold membership plans), you can create multiple user groups. You must always have at least one group - your default group (which cannot be deleted). When users signup, they will be placed into the group you have designated as the default group on this page. You can change a user\'s group by editing their account from the View Users page. If you want to give all users on your social network the same features and limits, you will only need one user level. ');
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -163,7 +163,7 @@ class LevelController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Create Level');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
@@ -217,7 +217,7 @@ class LevelController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name', array('$level_name'=>$model->title->message));
 		$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('admin_edit', array(
 			'model'=>$model,
 		));
 	}
@@ -233,7 +233,7 @@ class LevelController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Level: $level_name', array('$level_name'=>$model->title->message));
 		$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -303,7 +303,7 @@ class LevelController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Default Level: $level_name', array('$level_name'=>$model->title->message));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_default',array(
+		$this->render('admin_default', array(
 			'model'=>$model,
 		));
 	}
@@ -357,7 +357,7 @@ class LevelController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name User', array('$level_name'=>$model->title->message));
 		$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 		$this->pageMeta = '';
-		$this->render('admin_user',array(
+		$this->render('admin_user', array(
 			'model'=>$model,
 		));
 	}
@@ -411,7 +411,7 @@ class LevelController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Level: $level_name Message', array('$level_name'=>$model->title->message));
 		$this->pageDescription = Yii::t('phrase', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 		$this->pageMeta = '';
-		$this->render('admin_message',array(
+		$this->render('admin_message', array(
 			'model'=>$model,
 		));
 	}

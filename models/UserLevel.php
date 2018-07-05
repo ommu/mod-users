@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the template for generating the model class of a specified table.
@@ -201,47 +201,47 @@ class UserLevel extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.level_id',$this->level_id);
-		$criteria->compare('t.name',$this->name);
-		$criteria->compare('t.desc',$this->desc);
-		$criteria->compare('t.default',$this->default);
-		$criteria->compare('t.signup',$this->signup);
-		$criteria->compare('t.message_allow',$this->message_allow);
-		$criteria->compare('t.message_limit',strtolower($this->message_limit),true);
-		$criteria->compare('t.profile_block',$this->profile_block);
-		$criteria->compare('t.profile_search',$this->profile_search);
-		$criteria->compare('t.profile_privacy',strtolower($this->profile_privacy),true);
-		$criteria->compare('t.profile_comments',strtolower($this->profile_comments),true);
-		$criteria->compare('t.profile_style',$this->profile_style);
-		$criteria->compare('t.profile_style_sample',$this->profile_style_sample);
-		$criteria->compare('t.profile_status',$this->profile_status);
-		$criteria->compare('t.profile_invisible',$this->profile_invisible);
-		$criteria->compare('t.profile_views',$this->profile_views);
-		$criteria->compare('t.profile_change',$this->profile_change);
-		$criteria->compare('t.profile_delete',$this->profile_delete);
-		$criteria->compare('t.photo_allow',$this->photo_allow);
-		$criteria->compare('t.photo_size',strtolower($this->photo_size),true);
-		$criteria->compare('t.photo_exts',$this->photo_exts,true);
-		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.creation_date)',date('Y-m-d', strtotime($this->creation_date)));
-		if(isset($_GET['creation']))
-			$criteria->compare('t.creation_id',$_GET['creation']);
+		$criteria->compare('t.level_id', $this->level_id);
+		$criteria->compare('t.name', $this->name);
+		$criteria->compare('t.desc', $this->desc);
+		$criteria->compare('t.default', $this->default);
+		$criteria->compare('t.signup', $this->signup);
+		$criteria->compare('t.message_allow', $this->message_allow);
+		$criteria->compare('t.message_limit', strtolower($this->message_limit), true);
+		$criteria->compare('t.profile_block', $this->profile_block);
+		$criteria->compare('t.profile_search', $this->profile_search);
+		$criteria->compare('t.profile_privacy', strtolower($this->profile_privacy), true);
+		$criteria->compare('t.profile_comments', strtolower($this->profile_comments), true);
+		$criteria->compare('t.profile_style', $this->profile_style);
+		$criteria->compare('t.profile_style_sample', $this->profile_style_sample);
+		$criteria->compare('t.profile_status', $this->profile_status);
+		$criteria->compare('t.profile_invisible', $this->profile_invisible);
+		$criteria->compare('t.profile_views', $this->profile_views);
+		$criteria->compare('t.profile_change', $this->profile_change);
+		$criteria->compare('t.profile_delete', $this->profile_delete);
+		$criteria->compare('t.photo_allow', $this->photo_allow);
+		$criteria->compare('t.photo_size', strtolower($this->photo_size), true);
+		$criteria->compare('t.photo_exts', $this->photo_exts,true);
+		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
+		if(Yii::app()->getRequest()->getParam('creation'))
+			$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation'));
 		else
-			$criteria->compare('t.creation_id',$this->creation_id);
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+			$criteria->compare('t.creation_id', $this->creation_id);
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		if(Yii::app()->getRequest()->getParam('modified'))
-			$criteria->compare('t.modified_id',$_GET['modified']);
+			$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified'));
 		else
-			$criteria->compare('t.modified_id',$this->modified_id);
+			$criteria->compare('t.modified_id', $this->modified_id);
 		
 		$criteria->compare('title.message', strtolower($this->name_i), true);
 		$criteria->compare('description.message', strtolower($this->desc_i), true);
-		$criteria->compare('creation.displayname',strtolower($this->creation_search),true);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
-		$criteria->compare('view.user_active',$this->user_search);
+		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
+		$criteria->compare('view.user_active', $this->user_search);
 
-		if(!isset($_GET['UserLevel_sort']))
+		if(!Yii::app()->getRequest()->getParam('UserLevel_sort'))
 			$criteria->order = 't.level_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -349,7 +349,7 @@ class UserLevel extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'user_search',
-				'value' => 'CHtml::link($data->view->user_active ? $data->view->user_active : 0, $data->level_id != 1 ? Yii::app()->controller->createUrl("o/member/manage",array("level"=>$data->level_id)) : Yii::app()->controller->createUrl("o/admin/manage",array("level"=>$data->level_id)))',
+				'value' => 'CHtml::link($data->view->user_active ? $data->view->user_active : 0, $data->level_id != 1 ? Yii::app()->controller->createUrl("o/member/manage", array("level"=>$data->level_id)) : Yii::app()->controller->createUrl("o/admin/manage", array("level"=>$data->level_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -357,7 +357,7 @@ class UserLevel extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'default',
-				'value' => '$data->default == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Utility::getPublish(Yii::app()->controller->createUrl("default",array("id"=>$data->level_id)), $data->default, 6)',
+				'value' => '$data->default == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Utility::getPublish(Yii::app()->controller->createUrl("default", array("id"=>$data->level_id)), $data->default, 6)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -377,7 +377,7 @@ class UserLevel extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)
@@ -403,7 +403,7 @@ class UserLevel extends CActiveRecord
 	{
 		$criteria=new CDbCriteria;
 		if($type != null && $type == 'member')
-			$criteria->addNotInCondition('t.level_id',array(1));
+			$criteria->addNotInCondition('t.level_id', array(1));
 		if($type != null && $type == 'admin')
 			$criteria->compare('t.level_id',1);
 		

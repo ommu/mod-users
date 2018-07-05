@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_users".
@@ -170,7 +170,7 @@ class ViewUsers extends CActiveRecord
 		$criteria->compare('t.lastlogin_hours', strtolower($this->lastlogin_hours), true);
 		$criteria->compare('t.lastlogin_from', strtolower($this->lastlogin_from), true);
 
-		if(!isset($_GET['ViewUsers_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewUsers_sort'))
 			$criteria->order = 't.user_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -445,7 +445,7 @@ class ViewUsers extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

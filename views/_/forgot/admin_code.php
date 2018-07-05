@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -46,21 +46,21 @@ if($render == 1) {
 				</div>
 				<div class="clearfix">
 					<div class="desc">
-						<?php echo $form->passwordField($model,'newPassword',array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('newPassword'))); ?>
+						<?php echo $form->passwordField($model,'newPassword', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('newPassword'))); ?>
 						<?php echo $form->error($model,'newPassword'); ?>
 					</div>
 				</div>
 
 				<div class="clearfix">
 					<div class="desc">
-						<?php echo $form->passwordField($model,'confirmPassword',array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('confirmPassword'))); ?>
+						<?php echo $form->passwordField($model,'confirmPassword', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('confirmPassword'))); ?>
 						<?php echo $form->error($model,'confirmPassword'); ?>
 					</div>
 				</div>
 
 				<div class="submit clearfix">
 					<div class="desc">
-						<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()', 'class'=>'blue-button')); ?>
+						<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') , array('onclick' => 'setEnableSave()', 'class'=>'blue-button')); ?>
 					</div>
 				</div>
 			</div>

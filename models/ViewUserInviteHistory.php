@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 18 August 2017, 16:27 WIB
  * @link https://github.com/ommu/mod-users
  *
@@ -116,7 +116,7 @@ class ViewUserInviteHistory extends CActiveRecord
 		$criteria->compare('t.verify_day_left', strtolower($this->verify_day_left), true);
 		$criteria->compare('t.verify_hour_left', strtolower($this->verify_hour_left), true);
 
-		if(!isset($_GET['ViewUserInviteHistory_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewUserInviteHistory_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -235,7 +235,7 @@ class ViewUserInviteHistory extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

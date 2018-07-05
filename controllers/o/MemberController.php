@@ -22,7 +22,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ class MemberController extends Controller
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = Yii::t('phrase', 'This page lists all of the users that exist on your social network. For more information about a specific user, click on the "edit" link in its row. Click the "login" link to login as a specific user. Use the filter fields to find specific users based on your criteria. To view all users on your system, leave all the filter fields blank.');
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -177,7 +177,7 @@ class MemberController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Add Member');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 			'setting'=>$setting,
 		));
@@ -230,7 +230,7 @@ class MemberController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Update Member: $displayname', array('$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_edit',array(
+		$this->render('admin_edit', array(
 			'model'=>$model,
 			'setting'=>$setting,
 		));
@@ -247,7 +247,7 @@ class MemberController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Member: $displayname', array('$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -320,7 +320,7 @@ class MemberController extends Controller
 		$this->pageTitle = Yii::t('phrase', '$title Member: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_enabled',array(
+		$this->render('admin_enabled', array(
 			'title'=>$title,
 			'model'=>$model,
 		));
@@ -362,7 +362,7 @@ class MemberController extends Controller
 		$this->pageTitle = Yii::t('phrase', '$title Member: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_verify',array(
+		$this->render('admin_verify', array(
 			'title'=>$title,
 			'model'=>$model,
 		));
@@ -376,13 +376,13 @@ class MemberController extends Controller
 	public function actionSuggest($limit=10) 
 	{
 		if(Yii::app()->request->isAjaxRequest) {
-			if(isset($_GET['term'])) {
+			if(Yii::app()->getRequest()->getParam('term')) {
 				$criteria = new CDbCriteria;
 				$criteria->condition = 'enabled = 1 AND displayname LIKE :displayname';
 				$criteria->select = "user_id, displayname";
 				$criteria->limit = $limit;
 				$criteria->order = "user_id ASC";
-				$criteria->params = array(':displayname' => '%' . strtolower($_GET['term']) . '%');
+				$criteria->params = array(':displayname' => '%' . strtolower(Yii::app()->getRequest()->getParam('term')) . '%');
 				$model = Users::model()->findAll($criteria);
 
 				if($model) {

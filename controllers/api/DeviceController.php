@@ -15,7 +15,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2016 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2016 Ommu Platform (www.ommu.co)
  * @created date 9 April 2016, 06:37 WIB
  * @link https://github.com/ommu/mod-users
  *
@@ -60,7 +60,7 @@ class DeviceController extends ControllerApi
 			
 			$criteria=new CDbCriteria;
 			$criteria->select = 'id, user_id';
-			$criteria->compare('publish',1);
+			$criteria->compare('publish', 1);
 			$criteria->compare('android_id',$android_key);
 			
 			$device = UserDevice::model()->find($criteria);

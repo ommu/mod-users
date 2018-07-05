@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 3 August 2017, 14:34 WIB
  * @link https://github.com/ommu/mod-users
  *
@@ -114,7 +114,7 @@ class ViewUserSetting extends CActiveRecord
 		$criteria->compare('t.verify_difference_hours', $this->verify_difference_hours);
 		$criteria->compare('t.invite_difference_hours', $this->invite_difference_hours);
 
-		if(!isset($_GET['ViewUserSetting_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewUserSetting_sort'))
 			$criteria->order = 't.id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -233,7 +233,7 @@ class ViewUserSetting extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

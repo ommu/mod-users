@@ -6,7 +6,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -27,7 +27,7 @@
 	<fieldset>
 		<?php if(!Yii::app()->getRequest()->getParam('email')) {?>
 		<div class="clearfix">
-			<?php echo $form->textField($model,'email', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('email'))); ?><?php echo CHtml::submitButton('Check Email' ,array('onclick' => 'setEnableSave()')); ?>
+			<?php echo $form->textField($model,'email', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('email'))); ?><?php echo CHtml::submitButton('Check Email' , array('onclick' => 'setEnableSave()')); ?>
 			<?php echo $form->error($model,'email'); ?>
 		</div>
 		
@@ -36,7 +36,7 @@
 			echo $form->hiddenField($model,'email');
 		?>
 		<div class="clearfix">
-			<?php echo $form->passwordField($model,'password', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('password'))); ?><?php echo CHtml::submitButton('Login' ,array('onclick' => 'setEnableSave()')); ?>
+			<?php echo $form->passwordField($model,'password', array('maxlength'=>32, 'placeholder'=>$model->getAttributeLabel('password'))); ?><?php echo CHtml::submitButton('Login' , array('onclick' => 'setEnableSave()')); ?>
 			<?php echo $form->error($model,'password'); ?>
 		</div>
 		<?php }?>

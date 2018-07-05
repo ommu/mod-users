@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2015 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * LoginForm class.
@@ -62,7 +62,7 @@ class LoginFormOauth extends CFormModel
 		// we only want to authenticate when no input errors
 		if(!$this->hasErrors())
 		{
-			$this->_identity=new OauthIdentity($this->email,$this->password);
+			$this->_identity=new OauthIdentity($this->email, $this->password);
 			$this->_identity->authenticate();
 
 			switch($this->_identity->errorCode)
@@ -89,9 +89,9 @@ class LoginFormOauth extends CFormModel
 		if($this->_identity===null)
 		{
 			if($this->token !== null)
-				$this->_identity=new OauthIdentity($this->email,$this->password, $this->token);
+				$this->_identity=new OauthIdentity($this->email, $this->password, $this->token);
 			else 			
-				$this->_identity=new OauthIdentity($this->email,$this->password);
+				$this->_identity=new OauthIdentity($this->email, $this->password);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===OauthIdentity::ERROR_NONE)

@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 3 August 2017, 14:09 WIB
  * @link https://github.com/ommu/mod-users
  *
@@ -129,21 +129,21 @@ class ViewUserNewsletter extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('t.newsletter_id',$this->newsletter_id);
-		$criteria->compare('t.register',$this->register);
-		$criteria->compare('t.invite_by',strtolower($this->invite_by),true);
-		$criteria->compare('t.invites',$this->invites);
-		$criteria->compare('t.invite_all',$this->invite_all);
-		$criteria->compare('t.invite_users',$this->invite_users);
-		$criteria->compare('t.invite_user_all',$this->invite_user_all);
-		if($this->first_invite_date != null && !in_array($this->first_invite_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.first_invite_date)',date('Y-m-d', strtotime($this->first_invite_date)));
-		$criteria->compare('t.first_invite_user_id',$this->first_invite_user_id);
-		if($this->last_invite_date != null && !in_array($this->last_invite_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.last_invite_date)',date('Y-m-d', strtotime($this->last_invite_date)));
-		$criteria->compare('t.last_invite_user_id',$this->last_invite_user_id);
+		$criteria->compare('t.newsletter_id', $this->newsletter_id);
+		$criteria->compare('t.register', $this->register);
+		$criteria->compare('t.invite_by', strtolower($this->invite_by), true);
+		$criteria->compare('t.invites', $this->invites);
+		$criteria->compare('t.invite_all', $this->invite_all);
+		$criteria->compare('t.invite_users', $this->invite_users);
+		$criteria->compare('t.invite_user_all', $this->invite_user_all);
+		if($this->first_invite_date != null && !in_array($this->first_invite_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.first_invite_date)', date('Y-m-d', strtotime($this->first_invite_date)));
+		$criteria->compare('t.first_invite_user_id', $this->first_invite_user_id);
+		if($this->last_invite_date != null && !in_array($this->last_invite_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.last_invite_date)', date('Y-m-d', strtotime($this->last_invite_date)));
+		$criteria->compare('t.last_invite_user_id', $this->last_invite_user_id);
 
-		if(!isset($_GET['ViewUserNewsletter_sort']))
+		if(!Yii::app()->getRequest()->getParam('ViewUserNewsletter_sort'))
 			$criteria->order = 't.newsletter_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -295,7 +295,7 @@ class ViewUserNewsletter extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

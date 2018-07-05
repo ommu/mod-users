@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the template for generating the model class of a specified table.
@@ -103,13 +103,13 @@ class UserOption extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 		
-		$criteria->compare('t.option_id',$this->option_id);
-		$criteria->compare('t.ommu_status',$this->ommu_status);
-		$criteria->compare('t.invite_limit',$this->invite_limit);
-		$criteria->compare('t.invite_success',$this->invite_success);
-		$criteria->compare('t.signup_from',$this->signup_from);
+		$criteria->compare('t.option_id', $this->option_id);
+		$criteria->compare('t.ommu_status', $this->ommu_status);
+		$criteria->compare('t.invite_limit', $this->invite_limit);
+		$criteria->compare('t.invite_success', $this->invite_success);
+		$criteria->compare('t.signup_from', $this->signup_from);
 
-		if(!isset($_GET['UserOption_sort']))
+		if(!Yii::app()->getRequest()->getParam('UserOption_sort'))
 			$criteria->order = 't.option_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -169,7 +169,7 @@ class UserOption extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)

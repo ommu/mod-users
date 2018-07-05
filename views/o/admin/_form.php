@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -22,7 +22,7 @@
 
 	<fieldset>
 
-		<?php if(isset($_GET['id'])) {?>
+		<?php if(Yii::app()->getRequest()->getParam('id')) {?>
 		<div class="intro">
 			<?php echo Yii::t('phrase', 'Complete the form below to add/edit this admin account. Note that normal admins will not be able to delete or modify the superadmin account. If you want to change this admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');?>
 		</div>
@@ -37,7 +37,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('displayname')?> <span class="required">*</span></label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'displayname',array('maxlength'=>64,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'displayname', array('maxlength'=>64,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'displayname'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -47,7 +47,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('first_name')?> <span class="required">*</span></label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'first_name',array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'first_name', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'first_name'); ?>
 			</div>
 		</div>
@@ -55,7 +55,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('last_name')?> <span class="required">*</span></label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'last_name',array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'last_name', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'last_name'); ?>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('username')?> <span class="required">*</span></label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'username',array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'username', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'username'); ?>
 			</div>
 		</div>
@@ -74,7 +74,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('email')?> <span class="required">*</span></label>
 			<div class="col-lg-8 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'email',array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'email', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'email'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -90,12 +90,12 @@
 		</div>
 		<?php }?>
 		
-		<?php if($model->isNewRecord || (!$model->isNewRecord && isset($_GET['id']))) {
+		<?php if($model->isNewRecord || (!$model->isNewRecord && Yii::app()->getRequest()->getParam('id'))) {
 			if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {?>
 			<div class="form-group row">
 				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
 				<div class="col-lg-8 col-md-9 col-sm-12">
-					<?php echo $form->passwordField($model,'newPassword',array('maxlength'=>32,'class'=>'form-control')); ?>
+					<?php echo $form->passwordField($model,'newPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'newPassword'); ?>
 				</div>
 			</div>
@@ -103,7 +103,7 @@
 			<div class="form-group row">
 				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('confirmPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
 				<div class="col-lg-8 col-md-9 col-sm-12">
-					<?php echo $form->passwordField($model,'confirmPassword',array('maxlength'=>32,'class'=>'form-control')); ?>
+					<?php echo $form->passwordField($model,'confirmPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'confirmPassword'); ?>
 				</div>
 			</div>
@@ -135,7 +135,7 @@
 	</fieldset>
 </div>
 <div class="dialog-submit">
-	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') ,array('onclick' => 'setEnableSave()')); ?>
+	<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') , array('onclick' => 'setEnableSave()')); ?>
 	<?php echo CHtml::button(Yii::t('phrase', 'Close'), array('id'=>'closed')); ?>
 </div>
 <?php $this->endWidget(); ?>

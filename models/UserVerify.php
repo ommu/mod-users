@@ -4,7 +4,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  * This is the template for generating the model class of a specified table.
@@ -156,43 +156,43 @@ class UserVerify extends CActiveRecord
 			),
 		);
 
-		$criteria->compare('t.verify_id',$this->verify_id);
+		$criteria->compare('t.verify_id', $this->verify_id);
 		if(Yii::app()->getRequest()->getParam('type') == 'publish')
-			$criteria->compare('t.publish',1);
+			$criteria->compare('t.publish', 1);
 		elseif(Yii::app()->getRequest()->getParam('type') == 'unpublish')
-			$criteria->compare('t.publish',0);
+			$criteria->compare('t.publish', 0);
 		elseif(Yii::app()->getRequest()->getParam('type') == 'trash')
-			$criteria->compare('t.publish',2);
+			$criteria->compare('t.publish', 2);
 		else {
-			$criteria->addInCondition('t.publish',array(0,1));
-			$criteria->compare('t.publish',$this->publish);
+			$criteria->addInCondition('t.publish', array(0,1));
+			$criteria->compare('t.publish', $this->publish);
 		}
 		if(Yii::app()->getRequest()->getParam('user'))
 			$criteria->compare('t.user_id',Yii::app()->getRequest()->getParam('user'));
 		else
-			$criteria->compare('t.user_id',$this->user_id);
-		$criteria->compare('t.code',$this->code,true);
-		if($this->verify_date != null && !in_array($this->verify_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.verify_date)',date('Y-m-d', strtotime($this->verify_date)));
-		$criteria->compare('t.verify_ip',$this->verify_ip,true);
-		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.expired_date)',date('Y-m-d', strtotime($this->expired_date)));
-		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.modified_date)',date('Y-m-d', strtotime($this->modified_date)));
+			$criteria->compare('t.user_id', $this->user_id);
+		$criteria->compare('t.code', $this->code,true);
+		if($this->verify_date != null && !in_array($this->verify_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.verify_date)', date('Y-m-d', strtotime($this->verify_date)));
+		$criteria->compare('t.verify_ip', $this->verify_ip,true);
+		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.expired_date)', date('Y-m-d', strtotime($this->expired_date)));
+		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
 		if(Yii::app()->getRequest()->getParam('modified'))
-			$criteria->compare('t.modified_id',$_GET['modified']);
+			$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified'));
 		else
-			$criteria->compare('t.modified_id',$this->modified_id);
-		if($this->deleted_date != null && !in_array($this->deleted_date, array('0000-00-00 00:00:00', '0000-00-00')))
-			$criteria->compare('date(t.deleted_date)',date('Y-m-d', strtotime($this->deleted_date)));
+			$criteria->compare('t.modified_id', $this->modified_id);
+		if($this->deleted_date != null && !in_array($this->deleted_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
+			$criteria->compare('date(t.deleted_date)', date('Y-m-d', strtotime($this->deleted_date)));
 		
-		$criteria->compare('user.level_id',$this->level_search);
-		$criteria->compare('user.displayname',strtolower($this->user_search),true);
-		$criteria->compare('user.email',strtolower($this->email_search),true);
-		$criteria->compare('view.publish',$this->expired_search);
-		$criteria->compare('modified.displayname',strtolower($this->modified_search),true);
+		$criteria->compare('user.level_id', $this->level_search);
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);
+		$criteria->compare('user.email', strtolower($this->email_search), true);
+		$criteria->compare('view.publish', $this->expired_search);
+		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
 
-		if(!isset($_GET['UserVerify_sort']))
+		if(!Yii::app()->getRequest()->getParam('UserVerify_sort'))
 			$criteria->order = 't.verify_id DESC';
 
 		return new CActiveDataProvider($this, array(
@@ -325,7 +325,7 @@ class UserVerify extends CActiveRecord
 			if(!Yii::app()->getRequest()->getParam('type')) {
 				$this->defaultColumns[] = array(
 					'name' => 'publish',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\',array(\'id\'=>$data->verify_id)), $data->publish)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->verify_id)), $data->publish)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -346,7 +346,7 @@ class UserVerify extends CActiveRecord
 	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
-			$model = self::model()->findByPk($id,array(
+			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
  			if(count(explode(',', $column)) == 1)
@@ -389,7 +389,7 @@ class UserVerify extends CActiveRecord
 		if(parent::beforeValidate()) {		
 			if($this->isNewRecord) {
 				if(in_array($currentAction, array('account/verify','o/verify/add')) && $this->email_i != '') {
-					if(preg_match('/@/',$this->email_i)) {
+					if(preg_match('/@/', $this->email_i)) {
 						$user = Users::model()->findByAttributes(array('email' => strtolower($this->email_i)), array(
 							'select' => 'user_id, email',
 						));
@@ -441,7 +441,7 @@ class UserVerify extends CActiveRecord
 				'{displayname}', '{site_title}',
 				'{verify_link}',
 			);
-			$verify_link = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('account/email',array('token'=>$this->code));
+			$verify_link = Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('account/email', array('token'=>$this->code));
 			$verify_replace = array(
 				$this->user->displayname, $setting->site_title,
 				CHtml::link($verify_link, $verify_link),
@@ -457,8 +457,8 @@ class UserVerify extends CActiveRecord
 			// Update all history
 			$criteria=new CDbCriteria;
 			$criteria->addNotInCondition('verify_id', array($this->verify_id));
-			$criteria->compare('publish',1);
-			$criteria->compare('user_id',$this->user_id);
+			$criteria->compare('publish', 1);
+			$criteria->compare('user_id', $this->user_id);
 
 			self::model()->updateAll(array('publish'=>0), $criteria);
 		}

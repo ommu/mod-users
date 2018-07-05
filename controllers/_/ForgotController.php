@@ -17,7 +17,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ class ForgotController extends Controller
 					if($model->save()) {						
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('get',array('name'=>urlencode($model->displayname), 'email'=>$model->email, 'type'=>'success')),
+							'get' => Yii::app()->controller->createUrl('get', array('name'=>urlencode($model->displayname), 'email'=>$model->email, 'type'=>'success')),
 						));
 					} else {
 						print_r($model->getErrors());
@@ -212,7 +212,7 @@ class ForgotController extends Controller
 					if($model->save()) {
 						echo CJSON::encode(array(
 							'type' => 5,
-							'get' => Yii::app()->controller->createUrl('get',array('name'=>urlencode($model->user->displayname), 'email'=>$model->user->email)),
+							'get' => Yii::app()->controller->createUrl('get', array('name'=>urlencode($model->user->displayname), 'email'=>$model->user->email)),
 						));
 					} else {
 						print_r($model->getErrors());
@@ -241,7 +241,7 @@ class ForgotController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Forgot your password?');
 		$this->pageDescription = $desc;
 		$this->pageMeta = '';
-		$this->render('front_get',array(
+		$this->render('front_get', array(
 			'model'=>$model,
 		));
 	}

@@ -19,7 +19,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ class NewsletterController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Manage Subscribes');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -184,7 +184,7 @@ class NewsletterController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Add Subscribe');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
@@ -204,7 +204,7 @@ class NewsletterController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Subscribe: $email_address', array('$email_address'=>$model->email));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -277,7 +277,7 @@ class NewsletterController extends Controller
 		$this->pageTitle = Yii::t('phrase', '$title: $email_address', array('$title'=>$title, '$email_address'=>$model->email));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_status',array(
+		$this->render('admin_status', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

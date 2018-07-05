@@ -20,7 +20,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 7 August 2017, 06:44 WIB
  * @link https://github.com/ommu/mod-users
  *
@@ -119,7 +119,7 @@ class VerifyController extends Controller
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_manage',array(
+		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
 		));
@@ -168,7 +168,7 @@ class VerifyController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'Add Verify');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_add',array(
+		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
@@ -188,7 +188,7 @@ class VerifyController extends Controller
 		$this->pageTitle = Yii::t('phrase', 'View Verify: user $user_displayname ($user_email)', array('$user_displayname'=>$model->user->displayname, '$user_email'=>$model->user->email));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_view',array(
+		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
@@ -300,7 +300,7 @@ class VerifyController extends Controller
 		$this->pageTitle = Yii::t('phrase', '$title Verify: user $user_displayname ($user_email)', array('$title'=>$title, '$user_displayname'=>$model->user->displayname, '$user_email'=>$model->user->email));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_publish',array(
+		$this->render('admin_publish', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

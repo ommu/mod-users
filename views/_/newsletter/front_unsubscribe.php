@@ -7,7 +7,7 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (opensource.ommu.co)
+ * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -19,7 +19,7 @@
 ?>
 
 <?php 
-if(isset($_GET['success']) || (Yii::app()->getRequest()->getParam('email') || isset($_GET['secret']))) {
+if(Yii::app()->getRequest()->getParam('success') || (Yii::app()->getRequest()->getParam('email') || Yii::app()->getRequest()->getParam('secret'))) {
 	if($renderError == 1)
 		echo '<a class="button" href="'.Yii::app()->controller->createUrl('contact/index').'" title="'.Yii::t('phrase', 'Feedback').'">'.Yii::t('phrase', 'Feedback').'</a>';
 } else {
