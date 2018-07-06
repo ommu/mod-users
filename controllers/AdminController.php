@@ -36,7 +36,7 @@ class AdminController extends /*SBaseController*/ Controller
 	 */
 	public function init() 
 	{
-		$arrThemes = Utility::getCurrentTemplate('admin');
+		$arrThemes = $this->currentTemplate('admin');
 		Yii::app()->theme = $arrThemes['folder'];
 		$this->layout = $arrThemes['layout'];
 	}

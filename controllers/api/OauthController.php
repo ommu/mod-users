@@ -29,7 +29,7 @@ class OauthController extends ControllerApi
 	 */
 	public function init() 
 	{
-		$arrThemes = Utility::getCurrentTemplate('public');
+		$arrThemes = $this->currentTemplate('public');
 		Yii::app()->theme = $arrThemes['folder'];
 		$this->layout = $arrThemes['layout'];
 	}
