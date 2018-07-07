@@ -39,6 +39,8 @@
  */
 class UserInvites extends CActiveRecord
 {
+	use GridViewTrait;
+
 	public $defaultColumns = array();	
 	public $email_i;
 	public $multiple_email_i;
@@ -324,10 +326,7 @@ class UserInvites extends CActiveRecord
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter'=>array(
-					1=>Yii::t('phrase', 'Yes'),
-					0=>Yii::t('phrase', 'No'),
-				),
+				'filter' => $this->filterYesNo(),
 				'type' => 'raw',
 			);
 			if(!Yii::app()->getRequest()->getParam('type')) {
@@ -337,10 +336,7 @@ class UserInvites extends CActiveRecord
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
-					'filter'=>array(
-						1=>Yii::t('phrase', 'Yes'),
-						0=>Yii::t('phrase', 'No'),
-					),
+					'filter' => $this->filterYesNo(),
 					'type' => 'raw',
 				);
 			}
