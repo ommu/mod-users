@@ -21,7 +21,7 @@ if($render == 1) {
 	echo '<a class="button" href="'.Yii::app()->createUrl('users/forgot/get').'" title="'.Yii::t('phrase', 'Forgot your password').'">'.Yii::t('phrase', 'Forgot your password').'</a>';
 	
 } else if($render == 2) {?>
-	<?php $form=$this->beginWidget('application.libraries.core.components.system.OActiveForm', array(
+	<?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 		'action'=>Yii::app()->controller->createUrl('post', array('id'=>Yii::app()->params['reset_user_id'])),
 		'id'=>'users-form',
 		'enableAjaxValidation'=>true,
