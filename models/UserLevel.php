@@ -381,7 +381,7 @@ class UserLevel extends CActiveRecord
 	}
 
 	//get Type Member (Except administrator)
-	public static function getUserLevel($type=null) 
+	public static function getUserLevel($array=true) 
 	{
 		$criteria=new CDbCriteria;
 		if($type != null && $type == 'member')
@@ -391,14 +391,17 @@ class UserLevel extends CActiveRecord
 		
 		$model = self::model()->findAll($criteria);
 		
-		$items = array();
-		if($model != null) {
-			foreach($model as $key => $val)
-				$items[$val->level_id] = $val->title->message;
-		
-			return $items;
+		if($array == true) {
+			$items = array();
+			if($model != null) {
+				foreach($model as $key => $val)
+					$items[$val->level_id] = $val->title->message;
+			
+				return $items;
+			} else
+				return false;
 		} else
-			return false;
+			return $model;
 	}
 
 	/**
