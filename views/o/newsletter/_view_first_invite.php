@@ -12,7 +12,7 @@
  *
  */
 
-	$first_invite_date = $model->view->first_invite_date && !in_array($model->view->first_invite_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')) ? Utility::dateFormat($model->view->first_invite_date, true) : '-';
+	$first_invite_date = $model->view->first_invite_date && !in_array($model->view->first_invite_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')) ? $this->dateFormat($model->view->first_invite_date, true) : '-';
 	$first_invite_user = $model->view->first_user->displayname ? $model->view->first_user->displayname : '-';
 ?>
 
