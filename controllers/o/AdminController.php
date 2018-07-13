@@ -107,15 +107,7 @@ class AdminController extends Controller
 			$model->attributes=$_GET['Users'];
 		}
 
-		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
-					$columnTemp[] = $key;
-				}
-			}
-		}
-		$columns = $model->getGridColumn($columnTemp);
+		$columns = $model->getGridColumn($this->gridColumnTemp());
 
 		$this->pageTitle = Yii::t('phrase', 'Administrators');
 		$this->pageDescription = Yii::t('phrase', 'Your social network can have more than one administrator. This is useful if you want to have a staff of admins who maintain your social network. However, the first admin to be created (upon installation) is the "superadmin" and cannot be deleted. The superadmin can create and delete other admin accounts. All admin accounts on your system are listed below.');

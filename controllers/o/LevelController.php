@@ -101,15 +101,7 @@ class LevelController extends Controller
 			$model->attributes=$_GET['UserLevel'];
 		}
 
-		$columnTemp = array();
-		if(isset($_GET['GridColumn'])) {
-			foreach($_GET['GridColumn'] as $key => $val) {
-				if($_GET['GridColumn'][$key] == 1) {
-					$columnTemp[] = $key;
-				}
-			}
-		}
-		$columns = $model->getGridColumn($columnTemp);
+		$columns = $model->getGridColumn($this->gridColumnTemp());
 
 		$this->pageTitle = Yii::t('phrase', 'User Levels');
 		$this->pageDescription = Yii::t('phrase', 'If you want to put users into different groups with varying access to features (e.g. Bronze, Silver, and Gold membership plans), you can create multiple user groups. You must always have at least one group - your default group (which cannot be deleted). When users signup, they will be placed into the group you have designated as the default group on this page. You can change a user\'s group by editing their account from the View Users page. If you want to give all users on your social network the same features and limits, you will only need one user level. ');
