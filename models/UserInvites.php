@@ -288,7 +288,7 @@ class UserInvites extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'invite_date',
-				'value' => 'Utility::dateFormat($data->invite_date)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->invite_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

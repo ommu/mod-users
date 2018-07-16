@@ -282,7 +282,7 @@ class UserNewsletter extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'subscribe_date',
-				'value' => 'Utility::dateFormat($data->subscribe_date, true)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->subscribe_date, \'medium\', false)',
 				'htmlOptions' => array(
 					//'class' => 'center',
 				),

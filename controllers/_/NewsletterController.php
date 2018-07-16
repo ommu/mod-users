@@ -176,7 +176,7 @@ class NewsletterController extends Controller
 					$title = Yii::t('phrase', 'Unsubscribe successful');
 					$desc = Yii::t('phrase', 'Your email <strong>{email}</strong> has been successfully unsubscribed on {date}.', array(
 						'{email}'=>Yii::app()->getRequest()->getParam('email'), 
-						'{date}'=>Utility::dateFormat($_GET['date']),
+						'{date}'=>$this->dateFormat($_GET['date'], 'long', false),
 					));
 
 				} else {
@@ -213,7 +213,7 @@ class NewsletterController extends Controller
 								$title = Yii::t('phrase', 'Unsubscribe successful');
 								$desc = Yii::t('phrase', 'Your email <strong>{email}</strong> has been successfully unsubscribed on {date}.', array(
 									'{email}'=>$newsletter->email, 
-									'{date}'=>Utility::dateFormat($newsletter->updated_date),
+									'{date}'=>$this->dateFormat($newsletter->updated_date, 'long', false),
 								));
 							}
 						} else {

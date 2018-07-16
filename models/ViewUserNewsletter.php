@@ -229,7 +229,7 @@ class ViewUserNewsletter extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'first_invite_date',
-				'value' => 'Utility::dateFormat($data->first_invite_date)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->first_invite_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -241,7 +241,7 @@ class ViewUserNewsletter extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'last_invite_date',
-				'value' => 'Utility::dateFormat($data->last_invite_date)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->last_invite_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

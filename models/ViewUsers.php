@@ -287,7 +287,7 @@ class ViewUsers extends CActiveRecord
 			);
 			$this->templateColumns['email_lastchange_date'] = array(
 				'name' => 'email_lastchange_date',
-				'value' => '!in_array($data->email_lastchange_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->email_lastchange_date) : \'-\'',
+				'value' => '!in_array($data->email_lastchange_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->email_lastchange_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -307,7 +307,7 @@ class ViewUsers extends CActiveRecord
 			);
 			$this->templateColumns['username_lastchange_date'] = array(
 				'name' => 'username_lastchange_date',
-				'value' => '!in_array($data->username_lastchange_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->username_lastchange_date) : \'-\'',
+				'value' => '!in_array($data->username_lastchange_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->username_lastchange_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -327,7 +327,7 @@ class ViewUsers extends CActiveRecord
 			);
 			$this->templateColumns['password_lastchange_date'] = array(
 				'name' => 'password_lastchange_date',
-				'value' => '!in_array($data->password_lastchange_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->password_lastchange_date) : \'-\'',
+				'value' => '!in_array($data->password_lastchange_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->password_lastchange_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -347,7 +347,7 @@ class ViewUsers extends CActiveRecord
 			);
 			$this->templateColumns['lastlogin_date'] = array(
 				'name' => 'lastlogin_date',
-				'value' => '!in_array($data->lastlogin_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Utility::dateFormat($data->lastlogin_date) : \'-\'',
+				'value' => '!in_array($data->lastlogin_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->lastlogin_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

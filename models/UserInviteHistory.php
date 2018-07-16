@@ -261,7 +261,7 @@ class UserInviteHistory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'invite_date',
-				'value' => 'Utility::dateFormat($data->invite_date, true)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->invite_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -286,7 +286,7 @@ class UserInviteHistory extends CActiveRecord
 			/*
 			$this->defaultColumns[] = array(
 				'name' => 'expired_date',
-				'value' => 'Utility::dateFormat($data->expired_date)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->expired_date)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

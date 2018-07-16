@@ -262,7 +262,7 @@ class UserVerify extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'verify_date',
-				'value' => 'Utility::dateFormat($data->verify_date, true)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->verify_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -270,7 +270,7 @@ class UserVerify extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'expired_date',
-				'value' => 'Utility::dateFormat($data->expired_date, true)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->expired_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

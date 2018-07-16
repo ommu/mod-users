@@ -211,7 +211,7 @@ class UserHistoryLogin extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'lastlogin_date',
-				'value' => 'Utility::dateFormat($data->lastlogin_date, true)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->lastlogin_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

@@ -207,7 +207,7 @@ class UserHistoryPassword extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'update_date',
-				'value' => 'Utility::dateFormat($data->update_date, true)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->update_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

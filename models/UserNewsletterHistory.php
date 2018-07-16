@@ -229,7 +229,7 @@ class UserNewsletterHistory extends CActiveRecord
 			);
 			$this->defaultColumns[] = array(
 				'name' => 'updated_date',
-				'value' => 'Utility::dateFormat($data->updated_date, true)',
+				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->updated_date, \'medium\', false)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
