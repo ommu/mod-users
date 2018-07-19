@@ -96,7 +96,7 @@ class LevelController extends Controller
 	public function actionManage() 
 	{
 		$model=new UserLevel('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserLevel'])) {
 			$model->attributes=$_GET['UserLevel'];
 		}

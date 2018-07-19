@@ -96,7 +96,7 @@ class EmailController extends Controller
 		}
 		
 		$model=new UserHistoryEmail('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserHistoryEmail'])) {
 			$model->attributes=$_GET['UserHistoryEmail'];
 		}

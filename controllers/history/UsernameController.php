@@ -96,7 +96,7 @@ class UsernameController extends Controller
 		}
 		
 		$model=new UserHistoryUsername('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserHistoryUsername'])) {
 			$model->attributes=$_GET['UserHistoryUsername'];
 		}

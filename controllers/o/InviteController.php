@@ -100,7 +100,7 @@ class InviteController extends Controller
 		}
 		
 		$model=new UserInvites('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserInvites'])) {
 			$model->attributes=$_GET['UserInvites'];
 		}

@@ -101,7 +101,7 @@ class ForgotController extends Controller
 		}
 		
 		$model=new UserForgot('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserForgot'])) {
 			$model->attributes=$_GET['UserForgot'];
 		}

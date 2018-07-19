@@ -106,7 +106,7 @@ class MemberController extends Controller
 		}
 		
 		$model=new Users('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['Users'])) {
 			$model->attributes=$_GET['Users'];
 		}

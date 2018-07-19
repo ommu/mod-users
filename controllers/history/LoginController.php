@@ -96,7 +96,7 @@ class LoginController extends Controller
 		}
 		
 		$model=new UserHistoryLogin('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserHistoryLogin'])) {
 			$model->attributes=$_GET['UserHistoryLogin'];
 		}

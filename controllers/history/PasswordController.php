@@ -96,7 +96,7 @@ class PasswordController extends Controller
 		}
 		
 		$model=new UserHistoryPassword('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserHistoryPassword'])) {
 			$model->attributes=$_GET['UserHistoryPassword'];
 		}

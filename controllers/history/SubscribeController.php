@@ -100,7 +100,7 @@ class SubscribeController extends Controller
 		}
 		
 		$model=new UserNewsletterHistory('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserNewsletterHistory'])) {
 			$model->attributes=$_GET['UserNewsletterHistory'];
 		}

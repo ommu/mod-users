@@ -101,7 +101,7 @@ class VerifyController extends Controller
 		}
 		
 		$model=new UserVerify('search');
-		$model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();	// clear any default values
 		if(isset($_GET['UserVerify'])) {
 			$model->attributes=$_GET['UserVerify'];
 		}
