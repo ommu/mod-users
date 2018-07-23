@@ -1,6 +1,6 @@
 <?php
 /**
- * User History Password (user-history-password)
+ * User History Passwords (user-history-password)
  * @var $this PasswordController
  * @var $model UserHistoryPassword
  * @var $form CActiveForm
@@ -8,6 +8,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
+ * @modified date 23 July 2018, 22:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -35,18 +36,17 @@ EOP;
 	'name' => 'gridoption',
 ));
 $columns   = array();
-$exception = array('id');
-foreach($model->metaData->columns as $key => $val) {
-	if(!in_array($key, $exception)) {
+$exception = array('_option','_no','id');
+foreach($model->templateColumns as $key => $val) {
+	if(!in_array($key, $exception))
 		$columns[$key] = $key;
-	}
 }
 ?>
 <ul>
-	<?php foreach($columns as $val): ?>
+	<?php foreach($columns as $key => $val): ?>
 	<li>
-		<?php echo CHtml::checkBox('GridColumn['.$val.']'); ?>
-		<?php echo CHtml::label($val, 'GridColumn_'.$val); ?>
+		<?php echo CHtml::checkBox('GridColumn['.$val.']', in_array($key, $gridColumns) ? true : false); ?>
+		<?php echo CHtml::label($model->getAttributeLabel($val), 'GridColumn_'.$val); ?>
 	</li>
 	<?php endforeach; ?>
 </ul>

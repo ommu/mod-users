@@ -9,6 +9,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	View
  *	Delete
  *
  *	LoadModel
@@ -17,6 +18,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
+ * @modified date 23 July 2018, 22:52 WIB
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -66,7 +68,7 @@ class UsernameController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','delete'),
+				'actions'=>array('index','manage','view','delete'),
 				'users'=>array('@'),
 				'expression'=>'Yii::app()->user->level == 1',
 			),
@@ -75,7 +77,7 @@ class UsernameController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -89,26 +91,46 @@ class UsernameController extends Controller
 	 */
 	public function actionManage($user=null) 
 	{
-		$pageTitle = Yii::t('phrase', 'History Usernames');
+		$model=new UserHistoryUsername('search');
+		$model->unsetAttributes();	// clear any default values
+		$UserHistoryUsername = Yii::app()->getRequest()->getParam('UserHistoryUsername');
+		if($UserHistoryUsername)
+			$model->attributes=$UserHistoryUsername;
+
+		$columns = $model->getGridColumn($this->gridColumnTemp());
+
+		$pageTitle = Yii::t('phrase', ''User History Usernames');
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
 			$pageTitle = Yii::t('phrase', 'History Usernames: $user_displayname level $level_name', array ('$user_displayname'=>$data->displayname,'$level_name'=>$data->level->title->message));
 		}
 		
-		$model=new UserHistoryUsername('search');
-		$model->unsetAttributes();	// clear any default values
-		if(isset($_GET['UserHistoryUsername'])) {
-			$model->attributes=$_GET['UserHistoryUsername'];
-		}
-
-		$columns = $model->getGridColumn($this->gridColumnTemp());
-
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
+		));
+	}
+
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id) 
+	{
+		$model=$this->loadModel($id);
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = Yii::t('phrase', 'Detail History Username: {username}', array('{username}'=>$model->displayname));
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_view', array(
+			'model'=>$model,
 		));
 	}
 
@@ -128,7 +150,7 @@ class UsernameController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-user-history-username',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'History Usernames success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User history username success deleted.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -138,7 +160,7 @@ class UsernameController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete History Username: $user_displayname level $level_name', array('$user_displayname'=>$model->user->displayname,'$level_name'=>$model->user->level->title->message));
+		$this->pageTitle = Yii::t('phrase', 'Delete History Username: {username}', array('{username}'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
@@ -168,4 +190,5 @@ class UsernameController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

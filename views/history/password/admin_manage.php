@@ -1,36 +1,36 @@
 <?php
 /**
- * User History Password (user-history-password)
+ * User History Passwords (user-history-password)
  * @var $this PasswordController
  * @var $model UserHistoryPassword
- * @var $form CActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
+ * @modified date 23 July 2018, 22:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 	$this->breadcrumbs=array(
-		'User History Password'=>array('manage'),
+		'User History Passwords'=>array('manage'),
 		'Manage',
 	);
-
 	$this->menu=array(
 		array(
-			'label' => Yii::t('phrase', 'Filter'), 
+			'label' => Yii::t('phrase', 'Filter'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'search-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Filter')),
 		),
 		array(
-			'label' => Yii::t('phrase', 'Grid Options'), 
+			'label' => Yii::t('phrase', 'Grid Options'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'grid-button'),
 			'linkOptions' => array('title' => Yii::t('phrase', 'Grid Options')),
 		),
 	);
+
 ?>
 
 <?php //begin.Search ?>
@@ -45,6 +45,7 @@
 <div class="grid-form">
 <?php $this->renderPartial('_option_form', array(
 	'model'=>$model,
+	'gridColumns'=>$this->activeDefaultColumns($columns),
 )); ?>
 </div>
 <?php //end.Grid Option ?>
@@ -70,28 +71,28 @@
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => 'view',
+						'label' => Yii::t('phrase', 'Detail User History Password'),
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'view',
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'view\', array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
-						'label' => 'update',
+						'label' => Yii::t('phrase', 'Update User History Password'),
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'update',
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'edit\', array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
-						'label' => 'delete',
+						'label' => Yii::t('phrase', 'Delete User History Password'),
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'delete',
 						),
-						'url' => 'Yii::app()->controller->createUrl(\'delete\', array(\'id\'=>$data->primaryKey))')
+						'url' => 'Yii::app()->controller->createUrl(\'delete\', array(\'id\'=>$data->primaryKey))'),
 				),
-				'template' => '{delete}',
+				'template' => '{view}|{delete}',
 			));
 
 			$this->widget('application.libraries.yii-traits.system.OGridView', array(
