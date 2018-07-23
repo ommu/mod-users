@@ -1,10 +1,13 @@
-code			: 16000
-name			: Member
-description		: Member
-folder_name		: users
-version			: 0.1.0
-created_date	: 2012-08-30 14:03
-author			: Putra Sudaryanto [putra@sudaryanto.id]
+name: Users
+description: Users module from Ommu Platform
+folder_name: users
+model: Users
+
+author:
+  name: Putra Sudaryanto
+  phone: (+62)856-299-4114
+  email: putra@sudaryanto.id
+  homepage: https://sudaryanto.id
 
 db_table_name	: 
  

@@ -127,7 +127,7 @@ class AdminController extends Controller
 	{
 		$model=new Users;
 		$setting = OmmuSettings::model()->findByPk(1, array(
-			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_photo, signup_random',
+			'select' => 'signup_username, signup_approve, signup_verifyemail, signup_photo, signup_random',
 		));
 		if($model->isNewRecord)
 			$model->level_id = 1;
@@ -188,7 +188,7 @@ class AdminController extends Controller
 		
 		$model=$this->loadModel($id);
 		$setting = OmmuSettings::model()->findByPk(1, array(
-			'select'=>'signup_username, signup_approve, signup_verifyemail, signup_photo, signup_random',
+			'select' => 'signup_username, signup_approve, signup_verifyemail, signup_photo, signup_random',
 		));
 
 		// Uncomment the following line if AJAX validation is needed

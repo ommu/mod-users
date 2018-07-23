@@ -139,27 +139,27 @@ class UserInviteHistory extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'view' => array(
-				'alias'=>'view',
+				'alias' => 'view',
 			),
 			'invite' => array(
-				'alias'=>'invite',
-				'select'=>'newsletter_id, user_id'
+				'alias' => 'invite',
+				'select' => 'newsletter_id, user_id'
 			),
 			'invite.newsletter' => array(
-				'alias'=>'invite_newsletter',
-				'select'=>'newsletter_id, email'
+				'alias' => 'invite_newsletter',
+				'select' => 'newsletter_id, email'
 			),
 			'invite.newsletter.view' => array(
-				'alias'=>'invite_newsletter_view',
-				'select'=>'user_id'
+				'alias' => 'invite_newsletter_view',
+				'select' => 'user_id'
 			),
 			'invite.newsletter.view.user' => array(
-				'alias'=>'invite_newsletter_view_user',
-				'select'=>'displayname'
+				'alias' => 'invite_newsletter_view_user',
+				'select' => 'displayname'
 			),
 			'invite.user' => array(
-				'alias'=>'invite_user',
-				'select'=>'level_id, displayname'
+				'alias' => 'invite_user',
+				'select' => 'level_id, displayname'
 			),
 		);
 		

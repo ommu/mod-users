@@ -128,12 +128,12 @@ class UserNewsletterHistory extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'newsletter' => array(
-				'alias'=>'newsletter',
-				'select'=>'user_id, email'
+				'alias' => 'newsletter',
+				'select' => 'user_id, email'
 			),
 			'newsletter.user' => array(
-				'alias'=>'newsletter_user',
-				'select'=>'level_id, displayname'
+				'alias' => 'newsletter_user',
+				'select' => 'level_id, displayname'
 			),
 		);
 

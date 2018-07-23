@@ -153,28 +153,28 @@ class UserInvites extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'newsletter' => array(
-				'alias'=>'newsletter',
-				'select'=>'newsletter_id, user_id, email'
+				'alias' => 'newsletter',
+				'select' => 'newsletter_id, user_id, email'
 			),
 			'newsletter.view' => array(
-				'alias'=>'newsletter_view',
-				'select'=>'user_id, register'
+				'alias' => 'newsletter_view',
+				'select' => 'user_id, register'
 			),
 			'newsletter.view.user' => array(
-				'alias'=>'newsletter_view_user',
-				'select'=>'displayname'
+				'alias' => 'newsletter_view_user',
+				'select' => 'displayname'
 			),
 			'newsletter.user' => array(
-				'alias'=>'newsletter_user',
-				'select'=>'displayname'
+				'alias' => 'newsletter_user',
+				'select' => 'displayname'
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'level_id, displayname'
+				'alias' => 'user',
+				'select' => 'level_id, displayname'
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname'
+				'alias' => 'modified',
+				'select' => 'displayname'
 			),
 		);
 
@@ -371,8 +371,8 @@ class UserInvites extends CActiveRecord
 		$criteria=new CDbCriteria;
 		$criteria->with = array(
 			'newsletter' => array(
-				'alias'=>'newsletter',
-				'select'=>'newsletter_id, email',
+				'alias' => 'newsletter',
+				'select' => 'newsletter_id, email',
 			),
 		);
 		$criteria->compare('t.publish', 1);
@@ -390,15 +390,15 @@ class UserInvites extends CActiveRecord
 		$criteria=new CDbCriteria;
 		$criteria->with = array(
 			'newsletter' => array(
-				'alias'=>'newsletter',
-				'select'=>'newsletter_id, status, email'
+				'alias' => 'newsletter',
+				'select' => 'newsletter_id, status, email'
 			),
 			'newsletter.view' => array(
-				'alias'=>'newsletter_view',
-				'select'=>'user_id'
+				'alias' => 'newsletter_view',
+				'select' => 'user_id'
 			),
 			'histories' => array(
-				'alias'=>'histories',
+				'alias' => 'histories',
 				'together'=>true,
 			),
 		);

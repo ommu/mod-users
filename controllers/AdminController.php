@@ -88,7 +88,7 @@ class AdminController extends /*SBaseController*/ Controller
 
 		else {
 			$setting = OmmuSettings::model()->findByPk(1, array(
-				'select'=>'site_oauth',
+				'select' => 'site_oauth',
 			));
 			
 			$model=new LoginFormAdmin;
@@ -158,7 +158,7 @@ class AdminController extends /*SBaseController*/ Controller
 	public function actionAutologin() 
 	{
 		$setting = OmmuSettings::model()->findByPk(1, array(
-			'select'=>'site_oauth',
+			'select' => 'site_oauth',
 		));
 		
 		$token = $_GET['token'];

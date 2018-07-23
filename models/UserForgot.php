@@ -146,15 +146,15 @@ class UserForgot extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'view' => array(
-				'alias'=>'view',
+				'alias' => 'view',
 			),
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'level_id, email, displayname'
+				'alias' => 'user',
+				'select' => 'level_id, email, displayname'
 			),
 			'modified' => array(
-				'alias'=>'modified',
-				'select'=>'displayname'
+				'alias' => 'modified',
+				'select' => 'displayname'
 			),
 		);
 

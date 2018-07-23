@@ -127,8 +127,8 @@ class UserHistoryLogin extends CActiveRecord
 		// Custom Search
 		$criteria->with = array(
 			'user' => array(
-				'alias'=>'user',
-				'select'=>'level_id, displayname'
+				'alias' => 'user',
+				'select' => 'level_id, displayname'
 			),
 		);
 
