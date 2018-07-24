@@ -1,7 +1,7 @@
 <?php
 /**
  * User Newsletter (user-newsletter)
- * @var $this NewsletterController
+ * @var $this SubscribeController
  * @var $model UserNewsletter
  * @var $form CActiveForm
  *
@@ -13,7 +13,7 @@
  */
 ?>
 
-<?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
+<?php $form=$this->beginWidget('CActiveForm', array(
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
 )); ?>

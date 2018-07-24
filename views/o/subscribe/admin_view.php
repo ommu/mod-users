@@ -1,7 +1,7 @@
 <?php
 /**
  * User Newsletter (user-newsletter)
- * @var $this NewsletterController
+ * @var $this SubscribeController
  * @var $model UserNewsletter
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
