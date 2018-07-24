@@ -11,8 +11,8 @@
  *	Manage
  *	Add
  *	View
- *	Runaction
  *	Delete
+ *	Runaction
  *	Publish
  *
  *	LoadModel
@@ -22,6 +22,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 7 August 2017, 06:43 WIB
+ * @modified date 24 July 2018, 08:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -71,7 +72,7 @@ class ForgotController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','add','view','runaction','delete','publish'),
+				'actions'=>array('index','manage','add','view','delete','runaction','publish'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -80,7 +81,7 @@ class ForgotController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -94,20 +95,20 @@ class ForgotController extends Controller
 	 */
 	public function actionManage($user=null) 
 	{
+		$model=new UserForgot('search');
+		$model->unsetAttributes();	// clear any default values
+		$UserForgot = Yii::app()->getRequest()->getParam('UserForgot');
+		if($UserForgot)
+			$model->attributes=$UserForgot;
+
+		$columns = $model->getGridColumn($this->gridColumnTemp());
+
 		$pageTitle = Yii::t('phrase', 'User Forgots');
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
 			$pageTitle = Yii::t('phrase', 'User Forgots: $user_displayname ($user_email)', array ('$user_displayname'=>$data->displayname, '$user_email'=>$data->email));
 		}
 		
-		$model=new UserForgot('search');
-		$model->unsetAttributes();	// clear any default values
-		if(isset($_GET['UserForgot'])) {
-			$model->attributes=$_GET['UserForgot'];
-		}
-
-		$columns = $model->getGridColumn($this->gridColumnTemp());
-
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -116,7 +117,7 @@ class ForgotController extends Controller
 			'columns' => $columns,
 		));
 	}
-	
+
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -130,8 +131,7 @@ class ForgotController extends Controller
 
 		if(isset($_POST['UserForgot'])) {
 			$model->attributes=$_POST['UserForgot'];
-			$model->scenario = 'getForm';
-			
+
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
@@ -142,29 +142,28 @@ class ForgotController extends Controller
 						echo CJSON::encode(array(
 							'type' => 5,
 							'get' => Yii::app()->controller->createUrl('manage'),
-							'id' => 'partial-user-invite',
-							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Forgot Password success created.').'</strong></div>',
+							'id' => 'partial-user-forgot',
+							'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User forgot success created.').'</strong></div>',
 						));
-					} else {
+					} else
 						print_r($model->getErrors());
-					}
 				}
 			}
-			Yii::app()->end();			
+			Yii::app()->end();
 		}
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
-		
-		$this->pageTitle = Yii::t('phrase', 'Add Forgot');
+
+		$this->pageTitle = Yii::t('phrase', 'Create Forgot');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
-	
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -172,53 +171,17 @@ class ForgotController extends Controller
 	public function actionView($id) 
 	{
 		$model=$this->loadModel($id);
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 
-		$this->pageTitle = Yii::t('phrase', 'View Forgot: user $user_displayname ($user_email)', array('$user_displayname'=>$model->user->displayname, '$user_email'=>$model->user->email));
+		$this->pageTitle = Yii::t('phrase', 'Detail Forgot: {user_id}', array('{user_id}'=>$model->user->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view', array(
 			'model'=>$model,
 		));
-	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionRunaction() {
-		$id       = $_POST['trash_id'];
-		$criteria = null;
-		$actions  = Yii::app()->getRequest()->getParam('action');
-
-		if(count($id) > 0) {
-			$criteria = new CDbCriteria;
-			$criteria->addInCondition('forgot_id', $id);
-
-			if($actions == 'publish') {
-				UserForgot::model()->updateAll(array(
-					'publish' => 1,
-				),$criteria);
-			} elseif($actions == 'unpublish') {
-				UserForgot::model()->updateAll(array(
-					'publish' => 0,
-				),$criteria);
-			} elseif($actions == 'trash') {
-				UserForgot::model()->updateAll(array(
-					'publish' => 2,
-				),$criteria);
-			} elseif($actions == 'delete') {
-				UserForgot::model()->deleteAll($criteria);
-			}
-		}
-
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!Yii::app()->getRequest()->getParam('ajax')) {
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
-		}
 	}
 
 	/**
@@ -234,13 +197,13 @@ class ForgotController extends Controller
 			// we only allow deletion via POST request
 			$model->publish = 2;
 			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
-
+			
 			if($model->update()) {
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-user-forgot',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Forgot Password success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User forgot success deleted.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -250,27 +213,61 @@ class ForgotController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete Forgot: user $user_displayname ($user_email)', array('$user_displayname'=>$model->user->displayname, '$user_email'=>$model->user->email));
+		$this->pageTitle = Yii::t('phrase', 'Delete Forgot: {user_id}', array('{user_id}'=>$model->user->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
 	}
 
 	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionRunaction() 
+	{
+		$id       = $_POST['trash_id'];
+		$criteria = null;
+		$actions  = Yii::app()->getRequest()->getParam('action');
+
+		if(count($id) > 0) {
+			$criteria = new CDbCriteria;
+			$criteria->addInCondition('forgot_id', $id);
+
+			if($actions == 'publish') {
+				UserForgot::model()->updateAll(array(
+					'publish' => 1,
+				), $criteria);
+			} elseif($actions == 'unpublish') {
+				UserForgot::model()->updateAll(array(
+					'publish' => 0,
+				), $criteria);
+			} elseif($actions == 'trash') {
+				UserForgot::model()->updateAll(array(
+					'publish' => 2,
+				), $criteria);
+			} elseif($actions == 'delete') {
+				UserForgot::model()->deleteAll($criteria);
+			}
+		}
+
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!Yii::app()->getRequest()->getParam('ajax'))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
+	}
+
+	/**
+	 * Publish a particular model.
+	 * If publish is successful, the browser will be redirected to the 'manage' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
 	public function actionPublish($id) 
 	{
 		$model=$this->loadModel($id);
-		
 		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
 		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			//change value active or publish
+			// we only allow publish via POST request
 			$model->publish = $replace;
 			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
@@ -279,7 +276,7 @@ class ForgotController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-user-forgot',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Forgot Password success updated.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User forgot success updated.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -289,7 +286,7 @@ class ForgotController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', '$title Forgot: user $user_displayname ($user_email)', array('$title'=>$title, '$user_displayname'=>$model->user->displayname, '$user_email'=>$model->user->email));
+		$this->pageTitle = Yii::t('phrase', '{title} Forgot: {user_id}', array('{title}'=>$title, '{user_id}'=>$model->user->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_publish', array(
@@ -297,7 +294,7 @@ class ForgotController extends Controller
 			'model'=>$model,
 		));
 	}
-
+	
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -322,4 +319,5 @@ class ForgotController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

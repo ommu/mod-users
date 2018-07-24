@@ -6,23 +6,21 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 3 August 2017, 14:22 WIB
+ * @modified date 24 July 2018, 05:31 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_user_verify".
  *
  * The followings are the available columns in table '_user_verify':
- * @property string $verify_id
+ * @property integer $verify_id
  * @property integer $expired
- * @property string $verify_day_left
- * @property string $verify_hour_left
+ * @property integer $verify_day_left
+ * @property integer $verify_hour_left
  */
-class ViewUserVerify extends CActiveRecord
-{
-	public $defaultColumns = array();
-	public $templateColumns = array();
-	public $gridForbiddenColumn = array();
 
-	// Variable Search
+class ViewUserVerify extends OActiveRecord
+{
+	public $gridForbiddenColumn = array();
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -60,7 +58,8 @@ class ViewUserVerify extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('expired', 'numerical', 'integerOnly'=>true),
+			array('verify_id, expired, verify_day_left, verify_hour_left', 'numerical', 'integerOnly'=>true),
+			array('expired, verify_day_left, verify_hour_left', 'safe'),
 			array('verify_id', 'length', 'max'=>11),
 			array('verify_day_left, verify_hour_left', 'length', 'max'=>21),
 			// The following rule is used by search().
@@ -110,11 +109,10 @@ class ViewUserVerify extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		$criteria->compare('t.verify_id', strtolower($this->verify_id), true);
+		$criteria->compare('t.verify_id', $this->verify_id);
 		$criteria->compare('t.expired', $this->expired);
-		$criteria->compare('t.verify_day_left', strtolower($this->verify_day_left), true);
-		$criteria->compare('t.verify_hour_left', strtolower($this->verify_hour_left), true);
+		$criteria->compare('t.verify_day_left', $this->verify_day_left);
+		$criteria->compare('t.verify_hour_left', $this->verify_hour_left);
 
 		if(!Yii::app()->getRequest()->getParam('ViewUserVerify_sort'))
 			$criteria->order = 't.verify_id DESC';
@@ -122,73 +120,9 @@ class ViewUserVerify extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
-			'htmlOptions' => array(
-				'class' => 'center',
-			),
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -230,7 +164,7 @@ class ViewUserVerify extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -238,15 +172,14 @@ class ViewUserVerify extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
 	}
-
 }

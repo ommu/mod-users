@@ -5,52 +5,47 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
+ * @modified date 24 July 2018, 05:31 WIB
  * @link https://github.com/ommu/mod-users
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "ommu_user_verify".
  *
  * The followings are the available columns in table 'ommu_user_verify':
- * @property string $verify_id
+ * @property integer $verify_id
  * @property integer $publish
- * @property string $user_id
+ * @property integer $user_id
  * @property string $code
  * @property string $verify_date
  * @property string $verify_ip
  * @property string $expired_date
  * @property string $modified_date
- * @property string $modified_id
+ * @property integer $modified_id
  * @property string $deleted_date
  *
  * The followings are the available model relations:
+ * @property ViewUserVerify $view
  * @property Users $user
+ * @property Users $modified
  */
-class UserVerify extends CActiveRecord
+
+class UserVerify extends OActiveRecord
 {
 	use GridViewTrait;
+	use UtilityTrait;
 
-	public $defaultColumns = array();
+	public $gridForbiddenColumn = array('code','verify_ip','expired_date','modified_date','modified_search','deleted_date');
 	public $email_i;
-	
+
 	// Variable Search
 	public $level_search;
 	public $user_search;
 	public $email_search;
-	public $expired_search;
 	public $modified_search;
+	public $expired_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
 	 * @return UserVerify the static model class
 	 */
@@ -64,7 +59,8 @@ class UserVerify extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_user_verify';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_user_verify';
 	}
 
 	/**
@@ -75,21 +71,19 @@ class UserVerify extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, code', 'required'),
-			array('email_i', 'required', 'on'=>'getForm'),
-			array('publish, modified_id', 'numerical', 'integerOnly'=>true),
-			array('user_id, modified_id', 'length', 'max'=>11),
-			array('
-				email_i', 'length', 'max'=>32),
-			array('code', 'length', 'max'=>64),
-			array('verify_ip', 'length', 'max'=>20),
+			array('code, verify_ip, email_i', 'required'),
+			array('publish, user_id, modified_id', 'numerical', 'integerOnly'=>true),
 			array('email_i', 'email'),
-			array('user_id, verify_ip,
-				email_i', 'safe'),
+			array('publish, user_id', 'safe'),
+			array('user_id', 'length', 'max'=>11),
+			array('verify_ip', 'length', 'max'=>20),
+			array('email_i', 'length', 'max'=>32),
+			array('code', 'length', 'max'=>64),
+			// array('verify_date, modified_date, deleted_date', 'trigger'),
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
+			// @todo Please remove those attributes that should not be searched.
 			array('verify_id, publish, user_id, code, verify_date, verify_ip, expired_date, modified_date, modified_id, deleted_date,
-				level_search, user_search, email_search, expired_search, modified_search', 'safe', 'on'=>'search'),
+				level_search, user_search, email_search, modified_search, expired_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -116,7 +110,7 @@ class UserVerify extends CActiveRecord
 			'verify_id' => Yii::t('attribute', 'Verify'),
 			'publish' => Yii::t('attribute', 'Publish'),
 			'user_id' => Yii::t('attribute', 'User'),
-			'code' => Yii::t('attribute', 'Verify Code'),
+			'code' => Yii::t('attribute', 'Code'),
 			'verify_date' => Yii::t('attribute', 'Verify Date'),
 			'verify_ip' => Yii::t('attribute', 'Verify Ip'),
 			'expired_date' => Yii::t('attribute', 'Expired Date'),
@@ -127,34 +121,39 @@ class UserVerify extends CActiveRecord
 			'level_search' => Yii::t('attribute', 'level'),
 			'user_search' => Yii::t('attribute', 'User'),
 			'email_search' => Yii::t('attribute', 'Email'),
-			'expired_search' => Yii::t('attribute', 'Expired'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
+			'expired_search' => Yii::t('attribute', 'Expired'),
 		);
 	}
-	
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
-		// Custom Search
 		$criteria->with = array(
 			'view' => array(
 				'alias' => 'view',
 			),
 			'user' => array(
 				'alias' => 'user',
-				'select' => 'level_id, email, displayname'
+				'select' => 'level_id, email, displayname',
 			),
 			'modified' => array(
 				'alias' => 'modified',
-				'select' => 'displayname'
+				'select' => 'displayname',
 			),
 		);
 
@@ -169,114 +168,117 @@ class UserVerify extends CActiveRecord
 			$criteria->addInCondition('t.publish', array(0,1));
 			$criteria->compare('t.publish', $this->publish);
 		}
-		if(Yii::app()->getRequest()->getParam('user'))
-			$criteria->compare('t.user_id',Yii::app()->getRequest()->getParam('user'));
-		else
-			$criteria->compare('t.user_id', $this->user_id);
-		$criteria->compare('t.code', $this->code,true);
+		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
+		$criteria->compare('t.code', strtolower($this->code), true);
 		if($this->verify_date != null && !in_array($this->verify_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.verify_date)', date('Y-m-d', strtotime($this->verify_date)));
-		$criteria->compare('t.verify_ip', $this->verify_ip,true);
+		$criteria->compare('t.verify_ip', strtolower($this->verify_ip), true);
 		if($this->expired_date != null && !in_array($this->expired_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.expired_date)', date('Y-m-d', strtotime($this->expired_date)));
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
-		if(Yii::app()->getRequest()->getParam('modified'))
-			$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified'));
-		else
-			$criteria->compare('t.modified_id', $this->modified_id);
+		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
 		if($this->deleted_date != null && !in_array($this->deleted_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.deleted_date)', date('Y-m-d', strtotime($this->deleted_date)));
-		
+
 		$criteria->compare('user.level_id', $this->level_search);
 		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 		$criteria->compare('user.email', strtolower($this->email_search), true);
-		$criteria->compare('view.publish', $this->expired_search);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
+		$criteria->compare('view.publish', $this->expired_search);
 
 		if(!Yii::app()->getRequest()->getParam('UserVerify_sort'))
 			$criteria->order = 't.verify_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'pagination'=>array(
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
+			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		}else {
-			//$this->defaultColumns[] = 'verify_id';
-			$this->defaultColumns[] = 'publish';
-			$this->defaultColumns[] = 'user_id';
-			$this->defaultColumns[] = 'code';
-			$this->defaultColumns[] = 'verify_date';
-			$this->defaultColumns[] = 'verify_ip';
-			$this->defaultColumns[] = 'expired_date';
-			$this->defaultColumns[] = 'modified_date';
-			$this->defaultColumns[] = 'modified_id';
-			$this->defaultColumns[] = 'deleted_date';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
+			);
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
 			);
 			if(!Yii::app()->getRequest()->getParam('user')) {
-				$this->defaultColumns[] = array(
+				$this->templateColumns['level_search'] = array(
 					'name' => 'level_search',
-					'value' => '$data->user->level->title->message',
-					'filter'=>UserLevel::getUserLevel(),
+					'value' => '$data->user->level->title->message ? $data->user->level->title->message : \'-\'',
+					'filter' => UserLevel::getUserLevel(),
 					'type' => 'raw',
 				);
-				$this->defaultColumns[] = array(
+				$this->templateColumns['email_search'] = array(
 					'name' => 'email_search',
-					'value' => '$data->user->email',
+					'value' => '$data->user->email ? $data->user->email : \'-\'',
 				);
-				$this->defaultColumns[] = array(
+				$this->templateColumns['user_search'] = array(
 					'name' => 'user_search',
-					'value' => '$data->user->displayname',
+					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
 				);
 			}
-			$this->defaultColumns[] = array(
+			$this->templateColumns['code'] = array(
+				'name' => 'code',
+				'value' => '$data->code',
+			);
+			$this->templateColumns['verify_date'] = array(
 				'name' => 'verify_date',
-				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->verify_date, \'medium\', false)',
+				'value' => '!in_array($data->verify_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->verify_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'filter' => $this->filterDatepicker($this, 'verify_date'),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['verify_ip'] = array(
+				'name' => 'verify_ip',
+				'value' => '$data->verify_ip',
+			);
+			$this->templateColumns['expired_date'] = array(
 				'name' => 'expired_date',
-				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->expired_date, \'medium\', false)',
+				'value' => '!in_array($data->expired_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->expired_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'filter' => $this->filterDatepicker($this, 'expired_date'),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['modified_date'] = array(
+				'name' => 'modified_date',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->modified_date, \'medium\', false) : \'-\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterDatepicker($this, 'modified_date'),
+			);
+			if(!Yii::app()->getRequest()->getParam('modified')) {
+				$this->templateColumns['modified_search'] = array(
+					'name' => 'modified_search',
+					'value' => '$data->modified->displayname ? $data->modified->displayname : \'-\'',
+				);
+			}
+			$this->templateColumns['deleted_date'] = array(
+				'name' => 'deleted_date',
+				'value' => '!in_array($data->deleted_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->deleted_date, \'medium\', false) : \'-\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterDatepicker($this, 'deleted_date'),
+			);
+			$this->templateColumns['expired_search'] = array(
 				'name' => 'expired_search',
 				'value' => '$data->view->expired == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
@@ -286,9 +288,10 @@ class UserVerify extends CActiveRecord
 				'type' => 'raw',
 			);
 			if(!Yii::app()->getRequest()->getParam('type')) {
-				$this->defaultColumns[] = array(
+				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->verify_id)), $data->publish)',
+					//'value' => '$data->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -301,7 +304,7 @@ class UserVerify extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -309,10 +312,10 @@ class UserVerify extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
@@ -321,58 +324,35 @@ class UserVerify extends CActiveRecord
 	}
 
 	/**
-	 * User verification codes
-	 */
-	public static function getUniqueCode() {
-		$chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		srand((double)microtime()*time());
-		$i = 0;
-		$code = '' ;
-
-		while ($i <= 31) {
-			$num = rand() % 33;
-			$tmp = substr($chars, $num, 2);
-			$code = $code . $tmp; 
-			$i++;
-		}
-
-		return $code;
-	}
-
-	/**
 	 * before validate attributes
 	 */
 	protected function beforeValidate() 
 	{
-		$currentAction = strtolower(Yii::app()->controller->id.'/'.Yii::app()->controller->action->id);
-		
-		if(parent::beforeValidate()) {		
+		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-				if(in_array($currentAction, array('account/verify','o/verify/add')) && $this->email_i != '') {
-					if(preg_match('/@/', $this->email_i)) {
-						$user = Users::model()->findByAttributes(array('email' => strtolower($this->email_i)), array(
-							'select' => 'user_id, email',
-						));
-					} else {
-						$user = Users::model()->findByAttributes(array('username' => strtolower($this->email_i)), array(
-							'select' => 'user_id, email',
-						));
-					}
-					if($user == null)
-						$this->addError('email_i', Yii::t('phrase', 'Incorrect email address / username'));
-					else {
-						if($user->verified == 1)
-							$this->addError('email_i', Yii::t('phrase', 'Your account verified'));
-						else
-							$this->user_id = $user->user_id;
-					}
+				if(preg_match('/@/', $this->email_i)) {
+					$user = Users::model()->findByAttributes(array('email' => strtolower($this->email_i)), array(
+						'select' => 'user_id, verified',
+					));
+				} else {
+					$user = Users::model()->findByAttributes(array('username' => strtolower($this->email_i)), array(
+						'select' => 'user_id, verified',
+					));
+				}
+				if($user === null)
+					$this->addError('email_i', Yii::t('phrase', 'Incorrect email address/username'));
+				else {
+					if($user->verified == 1)
+						$this->addError('email_i', Yii::t('phrase', 'Your account verified'));
+					else
+						$this->user_id = $user->user_id;
 				}
 				
-				$this->code = self::getUniqueCode();
+				$this->code = $this->uniqueCode();
 				$this->verify_ip = $_SERVER['REMOTE_ADDR'];
 				
 			} else
-				$this->modified_id = Yii::app()->user->id;
+				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 		}
 		return true;
 	}
@@ -396,6 +376,14 @@ class UserVerify extends CActiveRecord
 		parent::afterSave();
 
 		if($this->isNewRecord) {
+			// Update all history
+			$criteria=new CDbCriteria;
+			$criteria->addNotInCondition('verify_id', array($this->verify_id));
+			$criteria->compare('publish', 1);
+			$criteria->compare('user_id', $this->user_id);
+
+			self::model()->updateAll(array('publish'=>0), $criteria);
+			
 			// Send Email to Member
 			$verify_search = array(
 				'{displayname}', '{site_title}',
@@ -413,14 +401,6 @@ class UserVerify extends CActiveRecord
 				$verify_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$verify_template.'.php';
 			$verify_message = Utility::getEmailTemplate(str_ireplace($verify_search, $verify_replace, file_get_contents($verify_file)));
 			Mailer::send($this->user->email, $this->user->displayname, $verify_title, $verify_message);
-
-			// Update all history
-			$criteria=new CDbCriteria;
-			$criteria->addNotInCondition('verify_id', array($this->verify_id));
-			$criteria->compare('publish', 1);
-			$criteria->compare('user_id', $this->user_id);
-
-			self::model()->updateAll(array('publish'=>0), $criteria);
 		}
 	}
 

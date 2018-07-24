@@ -9,20 +9,21 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 7 August 2017, 06:44 WIB
+ * @modified date 24 July 2018, 08:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 	$this->breadcrumbs=array(
 		'User Verifies'=>array('manage'),
+		$model->user->displayname=>array('view','id'=>$model->verify_id),
 		'Publish',
 	);
 ?>
 
-<?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
+<?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'user-verify-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 
 	<div class="dialog-content">
