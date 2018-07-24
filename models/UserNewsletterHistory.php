@@ -5,37 +5,28 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
+ * @modified date 24 July 2018, 05:33 WIB
  * @link https://github.com/ommu/mod-users
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "ommu_user_newsletter_history".
  *
  * The followings are the available columns in table 'ommu_user_newsletter_history':
- * @property string $id
+ * @property integer $id
  * @property integer $status
- * @property string $newsletter_id
+ * @property integer $newsletter_id
  * @property string $updated_date
  * @property string $updated_ip
  *
  * The followings are the available model relations:
  * @property UserNewsletter $newsletter
  */
-class UserNewsletterHistory extends CActiveRecord
+
+class UserNewsletterHistory extends OActiveRecord
 {
 	use GridViewTrait;
 
-	public $defaultColumns = array();
-	
+	public $gridForbiddenColumn = array();
+
 	// Variable Search
 	public $level_search;
 	public $user_search;
@@ -57,7 +48,8 @@ class UserNewsletterHistory extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_user_newsletter_history';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_user_newsletter_history';
 	}
 
 	/**
@@ -68,9 +60,10 @@ class UserNewsletterHistory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('status, newsletter_id, updated_date, updated_ip', 'required'),
-			array('status', 'numerical', 'integerOnly'=>true),
+			array('status, newsletter_id, updated_ip', 'required'),
+			array('status, newsletter_id', 'numerical', 'integerOnly'=>true),
 			array('newsletter_id', 'length', 'max'=>11),
+			array('updated_ip', 'length', 'max'=>20),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, status, newsletter_id, updated_date, updated_ip,
@@ -97,11 +90,11 @@ class UserNewsletterHistory extends CActiveRecord
 	{
 		return array(
 			'id' => Yii::t('attribute', 'ID'),
-			'status' => Yii::t('attribute', 'Status'),
+			'status' => Yii::t('attribute', 'Subscribe'),
 			'newsletter_id' => Yii::t('attribute', 'Newsletter'),
 			'updated_date' => Yii::t('attribute', 'Updated Date'),
 			'updated_ip' => Yii::t('attribute', 'Updated IP'),
-			'level_search' => Yii::t('attribute', 'level'),
+			'level_search' => Yii::t('attribute', 'Userlevel'),
 			'user_search' => Yii::t('attribute', 'User'),
 			'email_search' => Yii::t('attribute', 'Email'),
 		);
@@ -124,31 +117,26 @@ class UserNewsletterHistory extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
-		// Custom Search
 		$criteria->with = array(
 			'newsletter' => array(
 				'alias' => 'newsletter',
-				'select' => 'user_id, email'
+				'select' => 'user_id, email',
 			),
 			'newsletter.user' => array(
-				'alias' => 'newsletter_user',
-				'select' => 'level_id, displayname'
+				'alias' => 'newsletterUser',
+				'select' => 'level_id, email, displayname',
 			),
 		);
 
-		$criteria->compare('t.id', $this->id,true);
-		$criteria->compare('t.status', $this->status);
-		if(Yii::app()->getRequest()->getParam('newsletter'))
-			$criteria->compare('t.newsletter_id', Yii::app()->getRequest()->getParam('newsletter'));
-		else
-			$criteria->compare('t.newsletter_id', $this->newsletter_id);
+		$criteria->compare('t.id', $this->id);
+		$criteria->compare('t.status', Yii::app()->getRequest()->getParam('status') ? Yii::app()->getRequest()->getParam('status') : $this->status);
+		$criteria->compare('t.newsletter_id', Yii::app()->getRequest()->getParam('newsletter') ? Yii::app()->getRequest()->getParam('newsletter') : $this->newsletter_id);
 		if($this->updated_date != null && !in_array($this->updated_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.updated_date)', date('Y-m-d', strtotime($this->updated_date)));
-		$criteria->compare('t.updated_ip', $this->updated_ip,true);
-		
-		$criteria->compare('newsletter_user.level_id', $this->level_search);
-		$criteria->compare('newsletter_user.displayname', strtolower($this->user_search), true);
+		$criteria->compare('t.updated_ip', strtolower($this->updated_ip), true);
+
+		$criteria->compare('newsletterUser.level_id', $this->level_search);
+		$criteria->compare('newsletterUser.displayname', strtolower($this->user_search), true);
 		$criteria->compare('newsletter.email', strtolower($this->email_search), true);
 
 		if(!Yii::app()->getRequest()->getParam('UserNewsletterHistory_sort'))
@@ -157,97 +145,73 @@ class UserNewsletterHistory extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		} else {
-			//$this->defaultColumns[] = 'id';
-			$this->defaultColumns[] = 'status';
-			$this->defaultColumns[] = 'newsletter_id';
-			$this->defaultColumns[] = 'updated_date';
-			$this->defaultColumns[] = 'updated_ip';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			if(!Yii::app()->getRequest()->getParam('newsletter')) {
-				$this->defaultColumns[] = array(
-					'name' => 'level_search',
-					'value' => '$data->newsletter->user_id ? $data->newsletter->user->level->title->message : \'-\'',
-					'filter'=>UserLevel::getUserLevel(),
-					'type' => 'raw',
-				);
-				$this->defaultColumns[] = array(
-					'name' => 'user_search',
-					'value' => '$data->newsletter->user_id ? $data->newsletter->user->displayname : \'-\'',
-				);
-				$this->defaultColumns[] = array(
-					'name' => 'email_search',
-					'value' => '$data->newsletter->email',
-				);
-			}
-			$this->defaultColumns[] = array(
-				'name' => 'status',
-				'value' => '$data->status == 1 ? Yii::t(\'phrase\', \'Subscribe\') : Yii::t(\'phrase\', \'Unsubscribe\')',
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
-				'filter'=>array(
-					1=>Yii::t('phrase', 'Subscribe'),
-					0=>Yii::t('phrase', 'Unsubscribe'),
-				),
-				'type' => 'raw',
 			);
-			$this->defaultColumns[] = array(
+			if(!Yii::app()->getRequest()->getParam('newsletter')) {
+				$this->templateColumns['level_search'] = array(
+					'name' => 'level_search',
+					'value' => '$data->newsletter->user->level->title->message ? $data->newsletter->user->level->title->message : \'-\'',
+					'filter' => UserLevel::getUserLevel(),
+					'type' => 'raw',
+				);
+				$this->templateColumns['user_search'] = array(
+					'name' => 'user_search',
+					'value' => '$data->newsletter->user->displayname ? $data->newsletter->user->displayname : \'-\'',
+				);
+				$this->templateColumns['email_search'] = array(
+					'name' => 'email_search',
+					'value' => '$data->newsletter->email ? $data->newsletter->email : \'-\'',
+				);
+			}
+			$this->templateColumns['updated_date'] = array(
 				'name' => 'updated_date',
-				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->updated_date, \'medium\', false)',
+				'value' => '!in_array($data->updated_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->updated_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'filter' => $this->filterDatepicker($this, 'updated_date'),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['updated_ip'] = array(
 				'name' => 'updated_ip',
 				'value' => '$data->updated_ip',
+			);
+			$this->templateColumns['status'] = array(
+				'name' => 'status',
+				//'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'status\', array(\'id\'=>$data->id)), $data->status, \'Subscribe,Unsubscribe\')',
+				'value' => '$data->status == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
 			);
 		}
 		parent::afterConstruct();
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -255,10 +219,10 @@ class UserNewsletterHistory extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
@@ -266,4 +230,14 @@ class UserNewsletterHistory extends CActiveRecord
 		}
 	}
 
+	/**
+	 * before validate attributes
+	 */
+	protected function beforeValidate() 
+	{
+		if(parent::beforeValidate()) {
+			$this->updated_ip = $_SERVER['REMOTE_ADDR'];
+		}
+		return true;
+	}
 }

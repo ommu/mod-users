@@ -9,6 +9,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	View
  *	Delete
  *
  *	LoadModel
@@ -18,6 +19,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 5 August 2017, 19:31 WIB
+ * @modified date 24 July 2018, 06:41 WIB
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -67,7 +69,7 @@ class InviteController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','delete'),
+				'actions'=>array('index','manage','view','delete'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -76,7 +78,7 @@ class InviteController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -90,28 +92,52 @@ class InviteController extends Controller
 	 */
 	public function actionManage($invite=null) 
 	{
-		$pageTitle = Yii::t('phrase', 'User Invite Data');
-		if($invite != null) {
-			$data = UserInvites::model()->findByPk($invite);
-			$pageTitle = Yii::t('phrase', 'User Invite Data: $invite_email invite by Guest', array ('$invite_email'=>$data->newsletter->email));
-			if($data->user->displayname)
-				$pageTitle = Yii::t('phrase', 'User Invite Data: $invite_email invite by $user_displayname', array ('$invite_email'=>$data->newsletter->email, '$user_displayname'=>$data->user->displayname));
-		}
-		
 		$model=new UserInviteHistory('search');
 		$model->unsetAttributes();	// clear any default values
-		if(isset($_GET['UserInviteHistory'])) {
-			$model->attributes=$_GET['UserInviteHistory'];
-		}
+		$UserInviteHistory = Yii::app()->getRequest()->getParam('UserInviteHistory');
+		if($UserInviteHistory)
+			$model->attributes=$UserInviteHistory;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
+		$pageTitle = Yii::t('phrase', 'User Invite Histories');
+		if($invite != null) {
+			$data = UserInvites::model()->findByPk($invite);
+			$pageTitle = Yii::t('phrase', 'User Invite History: {invite_email} invite by Guest', array ('{invite_email}'=>$data->newsletter->email));
+			if($data->user_id)
+				$pageTitle = Yii::t('phrase', 'User Invite History: {invite_email} invite by {user_displayname}', array ('{invite_email}'=>$data->newsletter->email, '{user_displayname}'=>$data->user->displayname));
+		}
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
+		));
+	}
+
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id) 
+	{
+		$model=$this->loadModel($id);
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+
+		$pageTitle = Yii::t('phrase', 'Detail Invite History: {invite_email} invite by Guest', array('{invite_email}'=>$model->invite->newsletter->email));
+		if($model->invite->user_id)
+			$pageTitle = Yii::t('phrase', 'Detail Invite History: {invite_email} invite by {user_displayname}', array ('{invite_email}'=>$model->invite->newsletter->email, '{user_displayname}'=>$model->invite->user->displayname));
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_view', array(
+			'model'=>$model,
 		));
 	}
 
@@ -131,7 +157,7 @@ class InviteController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-user-invite-history',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Invite History success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User invite history success deleted.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -141,9 +167,10 @@ class InviteController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by Guest', array('$invite_email'=>$model->invite->newsletter->email));
-		if($model->invite->user->displayname)
-			$pageTitle = Yii::t('phrase', 'Delete Invite History: $invite_email invite by $user_displayname', array ('$invite_email'=>$model->invite->newsletter->email, '$user_displayname'=>$model->invite->user->displayname));
+		$pageTitle = Yii::t('phrase', 'Delete Invite History: {invite_email} invite by Guest', array('{invite_email}'=>$model->invite->newsletter->email));
+		if($model->invite->user_id)
+			$pageTitle = Yii::t('phrase', 'Delete Invite History: {invite_email} invite by {user_displayname}', array ('{invite_email}'=>$model->invite->newsletter->email, '{user_displayname}'=>$model->invite->user->displayname));
+
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -174,4 +201,5 @@ class InviteController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

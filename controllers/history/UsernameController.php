@@ -99,7 +99,7 @@ class UsernameController extends Controller
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
-		$pageTitle = Yii::t('phrase', ''User History Usernames');
+		$pageTitle = Yii::t('phrase', 'User History Usernames');
 		if($user != null) {
 			$data = Users::model()->findByPk($user);
 			$pageTitle = Yii::t('phrase', 'History Usernames: $user_displayname level $level_name', array ('$user_displayname'=>$data->displayname,'$level_name'=>$data->level->title->message));

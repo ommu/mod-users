@@ -6,23 +6,21 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 18 August 2017, 16:27 WIB
+ * @modified date 24 July 2018, 05:33 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_user_invite_history".
  *
  * The followings are the available columns in table '_user_invite_history':
- * @property string $id
+ * @property integer $id
  * @property integer $expired
- * @property string $verify_day_left
- * @property string $verify_hour_left
+ * @property integer $verify_day_left
+ * @property integer $verify_hour_left
  */
-class ViewUserInviteHistory extends CActiveRecord
-{
-	public $defaultColumns = array();
-	public $templateColumns = array();
-	public $gridForbiddenColumn = array();
 
-	// Variable Search
+class ViewUserInviteHistory extends OActiveRecord
+{
+	public $gridForbiddenColumn = array();
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -60,9 +58,12 @@ class ViewUserInviteHistory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('expired', 'numerical', 'integerOnly'=>true),
+			array('id, expired, verify_day_left, verify_hour_left', 'numerical', 'integerOnly'=>true),
+			array('expired, verify_day_left, verify_hour_left', 'safe'),
+			array('expired', 'length', 'max'=>1),
 			array('id', 'length', 'max'=>11),
 			array('verify_day_left, verify_hour_left', 'length', 'max'=>21),
+			// array('id', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, expired, verify_day_left, verify_hour_left', 'safe', 'on'=>'search'),
@@ -110,11 +111,10 @@ class ViewUserInviteHistory extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
-		$criteria->compare('t.id', strtolower($this->id), true);
+		$criteria->compare('t.id', $this->id);
 		$criteria->compare('t.expired', $this->expired);
-		$criteria->compare('t.verify_day_left', strtolower($this->verify_day_left), true);
-		$criteria->compare('t.verify_hour_left', strtolower($this->verify_hour_left), true);
+		$criteria->compare('t.verify_day_left', $this->verify_day_left);
+		$criteria->compare('t.verify_hour_left', $this->verify_hour_left);
 
 		if(!Yii::app()->getRequest()->getParam('ViewUserInviteHistory_sort'))
 			$criteria->order = 't.id DESC';
@@ -122,73 +122,9 @@ class ViewUserInviteHistory extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
-			'htmlOptions' => array(
-				'class' => 'center',
-			),
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -230,7 +166,7 @@ class ViewUserInviteHistory extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -238,15 +174,14 @@ class ViewUserInviteHistory extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
 	}
-
 }

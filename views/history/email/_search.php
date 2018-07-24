@@ -20,6 +20,12 @@
 )); ?>
 	<ul>
 		<li>
+			<?php echo $model->getAttributeLabel('level_search'); ?>
+			<?php $userlevel = UserLevel::getUserLevel();
+			echo $form->textField($model, 'level_search', $userlevel, array('prompt'=>'', 'class'=>'form-control')); ?>
+		</li>
+		
+		<li>
 			<?php echo $model->getAttributeLabel('user_search'); ?>
 			<?php echo $form->textField($model, 'user_search', array('class'=>'form-control')); ?>
 		</li>

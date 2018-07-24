@@ -9,20 +9,21 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 5 August 2017, 19:31 WIB
+ * @modified date 24 July 2018, 06:41 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 	$this->breadcrumbs=array(
 		'User Invite Histories'=>array('manage'),
+		$model->invite->displayname=>array('view','id'=>$model->id),
 		'Delete',
 	);
 ?>
 
-<?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
+<?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'user-invite-history-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 
 	<div class="dialog-content">

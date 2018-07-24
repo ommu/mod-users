@@ -9,6 +9,7 @@
  * TOC :
  *	Index
  *	Manage
+ *	View
  *	Delete
  *
  *	LoadModel
@@ -17,6 +18,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
+ * @modified date 24 July 2018, 06:42 WIB
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -66,7 +68,7 @@ class SubscribeController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','delete'),
+				'actions'=>array('index','manage','view','delete'),
 				'users'=>array('@'),
 				'expression'=>'Yii::app()->user->level == 1',
 			),
@@ -75,7 +77,7 @@ class SubscribeController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -89,30 +91,52 @@ class SubscribeController extends Controller
 	 */
 	public function actionManage($newsletter=null) 
 	{
-		$pageTitle = Yii::t('phrase', 'History Subscribe/Unsubscribe');
-		if($newsletter != null) {
-			$data = UserNewsletter::model()->findByPk($newsletter);
-			$pageTitle = Yii::t('phrase', 'History Subscribe/Unsubscribe: $newsletter_email', array ('$newsletter_email'=>$data->email));
-			if($data->displayname)
-				$pageTitle = Yii::t('phrase', 'History Subscribe/Unsubscribe: $newsletter_displayname ($newsletter_email)', array ('$newsletter_displayname'=>$data->displayname, '$newsletter_email'=>$data->email));
-			if($data->user_id)
-				$pageTitle = Yii::t('phrase', 'History Subscribe/Unsubscribe: $newsletter_displayname ($newsletter_email)', array ('$newsletter_displayname'=>$data->user->displayname, '$newsletter_email'=>$data->user->email));
-		}
-		
 		$model=new UserNewsletterHistory('search');
 		$model->unsetAttributes();	// clear any default values
-		if(isset($_GET['UserNewsletterHistory'])) {
-			$model->attributes=$_GET['UserNewsletterHistory'];
-		}
+		$UserNewsletterHistory = Yii::app()->getRequest()->getParam('UserNewsletterHistory');
+		if($UserNewsletterHistory)
+			$model->attributes=$UserNewsletterHistory;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
+		$pageTitle = Yii::t('phrase', 'User Newsletter History');
+		if($newsletter != null) {
+			$data = UserNewsletter::model()->findByPk($newsletter);
+			$pageTitle = Yii::t('phrase', 'User Newsletter History: {newsletter_email}', array ('{newsletter_email}'=>$data->email));
+			if($data->user_id)
+				$pageTitle = Yii::t('phrase', 'User Newsletter History: {newsletter_displayname} ({newsletter_email})', array ('{newsletter_displayname}'=>$data->user->displayname, '{newsletter_email}'=>$data->user->email));
+		}
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage', array(
 			'model'=>$model,
 			'columns' => $columns,
+		));
+	}
+
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id) 
+	{
+		$model=$this->loadModel($id);
+
+		$this->dialogDetail = true;
+		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
+		$this->dialogWidth = 600;
+		
+		$pageTitle = Yii::t('phrase', 'Detail Newsletter History: {newsletter_email}', array ('{newsletter_email}'=>$model->newsletter->email));
+		if($model->newsletter->user_id)
+			$pageTitle = Yii::t('phrase', 'Detail Newsletter History: {newsletter_displayname} ({newsletter_email})', array ('{newsletter_displayname}'=>$model->newsletter->user->displayname, '{newsletter_email}'=>$model->newsletter->user->email));
+
+		$this->pageTitle = $pageTitle;
+		$this->pageDescription = '';
+		$this->pageMeta = '';
+		$this->render('admin_view', array(
+			'model'=>$model,
 		));
 	}
 
@@ -132,7 +156,7 @@ class SubscribeController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-user-newsletter-history',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'History Subscribe/Unsubscribe success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter history success deleted.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -142,11 +166,9 @@ class SubscribeController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 		
-		$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_email', array ('$newsletter_email'=>$model->newsletter->email));
-		if($model->newsletter->displayname)
-			$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_displayname ($newsletter_email)', array ('$newsletter_displayname'=>$model->newsletter->displayname, '$newsletter_email'=>$model->newsletter->email));
+		$pageTitle = Yii::t('phrase', 'Delete Newsletter History: {newsletter_email}', array ('{newsletter_email}'=>$model->newsletter->email));
 		if($model->newsletter->user_id)
-			$pageTitle = Yii::t('phrase', 'Delete History Subscribe/Unsubscribe: $newsletter_displayname ($newsletter_email)', array ('$newsletter_displayname'=>$model->newsletter->user->displayname, '$newsletter_email'=>$model->newsletter->user->email));
+			$pageTitle = Yii::t('phrase', 'Delete Newsletter History: {newsletter_displayname} ({newsletter_email})', array ('{newsletter_displayname}'=>$model->newsletter->user->displayname, '{newsletter_email}'=>$model->newsletter->user->email));
 
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
@@ -178,4 +200,5 @@ class SubscribeController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }
