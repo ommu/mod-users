@@ -300,7 +300,7 @@ class UserNewsletter extends OActiveRecord
 			);
 			$this->templateColumns['invite_search'] = array(
 				'name' => 'invite_search',
-				'value' => 'CHtml::link($data->view->invites ? $data->view->invites : 0, Yii::app()->controller->createUrl("o/invite/manage", array("newsletter"=>$data->newsletter_id)))',
+				'value' => 'CHtml::link($data->view->invites ? $data->view->invites : 0, Yii::app()->controller->createUrl(\'o/invite/manage\', array("newsletter"=>$data->newsletter_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -392,8 +392,6 @@ class UserNewsletter extends OActiveRecord
 	 */
 	protected function beforeValidate() 
 	{
-		$controller = strtolower(Yii::app()->controller->id);
-		
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				$this->email_i = strtolower($this->email_i);
@@ -410,7 +408,7 @@ class UserNewsletter extends OActiveRecord
 				}
 				if($this->subscribe_id == null)
 					$this->subscribe_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
-				
+
 			} else
 				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
@@ -422,7 +420,8 @@ class UserNewsletter extends OActiveRecord
 	/**
 	 * before save attributes
 	 */
-	protected function beforeSave() {
+	protected function beforeSave() 
+	{
 		if(parent::beforeSave()) {
 			$this->email = strtolower($this->email);
 		}

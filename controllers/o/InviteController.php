@@ -11,8 +11,8 @@
  *	Manage
  *	Add
  *	View
- *	Runaction
  *	Delete
+ *	Runaction
  *	Publish
  *
  *	LoadModel
@@ -21,6 +21,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
+ * @modified date 24 July 2018, 09:36 WIB
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -70,7 +71,7 @@ class InviteController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','add','view','runaction','delete','publish'),
+				'actions'=>array('index','manage','add','view','delete','runaction','publish'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -79,7 +80,7 @@ class InviteController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -93,20 +94,20 @@ class InviteController extends Controller
 	 */
 	public function actionManage($user=null) 
 	{
-		$pageTitle = Yii::t('phrase', 'User Invites');
-		if($user != null) {
-			$data = Users::model()->findByPk($user);
-			$pageTitle = Yii::t('phrase', 'User Invite: by $user_displayname', array ('$user_displayname'=>$data->displayname));
-		}
-		
 		$model=new UserInvites('search');
 		$model->unsetAttributes();	// clear any default values
-		if(isset($_GET['UserInvites'])) {
-			$model->attributes=$_GET['UserInvites'];
-		}
+		$UserInvites = Yii::app()->getRequest()->getParam('UserInvites');
+		if($UserInvites)
+			$model->attributes=$UserInvites;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
+		$pageTitle = Yii::t('phrase', 'User Invites');
+		if($user != null) {
+			$data = Users::model()->findByPk($user);
+			$pageTitle = Yii::t('phrase', 'User Invite: by {user_displayname}', array ('{user_displayname}'=>$data->displayname));
+		}
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -115,7 +116,7 @@ class InviteController extends Controller
 			'columns' => $columns,
 		));
 	}
-	
+
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -129,61 +130,47 @@ class InviteController extends Controller
 
 		if(isset($_POST['UserInvites'])) {
 			$model->attributes=$_POST['UserInvites'];
-			if($model->multiple_email_i == 0)
-				$model->scenario = 'singleEmailForm';
-				
+
+			$email_i = $this->formatFileType($model->email_i);
 			$result = array();
-			
+
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
 
 			} else {
 				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
-					if($model->multiple_email_i == 1) {
-						if($model->validate()) {
-							$email_i = Utility::formatFileType($model->email_i);
-							$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
+					if($model->validate()) {
+						$user_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
+						if(count($email_i) > 1) {
 							foreach ($email_i as $email) {
 								$condition = UserInvites::insertInvite($email, $user_id);
 								if($condition == 0)
-									$result[] = Yii::t('phrase', '$email (skip)', array('$email'=>$email));
+									$result[] = Yii::t('phrase', '{email} (skip)', array('{email}'=>$email));
 								else if($condition == 1)
-									$result[] = Yii::t('phrase', '$email (success)', array('$email'=>$email));
+									$result[] = Yii::t('phrase', '{email} (success)', array('{email}'=>$email));
 								else if($condition == 2)
-									$result[] = Yii::t('phrase', '$email (error)', array('$email'=>$email));
+									$result[] = Yii::t('phrase', '{email} (error)', array('{email}'=>$email));
 							}
 							echo CJSON::encode(array(
 								'type' => 5,
 								'get' => Yii::app()->controller->createUrl('manage'),
 								'id' => 'partial-user-invites',
-								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Invite User $result success created.', array('$result'=>Utility::formatFileType($result, false))).'</strong></div>',
+								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User invite success created.<br/>{result}', array('{result}'=>$this->formatFileType($result, false, '<br/>'))).'</strong></div>',
 							));
-						} else
-							print_r($model->getErrors());
-
-					} else {
-						if($model->validate()) {
-							$invite = UserInvites::model()->with('newsletter')->find(array(
-								'select' => 't.invite_id, t.invites',
-								'condition' => 't.publish = :publish AND t.user_id = :user AND newsletter.email = :email',
-								'params' => array(
-									':publish' => '1',
-									':user' => !Yii::app()->user->isGuest ? Yii::app()->user->id : '0',
-									':email' => strtolower($model->email_i),
-								),
-							));
-							if(($invite == null && $model->save()) || ($invite != null && UserInvites::model()->updateByPk($invite->invite_id, array('code'=>UserInvites::getUniqueCode(), 'invites'=>$invite->invites+1, 'invite_ip'=>$_SERVER['REMOTE_ADDR'])))) {
+	
+						} else {
+							if(UserInvites::insertInvite($model->email_i, $user_id) == 1) {
 								echo CJSON::encode(array(
 									'type' => 5,
 									'get' => Yii::app()->controller->createUrl('manage'),
 									'id' => 'partial-user-invites',
-									'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Invite User success.').'</strong></div>',
+									'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User invite success created.').'</strong></div>',
 								));
 							}
-						} else
-							print_r($model->getErrors());
-					}
+						}
+					} else
+						print_r($model->getErrors());
 				}
 			}
 			Yii::app()->end();
@@ -192,15 +179,15 @@ class InviteController extends Controller
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
-		
-		$this->pageTitle = Yii::t('phrase', 'Invite User');
+
+		$this->pageTitle = Yii::t('phrase', 'Create Invite');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
-	
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -208,14 +195,14 @@ class InviteController extends Controller
 	public function actionView($id) 
 	{
 		$model=$this->loadModel($id);
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
 		
-		$pageTitle = Yii::t('phrase', 'View Invite: $newsletter_email by Guest', array('$newsletter_email'=>$model->newsletter->email));
+		$pageTitle = Yii::t('phrase', 'Detail Invite: {newsletter_email} by Guest', array('{newsletter_email}'=>$model->newsletter->email));
 		if($model->user_id)
-			$pageTitle = Yii::t('phrase', 'View Invite: $newsletter_email by $inviter_displayname', array('$newsletter_email'=>$model->newsletter->email, '$inviter_displayname'=>$model->user->displayname));
+			$pageTitle = Yii::t('phrase', 'Detail Invite: {newsletter_email} by {inviter_displayname}', array('{newsletter_email}'=>$model->newsletter->email, '{inviter_displayname}'=>$model->user->displayname));
 
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
@@ -223,42 +210,6 @@ class InviteController extends Controller
 		$this->render('admin_view', array(
 			'model'=>$model,
 		));
-	}
-
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionRunaction() {
-		$id       = $_POST['trash_id'];
-		$criteria = null;
-		$actions  = Yii::app()->getRequest()->getParam('action');
-
-		if(count($id) > 0) {
-			$criteria = new CDbCriteria;
-			$criteria->addInCondition('invite_id', $id);
-
-			if($actions == 'publish') {
-				UserInvites::model()->updateAll(array(
-					'publish' => 1,
-				),$criteria);
-			} elseif($actions == 'unpublish') {
-				UserInvites::model()->updateAll(array(
-					'publish' => 0,
-				),$criteria);
-			} elseif($actions == 'trash') {
-				UserInvites::model()->updateAll(array(
-					'publish' => 2,
-				),$criteria);
-			} elseif($actions == 'delete') {
-				UserInvites::model()->deleteAll($criteria);
-			}
-		}
-
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!Yii::app()->getRequest()->getParam('ajax')) {
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
-		}
 	}
 
 	/**
@@ -270,10 +221,6 @@ class InviteController extends Controller
 	{
 		$model=$this->loadModel($id);
 		
-		$pageTitle = Yii::t('phrase', 'Delete Invite: $newsletter_email by Guest', array('$newsletter_email'=>$model->newsletter->email));
-		if($model->user_id)
-			$pageTitle = Yii::t('phrase', 'Delete Invite: $newsletter_email by $inviter_displayname', array('$newsletter_email'=>$model->newsletter->email, '$inviter_displayname'=>$model->user->displayname));
-		
 		if(Yii::app()->request->isPostRequest) {
 			// we only allow deletion via POST request
 			$model->publish = 2;
@@ -284,7 +231,7 @@ class InviteController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-user-invites',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Invite success deleted.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User invite success deleted.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -294,6 +241,10 @@ class InviteController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
+		$pageTitle = Yii::t('phrase', 'Delete Invite: {newsletter_email} by Guest', array('{newsletter_email}'=>$model->newsletter->email));
+		if($model->user_id)
+			$pageTitle = Yii::t('phrase', 'Delete Invite: {newsletter_email} by {inviter_displayname}', array('{newsletter_email}'=>$model->newsletter->email, '{inviter_displayname}'=>$model->user->displayname));
+		
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
 		$this->pageMeta = '';
@@ -301,20 +252,54 @@ class InviteController extends Controller
 	}
 
 	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionRunaction() 
+	{
+		$id       = $_POST['trash_id'];
+		$criteria = null;
+		$actions  = Yii::app()->getRequest()->getParam('action');
+
+		if(count($id) > 0) {
+			$criteria = new CDbCriteria;
+			$criteria->addInCondition('invite_id', $id);
+
+			if($actions == 'publish') {
+				UserInvites::model()->updateAll(array(
+					'publish' => 1,
+				), $criteria);
+			} elseif($actions == 'unpublish') {
+				UserInvites::model()->updateAll(array(
+					'publish' => 0,
+				), $criteria);
+			} elseif($actions == 'trash') {
+				UserInvites::model()->updateAll(array(
+					'publish' => 2,
+				), $criteria);
+			} elseif($actions == 'delete') {
+				UserInvites::model()->deleteAll($criteria);
+			}
+		}
+
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!Yii::app()->getRequest()->getParam('ajax'))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('manage'));
+	}
+
+	/**
+	 * Publish a particular model.
+	 * If publish is successful, the browser will be redirected to the 'manage' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
 	public function actionPublish($id) 
 	{
 		$model=$this->loadModel($id);
-		
 		$title = $model->publish == 1 ? Yii::t('phrase', 'Unpublish') : Yii::t('phrase', 'Publish');
 		$replace = $model->publish == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			//change value active or publish
+			// we only allow publish via POST request
 			$model->publish = $replace;
 			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
@@ -323,7 +308,7 @@ class InviteController extends Controller
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
 					'id' => 'partial-user-invites',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User Invite success updated.').'</strong></div>',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User invite success updated.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -332,10 +317,10 @@ class InviteController extends Controller
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
-	
-		$pageTitle = Yii::t('phrase', '$title Invite: $newsletter_email by Guest', array('$title'=>$title, '$newsletter_email'=>$model->newsletter->email));
+
+		$pageTitle = Yii::t('phrase', '{title} Invite: {newsletter_email} by Guest', array('{title}'=>$title, '{newsletter_email}'=>$model->newsletter->email));
 		if($model->user_id)
-			$pageTitle = Yii::t('phrase', '$title Invite: $newsletter_email by $inviter_displayname', array('$title'=>$title, '$newsletter_email'=>$model->newsletter->email, '$inviter_displayname'=>$model->user->displayname));
+			$pageTitle = Yii::t('phrase', '{title} Invite: {newsletter_email} by {inviter_displayname}', array('{title}'=>$title, '{newsletter_email}'=>$model->newsletter->email, '{inviter_displayname}'=>$model->user->displayname));
 
 		$this->pageTitle = $pageTitle;
 		$this->pageDescription = '';
@@ -345,7 +330,7 @@ class InviteController extends Controller
 			'model'=>$model,
 		));
 	}
-
+	
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -370,4 +355,5 @@ class InviteController extends Controller
 			Yii::app()->end();
 		}
 	}
+
 }

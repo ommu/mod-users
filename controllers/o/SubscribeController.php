@@ -133,8 +133,8 @@ class SubscribeController extends Controller
 
 			} else {
 				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
-					if(count($email_i) > 1) {
-						if($model->validate()) {
+					if($model->validate()) {
+						if(count($email_i) > 1) {
 							foreach ($email_i as $email) {
 								$condition = UserNewsletter::insertNewsletter($email);
 								if($condition == 0)
@@ -148,22 +148,22 @@ class SubscribeController extends Controller
 								'type' => 5,
 								'get' => Yii::app()->controller->createUrl('manage'),
 								'id' => 'partial-support-newsletter',
-								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter {result} success created.', array('{result}'=>Utility::formatFileType($result, false))).'</strong></div>',
+								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter success created.<br/>{result}', array('{result}'=>$this->formatFileType($result, false, '<br/>'))).'</strong></div>',
 							));
-						} else
-							print_r($model->getErrors());
-
-					} else {
-						if($model->save()) {
-							echo CJSON::encode(array(
-								'type' => 5,
-								'get' => Yii::app()->controller->createUrl('manage'),
-								'id' => 'partial-user-newsletter',
-								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter success created.').'</strong></div>',
-							));
-						} else
-							print_r($model->getErrors());
-					}
+	
+						} else {
+							if($model->save()) {
+								echo CJSON::encode(array(
+									'type' => 5,
+									'get' => Yii::app()->controller->createUrl('manage'),
+									'id' => 'partial-user-newsletter',
+									'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter success created.').'</strong></div>',
+								));
+							} else
+								print_r($model->getErrors());
+						}
+					} else
+						print_r($model->getErrors());
 				}
 			}
 			Yii::app()->end();
