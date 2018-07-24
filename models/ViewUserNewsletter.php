@@ -6,29 +6,29 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 3 August 2017, 14:09 WIB
+ * @modified date 24 July 2018, 05:32 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_user_newsletter".
  *
  * The followings are the available columns in table '_user_newsletter':
- * @property string $newsletter_id
+ * @property integer $newsletter_id
  * @property integer $register
  * @property string $invite_by
  * @property string $invites
  * @property string $invite_all
  * @property string $invite_users
- * @property string $invite_user_all
+ * @property integer $invite_user_all
  * @property string $first_invite_date
- * @property string $first_invite_user_id
+ * @property integer $first_invite_user_id
  * @property string $last_invite_date
- * @property string $last_invite_user_id
+ * @property integer $last_invite_user_id
  */
-class ViewUserNewsletter extends CActiveRecord
+
+class ViewUserNewsletter extends OActiveRecord
 {
 	use GridViewTrait;
 
-	public $defaultColumns = array();
-	public $templateColumns = array();
 	public $gridForbiddenColumn = array();
 
 	/**
@@ -67,13 +67,14 @@ class ViewUserNewsletter extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('register', 'numerical', 'integerOnly'=>true),
-			array('newsletter_id, first_invite_user_id, last_invite_user_id', 'length', 'max'=>11),
+			array('newsletter_id, register, invite_user_all, first_invite_user_id, last_invite_user_id', 'numerical', 'integerOnly'=>true),
+			array('register, first_invite_user_id, last_invite_user_id', 'safe'),
+			array('register', 'length', 'max'=>1),
 			array('invite_by', 'length', 'max'=>5),
-			array('invites, invite_all', 'length', 'max'=>32),
-			array('invite_users', 'length', 'max'=>23),
+			array('newsletter_id, first_invite_user_id, last_invite_user_id', 'length', 'max'=>11),
 			array('invite_user_all', 'length', 'max'=>21),
-			array('first_invite_date, last_invite_date', 'safe'),
+			array('invite_users', 'length', 'max'=>23),
+			array('invites, invite_all', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('newsletter_id, register, invite_by, invites, invite_all, invite_users, invite_user_all, first_invite_date, first_invite_user_id, last_invite_date, last_invite_user_id', 'safe', 'on'=>'search'),
@@ -88,8 +89,8 @@ class ViewUserNewsletter extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'first_user' => array(self::BELONGS_TO, 'Users', 'first_invite_user_id'),
-			'last_user' => array(self::BELONGS_TO, 'Users', 'last_invite_user_id'),
+			'firstUser' => array(self::BELONGS_TO, 'Users', 'first_invite_user_id'),
+			'lastUser' => array(self::BELONGS_TO, 'Users', 'last_invite_user_id'),
 		);
 	}
 
@@ -130,7 +131,6 @@ class ViewUserNewsletter extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
 		$criteria->compare('t.newsletter_id', $this->newsletter_id);
 		$criteria->compare('t.register', $this->register);
 		$criteria->compare('t.invite_by', strtolower($this->invite_by), true);
@@ -151,103 +151,78 @@ class ViewUserNewsletter extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		} else {
-			$this->defaultColumns[] = 'newsletter_id';
-			$this->defaultColumns[] = 'register';
-			$this->defaultColumns[] = 'invite_by';
-			$this->defaultColumns[] = 'invites';
-			$this->defaultColumns[] = 'invite_all';
-			$this->defaultColumns[] = 'invite_users';
-			$this->defaultColumns[] = 'invite_user_all';
-			$this->defaultColumns[] = 'first_invite_date';
-			$this->defaultColumns[] = 'first_invite_user_id';
-			$this->defaultColumns[] = 'last_invite_date';
-			$this->defaultColumns[] = 'last_invite_user_id';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->templateColumns['newsletter_id'] = array(
 				'name' => 'newsletter_id',
 				'value' => '$data->newsletter_id',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['register'] = array(
 				'name' => 'register',
 				'value' => '$data->register',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['invite_by'] = array(
 				'name' => 'invite_by',
 				'value' => '$data->invite_by',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['invites'] = array(
 				'name' => 'invites',
 				'value' => '$data->invites',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['invite_all'] = array(
 				'name' => 'invite_all',
 				'value' => '$data->invite_all',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['invite_users'] = array(
 				'name' => 'invite_users',
 				'value' => '$data->invite_users',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['invite_user_all'] = array(
 				'name' => 'invite_user_all',
 				'value' => '$data->invite_user_all',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['first_invite_date'] = array(
 				'name' => 'first_invite_date',
-				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->first_invite_date, \'medium\', false)',
+				'value' => '!in_array($data->first_invite_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->first_invite_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'filter' => $this->filterDatepicker($this, 'first_invite_date'),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['first_invite_user_id'] = array(
 				'name' => 'first_invite_user_id',
 				'value' => '$data->first_invite_user_id',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['last_invite_date'] = array(
 				'name' => 'last_invite_date',
-				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->last_invite_date, \'medium\', false)',
+				'value' => '!in_array($data->last_invite_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->last_invite_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'filter' => $this->filterDatepicker($this, 'last_invite_date'),
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['last_invite_user_id'] = array(
 				'name' => 'last_invite_user_id',
 				'value' => '$data->last_invite_user_id',
 			);
@@ -256,7 +231,7 @@ class ViewUserNewsletter extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -264,15 +239,14 @@ class ViewUserNewsletter extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
 	}
-
 }

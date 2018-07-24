@@ -400,7 +400,7 @@ class UserVerify extends OActiveRecord
 			if(!file_exists($verify_file))
 				$verify_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$verify_template.'.php';
 			$verify_message = Utility::getEmailTemplate(str_ireplace($verify_search, $verify_replace, file_get_contents($verify_file)));
-			Mailer::send($this->user->email, $this->user->displayname, $verify_title, $verify_message);
+			//Mailer::send($this->user->email, $this->user->displayname, $verify_title, $verify_message);
 		}
 	}
 

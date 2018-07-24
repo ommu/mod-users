@@ -1,7 +1,7 @@
 <?php
 /**
- * NewsletterController
- * @var $this NewsletterController
+ * SubscribeController
+ * @var $this SubscribeController
  * @var $model UserNewsletter
  * @var $form CActiveForm
  *
@@ -22,7 +22,7 @@
  *----------------------------------------------------------------------------------------------------------
  */
 
-class NewsletterController extends Controller
+class SubscribeController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning

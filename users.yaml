@@ -32,7 +32,7 @@ plugin_menu		:
 		submenu :
 			- urlTitle: Subscribes
 				urlRules: {siteType: "0,1", userLevel: "1,2"}
-				urlPath: {url: o/newsletter/manage, attr: -, icon: -}
+				urlPath: {url: o/subscribe/manage, attr: -, icon: -}
 			- urlTitle: Invites
 				urlRules: {siteType: 1, userLevel: "1,2"}
 				urlPath: {url: o/invite/manage, attr: -, icon: -}
@@ -114,9 +114,9 @@ content_menu	:
 		urlRules: {users, o/level, "edit,view,user,message", siteType: 1, userLevel: 1}
 		urlPath: {url: view, attr: id=$_GET*id, icon: -}
 
-# controller o/newsletter
+# controller o/subscribe
 	- urlTitle: Add Subscribe
-		urlRules: {users, o/newsletter, manage, siteType: "0,1", userLevel: "1,2"}
+		urlRules: {users, o/subscribe, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
         
 # controller o/invite
@@ -162,7 +162,7 @@ content_menu	:
 # controller history/subscribe
 	- urlTitle: Back to Subscribes
 		urlRules: {users, history/subscribe, manage, siteType: 1, userLevel: 1}
-		urlPath: {url: o/newsletter/manage, attr: -, icon: -}
+		urlPath: {url: o/subscribe/manage, attr: -, icon: -}
 		
 # controller o/setting
 	- urlTitle: User Manual Book

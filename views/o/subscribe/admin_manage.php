@@ -1,38 +1,33 @@
 <?php
 /**
- * User Newsletter (user-newsletter)
+ * User Newsletters (user-newsletter)
  * @var $this SubscribeController
  * @var $model UserNewsletter
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
+ * @modified date 24 July 2018, 09:37 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
- 
+
 	$this->breadcrumbs=array(
-		'Support Newsletters'=>array('manage'),
+		'User Newsletters'=>array('manage'),
 		'Manage',
 	);
 	$this->menu=array(
 		array(
-			'label' => Yii::t('phrase', 'Filter'), 
+			'label' => Yii::t('phrase', 'Filter'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'search-button'),
-			'linkOptions' => array(
-				'title' => Yii::t('phrase', 'Filter'),
-				'off_address' => '',
-			),
+			'linkOptions' => array('title' => Yii::t('phrase', 'Filter')),
 		),
 		array(
-			'label' => Yii::t('phrase', 'Grid Options'), 
+			'label' => Yii::t('phrase', 'Grid Options'),
 			'url' => array('javascript:void(0);'),
 			'itemOptions' => array('class' => 'grid-button'),
-			'linkOptions' => array(
-				'title' => Yii::t('phrase', 'Grid Options'),
-				'off_address' => '',
-			),
+			'linkOptions' => array('title' => Yii::t('phrase', 'Grid Options')),
 		),
 	);
 
@@ -50,19 +45,20 @@
 <div class="grid-form">
 <?php $this->renderPartial('_option_form', array(
 	'model'=>$model,
+	'gridColumns'=>$this->activeDefaultColumns($columns),
 )); ?>
 </div>
 <?php //end.Grid Option ?>
 
-<div id="partial-support-newsletter">
+<div id="partial-user-newsletter">
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
 	<?php
-		if(Yii::app()->user->hasFlash('error'))
-				echo $this->flashMessage(Yii::app()->user->getFlash('error'), 'error');
-			if(Yii::app()->user->hasFlash('success'))
-				echo $this->flashMessage(Yii::app()->user->getFlash('success'), 'success');
-		?>
+	if(Yii::app()->user->hasFlash('error'))
+		echo $this->flashMessage(Yii::app()->user->getFlash('error'), 'error');
+	if(Yii::app()->user->hasFlash('success'))
+		echo $this->flashMessage(Yii::app()->user->getFlash('success'), 'success');
+	?>
 	</div>
 	<?php //begin.Messages ?>
 
@@ -75,32 +71,32 @@
 				'class'=>'CButtonColumn',
 				'buttons' => array(
 					'view' => array(
-						'label' => 'view',
+						'label' => Yii::t('phrase', 'Detail User Newsletter'),
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
-							'class' => 'view'
+							'class' => 'view',
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'view\', array(\'id\'=>$data->primaryKey))'),
 					'update' => array(
-						'label' => 'update',
+						'label' => Yii::t('phrase', 'Update User Newsletter'),
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'update',
 						),
 						'url' => 'Yii::app()->controller->createUrl(\'edit\', array(\'id\'=>$data->primaryKey))'),
 					'delete' => array(
-						'label' => 'delete',
+						'label' => Yii::t('phrase', 'Delete User Newsletter'),
 						'imageUrl' => Yii::app()->params['grid-view']['buttonImageUrl'],
 						'options' => array(
 							'class' => 'delete',
 						),
-						'url' => 'Yii::app()->controller->createUrl(\'delete\', array(\'id\'=>$data->primaryKey))')
+						'url' => 'Yii::app()->controller->createUrl(\'delete\', array(\'id\'=>$data->primaryKey))'),
 				),
 				'template' => '{view}|{delete}',
 			));
 
 			$this->widget('application.libraries.yii-traits.system.OGridView', array(
-				'id'=>'support-newsletter-grid',
+				'id'=>'user-newsletter-grid',
 				'dataProvider'=>$model->search(),
 				'filter'=>$model,
 				'columns'=>$columnData,

@@ -12,7 +12,7 @@
  *	Add
  *	View
  *	Delete
- *	Subscribe
+ *	Status
  *
  *	LoadModel
  *	performAjaxValidation
@@ -20,6 +20,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
+ * @modified date 24 July 2018, 12:25 WIB
  * @link https://github.com/ommu/mod-users
  *
  *----------------------------------------------------------------------------------------------------------
@@ -69,7 +70,7 @@ class SubscribeController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','add','view','delete','subscribe'),
+				'actions'=>array('index','manage','add','view','delete','status'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -78,7 +79,7 @@ class SubscribeController extends Controller
 			),
 		);
 	}
-	
+
 	/**
 	 * Lists all models.
 	 */
@@ -94,13 +95,13 @@ class SubscribeController extends Controller
 	{
 		$model=new UserNewsletter('search');
 		$model->unsetAttributes();	// clear any default values
-		if(isset($_GET['UserNewsletter'])) {
-			$model->attributes=$_GET['UserNewsletter'];
-		}
+		$UserNewsletter = Yii::app()->getRequest()->getParam('UserNewsletter');
+		if($UserNewsletter)
+			$model->attributes=$UserNewsletter;
 
 		$columns = $model->getGridColumn($this->gridColumnTemp());
 
-		$this->pageTitle = Yii::t('phrase', 'Manage Subscribes');
+		$this->pageTitle = Yii::t('phrase', 'User Newsletters');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_manage', array(
@@ -110,7 +111,8 @@ class SubscribeController extends Controller
 	}
 
 	/**
-	 * Lists all models.
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionAdd() 
 	{
@@ -121,45 +123,43 @@ class SubscribeController extends Controller
 
 		if(isset($_POST['UserNewsletter'])) {
 			$model->attributes=$_POST['UserNewsletter'];
-			if($model->multiple_email_i == 0)
-				$model->scenario = 'singleEmailForm';
-			
+
+			$email_i = $this->formatFileType($model->email_i);
 			$result = array();
-			
+
 			$jsonError = CActiveForm::validate($model);
 			if(strlen($jsonError) > 2) {
 				echo $jsonError;
 
 			} else {
 				if(Yii::app()->getRequest()->getParam('enablesave') == 1) {
-					if($model->multiple_email_i == 1) {
+					if(count($email_i) > 1) {
 						if($model->validate()) {
-							$email_i = Utility::formatFileType($model->email_i);
 							foreach ($email_i as $email) {
 								$condition = UserNewsletter::insertNewsletter($email);
 								if($condition == 0)
-									$result[] = Yii::t('phrase', '$email (skip)', array('$email'=>$email));
+									$result[] = Yii::t('phrase', '{email} (skip)', array('{email}'=>$email));
 								else if($condition == 1)
-									$result[] = Yii::t('phrase', '$email (success)', array('$email'=>$email));
+									$result[] = Yii::t('phrase', '{email} (success)', array('{email}'=>$email));
 								else if($condition == 2)
-									$result[] = Yii::t('phrase', '$email (error)', array('$email'=>$email));
+									$result[] = Yii::t('phrase', '{email} (error)', array('{email}'=>$email));
 							}
 							echo CJSON::encode(array(
 								'type' => 5,
 								'get' => Yii::app()->controller->createUrl('manage'),
 								'id' => 'partial-support-newsletter',
-								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Newsletter $result success created.', array('$result'=>Utility::formatFileType($result, false))).'</strong></div>',
+								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter {result} success created.', array('{result}'=>Utility::formatFileType($result, false))).'</strong></div>',
 							));
 						} else
 							print_r($model->getErrors());
-						
+
 					} else {
 						if($model->save()) {
 							echo CJSON::encode(array(
 								'type' => 5,
 								'get' => Yii::app()->controller->createUrl('manage'),
-								'id' => 'partial-support-newsletter',
-								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Newsletter success created.').'</strong></div>',
+								'id' => 'partial-user-newsletter',
+								'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter success created.').'</strong></div>',
 							));
 						} else
 							print_r($model->getErrors());
@@ -170,17 +170,17 @@ class SubscribeController extends Controller
 		}
 
 		$this->dialogDetail = true;
-		$this->dialogWidth = 600;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
-		
-		$this->pageTitle = Yii::t('phrase', 'Add Subscribe');
+		$this->dialogWidth = 600;
+
+		$this->pageTitle = Yii::t('phrase', 'Create Newsletter');
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_add', array(
 			'model'=>$model,
 		));
 	}
-	
+
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -188,19 +188,19 @@ class SubscribeController extends Controller
 	public function actionView($id) 
 	{
 		$model=$this->loadModel($id);
-		
+
 		$this->dialogDetail = true;
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 600;
-		
-		$this->pageTitle = Yii::t('phrase', 'View Subscribe: $email_address', array('$email_address'=>$model->email));
+
+		$this->pageTitle = Yii::t('phrase', 'Detail Newsletter: {email}', array('{email}'=>$model->email));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_view', array(
 			'model'=>$model,
 		));
 	}
-	
+
 	/**
 	 * Deletes a particular model.
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
@@ -216,8 +216,8 @@ class SubscribeController extends Controller
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
-					'id' => 'partial-support-newsletter',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member newsletter success deleted.').'</strong></div>',
+					'id' => 'partial-user-newsletter',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter success deleted.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -227,27 +227,25 @@ class SubscribeController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', 'Delete Subscribe: $email_address', array('$email_address'=>$model->email));
+		$this->pageTitle = Yii::t('phrase', 'Delete Newsletter: {email}', array('{email}'=>$model->email));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_delete');
 	}
-	
+
 	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * Status a particular model.
+	 * If status is successful, the browser will be redirected to the 'manage' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionSubscribe($id) 
+	public function actionStatus($id) 
 	{
 		$model=$this->loadModel($id);
-		
-		$title = $model->status == 1 ? Yii::t('phrase', 'Unsubcribe') : Yii::t('phrase', 'Subcribe');
+		$title = $model->status == 1 ? Yii::t('phrase', 'Unsubscribe') : Yii::t('phrase', 'Subscribe');
 		$replace = $model->status == 1 ? 0 : 1;
 
 		if(Yii::app()->request->isPostRequest) {
-			// we only allow deletion via POST request
-			//change value active or publish
+			// we only allow status via POST request
 			$model->status = $replace;
 			$model->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 
@@ -255,8 +253,8 @@ class SubscribeController extends Controller
 				echo CJSON::encode(array(
 					'type' => 5,
 					'get' => Yii::app()->controller->createUrl('manage'),
-					'id' => 'partial-support-newsletter',
-					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'Member newsletter success updated.').'</strong></div>',
+					'id' => 'partial-user-newsletter',
+					'msg' => '<div class="errorSummary success"><strong>'.Yii::t('phrase', 'User newsletter success updated.').'</strong></div>',
 				));
 			}
 			Yii::app()->end();
@@ -266,7 +264,7 @@ class SubscribeController extends Controller
 		$this->dialogGroundUrl = Yii::app()->controller->createUrl('manage');
 		$this->dialogWidth = 350;
 
-		$this->pageTitle = Yii::t('phrase', '$title: $email_address', array('$title'=>$title, '$email_address'=>$model->email));
+		$this->pageTitle = Yii::t('phrase', '{title} Newsletter: {email}', array('{title}'=>$title, '{email}'=>$model->email));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
 		$this->render('admin_status', array(
@@ -274,7 +272,7 @@ class SubscribeController extends Controller
 			'model'=>$model,
 		));
 	}
-
+	
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
@@ -294,9 +292,10 @@ class SubscribeController extends Controller
 	 */
 	protected function performAjaxValidation($model) 
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='support-newsletter-form') {
+		if(isset($_POST['ajax']) && $_POST['ajax']==='user-newsletter-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
+
 }

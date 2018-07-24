@@ -395,7 +395,7 @@ class UserForgot extends OActiveRecord
 			if(!file_exists($forgot_file))
 				$forgot_file = YiiBase::getPathOfAlias('ommu.users.components.templates').'/'.$forgot_template.'.php';
 			$forgot_message = Utility::getEmailTemplate(str_ireplace($forgot_search, $forgot_replace, file_get_contents($forgot_file)));
-			Mailer::send($this->user->email, $this->user->displayname, $forgot_title, $forgot_message);
+			//Mailer::send($this->user->email, $this->user->displayname, $forgot_title, $forgot_message);
 		}
 	}
 
