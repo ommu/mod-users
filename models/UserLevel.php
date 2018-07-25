@@ -5,29 +5,19 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
+ * @modified date 25 July 2018, 11:48 WIB
  * @link https://github.com/ommu/mod-users
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "ommu_user_level".
  *
  * The followings are the available columns in table 'ommu_user_level':
  * @property integer $level_id
- * @property string $name
- * @property string $desc
+ * @property integer $name
+ * @property integer $desc
  * @property integer $default
  * @property integer $signup
  * @property integer $message_allow
- * @property integer $message_limit
+ * @property string $message_limit
  * @property integer $profile_block
  * @property integer $profile_search
  * @property string $profile_privacy
@@ -40,29 +30,52 @@
  * @property integer $profile_change
  * @property integer $profile_delete
  * @property integer $photo_allow
- * @property integer $photo_size
+ * @property string $photo_size
  * @property string $photo_exts
  * @property string $creation_date
- * @property string $creation_id
+ * @property integer $creation_id
  * @property string $modified_date
- * @property string $modified_id
+ * @property integer $modified_id
+ * @property string $slug
  *
  * The followings are the available model relations:
- * @property Users[] $Users
+ * @property ViewUserLevel $view
+ * @property Users[] $users
+ * @property SourceMessage $title
+ * @property SourceMessage $description
+ * @property Users $creation
+ * @property Users $modified
  */
-class UserLevel extends CActiveRecord
+
+class UserLevel extends OActiveRecord
 {
 	use UtilityTrait;
 	use GridViewTrait;
+	use FileTrait;
 
-	public $defaultColumns = array();
+	public $gridForbiddenColumn = array();
 	public $name_i;
 	public $desc_i;
-	
+	public $user_i;
+
 	// Variable Search
 	public $creation_search;
 	public $modified_search;
-	public $user_search;
+
+	/**
+	 * Behaviors for this model
+	 */
+	public function behaviors() 
+	{
+		return array(
+			'sluggable' => array(
+				'class'=>'ext.yii-sluggable.SluggableBehavior',
+				'columns' => array('title.message'),
+				'unique' => true,
+				'update' => true,
+			),
+		);
+	}
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -80,7 +93,8 @@ class UserLevel extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_user_level';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_user_level';
 	}
 
 	/**
@@ -91,19 +105,20 @@ class UserLevel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('
-				name_i, desc_i', 'required', 'on'=>'info'),
+			array('name_i, desc_i', 'required', 'on'=>'info'),
 			array('profile_block, profile_search, profile_privacy, profile_comments, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow, photo_size, photo_exts', 'required', 'on'=>'user'),
 			array('message_allow, message_limit', 'required', 'on'=>'message'),
-			array('default, signup, message_allow, profile_block, profile_search, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow', 'numerical', 'integerOnly'=>true),
+			array('name, desc, default, signup, message_allow, profile_block, profile_search, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow, creation_id, modified_id', 'numerical', 'integerOnly'=>true),
+			array('default, signup, message_allow, message_limit, profile_block, profile_search, profile_privacy, profile_comments, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow, photo_size, photo_exts', 'safe'),
 			array('name, desc, creation_id, modified_id', 'length', 'max'=>11),
-			array('
-				name_i', 'length', 'max'=>32),
-			array('', 'safe'),
+			array('slug, name_i', 'length', 'max'=>32),
+			array('desc_i', 'length', 'max'=>128),
+			// array('message_limit, profile_privacy, profile_comments, photo_size, photo_exts', 'serialize'),
+			// array('creation_date, modified_date', 'trigger'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('level_id, name, desc, default, signup, message_allow, message_limit, profile_block, profile_search, profile_privacy, profile_comments, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow, photo_size, photo_exts, creation_date, creation_id, modified_date, modified_id,
-				name_i, desc_i, creation_search, modified_search, user_search', 'safe', 'on'=>'search'),
+			array('level_id, name, desc, default, signup, message_allow, message_limit, profile_block, profile_search, profile_privacy, profile_comments, profile_style, profile_style_sample, profile_status, profile_invisible, profile_views, profile_change, profile_delete, photo_allow, photo_size, photo_exts, creation_date, creation_id, modified_date, modified_id, slug,
+				name_i, desc_i, user_i, creation_search, modified_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -116,11 +131,11 @@ class UserLevel extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'view' => array(self::BELONGS_TO, 'ViewUserLevel', 'level_id'),
+			'users' => array(self::HAS_MANY, 'Users', 'level_id'),
 			'title' => array(self::BELONGS_TO, 'SourceMessage', 'name'),
 			'description' => array(self::BELONGS_TO, 'SourceMessage', 'desc'),
 			'creation' => array(self::BELONGS_TO, 'Users', 'creation_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
-			'users' => array(self::HAS_MANY, 'Users', 'level_id'),
 		);
 	}
 
@@ -157,9 +172,9 @@ class UserLevel extends CActiveRecord
 			'modified_id' => Yii::t('attribute', 'Modified'),
 			'name_i' => Yii::t('attribute', 'Level'),
 			'desc_i' => Yii::t('attribute', 'Description'),
+			'user_i' => Yii::t('attribute', 'Users'),
 			'creation_search' => Yii::t('attribute', 'Creation'),
 			'modified_search' => Yii::t('attribute', 'Modified'),
-			'user_search' => Yii::t('attribute', 'Users'),
 		);
 	}
 
@@ -180,8 +195,6 @@ class UserLevel extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
-		// Custom Search
 		$criteria->with = array(
 			'view' => array(
 				'alias' => 'view',
@@ -207,42 +220,37 @@ class UserLevel extends CActiveRecord
 		$criteria->compare('t.level_id', $this->level_id);
 		$criteria->compare('t.name', $this->name);
 		$criteria->compare('t.desc', $this->desc);
-		$criteria->compare('t.default', $this->default);
-		$criteria->compare('t.signup', $this->signup);
-		$criteria->compare('t.message_allow', $this->message_allow);
+		$criteria->compare('t.default', Yii::app()->getRequest()->getParam('default') ? Yii::app()->getRequest()->getParam('default') : $this->default);
+		$criteria->compare('t.signup', Yii::app()->getRequest()->getParam('signup') ? Yii::app()->getRequest()->getParam('signup') : $this->signup);
+		$criteria->compare('t.message_allow', Yii::app()->getRequest()->getParam('message_allow') ? Yii::app()->getRequest()->getParam('message_allow') : $this->message_allow);
 		$criteria->compare('t.message_limit', strtolower($this->message_limit), true);
-		$criteria->compare('t.profile_block', $this->profile_block);
-		$criteria->compare('t.profile_search', $this->profile_search);
+		$criteria->compare('t.profile_block', Yii::app()->getRequest()->getParam('profile_block') ? Yii::app()->getRequest()->getParam('profile_block') : $this->profile_block);
+		$criteria->compare('t.profile_search', Yii::app()->getRequest()->getParam('profile_search') ? Yii::app()->getRequest()->getParam('profile_search') : $this->profile_search);
 		$criteria->compare('t.profile_privacy', strtolower($this->profile_privacy), true);
 		$criteria->compare('t.profile_comments', strtolower($this->profile_comments), true);
-		$criteria->compare('t.profile_style', $this->profile_style);
-		$criteria->compare('t.profile_style_sample', $this->profile_style_sample);
-		$criteria->compare('t.profile_status', $this->profile_status);
-		$criteria->compare('t.profile_invisible', $this->profile_invisible);
-		$criteria->compare('t.profile_views', $this->profile_views);
-		$criteria->compare('t.profile_change', $this->profile_change);
-		$criteria->compare('t.profile_delete', $this->profile_delete);
-		$criteria->compare('t.photo_allow', $this->photo_allow);
+		$criteria->compare('t.profile_style', Yii::app()->getRequest()->getParam('profile_style') ? Yii::app()->getRequest()->getParam('profile_style') : $this->profile_style);
+		$criteria->compare('t.profile_style_sample', Yii::app()->getRequest()->getParam('profile_style_sample') ? Yii::app()->getRequest()->getParam('profile_style_sample') : $this->profile_style_sample);
+		$criteria->compare('t.profile_status', Yii::app()->getRequest()->getParam('profile_status') ? Yii::app()->getRequest()->getParam('profile_status') : $this->profile_status);
+		$criteria->compare('t.profile_invisible', Yii::app()->getRequest()->getParam('profile_invisible') ? Yii::app()->getRequest()->getParam('profile_invisible') : $this->profile_invisible);
+		$criteria->compare('t.profile_views', Yii::app()->getRequest()->getParam('profile_views') ? Yii::app()->getRequest()->getParam('profile_views') : $this->profile_views);
+		$criteria->compare('t.profile_change', Yii::app()->getRequest()->getParam('profile_change') ? Yii::app()->getRequest()->getParam('profile_change') : $this->profile_change);
+		$criteria->compare('t.profile_delete', Yii::app()->getRequest()->getParam('profile_delete') ? Yii::app()->getRequest()->getParam('profile_delete') : $this->profile_delete);
+		$criteria->compare('t.photo_allow', Yii::app()->getRequest()->getParam('photo_allow') ? Yii::app()->getRequest()->getParam('photo_allow') : $this->photo_allow);
 		$criteria->compare('t.photo_size', strtolower($this->photo_size), true);
-		$criteria->compare('t.photo_exts', $this->photo_exts,true);
+		$criteria->compare('t.photo_exts', strtolower($this->photo_exts), true);
 		if($this->creation_date != null && !in_array($this->creation_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.creation_date)', date('Y-m-d', strtotime($this->creation_date)));
-		if(Yii::app()->getRequest()->getParam('creation'))
-			$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation'));
-		else
-			$criteria->compare('t.creation_id', $this->creation_id);
+		$criteria->compare('t.creation_id', Yii::app()->getRequest()->getParam('creation') ? Yii::app()->getRequest()->getParam('creation') : $this->creation_id);
 		if($this->modified_date != null && !in_array($this->modified_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.modified_date)', date('Y-m-d', strtotime($this->modified_date)));
-		if(Yii::app()->getRequest()->getParam('modified'))
-			$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified'));
-		else
-			$criteria->compare('t.modified_id', $this->modified_id);
-		
+		$criteria->compare('t.modified_id', Yii::app()->getRequest()->getParam('modified') ? Yii::app()->getRequest()->getParam('modified') : $this->modified_id);
+		$criteria->compare('t.slug', strtolower($this->slug), true);
+
 		$criteria->compare('title.message', strtolower($this->name_i), true);
 		$criteria->compare('description.message', strtolower($this->desc_i), true);
 		$criteria->compare('creation.displayname', strtolower($this->creation_search), true);
 		$criteria->compare('modified.displayname', strtolower($this->modified_search), true);
-		$criteria->compare('view.user_active', $this->user_search);
+		$criteria->compare('view.user_active', $this->user_i);
 
 		if(!Yii::app()->getRequest()->getParam('UserLevel_sort'))
 			$criteria->order = 't.level_id DESC';
@@ -250,99 +258,210 @@ class UserLevel extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		} else {
-			//$this->defaultColumns[] = 'level_id';
-			$this->defaultColumns[] = 'name';
-			$this->defaultColumns[] = 'desc';
-			$this->defaultColumns[] = 'default';
-			$this->defaultColumns[] = 'signup';
-			$this->defaultColumns[] = 'message_allow';
-			$this->defaultColumns[] = 'message_limit';
-			$this->defaultColumns[] = 'profile_block';
-			$this->defaultColumns[] = 'profile_search';
-			$this->defaultColumns[] = 'profile_privacy';
-			$this->defaultColumns[] = 'profile_comments';
-			$this->defaultColumns[] = 'profile_style';
-			$this->defaultColumns[] = 'profile_style_sample';
-			$this->defaultColumns[] = 'profile_status';
-			$this->defaultColumns[] = 'profile_invisible';
-			$this->defaultColumns[] = 'profile_views';
-			$this->defaultColumns[] = 'profile_change';
-			$this->defaultColumns[] = 'profile_delete';
-			$this->defaultColumns[] = 'photo_allow';
-			$this->defaultColumns[] = 'photo_size';
-			$this->defaultColumns[] = 'photo_exts';
-			$this->defaultColumns[] = 'creation_date';
-			$this->defaultColumns[] = 'creation_id';
-			$this->defaultColumns[] = 'modified_date';
-			$this->defaultColumns[] = 'modified_id';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->templateColumns['name_i'] = array(
 				'name' => 'name_i',
 				'value' => '$data->title->message',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['desc_i'] = array(
 				'name' => 'desc_i',
 				'value' => '$data->description->message',
 			);
-			$this->defaultColumns[] = array(
-				'name' => 'creation_search',
-				'value' => '$data->creation->displayname',
+			$this->templateColumns['message_limit'] = array(
+				'name' => 'message_limit',
+				'value' => '$data->message_limit',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['profile_privacy'] = array(
+				'name' => 'profile_privacy',
+				'value' => '$data->profile_privacy',
+			);
+			$this->templateColumns['profile_comments'] = array(
+				'name' => 'profile_comments',
+				'value' => '$data->profile_comments',
+			);
+			$this->templateColumns['photo_size'] = array(
+				'name' => 'photo_size',
+				'value' => '$data->photo_size',
+			);
+			$this->templateColumns['photo_exts'] = array(
+				'name' => 'photo_exts',
+				'value' => '$data->photo_exts',
+			);
+			$this->templateColumns['creation_date'] = array(
 				'name' => 'creation_date',
-				'value' => 'Yii::app()->dateFormatter->formatDateTime($data->creation_date, \'medium\', false)',
+				'value' => '!in_array($data->creation_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->creation_date, \'medium\', false) : \'-\'',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'filter' => $this->filterDatepicker($this, 'creation_date'),
 			);
-			$this->defaultColumns[] = array(
-				'name' => 'user_search',
-				'value' => 'CHtml::link($data->view->user_active ? $data->view->user_active : 0, $data->level_id != 1 ? Yii::app()->controller->createUrl("o/member/manage", array("level"=>$data->level_id)) : Yii::app()->controller->createUrl("o/admin/manage", array("level"=>$data->level_id)))',
+			if(!Yii::app()->getRequest()->getParam('creation')) {
+				$this->templateColumns['creation_search'] = array(
+					'name' => 'creation_search',
+					'value' => '$data->creation->displayname ? $data->creation->displayname : \'-\'',
+				);
+			}
+			$this->templateColumns['modified_date'] = array(
+				'name' => 'modified_date',
+				'value' => '!in_array($data->modified_date, array(\'0000-00-00 00:00:00\', \'1970-01-01 00:00:00\', \'0002-12-02 07:07:12\', \'-0001-11-30 00:00:00\')) ? Yii::app()->dateFormatter->formatDateTime($data->modified_date, \'medium\', false) : \'-\'',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterDatepicker($this, 'modified_date'),
+			);
+			if(!Yii::app()->getRequest()->getParam('modified')) {
+				$this->templateColumns['modified_search'] = array(
+					'name' => 'modified_search',
+					'value' => '$data->modified->displayname ? $data->modified->displayname : \'-\'',
+				);
+			}
+			$this->templateColumns['slug'] = array(
+				'name' => 'slug',
+				'value' => '$data->slug',
+			);
+			$this->templateColumns['user_i'] = array(
+				'name' => 'user_i',
+				'value' => 'CHtml::link($data->view->user_active ? $data->view->user_active : 0, $data->level_id != 1 ? Yii::app()->controller->createUrl(\'o/member/manage\', array(\'level\'=>$data->level_id)) : Yii::app()->controller->createUrl(\'o/admin/manage\', array(\'level\'=>$data->level_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
 				'type' => 'raw',
 			);
-			$this->defaultColumns[] = array(
+			$this->templateColumns['message_allow'] = array(
+				'name' => 'message_allow',
+				'value' => '$data->message_allow ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_block'] = array(
+				'name' => 'profile_block',
+				'value' => '$data->profile_block ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_search'] = array(
+				'name' => 'profile_search',
+				'value' => '$data->profile_search ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_style'] = array(
+				'name' => 'profile_style',
+				'value' => '$data->profile_style ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_style_sample'] = array(
+				'name' => 'profile_style_sample',
+				'value' => '$data->profile_style_sample ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_status'] = array(
+				'name' => 'profile_status',
+				'value' => '$data->profile_status ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_invisible'] = array(
+				'name' => 'profile_invisible',
+				'value' => '$data->profile_invisible ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_views'] = array(
+				'name' => 'profile_views',
+				'value' => '$data->profile_views ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_change'] = array(
+				'name' => 'profile_change',
+				'value' => '$data->profile_change ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['profile_delete'] = array(
+				'name' => 'profile_delete',
+				'value' => '$data->profile_delete ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['photo_allow'] = array(
+				'name' => 'photo_allow',
+				'value' => '$data->photo_allow ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['default'] = array(
 				'name' => 'default',
-				'value' => '$data->default == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : Utility::getPublish(Yii::app()->controller->createUrl("default", array("id"=>$data->level_id)), $data->default, 6)',
+				//'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'default\', array(\'id\'=>$data->level_id)), $data->default, \'Default,No\')',
+				'value' => '$data->default == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['signup'] = array(
+				'name' => 'signup',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'signup\', array(\'id\'=>$data->level_id)), $data->signup, \'Enable,Disable#trigger[insert,update]\')',
+				//'value' => '$data->signup == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),
@@ -354,7 +473,7 @@ class UserLevel extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -362,10 +481,10 @@ class UserLevel extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
@@ -380,23 +499,25 @@ class UserLevel extends CActiveRecord
 		return $model->level_id;
 	}
 
-	//get Type Member (Except administrator)
-	public static function getUserLevel($array=true) 
+	/**
+	 * function getUserLevel
+	 */
+	public static function getUserLevel($type=null, $array=true) 
 	{
 		$criteria=new CDbCriteria;
 		if($type != null && $type == 'member')
 			$criteria->addNotInCondition('t.level_id', array(1));
 		if($type != null && $type == 'admin')
 			$criteria->compare('t.level_id',1);
-		
+
 		$model = self::model()->findAll($criteria);
-		
+
 		if($array == true) {
 			$items = array();
 			if($model != null) {
-				foreach($model as $key => $val)
+				foreach($model as $key => $val) {
 					$items[$val->level_id] = $val->title->message;
-			
+				}
 				return $items;
 			} else
 				return false;
@@ -409,10 +530,18 @@ class UserLevel extends CActiveRecord
 	 */
 	protected function afterFind()
 	{
+		parent::afterFind();
 		$this->name_i = $this->title->message;
 		$this->desc_i = $this->description->message;
-		
-		parent::afterFind();
+		$this->message_limit = unserialize($this->message_limit);
+		$this->profile_privacy = unserialize($this->profile_privacy);
+		$this->profile_comments = unserialize($this->profile_comments);
+		$this->photo_size = unserialize($this->photo_size);
+		$photo_exts = unserialize($this->photo_exts);
+		if(!empty($photo_exts))
+			$this->photo_exts = $this->formatFileType($photo_exts, false);
+
+		return true;
 	}
 
 	/**
@@ -424,9 +553,9 @@ class UserLevel extends CActiveRecord
 		
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
-				$this->creation_id = Yii::app()->user->id;
+				$this->creation_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 			else
-				$this->modified_id = Yii::app()->user->id;
+				$this->modified_id = !Yii::app()->user->isGuest ? Yii::app()->user->id : null;
 			
 			if($currentAction == 'o/level/user') {
 				if($this->photo_size['width'] == '' || $this->photo_size['height'] == '')
@@ -435,7 +564,7 @@ class UserLevel extends CActiveRecord
 		}
 		return true;
 	}
-	
+
 	/**
 	 * before save attributes
 	 */
@@ -446,7 +575,7 @@ class UserLevel extends CActiveRecord
 		$action = strtolower(Yii::app()->controller->action->id);
 		$currentAction = strtolower($controller.'/'.$action);
 
-		$location = $module.' '.$controller;
+		$location = $this->urlTitle($module.' '.$controller);
 		
 		if(parent::beforeSave()) {
 			if($this->isNewRecord || (!$this->isNewRecord && !$this->name)) {
@@ -455,9 +584,9 @@ class UserLevel extends CActiveRecord
 				$name->location = $location.'_title';
 				if($name->save())
 					$this->name = $name->id;
-				
+
 				$this->slug = $this->urlTitle($this->name_i);
-				
+
 			} else {
 				if($currentAction == 'o/level/edit') {
 					$name = SourceMessage::model()->findByPk($this->name);
@@ -465,14 +594,14 @@ class UserLevel extends CActiveRecord
 					$name->save();
 				}
 			}
-			
+
 			if($this->isNewRecord || (!$this->isNewRecord && !$this->desc)) {
 				$desc=new SourceMessage;
 				$desc->message = $this->desc_i;
 				$desc->location = $location.'_description';
 				if($desc->save())
 					$this->desc = $desc->id;
-				
+
 			} else {
 				if($currentAction == 'o/level/edit') {
 					$desc = SourceMessage::model()->findByPk($this->desc);
@@ -488,16 +617,15 @@ class UserLevel extends CActiveRecord
 				));
 				$this->default = 1;
 			}
-				
+
 			if($currentAction == 'o/level/user') {
 				$this->profile_privacy = serialize($this->profile_privacy);
 				$this->profile_comments = serialize($this->profile_comments);
 				$this->photo_size = serialize($this->photo_size);
-				$this->photo_exts = serialize(Utility::formatFileType($this->photo_exts));
+				$this->photo_exts = serialize($this->formatFileType($this->photo_exts));
 				
 			} else if($currentAction == 'o/level/message')
 				$this->message_limit = serialize($this->message_limit);
-				
 		}
 		return true;
 	}

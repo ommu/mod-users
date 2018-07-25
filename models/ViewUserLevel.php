@@ -5,6 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
+ * @modified date 25 July 2018, 11:48 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_user_level".
@@ -15,15 +16,12 @@
  * @property string $user_pending
  * @property string $user_noverified
  * @property string $user_blocked
- * @property string $user_all
+ * @property integer $user_all
  */
-class ViewUserLevel extends CActiveRecord
-{
-	public $defaultColumns = array();
-	public $templateColumns = array();
-	public $gridForbiddenColumn = array();
 
-	// Variable Search
+class ViewUserLevel extends OActiveRecord
+{
+	public $gridForbiddenColumn = array();
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -61,9 +59,10 @@ class ViewUserLevel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('level_id', 'numerical', 'integerOnly'=>true),
-			array('user_active, user_pending, user_noverified, user_blocked', 'length', 'max'=>23),
+			array('level_id, user_all', 'numerical', 'integerOnly'=>true),
+			array('level_id', 'safe'),
 			array('user_all', 'length', 'max'=>21),
+			array('user_active, user_pending, user_noverified, user_blocked', 'length', 'max'=>23),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('level_id, user_active, user_pending, user_noverified, user_blocked, user_all', 'safe', 'on'=>'search'),
@@ -88,10 +87,10 @@ class ViewUserLevel extends CActiveRecord
 	{
 		return array(
 			'level_id' => Yii::t('attribute', 'Level'),
-			'user_active' => Yii::t('attribute', 'Active'),
-			'user_pending' => Yii::t('attribute', 'Pending'),
-			'user_noverified' => Yii::t('attribute', 'No Verified'),
-			'user_blocked' => Yii::t('attribute', 'Blocked'),
+			'user_active' => Yii::t('attribute', 'User Active'),
+			'user_pending' => Yii::t('attribute', 'User Pending'),
+			'user_noverified' => Yii::t('attribute', 'User Noverified'),
+			'user_blocked' => Yii::t('attribute', 'User Blocked'),
 			'user_all' => Yii::t('attribute', 'User All'),
 		);
 	}
@@ -113,13 +112,12 @@ class ViewUserLevel extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-
 		$criteria->compare('t.level_id', $this->level_id);
-		$criteria->compare('t.user_active', strtolower($this->user_active), true);
-		$criteria->compare('t.user_pending', strtolower($this->user_pending), true);
-		$criteria->compare('t.user_noverified', strtolower($this->user_noverified), true);
-		$criteria->compare('t.user_blocked', strtolower($this->user_blocked), true);
-		$criteria->compare('t.user_all', strtolower($this->user_all), true);
+		$criteria->compare('t.user_active', $this->user_active);
+		$criteria->compare('t.user_pending', $this->user_pending);
+		$criteria->compare('t.user_noverified', $this->user_noverified);
+		$criteria->compare('t.user_blocked', $this->user_blocked);
+		$criteria->compare('t.user_all', $this->user_all);
 
 		if(!Yii::app()->getRequest()->getParam('ViewUserLevel_sort'))
 			$criteria->order = 't.level_id DESC';
@@ -127,73 +125,9 @@ class ViewUserLevel extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
-			'htmlOptions' => array(
-				'class' => 'center',
-			),
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -243,7 +177,7 @@ class ViewUserLevel extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -251,15 +185,14 @@ class ViewUserLevel extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
 	}
-
 }

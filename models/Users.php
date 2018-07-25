@@ -75,7 +75,7 @@ class Users extends OActiveRecord
 	public $oldPassword;
 	public $newPassword;
 	public $confirmPassword;
-	
+
 	// Variable Search
 	public $modified_search;
 
@@ -144,9 +144,19 @@ class Users extends OActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'forgots' => array(self::HAS_MANY, 'UserForgot', 'user_id'),
-			'option' => array(self::HAS_ONE, 'UserOption', 'user_id'),
-			'verifies' => array(self::HAS_MANY, 'UserVerify', 'user_id'),
+			'forgots' => array(self::HAS_MANY, 'UserForgot', 'user_id', 'on'=>'forgots.publish=1'),
+			'forgotAll' => array(self::HAS_MANY, 'UserForgot', 'user_id'),
+			'emails' => array(self::HAS_MANY, 'UserHistoryEmail', 'user_id'),
+			'logins' => array(self::HAS_MANY, 'UserHistoryLogin', 'user_id'),
+			'passwords' => array(self::HAS_MANY, 'UserHistoryPassword', 'user_id'),
+			'usernames' => array(self::HAS_MANY, 'UserHistoryUsername', 'user_id'),
+			'invites' => array(self::HAS_MANY, 'UserInvites', 'user_id', 'on'=>'invites.publish=1'),
+			'inviteAll' => array(self::HAS_MANY, 'UserInvites', 'user_id'),
+			'references' => array(self::HAS_MANY, 'UserNewsletter', 'reference_id'),
+			'subscribes' => array(self::HAS_MANY, 'UserNewsletter', 'user_id'),
+			'option' => array(self::HAS_ONE, 'UserOption', 'option_id'),
+			'verifies' => array(self::HAS_MANY, 'UserVerify', 'user_id', 'on'=>'verifies.publish=1'),
+			'verifyAll' => array(self::HAS_MANY, 'UserVerify', 'user_id'),
 			'view' => array(self::BELONGS_TO, 'ViewUsers', 'user_id'),
 			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
 			'language' => array(self::BELONGS_TO, 'OmmuLanguages', 'language_id'),
@@ -211,6 +221,7 @@ class Users extends OActiveRecord
 	public function search()
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
+
 		$controller = strtolower(Yii::app()->controller->id);
 
 		$criteria=new CDbCriteria;
