@@ -76,7 +76,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','manage','add','edit','view','delete','enable','verify'),
+				'actions'=>array('index','manage','add','edit','view','delete','enabled','verified'),
 				'users'=>array('@'),
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
@@ -281,7 +281,7 @@ class MemberController extends Controller
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionEnable($id) 
+	public function actionEnabled($id) 
 	{
 		$model=$this->loadModel($id);
 		
@@ -323,7 +323,7 @@ class MemberController extends Controller
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionVerify($id) 
+	public function actionVerified($id) 
 	{
 		$model=$this->loadModel($id);
 		
@@ -354,7 +354,7 @@ class MemberController extends Controller
 		$this->pageTitle = Yii::t('phrase', '$title Member: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_verify', array(
+		$this->render('admin_verified', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

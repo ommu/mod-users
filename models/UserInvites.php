@@ -345,16 +345,18 @@ class UserInvites extends OActiveRecord
 	 */
 	public static function getInvite($email) 
 	{
+		$email = strtolower($email);
+
 		$criteria=new CDbCriteria;
 		$criteria->with = array(
 			'newsletter' => array(
 				'alias' => 'newsletter',
-				'select' => 'newsletter_id, email',
+				'select' => 'newsletter_id, user_id, email',
 			),
 		);
 		$criteria->compare('t.publish', 1);
-		$criteria->compare('t.user_id','<>0');
-		$criteria->compare('newsletter.email', strtolower($email));
+		$criteria->addCondition('t.user_id IS NOT NULL');
+		$criteria->compare('newsletter.email', $email);
 		$criteria->order ='t.invite_id DESC';
 		$model = self::model()->find($criteria);
 		
@@ -366,28 +368,29 @@ class UserInvites extends OActiveRecord
 	 */
 	public static function getInviteWithCode($email, $code)
 	{
+		$email = strtolower($email);
+
 		$criteria=new CDbCriteria;
 		$criteria->with = array(
-			'newsletter' => array(
+			'view' => array(
+				'alias' => 'view',
+			),
+			'invite' => array(
+				'alias' => 'invite',
+				'select' => 'publish, newsletter_id, user_id',
+			),
+			'invite.newsletter' => array(
 				'alias' => 'newsletter',
-				'select' => 'newsletter_id, status, email'
-			),
-			'newsletter.view' => array(
-				'alias' => 'newsletterView',
-				'select' => 'user_id'
-			),
-			'histories' => array(
-				'alias' => 'histories',
-				'together'=>true,
+				'select' => 'status, email'
 			),
 		);
-		$criteria->compare('t.publish', 1);
-		$criteria->compare('newsletter.status',1);
-		$criteria->compare('newsletter.email', strtolower($email));
-		$criteria->compare('histories.code',$code);
-		$criteria->compare('histories.expired_date','>='.date('Y-m-d H:i:s'));
-		$criteria->order = 't.invite_id DESC';
-		$model = self::model()->find($criteria);
+		$criteria->compare('t.code', $code);
+		$criteria->compare('view.expired', 0);
+		$criteria->compare('invite.publish', 1);
+		$criteria->addCondition('invite.user_id IS NOT NULL');
+		$criteria->compare('newsletter.status', 1);
+		$criteria->compare('newsletter.email', $email);
+		$model = UserInviteHistory::model()->find($criteria);
 		
 		return $model;
 	}

@@ -5,40 +5,46 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2015 Ommu Platform (www.ommu.co)
+ * @modified date 25 July 2018, 05:53 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_users".
  *
  * The followings are the available columns in table '_users':
- * @property string $user_id
+ * @property integer $user_id
  * @property string $token_key
  * @property string $token_password
  * @property string $token_oauth
- * @property string $emails
+ * @property integer $emails
  * @property string $email_lastchange_date
- * @property string $email_lastchange_days
- * @property string $email_lastchange_hours
- * @property string $usernames
+ * @property integer $email_lastchange_days
+ * @property integer $email_lastchange_hours
+ * @property integer $usernames
  * @property string $username_lastchange_date
- * @property string $username_lastchange_days
- * @property string $username_lastchange_hours
- * @property string $passwords
+ * @property integer $username_lastchange_days
+ * @property integer $username_lastchange_hours
+ * @property integer $passwords
  * @property string $password_lastchange_date
- * @property string $password_lastchange_days
- * @property string $password_lastchange_hours
- * @property string $logins
+ * @property integer $password_lastchange_days
+ * @property integer $password_lastchange_hours
+ * @property integer $logins
  * @property string $lastlogin_date
- * @property string $lastlogin_days
- * @property string $lastlogin_hours
+ * @property integer $lastlogin_days
+ * @property integer $lastlogin_hours
  * @property string $lastlogin_from
+ *
+ * The followings are the available model relations:
+ * @property Users $user
  */
-class ViewUsers extends CActiveRecord
+
+class ViewUsers extends OActiveRecord
 {
 	use GridViewTrait;
 
-	public $defaultColumns = array();
-	public $templateColumns = array();
 	public $gridForbiddenColumn = array();
+
+	// Variable Search
+	public $user_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
@@ -76,13 +82,15 @@ class ViewUsers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('user_id, emails, email_lastchange_days, email_lastchange_hours, usernames, username_lastchange_days, username_lastchange_hours, passwords, password_lastchange_days, password_lastchange_hours, logins, lastlogin_days, lastlogin_hours', 'numerical', 'integerOnly'=>true),
+			array('emails, email_lastchange_days, email_lastchange_hours, usernames, username_lastchange_days, username_lastchange_hours, passwords, password_lastchange_days, password_lastchange_hours, logins, lastlogin_days, lastlogin_hours', 'safe'),
 			array('user_id', 'length', 'max'=>11),
-			array('token_key, token_password, token_oauth, lastlogin_from', 'length', 'max'=>32),
 			array('emails, email_lastchange_days, email_lastchange_hours, usernames, username_lastchange_days, username_lastchange_hours, passwords, password_lastchange_days, password_lastchange_hours, logins, lastlogin_days, lastlogin_hours', 'length', 'max'=>21),
-			array('email_lastchange_date, username_lastchange_date, password_lastchange_date, lastlogin_date', 'safe'),
+			array('token_key, token_password, token_oauth, lastlogin_from', 'length', 'max'=>32),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('user_id, token_key, token_password, token_oauth, emails, email_lastchange_date, email_lastchange_days, email_lastchange_hours, usernames, username_lastchange_date, username_lastchange_days, username_lastchange_hours, passwords, password_lastchange_date, password_lastchange_days, password_lastchange_hours, logins, lastlogin_date, lastlogin_days, lastlogin_hours, lastlogin_from', 'safe', 'on'=>'search'),
+			array('user_id, token_key, token_password, token_oauth, emails, email_lastchange_date, email_lastchange_days, email_lastchange_hours, usernames, username_lastchange_date, username_lastchange_days, username_lastchange_hours, passwords, password_lastchange_date, password_lastchange_days, password_lastchange_hours, logins, lastlogin_date, lastlogin_days, lastlogin_hours, lastlogin_from,
+				user_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -125,6 +133,7 @@ class ViewUsers extends CActiveRecord
 			'lastlogin_days' => Yii::t('attribute', 'Lastlogin Days'),
 			'lastlogin_hours' => Yii::t('attribute', 'Lastlogin Hours'),
 			'lastlogin_from' => Yii::t('attribute', 'Lastlogin From'),
+			'user_search' => Yii::t('attribute', 'User'),
 		);
 	}
 
@@ -145,7 +154,13 @@ class ViewUsers extends CActiveRecord
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
+		$criteria->with = array(
+			'user' => array(
+				'alias' => 'user',
+				'select' => 'displayname',
+			),
+		);
+
 		$criteria->compare('t.user_id', Yii::app()->getRequest()->getParam('user') ? Yii::app()->getRequest()->getParam('user') : $this->user_id);
 		$criteria->compare('t.token_key', strtolower($this->token_key), true);
 		$criteria->compare('t.token_password', strtolower($this->token_password), true);
@@ -153,24 +168,26 @@ class ViewUsers extends CActiveRecord
 		$criteria->compare('t.emails', strtolower($this->emails), true);
 		if($this->email_lastchange_date != null && !in_array($this->email_lastchange_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.email_lastchange_date)', date('Y-m-d', strtotime($this->email_lastchange_date)));
-		$criteria->compare('t.email_lastchange_days', strtolower($this->email_lastchange_days), true);
-		$criteria->compare('t.email_lastchange_hours', strtolower($this->email_lastchange_hours), true);
-		$criteria->compare('t.usernames', strtolower($this->usernames), true);
+		$criteria->compare('t.email_lastchange_days', $this->email_lastchange_days);
+		$criteria->compare('t.email_lastchange_hours', $this->email_lastchange_hours);
+		$criteria->compare('t.usernames', $this->usernames);
 		if($this->username_lastchange_date != null && !in_array($this->username_lastchange_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.username_lastchange_date)', date('Y-m-d', strtotime($this->username_lastchange_date)));
-		$criteria->compare('t.username_lastchange_days', strtolower($this->username_lastchange_days), true);
-		$criteria->compare('t.username_lastchange_hours', strtolower($this->username_lastchange_hours), true);
-		$criteria->compare('t.passwords', strtolower($this->passwords), true);
+		$criteria->compare('t.username_lastchange_days', $this->username_lastchange_days);
+		$criteria->compare('t.username_lastchange_hours', $this->username_lastchange_hours);
+		$criteria->compare('t.passwords', $this->passwords);
 		if($this->password_lastchange_date != null && !in_array($this->password_lastchange_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.password_lastchange_date)', date('Y-m-d', strtotime($this->password_lastchange_date)));
-		$criteria->compare('t.password_lastchange_days', strtolower($this->password_lastchange_days), true);
-		$criteria->compare('t.password_lastchange_hours', strtolower($this->password_lastchange_hours), true);
-		$criteria->compare('t.logins', strtolower($this->logins), true);
+		$criteria->compare('t.password_lastchange_days', $this->password_lastchange_days);
+		$criteria->compare('t.password_lastchange_hours', $this->password_lastchange_hours);
+		$criteria->compare('t.logins', $this->logins);
 		if($this->lastlogin_date != null && !in_array($this->lastlogin_date, array('0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00')))
 			$criteria->compare('date(t.lastlogin_date)', date('Y-m-d', strtotime($this->lastlogin_date)));
-		$criteria->compare('t.lastlogin_days', strtolower($this->lastlogin_days), true);
-		$criteria->compare('t.lastlogin_hours', strtolower($this->lastlogin_hours), true);
+		$criteria->compare('t.lastlogin_days', $this->lastlogin_days);
+		$criteria->compare('t.lastlogin_hours', $this->lastlogin_hours);
 		$criteria->compare('t.lastlogin_from', strtolower($this->lastlogin_from), true);
+
+		$criteria->compare('user.displayname', strtolower($this->user_search), true);
 
 		if(!Yii::app()->getRequest()->getParam('ViewUsers_sort'))
 			$criteria->order = 't.user_id DESC';
@@ -178,73 +195,9 @@ class ViewUsers extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array(
-				'pageSize'=>30,
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
 			),
 		));
-	}
-
-	/**
-	 * Get kolom untuk Grid View
-	 *
-	 * @param array $columns kolom dari view
-	 * @return array dari grid yang aktif
-	 */
-	public function getGridColumn($columns=null) 
-	{
-		// Jika $columns kosong maka isi defaultColumns dg templateColumns
-		if(empty($columns) || $columns == null) {
-			array_splice($this->defaultColumns, 0);
-			foreach($this->templateColumns as $key => $val) {
-				if(!in_array($key, $this->gridForbiddenColumn) && !in_array($key, $this->defaultColumns))
-					$this->defaultColumns[] = $val;
-			}
-			return $this->defaultColumns;
-		}
-
-		foreach($columns as $val) {
-			if(!in_array($val, $this->gridForbiddenColumn) && !in_array($val, $this->defaultColumns)) {
-				$col = $this->getTemplateColumn($val);
-				if($col != null)
-					$this->defaultColumns[] = $col;
-			}
-		}
-
-		array_unshift($this->defaultColumns, array(
-			'header' => Yii::t('app', 'No'),
-			'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
-			'htmlOptions' => array(
-				'class' => 'center',
-			),
-		));
-
-		array_unshift($this->defaultColumns, array(
-			'class' => 'CCheckBoxColumn',
-			'name' => 'id',
-			'selectableRows' => 2,
-			'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
-		));
-
-		return $this->defaultColumns;
-	}
-
-	/**
-	 * Get kolom template berdasarkan id pengenal
-	 *
-	 * @param string $name nama pengenal
-	 * @return mixed
-	 */
-	public function getTemplateColumn($name) 
-	{
-		$data = null;
-		if(trim($name) == '') return $data;
-
-		foreach($this->templateColumns as $key => $item) {
-			if($name == $key) {
-				$data = $item;
-				break;
-			}
-		}
-		return $data;
 	}
 
 	/**
@@ -265,10 +218,12 @@ class ViewUsers extends CActiveRecord
 					'class' => 'center',
 				),
 			);
-			$this->templateColumns['user_id'] = array(
-				'name' => 'user_id',
-				'value' => '$data->user_id',
-			);
+			if(!Yii::app()->getRequest()->getParam('user')) {
+				$this->templateColumns['user_search'] = array(
+					'name' => 'user_search',
+					'value' => '$data->user->displayname ? $data->user->displayname : \'-\'',
+				);
+			}
 			$this->templateColumns['token_key'] = array(
 				'name' => 'token_key',
 				'value' => '$data->token_key',
@@ -370,7 +325,7 @@ class ViewUsers extends CActiveRecord
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -378,15 +333,14 @@ class ViewUsers extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
 	}
-
 }

@@ -78,7 +78,7 @@ class AdminController extends Controller
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','delete','enable','verify'),
+				'actions'=>array('manage','add','delete','enabled','verified'),
 				'users'=>array('@'),
 				'expression'=>'Yii::app()->user->level == 1',
 			),
@@ -285,7 +285,7 @@ class AdminController extends Controller
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionEnable($id) 
+	public function actionEnabled($id) 
 	{
 		$model=$this->loadModel($id);
 		
@@ -327,7 +327,7 @@ class AdminController extends Controller
 	 * If deletion is successful, the browser will be redirected to the 'admin' page.
 	 * @param integer $id the ID of the model to be deleted
 	 */
-	public function actionVerify($id) 
+	public function actionVerified($id) 
 	{
 		$model=$this->loadModel($id);
 		
@@ -358,7 +358,7 @@ class AdminController extends Controller
 		$this->pageTitle = Yii::t('phrase', '$title Administrator: $displayname', array('$title'=>$title, '$displayname'=>$model->displayname));
 		$this->pageDescription = '';
 		$this->pageMeta = '';
-		$this->render('admin_verify', array(
+		$this->render('admin_verified', array(
 			'title'=>$title,
 			'model'=>$model,
 		));

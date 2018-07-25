@@ -5,34 +5,34 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
+ * @modified date 25 July 2018, 05:49 WIB
  * @link https://github.com/ommu/mod-users
- *
- * This is the template for generating the model class of a specified table.
- * - $this: the ModelCode object
- * - $tableName: the table name for this class (prefix is already removed if necessary)
- * - $modelClass: the model class name
- * - $columns: list of table columns (name=>CDbColumnSchema)
- * - $labels: list of attribute labels (name=>label)
- * - $rules: list of validation rules
- * - $relations: list of relations (name=>relation declaration)
- *
- * --------------------------------------------------------------------------------------
  *
  * This is the model class for table "ommu_user_option".
  *
  * The followings are the available columns in table 'ommu_user_option':
- * @property string $option_id
- * @property integer _status
+ * @property integer $option_id
+ * @property integer $ommu_status
  * @property integer $invite_limit
  * @property integer $invite_success
  * @property string $signup_from
+ *
+ * The followings are the available model relations:
+ * @property Users $option
  */
-class UserOption extends CActiveRecord
+
+class UserOption extends OActiveRecord
 {
-	public $defaultColumns = array();
+	use GridViewTrait;
+
+	public $gridForbiddenColumn = array();
+
+	// Variable Search
+	public $option_search;
 
 	/**
 	 * Returns the static model of the specified AR class.
+	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
 	 * @return UserOption the static model class
 	 */
@@ -46,7 +46,8 @@ class UserOption extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'ommu_user_option';
+		preg_match("/dbname=([^;]+)/i", $this->dbConnection->connectionString, $matches);
+		return $matches[1].'.ommu_user_option';
 	}
 
 	/**
@@ -57,12 +58,15 @@ class UserOption extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('option_id', 'required'),
-			array('ommu_status, invite_limit, invite_success', 'numerical', 'integerOnly'=>true),
+			array('signup_from', 'required'),
+			array('option_id, ommu_status, invite_limit, invite_success', 'numerical', 'integerOnly'=>true),
+			array('ommu_status, invite_limit, invite_success', 'safe'),
 			array('option_id', 'length', 'max'=>11),
+			// array('option_id', 'trigger'),
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('option_id, ommu_status, invite_limit, invite_success, signup_from', 'safe', 'on'=>'search'),
+			// @todo Please remove those attributes that should not be searched.
+			array('option_id, ommu_status, invite_limit, invite_success, signup_from,
+				option_search', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,7 +78,7 @@ class UserOption extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'user' => array(self::BELONGS_TO, 'Users', 'option_id'),
+			'option' => array(self::BELONGS_TO, 'Users', 'option_id'),
 		);
 	}
 
@@ -85,86 +89,102 @@ class UserOption extends CActiveRecord
 	{
 		return array(
 			'option_id' => Yii::t('attribute', 'Option'),
-			'ommu_status' =>  Yii::t('attribute', 'Ommu Status'),
+			'ommu_status' => Yii::t('attribute', 'Ommu Status'),
 			'invite_limit' => Yii::t('attribute', 'Invite Limit'),
 			'invite_success' => Yii::t('attribute', 'Invite Success'),
 			'signup_from' => Yii::t('attribute', 'Signup From'),
+			'option_search' => Yii::t('attribute', 'Option'),
 		);
 	}
-	
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
-	 * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
+	 *
+	 * Typical usecase:
+	 * - Initialize the model fields with values from filter form.
+	 * - Execute this method to get CActiveDataProvider instance which will filter
+	 * models according to data in model fields.
+	 * - Pass data provider to CGridView, CListView or any similar widget.
+	 *
+	 * @return CActiveDataProvider the data provider that can return the models
+	 * based on the search/filter conditions.
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
-		
-		$criteria->compare('t.option_id', $this->option_id);
-		$criteria->compare('t.ommu_status', $this->ommu_status);
+		$criteria->with = array(
+			'option' => array(
+				'alias' => 'option',
+				'select' => 'displayname',
+			),
+		);
+
+		$criteria->compare('t.option_id', Yii::app()->getRequest()->getParam('option') ? Yii::app()->getRequest()->getParam('option') : $this->option_id);
+		$criteria->compare('t.ommu_status', Yii::app()->getRequest()->getParam('ommu_status') ? Yii::app()->getRequest()->getParam('ommu_status') : $this->ommu_status);
 		$criteria->compare('t.invite_limit', $this->invite_limit);
 		$criteria->compare('t.invite_success', $this->invite_success);
-		$criteria->compare('t.signup_from', $this->signup_from);
+		$criteria->compare('t.signup_from', strtolower($this->signup_from), true);
+
+		$criteria->compare('option.displayname', strtolower($this->option_search), true);			//option.displayname
 
 		if(!Yii::app()->getRequest()->getParam('UserOption_sort'))
 			$criteria->order = 't.option_id DESC';
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'pagination'=>array(
+				'pageSize'=>Yii::app()->params['grid-view'] ? Yii::app()->params['grid-view']['pageSize'] : 50,
+			),
 		));
-	}
-
-
-	/**
-	 * Get column for CGrid View
-	 */
-	public function getGridColumn($columns=null) {
-		if($columns !== null) {
-			foreach($columns as $val) {
-				/*
-				if(trim($val) == 'enabled') {
-					$this->defaultColumns[] = array(
-						'name'  => 'enabled',
-						'value' => '$data->enabled == 1? "Ya": "Tidak"',
-					);
-				}
-				*/
-				$this->defaultColumns[] = $val;
-			}
-		} else {
-			$this->defaultColumns[] = 'option_id';
-			$this->defaultColumns[] = 'ommu_status';
-			$this->defaultColumns[] = 'invite_limit';
-			$this->defaultColumns[] = 'invite_success';
-			$this->defaultColumns[] = 'signup_from';
-		}
-
-		return $this->defaultColumns;
 	}
 
 	/**
 	 * Set default columns to display
 	 */
 	protected function afterConstruct() {
-		if(count($this->defaultColumns) == 0) {
-			$this->defaultColumns[] = array(
-				'header' => 'No',
-				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1'
+		if(count($this->templateColumns) == 0) {
+			$this->templateColumns['_option'] = array(
+				'class' => 'CCheckBoxColumn',
+				'name' => 'id',
+				'selectableRows' => 2,
+				'checkBoxHtmlOptions' => array('name' => 'trash_id[]')
 			);
-			$this->defaultColumns[] = 'option_id';
-			$this->defaultColumns[] = 'ommu_status';
-			$this->defaultColumns[] = 'invite_limit';
-			$this->defaultColumns[] = 'invite_success';
-			$this->defaultColumns[] = 'signup_from';
+			$this->templateColumns['_no'] = array(
+				'header' => Yii::t('app', 'No'),
+				'value' => '$this->grid->dataProvider->pagination->currentPage*$this->grid->dataProvider->pagination->pageSize + $row+1',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+			);
+			$this->templateColumns['invite_limit'] = array(
+				'name' => 'invite_limit',
+				'value' => '$data->invite_limit',
+			);
+			$this->templateColumns['invite_success'] = array(
+				'name' => 'invite_success',
+				'value' => '$data->invite_success',
+			);
+			$this->templateColumns['signup_from'] = array(
+				'name' => 'signup_from',
+				'value' => '$data->signup_from',
+			);
+			$this->templateColumns['ommu_status'] = array(
+				'name' => 'ommu_status',
+				'value' => '$data->ommu_status ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
 		}
 		parent::afterConstruct();
 	}
 
 	/**
-	 * User get information
+	 * Model get information
 	 */
 	public static function getInfo($id, $column=null)
 	{
@@ -172,15 +192,14 @@ class UserOption extends CActiveRecord
 			$model = self::model()->findByPk($id, array(
 				'select' => $column,
 			));
- 			if(count(explode(',', $column)) == 1)
- 				return $model->$column;
- 			else
- 				return $model;
+			if(count(explode(',', $column)) == 1)
+				return $model->$column;
+			else
+				return $model;
 			
 		} else {
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
 	}
-
 }
