@@ -17,15 +17,15 @@ plugin_menu		:
 	- urlTitle: Administrators
 		urlRules: {siteType: "0,1", userLevel: 1}
 		urlPath: {url: o/admin/manage, attr: -, icon: -}
-        
+
 	- urlTitle: Members
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: o/member/manage, attr: -, icon: -}
-        
+
 	- urlTitle: User Level
 		urlRules: {siteType: "0,1", userLevel: 1}
 		urlPath: {url: o/level/manage, attr: -, icon: -}
-        
+
 	- urlTitle: Datas
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: -, attr: -, icon: -}
@@ -42,7 +42,7 @@ plugin_menu		:
 			- urlTitle: Verify Emails
 				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/verify/manage, attr: -, icon: -}
-                
+
 	- urlTitle: History
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: -, attr: -, icon: -}
@@ -62,14 +62,14 @@ plugin_menu		:
 			- urlTitle: Subscribe/Unsubscribe
 				urlRules: {siteType: 1, userLevel: 1}
 				urlPath: {url: history/subscribe/manage, attr: -, icon: -}
-		
+
 	- urlTitle: Settings
 		urlRules: {siteType: "0,1", userLevel: 1}
-		urlPath: {url: o/setting/edit, attr: -, icon: -}
-                
+		urlPath: {url: setting/edit, attr: -, icon: -}
+
 	- urlTitle: Users Manual
 		urlRules: {siteType: "0,1", userLevel: 2}
-		urlPath: {url: o/setting/manual, attr: -, icon: -}
+		urlPath: {url: setting/manual, attr: -, icon: -}
 
 content_menu	:
 # controller o/admin
@@ -82,7 +82,7 @@ content_menu	:
 	- urlTitle: Edit Administrator
 		urlRules: {users, o/admin, view, siteType: "0,1", userLevel: 1}
 		urlPath: {url: edit, attr: id=$_GET*id, icon: -}
-        
+
 # controller o/member
 	- urlTitle: Add Member
 		urlRules: {users, o/member, manage, siteType: "0,1", userLevel: "1,2"}
@@ -93,7 +93,7 @@ content_menu	:
 	- urlTitle: Edit Member
 		urlRules: {users, o/member, view, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: edit, attr: id=$_GET*id, icon: -}
-        
+
 # controller o/level
 	- urlTitle: Add User Level
 		urlRules: {users, o/level, manage, siteType: "0,1", userLevel: 1}
@@ -118,7 +118,7 @@ content_menu	:
 	- urlTitle: Add Subscribe
 		urlRules: {users, o/subscribe, manage, siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: add, attr: -, icon: -}
-        
+
 # controller o/invite
 	- urlTitle: Invite User
 		urlRules: {users, o/invite, "manage", siteType: 1, userLevel: "1,2"}
@@ -153,7 +153,7 @@ content_menu	:
 	- urlTitle: Back to Mambers
 		urlRules: {users, history/password, manage, siteType: 1, userLevel: 1}
 		urlPath: {url: o/member/manage, attr: -, icon: -}
-        
+
 # controller history/invite
 	- urlTitle: Back to Invites
 		urlRules: {users, history/invite, "manage", siteType: 1, userLevel: "1,2"}
@@ -163,7 +163,7 @@ content_menu	:
 	- urlTitle: Back to Subscribes
 		urlRules: {users, history/subscribe, manage, siteType: 1, userLevel: 1}
 		urlPath: {url: o/subscribe/manage, attr: -, icon: -}
-		
+
 # controller o/setting
 	- urlTitle: User Manual Book
 		urlRules: {users, o/setting, edit, siteType: "0,1", userLevel: 1}

@@ -53,7 +53,7 @@ class UserLevel extends OActiveRecord
 	use GridViewTrait;
 	use FileTrait;
 
-	public $gridForbiddenColumn = array();
+	public $gridForbiddenColumn = ['creation_search','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','slug','modified_date','modified_search'];
 	public $name_i;
 	public $desc_i;
 	public $user_i;
@@ -291,23 +291,23 @@ class UserLevel extends OActiveRecord
 			);
 			$this->templateColumns['message_limit'] = array(
 				'name' => 'message_limit',
-				'value' => '$data->message_limit',
+				'value' => 'serialize($data->message_limit)',
 			);
 			$this->templateColumns['profile_privacy'] = array(
 				'name' => 'profile_privacy',
-				'value' => '$data->profile_privacy',
+				'value' => 'serialize($data->profile_privacy)',
 			);
 			$this->templateColumns['profile_comments'] = array(
 				'name' => 'profile_comments',
-				'value' => '$data->profile_comments',
+				'value' => 'serialize($data->profile_comments)',
 			);
 			$this->templateColumns['photo_size'] = array(
 				'name' => 'photo_size',
-				'value' => '$data->photo_size',
+				'value' => 'serialize($data->photo_size)',
 			);
 			$this->templateColumns['photo_exts'] = array(
 				'name' => 'photo_exts',
-				'value' => '$data->photo_exts',
+				'value' => 'serialize($data->photo_exts)',
 			);
 			$this->templateColumns['creation_date'] = array(
 				'name' => 'creation_date',
