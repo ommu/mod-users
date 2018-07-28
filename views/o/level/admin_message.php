@@ -40,8 +40,8 @@
 			</div>
 
 			<div class="form-group row">
-				<?php echo $form->labelEx($model,'message_allow', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<?php echo $form->labelEx($model,'message_allow', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<span class="small-px"><?php echo Yii::t('phrase', 'If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.');?></span>
 					<?php echo $form->radioButtonList($model, 'message_allow', array(
 						2 => Yii::t('phrase', 'Everyone - users can send private messages to anyone.'),
@@ -53,14 +53,14 @@
 			</div>
 
 			<div class="form-group row">
-				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo Yii::t('phrase', 'Inbox/Outbox Capacity');?></label>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo Yii::t('phrase', 'Inbox/Outbox Capacity');?></label>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<span class="small-px"><?php echo Yii::t('phrase', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.');?></span>
 					<div class="row">
 						<div class="col-sm-4">
 							<?php 
 							if(!$model->getErrors())
-								$model->message_limit = unserialize($model->message_limit);
+								$model->message_limit = $model->message_limit;
 							echo $form->dropDownList($model, 'message_limit[inbox]', array(
 								5 => 5,
 								10 => 10,
@@ -97,8 +97,8 @@
 			</div>
 
 			<div class="form-group row submit">
-				<label class="col-form-label col-lg-4 col-md-3 col-sm-12">&nbsp;</label>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<label class="col-form-label col-lg-3 col-md-3 col-sm-12">&nbsp;</label>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php echo CHtml::submitButton($model->isNewRecord ? Yii::t('phrase', 'Create') : Yii::t('phrase', 'Save') , array('onclick' => 'setEnableSave()')); ?>
 				</div>
 			</div>

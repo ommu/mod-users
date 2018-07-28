@@ -30,24 +30,24 @@
 			<?php echo $form->errorSummary($model); ?>
 
 			<div class="form-group row">
-				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('oldPassword')?> <span class="required">*</span></label>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('oldPassword')?> <span class="required">*</span></label>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php echo $form->passwordField($model,'oldPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'oldPassword'); ?>
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('newPassword')?> <span class="required">*</span></label>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('newPassword')?> <span class="required">*</span></label>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php echo $form->passwordField($model,'newPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'newPassword'); ?>
 				</div>
 			</div>
 
 			<div class="form-group row">
-				<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('confirmPassword')?> <span class="required">*</span></label>
-				<div class="col-lg-8 col-md-9 col-sm-12">
+				<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('confirmPassword')?> <span class="required">*</span></label>
+				<div class="col-lg-6 col-md-9 col-sm-12">
 					<?php echo $form->passwordField($model,'confirmPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'confirmPassword'); ?>
 				</div>

@@ -34,8 +34,8 @@
 		<?php }?>
 
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'level_id', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'level_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php 
 				$userlevel = UserLevel::getUserLevel('member');
 				if($userlevel != null)
@@ -47,8 +47,8 @@
 		</div>
 
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('displayname')?> <span class="required">*</span></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('displayname')?> <span class="required">*</span></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'displayname', array('maxlength'=>64,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'displayname'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
@@ -57,16 +57,16 @@
 
 		<?php if(!$model->isNewRecord) {?>
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('first_name')?> <span class="required">*</span></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('first_name')?> <span class="required">*</span></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'first_name', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'first_name'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('last_name')?> <span class="required">*</span></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('last_name')?> <span class="required">*</span></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'last_name', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'last_name'); ?>
 			</div>
@@ -75,8 +75,8 @@
 
 		<?php if($setting->signup_username == 1) {?>
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('username')?> <span class="required">*</span></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('username')?> <span class="required">*</span></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'username', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'username'); ?>
 			</div>
@@ -84,8 +84,8 @@
 		<?php }?>
 
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('email')?> <span class="required">*</span></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('email')?> <span class="required">*</span></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->textField($model,'email', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'email'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
@@ -94,8 +94,8 @@
 
 		<?php if($setting->signup_photo == 1) {?>
 		<div class="form-group row">
-			<?php echo $form->labelEx($model,'photos', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'photos', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->fileField($model,'photos', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'photos'); ?>
 				<div class="small-px silent"><?php echo Yii::t('phrase', 'Inputkan alamat url photo Anda.<br/>contoh: http://ommu.co/putrasudaryanto.jpg');?></div>
@@ -105,16 +105,16 @@
 		
 		<?php if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {?>
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->passwordField($model,'newPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'newPassword'); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
-			<label class="col-form-label col-lg-4 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('confirmPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('confirmPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->passwordField($model,'confirmPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'confirmPassword'); ?>
 			</div>
@@ -123,8 +123,8 @@
 
 		<?php if(($model->isNewRecord && $setting->signup_approve == 0) || !$model->isNewRecord) {?>
 		<div class="form-group row publish">
-			<?php echo $form->labelEx($model,'enabled', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'enabled', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'enabled', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model, 'enabled'); ?>
 				<?php echo $form->error($model,'enabled'); ?>
@@ -135,8 +135,8 @@
 
 		<?php if(($model->isNewRecord && $setting->signup_verifyemail == 1) || !$model->isNewRecord) {?>
 		<div class="form-group row publish">
-			<?php echo $form->labelEx($model,'verified', array('class'=>'col-form-label col-lg-4 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-8 col-md-9 col-sm-12">
+			<?php echo $form->labelEx($model,'verified', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
+			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php echo $form->checkBox($model,'verified', array('class'=>'form-control')); ?>
 				<?php echo $form->labelEx($model, 'verified'); ?>
 				<?php echo $form->error($model,'verified'); ?>
