@@ -40,7 +40,7 @@
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'email_i', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-6 col-md-9 col-sm-12">
+			<div class="col-lg-9 col-md-9 col-sm-12">
 				<?php echo $form->textArea($model, 'email_i', array('rows'=>6, 'cols'=>50, 'class'=>'form-control smaller')); ?>
 				<?php echo $form->error($model, 'email_i'); ?>
 				<?php echo $form->error($model, 'email'); ?>

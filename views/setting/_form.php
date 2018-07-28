@@ -77,55 +77,55 @@
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'forgot_difference', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-6 col-md-9 col-sm-12">
-				<div>
-					<?php 
-					if($model->isNewRecord && !$model->getErrors())
-						$model->forgot_diff_type = 0;
-					echo $form->dropDownList($model, 'forgot_diff_type', array(
-						1 => Yii::t('phrase', 'Hour'),
-						0 => Yii::t('phrase', 'Day'),
-					), array('class'=>'form-control')); ?>
-					<?php echo $form->textField($model,'forgot_difference', array('maxlength'=>2,'class'=>'span-2')); ?>
-				</div>
+			<div class="col-lg-3 col-md-4 col-sm-6 col-6">
+				<?php echo $form->textField($model,'forgot_difference', array('maxlength'=>2,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'forgot_difference'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+			<div class="col-lg-3 col-md-5 col-sm-6 col-6">
+				<?php 
+				if($model->isNewRecord && !$model->getErrors())
+					$model->forgot_diff_type = 0;
+				echo $form->dropDownList($model, 'forgot_diff_type', array(
+					1 => Yii::t('phrase', 'Hour'),
+					0 => Yii::t('phrase', 'Day'),
+				), array('class'=>'form-control')); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'verify_difference', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-6 col-md-9 col-sm-12">
-				<div>
-					<?php 
-					if($model->isNewRecord && !$model->getErrors())
-						$model->verify_diff_type = 0;
-					echo $form->dropDownList($model, 'verify_diff_type', array(
-						1 => Yii::t('phrase', 'Hour'),
-						0 => Yii::t('phrase', 'Day'),
-					), array('class'=>'form-control')); ?>
-					<?php echo $form->textField($model,'verify_difference', array('maxlength'=>2,'class'=>'span-2')); ?>
-				</div>
+			<div class="col-lg-3 col-md-4 col-sm-6 col-6">
+				<?php echo $form->textField($model,'verify_difference', array('maxlength'=>2,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'verify_difference'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+			<div class="col-lg-3 col-md-5 col-sm-6 col-6">
+				<?php 
+				if($model->isNewRecord && !$model->getErrors())
+					$model->verify_diff_type = 0;
+				echo $form->dropDownList($model, 'verify_diff_type', array(
+					1 => Yii::t('phrase', 'Hour'),
+					0 => Yii::t('phrase', 'Day'),
+				), array('class'=>'form-control')); ?>
 			</div>
 		</div>
 
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'invite_difference', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
-			<div class="col-lg-6 col-md-9 col-sm-12">
-				<div>
-					<?php 
-					if($model->isNewRecord && !$model->getErrors())
-						$model->invite_diff_type = 0;
-					echo $form->dropDownList($model, 'invite_diff_type', array(
-						1 => Yii::t('phrase', 'Hour'),
-						0 => Yii::t('phrase', 'Day'),
-					), array('class'=>'form-control')); ?>
-					<?php echo $form->textField($model,'invite_difference', array('maxlength'=>2,'class'=>'span-2')); ?>
-				</div>
+			<div class="col-lg-3 col-md-4 col-sm-6 col-6">
+				<?php echo $form->textField($model,'invite_difference', array('maxlength'=>2,'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'invite_difference'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
+			</div>
+			<div class="col-lg-3 col-md-5 col-sm-6 col-6">
+				<?php 
+				if($model->isNewRecord && !$model->getErrors())
+					$model->invite_diff_type = 0;
+				echo $form->dropDownList($model, 'invite_diff_type', array(
+					1 => Yii::t('phrase', 'Hour'),
+					0 => Yii::t('phrase', 'Day'),
+				), array('class'=>'form-control')); ?>
 			</div>
 		</div>
 
