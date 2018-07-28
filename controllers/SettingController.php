@@ -97,9 +97,6 @@ class SettingController extends Controller
 	 */
 	public function actionEdit() 
 	{
-		if(Yii::app()->user->level != 1)
-			throw new CHttpException(404, Yii::t('phrase', 'The requested page does not exist.'));
-		
 		$model = UserSetting::model()->findByPk(1);
 		if($model == null)
 			$model=new UserSetting;
