@@ -78,7 +78,7 @@ class AdminController extends Controller
 				'expression'=>'in_array(Yii::app()->user->level, array(1,2))',
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('manage','add','delete','enabled','verified'),
+				'actions'=>array('manage','add','delete','view','enabled','verified'),
 				'users'=>array('@'),
 				'expression'=>'Yii::app()->user->level == 1',
 			),

@@ -52,7 +52,7 @@
 			),
 			array(
 				'name'=>'message_limit',
-				'value'=>$model->message_limit ? $model->message_limit : '-',
+				'value'=>$model->message_limit ? serialize($model->message_limit) : '-',
 			),
 			array(
 				'name'=>'profile_block',
@@ -66,11 +66,11 @@
 			),
 			array(
 				'name'=>'profile_privacy',
-				'value'=>$model->profile_privacy ? $model->profile_privacy : '-',
+				'value'=>$model->profile_privacy ? serialize($model->profile_privacy) : '-',
 			),
 			array(
 				'name'=>'profile_comments',
-				'value'=>$model->profile_comments ? $model->profile_comments : '-',
+				'value'=>$model->profile_comments ? serialize($model->profile_comments) : '-',
 			),
 			array(
 				'name'=>'profile_style',
@@ -109,11 +109,11 @@
 			),
 			array(
 				'name'=>'photo_size',
-				'value'=>$model->photo_size ? $model->photo_size : '-',
+				'value'=>$model->photo_size ? serialize($model->photo_size) : '-',
 			),
 			array(
 				'name'=>'photo_exts',
-				'value'=>$model->photo_exts ? $model->photo_exts : '-',
+				'value'=>$model->photo_exts ? serialize($model->photo_exts) : '-',
 			),
 			array(
 				'name'=>'creation_date',
