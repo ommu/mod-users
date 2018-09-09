@@ -30,12 +30,6 @@ plugin_menu		:
 		urlRules: {siteType: "0,1", userLevel: "1,2"}
 		urlPath: {url: -, attr: -, icon: -}
 		submenu :
-			- urlTitle: Subscribes
-				urlRules: {siteType: "0,1", userLevel: "1,2"}
-				urlPath: {url: o/subscribe/manage, attr: -, icon: -}
-			- urlTitle: Invites
-				urlRules: {siteType: 1, userLevel: "1,2"}
-				urlPath: {url: o/invite/manage, attr: -, icon: -}
 			- urlTitle: Forgot Passwords
 				urlRules: {siteType: "0,1", userLevel: "1,2"}
 				urlPath: {url: o/forgot/manage, attr: -, icon: -}
@@ -59,9 +53,6 @@ plugin_menu		:
 			- urlTitle: Passwords
 				urlRules: {siteType: 1, userLevel: 1}
 				urlPath: {url: history/password/manage, attr: -, icon: -}
-			- urlTitle: Subscribe/Unsubscribe
-				urlRules: {siteType: 1, userLevel: 1}
-				urlPath: {url: history/subscribe/manage, attr: -, icon: -}
 
 	- urlTitle: Settings
 		urlRules: {siteType: "0,1", userLevel: 1}
