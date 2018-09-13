@@ -340,7 +340,7 @@ class UsersCopy extends CActiveRecord
 					'htmlOptions' => array(
 						//'class' => 'center',
 					),
-					'filter'=>UserLevel::getUserLevel(),
+					'filter'=>UserLevel::getLevel(),
 					'type' => 'raw',
 				);
 			}

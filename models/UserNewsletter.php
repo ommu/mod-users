@@ -240,7 +240,7 @@ class UserNewsletter extends OActiveRecord
 				$this->templateColumns['level_search'] = array(
 					'name' => 'level_search',
 					'value' => '$data->user_id ? $data->user->level->title->message : \'-\'',
-					'filter' => UserLevel::getUserLevel(),
+					'filter' => UserLevel::getLevel(),
 					'type' => 'raw',
 				);
 				$this->templateColumns['user_search'] = array(

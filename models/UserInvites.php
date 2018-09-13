@@ -245,7 +245,7 @@ class UserInvites extends OActiveRecord
 				$this->templateColumns['userlevel_search'] = array(
 					'name' => 'userlevel_search',
 					'value' => '$data->user_id ? $data->user->level->title->message : \'-\'',
-					'filter' => UserLevel::getUserLevel(),
+					'filter' => UserLevel::getLevel(),
 					'type' => 'raw',
 				);
 			}

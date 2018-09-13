@@ -37,7 +37,7 @@
 			<?php echo $form->labelEx($model,'level_id', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-9 col-md-9 col-sm-12">
 				<?php 
-				$userlevel = UserLevel::getUserLevel('member');
+				$userlevel = UserLevel::getLevel('member');
 				if($userlevel != null)
 					echo $form->dropDownList($model,'level_id', $userlevel, array('prompt'=>Yii::t('phrase', 'Select User Level'), 'class'=>'form-control'));
 				else

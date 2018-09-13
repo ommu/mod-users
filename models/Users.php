@@ -5,7 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
- * @modified date 25 July 2018, 05:53 WIB
+ * @modified date 13 September 2018, 15:13 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_users".
@@ -51,11 +51,13 @@
  * @property UserNewsletter[] $newsletters
  * @property UserNewsletter[] $newsletters1
  * @property UserOption $option
+ * @property UserPhones[] $phones
+ * @property UserPhones[] $phoneAll
  * @property UserVerify[] $verifies
  * @property UserVerify[] $verifyAll
  * @property ViewUsers $view
- * @property UserLevel $level
  * @property OmmuLanguages $language
+ * @property UserLevel $level
  * @property Users $user
  * @property Users $modified
  */
@@ -155,11 +157,13 @@ class Users extends OActiveRecord
 			'references' => array(self::HAS_MANY, 'UserNewsletter', 'reference_id'),
 			'subscribes' => array(self::HAS_MANY, 'UserNewsletter', 'user_id'),
 			'option' => array(self::HAS_ONE, 'UserOption', 'option_id'),
+			'phones' => array(self::HAS_MANY, 'UserPhones', 'user_id', 'on'=>'phones.publish=1'),
+			'phoneAll' => array(self::HAS_MANY, 'UserPhones', 'user_id'),
 			'verifies' => array(self::HAS_MANY, 'UserVerify', 'user_id', 'on'=>'verifies.publish=1'),
 			'verifyAll' => array(self::HAS_MANY, 'UserVerify', 'user_id'),
 			'view' => array(self::BELONGS_TO, 'ViewUsers', 'user_id'),
-			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
 			'language' => array(self::BELONGS_TO, 'OmmuLanguages', 'language_id'),
+			'level' => array(self::BELONGS_TO, 'UserLevel', 'level_id'),
 			'modified' => array(self::BELONGS_TO, 'Users', 'modified_id'),
 		);
 	}
@@ -318,8 +322,7 @@ class Users extends OActiveRecord
 				$this->templateColumns['level_id'] = array(
 					'name' => 'level_id',
 					'value' => '$data->level->title->message ? $data->level->title->message : \'-\'',
-					'filter' => UserLevel::getUserLevel('member'),
-					'type' => 'raw',
+					'filter' => UserLevel::getLevel('member'),
 				);
 			}
 			if(!Yii::app()->getRequest()->getParam('language')) {
@@ -355,7 +358,7 @@ class Users extends OActiveRecord
 			);
 			$this->templateColumns['photos'] = array(
 				'name' => 'photos',
-				'value' => '$data->photos ? CHtml::link($data->photos, join(\'/\', array(Yii::app()->request->baseUrl, self::getUploadPath(false), $data->photos)), array(\'target\' => \'_blank\')) : \'-\'',
+				'value' => '$data->photos ? CHtml::link($data->photos, join(\'/\', array(Yii::app()->request->baseUrl, self::getUploadPath(false), $data->user_id, $data->photos), array(\'target\' => \'_blank\')) : \'-\'',
 				'type' => 'raw',
 			);
 			$this->templateColumns['salt'] = array(
@@ -416,6 +419,24 @@ class Users extends OActiveRecord
 				'name' => 'update_ip',
 				'value' => '$data->update_ip',
 			);
+			$this->templateColumns['enabled'] = array(
+				'name' => 'enabled',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'enabled\', array(\'id\'=>$data->user_id)), $data->enabled, Users::getEnabled())',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => self::getEnabled(),
+				'type' => 'raw',
+			);
+			$this->templateColumns['deactivate'] = array(
+				'name' => 'deactivate',
+				'value' => '$data->deactivate ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
+				'htmlOptions' => array(
+					'class' => 'center',
+				),
+				'filter' => $this->filterYesNo(),
+				'type' => 'raw',
+			);
 			$this->templateColumns['search'] = array(
 				'name' => 'search',
 				'value' => '$data->search ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
@@ -452,21 +473,10 @@ class Users extends OActiveRecord
 				'filter' => $this->filterYesNo(),
 				'type' => 'raw',
 			);
-			$this->templateColumns['enabled'] = array(
-				'name' => 'enabled',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'enabled\', array(\'id\'=>$data->user_id)), $data->enabled, \'0=null,1=enable,2=blocked\')',
-				//'value' => '$data->enabled == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => $this->filterYesNo(),
-				'type' => 'raw',
-			);
 			if(!in_array($controller, array('o/admin'))) {
 				$this->templateColumns['verified'] = array(
 					'name' => 'verified',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'verified\', array(\'id\'=>$data->user_id)), $data->verified, \'Verified,Unverified\')',
-					//'value' => '$data->verified == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -474,16 +484,6 @@ class Users extends OActiveRecord
 					'type' => 'raw',
 				);
 			}
-			$this->templateColumns['deactivate'] = array(
-				'name' => 'deactivate',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'deactivate\', array(\'id\'=>$data->user_id)), $data->deactivate, \'0=deactivate, 1=active\')',
-				//'value' => '$data->deactivate == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
-				'htmlOptions' => array(
-					'class' => 'center',
-				),
-				'filter' => $this->filterYesNo(),
-				'type' => 'raw',
-			);
 		}
 		parent::afterConstruct();
 	}
@@ -506,6 +506,23 @@ class Users extends OActiveRecord
 			$model = self::model()->findByPk($id);
 			return $model;
 		}
+	}
+
+	/**
+	 * function getEnabled
+	 */
+	public static function getEnabled($value=null)
+	{
+		$items = array(
+			'0'=>Yii::t('phrase', 'Disable'),
+			'1'=>Yii::t('phrase', 'Enable'),
+			'2'=>Yii::t('phrase', 'Blocked'),
+		);
+
+		if($value != null)
+			return $items[$value];
+		else
+			return $items;
 	}
 
 	/**
@@ -730,7 +747,7 @@ class Users extends OActiveRecord
 	/**
 	 * before save attributes
 	 */
-	protected function beforeSave() 
+	protected function beforeSave()
 	{
 		if(parent::beforeSave()) {
 			$this->email = strtolower($this->email);
@@ -739,25 +756,11 @@ class Users extends OActiveRecord
 				$this->password = self::hashPassword($this->salt, $this->newPassword);
 
 			if(!$this->isNewRecord) {
-				$uploadPath = join('/', array(self::getUploadPath(), $this->user_id)); 
-				$verwijderenPath = join('/', array(self::getUploadPath(), 'verwijderen')); 
-				// Add directory
-				if(!file_exists($uploadPath) || !file_exists($verwijderenPath)) {
-					@mkdir($uploadPath, 0755, true);
-					@mkdir($verwijderenPath, 0755, true);
-
-					// Add file in directory (index.php)
-					$indexFile = join('/', array($uploadPath, 'index.php'));
-					if(!file_exists($indexFile))
-						file_put_contents($indexFile, "<?php\n");
-
-					$verwijderenFile = join('/', array($verwijderenPath, 'index.php'));
-					if(!file_exists($verwijderenFile))
-						file_put_contents($verwijderenFile, "<?php\n");
-				} else {
-					@chmod($uploadPath, 0755, true);
-					@chmod($verwijderenPath, 0755, true);
-				}
+				// create directory
+				$this->createUploadDirectory(self::getUploadPath(), $this->user_id);
+				
+				$uploadPath = join('/', array(self::getUploadPath(), $this->user_id));
+				$verwijderenPath = join('/', array(self::getUploadPath(), 'verwijderen'));
 
 				$this->photos = CUploadedFile::getInstance($this, 'photos');
 				if($this->photos != null) {
@@ -800,25 +803,11 @@ class Users extends OActiveRecord
 
 		parent::afterSave();
 
-		// Create user direcrtory
-		$uploadPath = join('/', array(self::getUploadPath(), $this->user_id)); 
-		$verwijderenPath = join('/', array(self::getUploadPath(), 'verwijderen')); 
-		if(!file_exists($uploadPath) || !file_exists($verwijderenPath)) {
-			@mkdir($uploadPath, 0755, true);
-			@mkdir($verwijderenPath, 0755,true);
+		// create directory
+		$this->createUploadDirectory(self::getUploadPath(), $this->user_id);
 
-			// Add file in directory (index.php)
-			$indexFile = join('/', array($uploadPath, 'index.php'));
-			if(!file_exists($indexFile))
-				file_put_contents($indexFile, "<?php\n");
-
-			$verwijderenFile = join('/', array($verwijderenPath, 'index.php'));
-			if(!file_exists($verwijderenFile))
-				file_put_contents($verwijderenFile, "<?php\n");
-		} else {
-			@chmod($uploadPath, 0755, true);
-			@chmod($verwijderenPath, 0755,true);
-		}
+		$uploadPath = join('/', array(self::getUploadPath(), $this->user_id));
+		$verwijderenPath = join('/', array(self::getUploadPath(), 'verwijderen'));
 
 		// Generate Verification Code
 		if ($this->verified != $this->old_verified_i && $this->verified == 0) {
@@ -957,7 +946,7 @@ class Users extends OActiveRecord
 		$uploadPath = join('/', array(self::getUploadPath(), $this->user_id));
 		$verwijderenPath = join('/', array(self::getUploadPath(), 'verwijderen'));
 
-		if($this->photos != '' && file_exists(join('/', array($uploadPath, $this->photos)))) 
+		if($this->photos != '' && file_exists(join('/', array($uploadPath, $this->photos))))
 			rename(join('/', array($uploadPath, $this->photos)), join('/', array($verwijderenPath, time().'_deleted_'.$this->photos)));
 
 		$this->deleteFolder($uploadPath);

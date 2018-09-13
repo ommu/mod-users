@@ -219,7 +219,7 @@ class UserForgot extends OActiveRecord
 				$this->templateColumns['level_search'] = array(
 					'name' => 'level_search',
 					'value' => '$data->user->level->title->message ? $data->user->level->title->message : \'-\'',
-					'filter' => UserLevel::getUserLevel(),
+					'filter' => UserLevel::getLevel(),
 					'type' => 'raw',
 				);
 				$this->templateColumns['email_search'] = array(

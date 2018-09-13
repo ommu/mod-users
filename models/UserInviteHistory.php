@@ -205,7 +205,7 @@ class UserInviteHistory extends OActiveRecord
 				$this->templateColumns['userlevel_search'] = array(
 					'name' => 'userlevel_search',
 					'value' => '$data->invite->user->level->title->message ? $data->invite->user->level->title->message : \'-\'',
-					'filter' => UserLevel::getUserLevel(),
+					'filter' => UserLevel::getLevel(),
 					'type' => 'raw',
 				);
 			}

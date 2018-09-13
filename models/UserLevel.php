@@ -500,9 +500,9 @@ class UserLevel extends OActiveRecord
 	}
 
 	/**
-	 * function getUserLevel
+	 * function getLevel
 	 */
-	public static function getUserLevel($type=null, $array=true) 
+	public static function getLevel($type=null, $array=true) 
 	{
 		$criteria=new CDbCriteria;
 		if($type != null && $type == 'member')

@@ -21,7 +21,7 @@
 	<ul>
 		<li>
 			<?php echo $model->getAttributeLabel('level_search'); ?>
-			<?php $userlevel = UserLevel::getUserLevel();
+			<?php $userlevel = UserLevel::getLevel();
 			echo $form->textField($model, 'level_search', $userlevel, array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 		
