@@ -43,6 +43,7 @@
 <div class="grid-form">
 <?php $this->renderPartial('_option_form', array(
 	'model'=>$model,
+	'gridColumns'=>$this->activeDefaultColumns($columns),
 )); ?>
 </div>
 <?php //end.Grid Option ?>

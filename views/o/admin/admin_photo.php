@@ -43,7 +43,7 @@
 				<?php }?>
 				<?php echo $form->fileField($model,'photos', array('class'=>'form-control')); ?>
 				<?php echo $form->error($model,'photos'); ?>
-				<span class="small-px">extensions are allowed: <?php echo Utility::formatFileType($photo_exts, false);?></span>
+				<div class="small-px">extensions are allowed: <?php echo Utility::formatFileType($photo_exts, false);?></div>
 			</div>
 		</div>
 

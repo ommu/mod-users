@@ -5,7 +5,7 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
- * @modified date 13 September 2018, 15:13 WIB
+ * @modified date 14 September 2018, 06:11 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_users".

@@ -1,5 +1,5 @@
 {
-	"name": "ommu/mod-users",
+	"name": "ommu/users",
 	"description": "Users Module from Ommu Platform",
 	"keywords": [
 		"module",
@@ -33,6 +33,7 @@
 		"oomphinc/composer-installers-extender": "^1.0",
 		"yiisoft/yii": ">=1.1.14",
 		"ommu/yii-sluggable": "~1.0",
-		"ommu/phpmailer": "~0.1"
+		"ommu/phpmailer": "~0.1",
+		"ommu/yii-traits": "~1.0"
 	}
 }

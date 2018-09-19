@@ -7,7 +7,9 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
+ * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
+ * @created date 15 September 2018, 20:23 WIB
+ * @modified date 15 September 2018, 20:23 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -19,143 +21,132 @@
 )); ?>
 	<ul>
 		<li>
-			<?php echo $model->getAttributeLabel('user_id'); ?><br/>
-			<?php echo $form->textField($model,'user_id'); ?>
+			<?php echo $model->getAttributeLabel('level_id'); ?>
+			<?php echo $form->dropDownList($model, 'level_id', UserLevel::getLevel(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('enabled'); ?><br/>
-			<?php echo $form->textField($model,'enabled'); ?>
+			<?php echo $model->getAttributeLabel('language_id'); ?>
+			<?php echo $form->dropDownList($model, 'language_id', OmmuLanguages::getLanguage(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('verified'); ?><br/>
-			<?php echo $form->textField($model,'verified'); ?>
+			<?php echo $model->getAttributeLabel('email'); ?>
+			<?php echo $form->textField($model, 'email', array('maxlength'=>32, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('level_id'); ?><br/>
-			<?php echo $form->textField($model,'level_id'); ?>
+			<?php echo $model->getAttributeLabel('username'); ?>
+			<?php echo $form->textField($model, 'username', array('maxlength'=>32, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('language_id'); ?><br/>
-			<?php echo $form->textField($model,'language_id'); ?>
+			<?php echo $model->getAttributeLabel('first_name'); ?>
+			<?php echo $form->textField($model, 'first_name', array('maxlength'=>32, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('email'); ?><br/>
-			<?php echo $form->textField($model,'email'); ?>
+			<?php echo $model->getAttributeLabel('last_name'); ?>
+			<?php echo $form->textField($model, 'last_name', array('maxlength'=>32, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('username'); ?><br/>
-			<?php echo $form->textField($model,'username'); ?>
+			<?php echo $model->getAttributeLabel('displayname'); ?>
+			<?php echo $form->textField($model, 'displayname', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('first_name'); ?><br/>
-			<?php echo $form->textField($model,'first_name'); ?>
+			<?php echo $model->getAttributeLabel('photos'); ?>
+			<?php echo $form->textField($model, 'photos', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('last_name'); ?><br/>
-			<?php echo $form->textField($model,'last_name'); ?>
+			<?php echo $model->getAttributeLabel('salt'); ?>
+			<?php echo $form->textField($model, 'salt', array('maxlength'=>32, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('displayname'); ?><br/>
-			<?php echo $form->textField($model,'displayname'); ?>
+			<?php echo $model->getAttributeLabel('creation_date'); ?>
+			<?php echo $this->filterDatepicker($model, 'creation_date', false); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('password'); ?><br/>
-			<?php echo $form->textField($model,'password'); ?>
+			<?php echo $model->getAttributeLabel('creation_ip'); ?>
+			<?php echo $form->textField($model, 'creation_ip', array('maxlength'=>20, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('photos'); ?><br/>
-			<?php echo $form->textField($model,'photos'); ?>
+			<?php echo $model->getAttributeLabel('modified_date'); ?>
+			<?php echo $this->filterDatepicker($model, 'modified_date', false); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('salt'); ?><br/>
-			<?php echo $form->textField($model,'salt'); ?>
+			<?php echo $model->getAttributeLabel('modified_search'); ?>
+			<?php echo $form->textField($model, 'modified_search', array('class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('deactivate'); ?><br/>
-			<?php echo $form->textField($model,'deactivate'); ?>
+			<?php echo $model->getAttributeLabel('lastlogin_date'); ?>
+			<?php echo $this->filterDatepicker($model, 'lastlogin_date', false); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('search'); ?><br/>
-			<?php echo $form->textField($model,'search'); ?>
+			<?php echo $model->getAttributeLabel('lastlogin_ip'); ?>
+			<?php echo $form->textField($model, 'lastlogin_ip', array('maxlength'=>20, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('invisible'); ?><br/>
-			<?php echo $form->textField($model,'invisible'); ?>
+			<?php echo $model->getAttributeLabel('lastlogin_from'); ?>
+			<?php echo $form->textField($model, 'lastlogin_from', array('maxlength'=>32, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('privacy'); ?><br/>
-			<?php echo $form->textField($model,'privacy'); ?>
+			<?php echo $model->getAttributeLabel('update_date'); ?>
+			<?php echo $this->filterDatepicker($model, 'update_date', false); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('comments'); ?><br/>
-			<?php echo $form->textField($model,'comments'); ?>
+			<?php echo $model->getAttributeLabel('update_ip'); ?>
+			<?php echo $form->textField($model, 'update_ip', array('maxlength'=>20, 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('creation_date'); ?><br/>
-			<?php echo $form->textField($model,'creation_date'); ?>
+			<?php echo $model->getAttributeLabel('enabled'); ?>
+			<?php echo $form->dropDownList($model, 'enabled', Users::getEnabled(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('creation_ip'); ?><br/>
-			<?php echo $form->textField($model,'creation_ip'); ?>
+			<?php echo $model->getAttributeLabel('verified'); ?>
+			<?php echo $form->dropDownList($model, 'verified', array('1'=>Yii::t('phrase', 'Verified'), '0'=>Yii::t('phrase', 'Unverified')), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('modified_date'); ?><br/>
-			<?php echo $form->textField($model,'modified_date'); ?>
+			<?php echo $model->getAttributeLabel('deactivate'); ?>
+			<?php echo $form->dropDownList($model, 'deactivate', $this->filterYesNo(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('modified_id'); ?><br/>
-			<?php echo $form->textField($model,'modified_id'); ?>
+			<?php echo $model->getAttributeLabel('search'); ?>
+			<?php echo $form->dropDownList($model, 'search', $this->filterYesNo(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('lastlogin_date'); ?><br/>
-			<?php echo $form->textField($model,'lastlogin_date'); ?>
+			<?php echo $model->getAttributeLabel('invisible'); ?>
+			<?php echo $form->dropDownList($model, 'invisible', $this->filterYesNo(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('lastlogin_ip'); ?><br/>
-			<?php echo $form->textField($model,'lastlogin_ip'); ?>
+			<?php echo $model->getAttributeLabel('privacy'); ?>
+			<?php echo $form->dropDownList($model, 'privacy', $this->filterYesNo(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li>
-			<?php echo $model->getAttributeLabel('lastlogin_from'); ?><br/>
-			<?php echo $form->textField($model,'lastlogin_from'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('update_date'); ?><br/>
-			<?php echo $form->textField($model,'update_date'); ?>
-		</li>
-
-		<li>
-			<?php echo $model->getAttributeLabel('update_ip'); ?><br/>
-			<?php echo $form->textField($model,'update_ip'); ?>
+			<?php echo $model->getAttributeLabel('comments'); ?>
+			<?php echo $form->dropDownList($model, 'comments', $this->filterYesNo(), array('prompt'=>'', 'class'=>'form-control')); ?>
 		</li>
 
 		<li class="submit">
-			<?php echo CHtml::submitButton('Search'); ?>
+			<?php echo CHtml::submitButton(Yii::t('phrase', 'Search')); ?>
 		</li>
 	</ul>
-	<div class="clear"></div>
 <?php $this->endWidget(); ?>

@@ -355,7 +355,7 @@ class UsersCopy extends CActiveRecord
 			if($controller != 'o/admin') {
 				$this->defaultColumns[] = array(
 					'name' => 'verified',
-					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("verify", array("id"=>$data->user_id)), $data->verified, 7)',
+					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'verify\', array(\'id\'=>$data->user_id)), $data->verified, 7)',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
@@ -365,7 +365,7 @@ class UsersCopy extends CActiveRecord
 			}
 			$this->defaultColumns[] = array(
 				'name' => 'enabled',
-				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl("enabled", array("id"=>$data->user_id)), $data->enabled, 3)',
+				'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'enabled\', array(\'id\'=>$data->user_id)), $data->enabled, 3)',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

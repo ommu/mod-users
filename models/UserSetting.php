@@ -150,7 +150,7 @@ class UserSetting extends OActiveRecord
 
 		$criteria->compare('t.id', $this->id);
 		$criteria->compare('t.license', strtolower($this->license), true);
-		$criteria->compare('t.permission', Yii::app()->getRequest()->getParam('permission') ? Yii::app()->getRequest()->getParam('permission') : $this->permission);
+		$criteria->compare('t.permission', $this->permission);
 		$criteria->compare('t.meta_keyword', strtolower($this->meta_keyword), true);
 		$criteria->compare('t.meta_description', strtolower($this->meta_description), true);
 		$criteria->compare('t.forgot_diff_type', $this->forgot_diff_type);

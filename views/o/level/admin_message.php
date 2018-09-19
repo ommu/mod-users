@@ -42,7 +42,7 @@
 			<div class="form-group row">
 				<?php echo $form->labelEx($model,'message_allow', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 				<div class="col-lg-6 col-md-9 col-sm-12">
-					<span class="small-px"><?php echo Yii::t('phrase', 'If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.');?></span>
+					<div class="small-px"><?php echo Yii::t('phrase', 'If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.');?></div>
 					<?php echo $form->radioButtonList($model, 'message_allow', array(
 						2 => Yii::t('phrase', 'Everyone - users can send private messages to anyone.'),
 						1 => Yii::t('phrase', 'Friends only - users can send private messages to their friends only.'),
@@ -55,7 +55,7 @@
 			<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo Yii::t('phrase', 'Inbox/Outbox Capacity');?></label>
 				<div class="col-lg-6 col-md-9 col-sm-12">
-					<span class="small-px"><?php echo Yii::t('phrase', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.');?></span>
+					<div class="small-px"><?php echo Yii::t('phrase', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.');?></div>
 					<div class="row">
 						<div class="col-sm-4">
 							<?php 

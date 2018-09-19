@@ -291,7 +291,6 @@ class UserVerify extends OActiveRecord
 				$this->templateColumns['publish'] = array(
 					'name' => 'publish',
 					'value' => 'Utility::getPublish(Yii::app()->controller->createUrl(\'publish\', array(\'id\'=>$data->verify_id)), $data->publish)',
-					//'value' => '$data->publish == 1 ? CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/publish.png\') : CHtml::image(Yii::app()->theme->baseUrl.\'/images/icons/unpublish.png\')',
 					'htmlOptions' => array(
 						'class' => 'center',
 					),
