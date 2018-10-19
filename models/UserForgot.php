@@ -4,7 +4,7 @@
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 17 October 2017, 14:17 WIB
  * @modified date 2 May 2018, 13:32 WIB
  * @link https://ecc.ft.ugm.ac.id
@@ -274,7 +274,7 @@ class UserForgot extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-				if(preg_match('/@/',$this->email_i)) {
+				if(preg_match('/@/', $this->email_i)) {
 					$user = Users::find()
 						->select(['user_id','email'])
 						->where(['email' => $this->email_i])

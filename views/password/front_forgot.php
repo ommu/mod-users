@@ -8,12 +8,12 @@
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2018 ECC UGM (ecc.ft.ugm.ac.id)
+ * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 30 May 2018, 11:54 WIB
  * @modified date 30 May 2018, 11:54 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @link http://ecc.ft.ugm.ac.id
+ * @link https://github.com/ommu/mod-users
  *
  */
 
@@ -22,7 +22,9 @@ use yii\widgets\ActiveForm;
 ?>
 
 <?php if(Yii::$app->session->hasFlash('success'))
-	echo Yii::$app->session->getFlash('success');?>
+	echo Yii::$app->session->getFlash('success');
+else if(Yii::$app->session->hasFlash('warning'))
+	echo Yii::$app->session->getFlash('warning');?>
 
 <?php $form = ActiveForm::begin([
 	'options' => [

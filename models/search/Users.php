@@ -5,8 +5,8 @@
  *
  * UserInvites represents the model behind the search form about `ommu\users\models\UserInvites`.
  *
- * @copyright Copyright (c) 2017 ECC UGM (ecc.ft.ugm.ac.id)
- * @link http://ecc.ft.ugm.ac.id
+ * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
+ * @link https://github.com/ommu/mod-users
  * @author Agus Susilo <smartgdi@gmail.com>
  * @created date 17 April 2018, 09:39 WIB
  *
