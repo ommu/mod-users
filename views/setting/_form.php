@@ -17,7 +17,6 @@
 <?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 	'id'=>'user-setting-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 	<?php //begin.Messages ?>
 	<div id="ajax-message">
@@ -35,9 +34,9 @@
 			<div class="col-lg-6 col-md-9 col-sm-12">
 				<?php if($model->isNewRecord || (!$model->isNewRecord && $model->license == '')) {
 					$model->license = $this->licenseCode();
-					echo $form->textField($model,'license', array('maxlength'=>32,'class'=>'form-control'));
+					echo $form->textField($model,'license', array('maxlength'=>32, 'class'=>'form-control'));
 				} else
-					echo $form->textField($model,'license', array('maxlength'=>32,'class'=>'form-control','disabled'=>'disabled'));?>
+					echo $form->textField($model,'license', array('maxlength'=>32, 'class'=>'form-control','disabled'=>'disabled'));?>
 				<?php echo $form->error($model,'license'); ?>
 				<div class="small-px"><?php echo Yii::t('phrase', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.');?></div>
 			</div>
@@ -76,7 +75,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'forgot_difference', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-3 col-md-4 col-sm-6 col-6">
-				<?php echo $form->textField($model,'forgot_difference', array('maxlength'=>2,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'forgot_difference', array('maxlength'=>2, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'forgot_difference'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -93,7 +92,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'verify_difference', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-3 col-md-4 col-sm-6 col-6">
-				<?php echo $form->textField($model,'verify_difference', array('maxlength'=>2,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'verify_difference', array('maxlength'=>2, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'verify_difference'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -110,7 +109,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model,'invite_difference', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-3 col-md-4 col-sm-6 col-6">
-				<?php echo $form->textField($model,'invite_difference', array('maxlength'=>2,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'invite_difference', array('maxlength'=>2, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'invite_difference'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>

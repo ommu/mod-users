@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'User Newsletters'=>array('manage'),
 		$model->email=>array('view','id'=>$model->newsletter_id),
-		'Status',
+		Yii::t('phrase', 'Status'),
 	);
 ?>
 

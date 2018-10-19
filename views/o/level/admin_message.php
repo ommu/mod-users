@@ -15,7 +15,7 @@
 	$this->breadcrumbs=array(
 		'User Levels'=>array('manage'),
 		$model->title->message=>array('view','id'=>$model->level_id),
-		'Update',
+		Yii::t('phrase', 'Update'),
 	);
 ?>
 
@@ -23,7 +23,6 @@
 	<?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 		'id'=>'user-level-form',
 		'enableAjaxValidation'=>true,
-		//'htmlOptions' => array('enctype' => 'multipart/form-data')
 	)); ?>
 
 		<?php //begin.Messages ?>

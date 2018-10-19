@@ -16,7 +16,6 @@
 <?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 	'id'=>'users-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 <div class="dialog-content">
 	<fieldset>
@@ -49,7 +48,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('displayname')?> <span class="required">*</span></label>
 			<div class="col-lg-9 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'displayname', array('maxlength'=>64,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'displayname', array('maxlength'=>64, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'displayname'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -59,7 +58,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('first_name')?> <span class="required">*</span></label>
 			<div class="col-lg-9 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'first_name', array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'first_name', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'first_name'); ?>
 			</div>
 		</div>
@@ -67,7 +66,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('last_name')?> <span class="required">*</span></label>
 			<div class="col-lg-9 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'last_name', array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'last_name', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'last_name'); ?>
 			</div>
 		</div>
@@ -77,7 +76,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('username')?> <span class="required">*</span></label>
 			<div class="col-lg-9 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'username', array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'username', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'username'); ?>
 			</div>
 		</div>
@@ -86,7 +85,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('email')?> <span class="required">*</span></label>
 			<div class="col-lg-9 col-md-9 col-sm-12">
-				<?php echo $form->textField($model,'email', array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->textField($model,'email', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'email'); ?>
 				<?php /*<div class="small-px silent"></div>*/?>
 			</div>
@@ -107,7 +106,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('newPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
 			<div class="col-lg-9 col-md-9 col-sm-12">
-				<?php echo $form->passwordField($model,'newPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->passwordField($model,'newPassword', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'newPassword'); ?>
 			</div>
 		</div>
@@ -115,7 +114,7 @@
 		<div class="form-group row">
 			<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('confirmPassword')?> <?php echo $model->isNewRecord ? '<span class="required">*</span>' : '';?></label>
 			<div class="col-lg-9 col-md-9 col-sm-12">
-				<?php echo $form->passwordField($model,'confirmPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
+				<?php echo $form->passwordField($model,'confirmPassword', array('maxlength'=>32, 'class'=>'form-control')); ?>
 				<?php echo $form->error($model,'confirmPassword'); ?>
 			</div>
 		</div>

@@ -17,7 +17,7 @@
 	$this->breadcrumbs=array(
 		'User Verifies'=>array('manage'),
 		$model->user->displayname=>array('view','id'=>$model->verify_id),
-		'Delete',
+		Yii::t('phrase', 'Delete'),
 	);
 ?>
 

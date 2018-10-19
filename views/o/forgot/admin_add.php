@@ -16,7 +16,7 @@
 
 	$this->breadcrumbs=array(
 		'User Forgots'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 

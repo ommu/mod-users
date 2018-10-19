@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'User Verifies'=>array('manage'),
-		'Manage',
+		Yii::t('phrase', 'Manage'),
 	);
 	$this->menu=array(
 		array(

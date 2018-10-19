@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'User Invites'=>array('manage'),
 		$model->displayname=>array('view','id'=>$model->invite_id),
-		'Publish',
+		Yii::t('phrase', 'Publish'),
 	);
 ?>
 

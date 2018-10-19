@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'User Newsletter Histories'=>array('manage'),
 		$model->newsletter->user->displayname=>array('view','id'=>$model->id),
-		'Delete',
+		Yii::t('phrase', 'Delete'),
 	);
 ?>
 

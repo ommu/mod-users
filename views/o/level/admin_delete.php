@@ -14,14 +14,13 @@
 
 	$this->breadcrumbs=array(
 		'User Levels'=>array('manage'),
-		'Delete',
+		Yii::t('phrase', 'Delete'),
 	);
 ?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'user-level-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 	<div class="dialog-content">
 		<?php echo Yii::t('phrase', 'Are you sure you want to delete this item?');?>

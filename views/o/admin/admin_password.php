@@ -21,7 +21,6 @@
 <?php $form=$this->beginWidget('application.libraries.yii-traits.system.OActiveForm', array(
 	'id'=>'users-form',
 	'enableAjaxValidation'=>true,
-	//'htmlOptions' => array('enctype' => 'multipart/form-data')
 )); ?>
 <div class="dialog-content">
 	<?php if(!Yii::app()->getRequest()->getParam('type') || (Yii::app()->getRequest()->getParam('type') != 'success')) {?>
@@ -32,7 +31,7 @@
 			<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('oldPassword')?> <span class="required">*</span></label>
 				<div class="col-lg-6 col-md-9 col-sm-12">
-					<?php echo $form->passwordField($model,'oldPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
+					<?php echo $form->passwordField($model,'oldPassword', array('maxlength'=>32, 'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'oldPassword'); ?>
 				</div>
 			</div>
@@ -40,7 +39,7 @@
 			<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('newPassword')?> <span class="required">*</span></label>
 				<div class="col-lg-6 col-md-9 col-sm-12">
-					<?php echo $form->passwordField($model,'newPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
+					<?php echo $form->passwordField($model,'newPassword', array('maxlength'=>32, 'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'newPassword'); ?>
 				</div>
 			</div>
@@ -48,7 +47,7 @@
 			<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-md-3 col-sm-12"><?php echo $model->getAttributeLabel('confirmPassword')?> <span class="required">*</span></label>
 				<div class="col-lg-6 col-md-9 col-sm-12">
-					<?php echo $form->passwordField($model,'confirmPassword', array('maxlength'=>32,'class'=>'form-control')); ?>
+					<?php echo $form->passwordField($model,'confirmPassword', array('maxlength'=>32, 'class'=>'form-control')); ?>
 					<?php echo $form->error($model,'confirmPassword'); ?>
 				</div>
 			</div>

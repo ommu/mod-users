@@ -12,8 +12,8 @@
  */
  
 	$this->breadcrumbs=array(
-	'User Forgots'=>array('manage'),
-		'Create',
+		'User Forgots'=>array('manage'),
+		Yii::t('phrase', 'Create'),
 	);
 
 if($render == 1) {?>

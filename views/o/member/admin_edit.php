@@ -15,7 +15,7 @@
 	$this->breadcrumbs=array(
 		'Users'=>array('manage'),
 		$model->user_id=>array('view','id'=>$model->user_id),
-		'Update',
+		Yii::t('phrase', 'Update'),
 	);
 ?>
 

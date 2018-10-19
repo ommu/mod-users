@@ -309,7 +309,7 @@ class UserNewsletter extends OActiveRecord
 			$this->templateColumns['invite_user_search'] = array(
 				'name' => 'invite_user_search',
 				'value' => '$data->view->invite_users ? $data->view->invite_users : 0',
-				//'value' => 'CHtml::link($data->view->invite_users ? $data->view->invite_users : 0, Yii::app()->controller->createUrl("o/invite/manage", array("newsletter"=>$data->newsletter_id)))',
+				//'value' => 'CHtml::link($data->view->invite_users ? $data->view->invite_users : 0, Yii::app()->controller->createUrl(\'o/invite/manage\', array("newsletter"=>$data->newsletter_id)))',
 				'htmlOptions' => array(
 					'class' => 'center',
 				),

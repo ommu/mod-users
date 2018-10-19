@@ -17,7 +17,7 @@
 	$this->breadcrumbs=array(
 		'User Forgots'=>array('manage'),
 		$model->user->displayname=>array('view','id'=>$model->forgot_id),
-		'Publish',
+		Yii::t('phrase', 'Publish'),
 	);
 ?>
 

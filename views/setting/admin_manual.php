@@ -13,7 +13,7 @@
 
 	$this->breadcrumbs=array(
 		'Users Settings'=>array('manage'),
-		'Manual Book',
+		Yii::t('phrase', 'Manual'),
 	);
 ?>
 

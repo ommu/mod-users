@@ -14,7 +14,7 @@
  
 	$this->breadcrumbs=array(
 		'User Forgots'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 
 if(Yii::app()->getRequest()->getParam('name') && Yii::app()->getRequest()->getParam('email')) {

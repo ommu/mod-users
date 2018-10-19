@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'User Newsletters'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 

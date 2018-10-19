@@ -665,7 +665,7 @@ class UsersCopy extends CActiveRecord
 				$welcome_replace = array(
 					Utility::getProtocol().'://'.Yii::app()->request->serverName.$_assetsUrl,
 					Utility::getProtocol().'://'.Yii::app()->request->serverName.Yii::app()->createUrl('site/index'),
-					$this->displayname,	
+					$this->displayname,
 				);
 				$welcome_template = 'user_welcome';
 				$welcome_title = 'Welcome to SSO-GTP by BPAD Yogyakarta';

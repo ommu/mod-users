@@ -17,7 +17,7 @@
 	$this->breadcrumbs=array(
 		'User Invite Histories'=>array('manage'),
 		$model->invite->displayname=>array('view','id'=>$model->id),
-		'Delete',
+		Yii::t('phrase', 'Delete'),
 	);
 ?>
 

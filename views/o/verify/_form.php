@@ -42,7 +42,7 @@
 		<div class="form-group row">
 			<?php echo $form->labelEx($model, 'email_i', array('class'=>'col-form-label col-lg-3 col-md-3 col-sm-12')); ?>
 			<div class="col-lg-9 col-md-9 col-sm-12">
-				<?php echo $form->textField($model, 'email_i', array('maxlength'=>32,'class'=>'form-control'));?>
+				<?php echo $form->textField($model, 'email_i', array('maxlength'=>32, 'class'=>'form-control'));?>
 				<?php echo $form->error($model, 'email_i'); ?>
 			</div>
 		</div>

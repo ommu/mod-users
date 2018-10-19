@@ -13,7 +13,7 @@
 
 	$this->breadcrumbs=array(
 		'User Levels'=>array('manage'),
-		'Manage',
+		Yii::t('phrase', 'Manage'),
 	);
 	$this->menu=array(
 		array(

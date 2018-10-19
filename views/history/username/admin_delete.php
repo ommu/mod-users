@@ -16,7 +16,7 @@
 	$this->breadcrumbs=array(
 		'User History Usernames'=>array('manage'),
 		$model->displayname=>array('view','id'=>$model->id),
-		'Delete',
+		Yii::t('phrase', 'Delete'),
 	);
 ?>
 

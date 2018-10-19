@@ -15,7 +15,7 @@
 
 	$this->breadcrumbs=array(
 		'User Invites'=>array('manage'),
-		'Create',
+		Yii::t('phrase', 'Create'),
 	);
 ?>
 
