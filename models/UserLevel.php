@@ -335,7 +335,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'message_allow',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->message_allow ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->message_allow);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -343,7 +343,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_block',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_block ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_block);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -351,7 +351,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_search',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_search ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_search);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -359,7 +359,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_style',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_style ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_style);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -367,7 +367,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_style_sample',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_style_sample ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_style_sample);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -375,7 +375,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_status',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_status ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_status);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -383,7 +383,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_invisible',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_invisible ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_invisible);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -391,7 +391,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_views',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_views ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_views);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -399,7 +399,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_change',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_change ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_change);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -407,7 +407,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'profile_delete',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->profile_delete ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->profile_delete);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -415,7 +415,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'photo_allow',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->photo_allow ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->photo_allow);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];

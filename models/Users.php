@@ -418,7 +418,7 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'search',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->search ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->search);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -426,7 +426,7 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'invisible',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->invisible ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->invisible);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -434,7 +434,7 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'privacy',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->privacy ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->privacy);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
@@ -442,7 +442,7 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'comments',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->comments ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->comments);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];

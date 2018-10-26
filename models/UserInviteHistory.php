@@ -183,7 +183,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'attribute' => 'expired_search',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->view->expired ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->view->expired);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',

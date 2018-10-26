@@ -284,7 +284,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'attribute' => 'register_search',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->view) ? ($model->view->register == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No')) : '-';
+				return isset($model->view) ? $this->filterYesNo($model->view->register) : '-';
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',

@@ -1,7 +1,6 @@
 <?php
 /**
  * UserInvites
- * version: 0.0.1
  *
  * UserInvites represents the model behind the search form about `ommu\users\models\UserInvites`.
  *

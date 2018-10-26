@@ -144,7 +144,7 @@ class UserOption extends \app\components\ActiveRecord
 			'attribute' => 'ommu_status',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $model->ommu_status ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $this->filterYesNo($model->ommu_status);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
