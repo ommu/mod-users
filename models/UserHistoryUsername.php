@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:38 WIB
  * @modified date 5 May 2018, 02:02 WIB
- * @link https://ecc.ft.ugm.ac.id
+ * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_history_username".
  *

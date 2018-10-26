@@ -9,7 +9,7 @@
  * @modified date 3 May 2018, 13:49 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
- * @link https://ecc.ft.ugm.ac.id
+ * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_option".
  *

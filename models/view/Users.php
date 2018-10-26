@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 2 May 2018, 13:20 WIB
- * @link https://ecc.ft.ugm.ac.id
+ * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_users".
  *
