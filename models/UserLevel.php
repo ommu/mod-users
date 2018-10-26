@@ -60,7 +60,6 @@ use ommu\users\models\view\UserLevel as UserLevelView;
 class UserLevel extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
-	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['desc_i','creation_search','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','slug','modified_date','modified_search'];

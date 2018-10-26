@@ -31,7 +31,7 @@ use yii\helpers\Html;
 
 class UserNewsletterHistory extends \app\components\ActiveRecord
 {
-	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = [];
 

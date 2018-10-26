@@ -71,7 +71,6 @@ use ommu\users\models\view\Users as UsersView;
 class Users extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
-	use \ommu\traits\GridViewTrait;
 	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = [];

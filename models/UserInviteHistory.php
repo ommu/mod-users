@@ -33,7 +33,7 @@ use ommu\users\models\view\UserInviteHistory as UserInviteHistoryView;
 
 class UserInviteHistory extends \app\components\ActiveRecord
 {
-	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = ['code','invite_ip','expired_date'];
 

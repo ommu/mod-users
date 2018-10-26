@@ -39,7 +39,6 @@ use ommu\users\models\view\UserForgot as UserForgotView;
 class UserForgot extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
-	use \ommu\traits\GridViewTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['code','forgot_ip','modified_date','modified_search','deleted_date'];

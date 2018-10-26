@@ -42,7 +42,7 @@ use ommu\users\models\view\UserNewsletter as UserNewsletterView;
 
 class UserNewsletter extends \app\components\ActiveRecord
 {
-	use \ommu\traits\GridViewTrait;
+	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
