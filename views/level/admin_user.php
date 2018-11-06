@@ -50,13 +50,13 @@ $profile_block = [
 	1 => Yii::t('app', 'Yes, users can block other users.'),
 	0 => Yii::t('app', 'No, users cannot block other users.'),
 ];
-echo $form->field($model, 'profile_block', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'If set to "yes", users can block other users from sending them private messages, requesting their friendship, and viewing their profile. This helps fight spam and network abuse.').'</span>{input}{error}</div>'])
+echo $form->field($model, 'profile_block', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'If set to "yes", users can block other users from sending them private messages, requesting their friendship, and viewing their profile. This helps fight spam and network abuse.').'</span>{input}{error}</div>'])
 ->radioList($profile_block, ['class'=>'desc pt-10', 'separator'=>'<br />'])
 	->label($model->getAttributeLabel('profile_block'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <div class="form-group">
 	<label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo Yii::t('app', 'Privacy Options');?></label>
-	<div class="col-md-9 col-sm-9 col-xs-12">
+	<div class="col-md-6 col-sm-9 col-xs-12">
 		<?php $profile_search = [
 			1 => Yii::t('app', 'Yes, allow users to exclude themselves from search results. '),
 			0 => Yii::t('app', 'No, force all users to be included in search results.  '),
@@ -94,7 +94,7 @@ echo $form->field($model, 'profile_block', ['template' => '{label}<div class="co
 <div class="form-group">
 	<?php echo $form->field($model, 'photo_allow', ['template' => '{label}', 'options' => ['tag' => null]])
 		->label($model->getAttributeLabel('photo_allow'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-	<div class="col-md-9 col-sm-9 col-xs-12">
+	<div class="col-md-6 col-sm-9 col-xs-12">
 		<?php $photo_allow = [
 			1 => Yii::t('app', 'Yes, users can upload a photo.'),
 			0 => Yii::t('app', 'No, users can not upload a photo.'),
@@ -120,7 +120,7 @@ echo $form->field($model, 'profile_block', ['template' => '{label}<div class="co
 
 <div class="form-group">
 	<label class="control-label col-md-3 col-sm-3 col-xs-12"><?php echo Yii::t('app', 'Default');?></label>
-	<div class="col-md-9 col-sm-9 col-xs-12">
+	<div class="col-md-6 col-sm-9 col-xs-12">
 		<?php $profile_style = [
 			1 => Yii::t('app', 'Yes, users can add custom CSS styles to their profiles.'),
 			0 => Yii::t('app', 'No, users cannot add custom CSS styles to their profiles.'),
@@ -144,7 +144,7 @@ echo $form->field($model, 'profile_block', ['template' => '{label}<div class="co
 	1 => Yii::t('app', 'Yes, allow users to have a "status" message.'),
 	0 => Yii::t('app', 'No, users cannot have a "status" message.'),
 ];
-echo $form->field($model, 'profile_status', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'Enable this feature if you want to allow users to show their "status" on their profile. By updating their status, users can tell others what they are up to, what\'s on their minds, etc.').'</span>{input}{error}</div>'])
+echo $form->field($model, 'profile_status', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'Enable this feature if you want to allow users to show their "status" on their profile. By updating their status, users can tell others what they are up to, what\'s on their minds, etc.').'</span>{input}{error}</div>'])
 	->radioList($profile_status, ['class'=>'desc pt-10', 'separator'=>'<br />'])
 	->label($model->getAttributeLabel('profile_status'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
@@ -152,7 +152,7 @@ echo $form->field($model, 'profile_status', ['template' => '{label}<div class="c
 	1 => Yii::t('app', 'Yes, allow users to go invisible.'),
 	0 => Yii::t('app', 'No, do not allow users to go invisible.'),
 ];
-echo $form->field($model, 'profile_invisible', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'Enable this feature if you want to allow users to go "invisible" (not be displayed in the online users list even if they are online).').'</span>{input}{error}</div>'])
+echo $form->field($model, 'profile_invisible', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'Enable this feature if you want to allow users to go "invisible" (not be displayed in the online users list even if they are online).').'</span>{input}{error}</div>'])
 	->radioList($profile_invisible, ['class'=>'desc pt-10', 'separator'=>'<br />'])
 	->label($model->getAttributeLabel('profile_invisible'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
@@ -160,7 +160,7 @@ echo $form->field($model, 'profile_invisible', ['template' => '{label}<div class
 	1 => Yii::t('app', 'Yes, allow users to see who has viewed their profile.'),
 	0 => Yii::t('app', 'No, do not allow users to see who has viewed their profile.'),
 ];
-echo $form->field($model, 'profile_views', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', '
+echo $form->field($model, 'profile_views', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', '
 If you enable this feature, users will be given the option of seeing which users have visited their profile.').'</span>{input}{error}</div>'])
 	->radioList($profile_views, ['class'=>'desc pt-10', 'separator'=>'<br />'])
 	->label($model->getAttributeLabel('profile_views'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
@@ -169,7 +169,7 @@ If you enable this feature, users will be given the option of seeing which users
 	1 => Yii::t('app', 'Yes, allow users to change their username.'),
 	0 => Yii::t('app', 'No, do not allow users to change their username.'),
 ];
-echo $form->field($model, 'profile_change', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', '
+echo $form->field($model, 'profile_change', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', '
 Enable this feature if you want to allow your users to be able to change their username. Note that if you have usernames disabled on the General Settings page, this feature is irrelevant.').'</span>{input}{error}</div>'])
 	->radioList($profile_change, ['class'=>'desc pt-10', 'separator'=>'<br />'])
 	->label($model->getAttributeLabel('profile_change'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
@@ -178,13 +178,13 @@ Enable this feature if you want to allow your users to be able to change their u
 	1 => Yii::t('app', 'Yes, allow users to delete their account.'),
 	0 => Yii::t('app', 'No, do not allow users to delete their account.'),
 ];
-echo $form->field($model, 'profile_delete', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'Enable this feature if you would like to allow your users to delete their account manually.').'</span>{input}{error}</div>'])
+echo $form->field($model, 'profile_delete', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'Enable this feature if you would like to allow your users to delete their account manually.').'</span>{input}{error}</div>'])
 	->radioList($profile_delete, ['class'=>'desc pt-10', 'separator'=>'<br />'])
 	->label($model->getAttributeLabel('profile_delete'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <div class="ln_solid"></div>
 <div class="form-group">
-	<div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>

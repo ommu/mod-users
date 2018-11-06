@@ -51,7 +51,7 @@ $message_allow = [
 	1 => Yii::t('app', 'Friends only - users can send private messages to their friends only.'),
 	0 => Yii::t('app', 'Nobody - users cannot send private messages.'),
 ];
-echo $form->field($model, 'message_allow', ['template' => '{label}<div class="col-md-9 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', '
+echo $form->field($model, 'message_allow', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', '
 If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.').'</span>{input}{error}</div>'])
 	->radioList($message_allow, ['class'=>'desc pt-10', 'separator' => '<br />'])
 	->label($model->getAttributeLabel('message_allow'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
@@ -59,7 +59,7 @@ If set to "nobody", none of the other settings on this page will apply. Otherwis
 <div class="form-group field-message_limit">
 	<?php echo $form->field($model, 'message_limit[i]', ['template' => '{label}', 'options' => ['tag' => null]])
 		->label($model->getAttributeLabel('message_limit[i]'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-	<div class="col-md-9 col-sm-9 col-xs-12">
+	<div class="col-md-6 col-sm-9 col-xs-12">
 		<span class="small-px mb-10"><?php echo Yii::t('app', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.'); ?></span>
 		<?php 
 		$message_limit = [
@@ -85,7 +85,7 @@ If set to "nobody", none of the other settings on this page will apply. Otherwis
 
 <div class="ln_solid"></div>
 <div class="form-group">
-	<div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>
