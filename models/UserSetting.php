@@ -15,8 +15,8 @@
  * @property integer $id
  * @property string $license
  * @property integer $permission
- * @property string $meta_keyword
  * @property string $meta_description
+ * @property string $meta_keyword
  * @property string $forgot_diff_type
  * @property integer $forgot_difference
  * @property string $verify_diff_type
@@ -70,9 +70,9 @@ class UserSetting extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['license', 'permission', 'meta_keyword', 'meta_description', 'forgot_diff_type', 'forgot_difference', 'verify_diff_type', 'verify_difference', 'invite_diff_type', 'invite_difference', 'invite_order'], 'required'],
+			[['license', 'permission', 'meta_description', 'meta_keyword', 'forgot_diff_type', 'forgot_difference', 'verify_diff_type', 'verify_difference', 'invite_diff_type', 'invite_difference', 'invite_order'], 'required'],
 			[['permission', 'forgot_difference', 'verify_difference', 'invite_difference', 'modified_id'], 'integer'],
-			[['meta_keyword', 'meta_description', 'forgot_diff_type', 'verify_diff_type', 'invite_diff_type', 'invite_order'], 'string'],
+			[['meta_description', 'meta_keyword', 'forgot_diff_type', 'verify_diff_type', 'invite_diff_type', 'invite_order'], 'string'],
 			[['modified_date'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
@@ -87,8 +87,8 @@ class UserSetting extends \app\components\ActiveRecord
 			'id' => Yii::t('app', 'ID'),
 			'license' => Yii::t('app', 'License'),
 			'permission' => Yii::t('app', 'Permission'),
-			'meta_keyword' => Yii::t('app', 'Meta Keyword'),
 			'meta_description' => Yii::t('app', 'Meta Description'),
+			'meta_keyword' => Yii::t('app', 'Meta Keyword'),
 			'forgot_diff_type' => Yii::t('app', 'Forgot Diff Type'),
 			'forgot_difference' => Yii::t('app', 'Forgot Difference'),
 			'verify_diff_type' => Yii::t('app', 'Verify Diff Type'),
@@ -119,6 +119,15 @@ class UserSetting extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 * @return \ommu\users\models\query\UserSetting the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\users\models\query\UserSetting(get_called_class());
+	}
+
+	/**
 	 * Set default columns to display
 	 */
 	public function init() 
@@ -136,16 +145,22 @@ class UserSetting extends \app\components\ActiveRecord
 				return $model->license;
 			},
 		];
-		$this->templateColumns['meta_keyword'] = [
-			'attribute' => 'meta_keyword',
+		$this->templateColumns['permission'] = [
+			'attribute' => 'permission',
 			'value' => function($model, $key, $index, $column) {
-				return $model->meta_keyword;
+				return self::getPermission($model->permission);
 			},
 		];
 		$this->templateColumns['meta_description'] = [
 			'attribute' => 'meta_description',
 			'value' => function($model, $key, $index, $column) {
 				return $model->meta_description;
+			},
+		];
+		$this->templateColumns['meta_keyword'] = [
+			'attribute' => 'meta_keyword',
+			'value' => function($model, $key, $index, $column) {
+				return $model->meta_keyword;
 			},
 		];
 		$this->templateColumns['forgot_diff_type'] = [
@@ -192,10 +207,10 @@ class UserSetting extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'modified_date'),
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
@@ -206,14 +221,6 @@ class UserSetting extends \app\components\ActiveRecord
 				},
 			];
 		}
-		$this->templateColumns['permission'] = [
-			'attribute' => 'permission',
-			'filter' => $this->filterYesNo(),
-			'value' => function($model, $key, $index, $column) {
-				return $this->filterYesNo($model->permission);
-			},
-			'contentOptions' => ['class'=>'center'],
-		];
 	}
 
 	/**
@@ -232,6 +239,22 @@ class UserSetting extends \app\components\ActiveRecord
 			$model = self::findOne(1);
 			return $model;
 		}
+	}
+
+	/**
+	 * function getPermission
+	 */
+	public static function getPermission($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, the public can view "module name" unless they are made private.'),
+			0 => Yii::t('app', 'No, the public cannot view "module name".'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
 	}
 
 	/**
@@ -264,7 +287,7 @@ class UserSetting extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if(!$this->isNewRecord)
@@ -272,5 +295,4 @@ class UserSetting extends \app\components\ActiveRecord
 		}
 		return true;
 	}
-
 }

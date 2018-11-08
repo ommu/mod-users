@@ -9,6 +9,7 @@
  * TOC :
  *	Index
  *	Update
+ *	View
  *	Delete
  *
  *	findModel
@@ -17,7 +18,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 9 October 2017, 11:22 WIB
- * @modified date 6 May 2018, 20:24 WIB
+ * @modified date 8 November 2018, 12:47 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -26,16 +27,15 @@ namespace ommu\users\controllers\setting;
 
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
 use app\components\Controller;
-use mdm\admin\components\AccessControl;
 use ommu\users\models\UserSetting;
+use mdm\admin\components\AccessControl;
 use ommu\users\models\search\UserLevel as UserLevelSearch;
 
 class AdminController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{
@@ -70,7 +70,11 @@ class AdminController extends Controller
 	public function actionUpdate()
 	{
 		$this->layout = 'admin_default';
-		
+
+		$model = UserSetting::findOne(1);
+		if($model === null)
+			$model = new UserSetting();
+
 		$searchModel = new UserLevelSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -84,17 +88,13 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$model = UserSetting::findOne(1);
-		if($model === null)
-			$model = new UserSetting();
-
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User setting success updated.'));
 				return $this->redirect(['update']);
-				//return $this->redirect(['view', 'id' => $model->id]);
+				//return $this->redirect(['view', 'id'=>$model->id]);
 			}
 		}
 
@@ -102,9 +102,26 @@ class AdminController extends Controller
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
+			'model' => $model,
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
+		]);
+	}
+
+	/**
+	 * Displays a single UserSetting model.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionView($id)
+	{
+		$model = $this->findModel($id);
+
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {id}', ['model-class' => 'Setting', 'id' => $model->id]);
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_view', [
 			'model' => $model,
 		]);
 	}
@@ -132,9 +149,9 @@ class AdminController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserSetting::findOne($id)) !== null) 
+		if(($model = UserSetting::findOne($id)) !== null)
 			return $model;
-		else
-			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

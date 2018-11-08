@@ -28,7 +28,6 @@ namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserNewsletter;
@@ -196,6 +195,6 @@ class NewsletterController extends Controller
 		if(($model = UserNewsletter::findOne($id)) !== null) 
 			return $model;
 		else
-			throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }
