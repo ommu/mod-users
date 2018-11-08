@@ -473,7 +473,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'default',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['level/default', 'id'=>$model->primaryKey]);
+				$url = Url::to(['setting/level/default', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->default, 'Default,No', true);
 			},
 			'contentOptions' => ['class'=>'center'],
@@ -483,7 +483,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'signup',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['level/signup', 'id'=>$model->primaryKey]);
+				$url = Url::to(['setting/level/signup', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->signup, 'Enable,Disable');
 			},
 			'contentOptions' => ['class'=>'center'],
