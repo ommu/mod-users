@@ -186,11 +186,11 @@ class UserNewsletter extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\query\UserNewsletterQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserNewsletter the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\users\models\query\UserNewsletterQuery(get_called_class());
+		return new \ommu\users\models\query\UserNewsletter(get_called_class());
 	}
 
 	/**

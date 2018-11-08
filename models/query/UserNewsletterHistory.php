@@ -1,21 +1,21 @@
 <?php
 /**
- * UserLevelQuery
+ * UserNewsletterHistory
  *
- * This is the ActiveQuery class for [[\ommu\users\models\UserLevel]].
- * @see \ommu\users\models\UserLevel
+ * This is the ActiveQuery class for [[\ommu\users\models\UserNewsletterHistory]].
+ * @see \ommu\users\models\UserNewsletterHistory
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
- * @created date 2 May 2018, 13:29 WIB
+ * @created date 7 May 2018, 07:38 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 namespace ommu\users\models\query;
 
-class UserLevelQuery extends \yii\db\ActiveQuery
+class UserNewsletterHistory extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()
@@ -26,7 +26,7 @@ class UserLevelQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\UserLevel[]|array
+	 * @return \ommu\users\models\UserNewsletterHistory[]|array
 	 */
 	public function all($db = null)
 	{
@@ -35,7 +35,7 @@ class UserLevelQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\UserLevel|array|null
+	 * @return \ommu\users\models\UserNewsletterHistory|array|null
 	 */
 	public function one($db = null)
 	{

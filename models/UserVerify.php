@@ -133,11 +133,11 @@ class UserVerify extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\query\UserVerifyQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserVerify the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\users\models\query\UserVerifyQuery(get_called_class());
+		return new \ommu\users\models\query\UserVerify(get_called_class());
 	}
 
 	/**
@@ -229,7 +229,7 @@ class UserVerify extends \app\components\ActiveRecord
 			'attribute' => 'expired_search',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $this->filterYesNo($model->view->expire);
+				return $this->filterYesNo($model->view->expired);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',

@@ -267,11 +267,11 @@ class Users extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\query\UsersQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\Users the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\users\models\query\UsersQuery(get_called_class());
+		return new \ommu\users\models\query\Users(get_called_class());
 	}
 
 	/**

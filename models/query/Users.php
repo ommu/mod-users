@@ -1,6 +1,6 @@
 <?php
 /**
- * UsersQuery
+ * Users
  *
  * This is the ActiveQuery class for [[\ommu\users\models\Users]].
  * @see \ommu\users\models\Users
@@ -15,7 +15,7 @@
 
 namespace ommu\users\models\query;
 
-class UsersQuery extends \yii\db\ActiveQuery
+class Users extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()

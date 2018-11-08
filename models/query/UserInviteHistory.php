@@ -1,6 +1,6 @@
 <?php
 /**
- * UserInviteHistoryQuery
+ * UserInviteHistory
  *
  * This is the ActiveQuery class for [[\ommu\users\models\UserInviteHistory]].
  * @see \ommu\users\models\UserInviteHistory
@@ -15,7 +15,7 @@
 
 namespace ommu\users\models\query;
 
-class UserInviteHistoryQuery extends \yii\db\ActiveQuery
+class UserInviteHistory extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()

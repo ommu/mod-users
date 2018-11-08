@@ -1,6 +1,6 @@
 <?php
 /**
- * UserOptionQuery
+ * UserOption
  *
  * This is the ActiveQuery class for [[\ommu\users\models\UserOption]].
  * @see \ommu\users\models\UserOption
@@ -15,7 +15,7 @@
 
 namespace ommu\users\models\query;
 
-class UserOptionQuery extends \yii\db\ActiveQuery
+class UserOption extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()

@@ -1,6 +1,6 @@
 <?php
 /**
- * UserVerifyQuery
+ * UserVerify
  *
  * This is the ActiveQuery class for [[\ommu\users\models\UserVerify]].
  * @see \ommu\users\models\UserVerify
@@ -15,7 +15,7 @@
 
 namespace ommu\users\models\query;
 
-class UserVerifyQuery extends \yii\db\ActiveQuery
+class UserVerify extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()

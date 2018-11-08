@@ -1,21 +1,21 @@
 <?php
 /**
- * UserForgotQuery
+ * UserInvites
  *
- * This is the ActiveQuery class for [[\ommu\users\models\UserForgot]].
- * @see \ommu\users\models\UserForgot
+ * This is the ActiveQuery class for [[\ommu\users\models\UserInvites]].
+ * @see \ommu\users\models\UserInvites
  * 
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
- * @created date 2 May 2018, 13:32 WIB
+ * @created date 2 May 2018, 13:30 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 namespace ommu\users\models\query;
 
-class UserForgotQuery extends \yii\db\ActiveQuery
+class UserInvites extends \yii\db\ActiveQuery
 {
 	/*
 	public function active()
@@ -42,7 +42,7 @@ class UserForgotQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\UserForgot[]|array
+	 * @return \ommu\users\models\UserInvites[]|array
 	 */
 	public function all($db = null)
 	{
@@ -51,7 +51,7 @@ class UserForgotQuery extends \yii\db\ActiveQuery
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\UserForgot|array|null
+	 * @return \ommu\users\models\UserInvites|array|null
 	 */
 	public function one($db = null)
 	{

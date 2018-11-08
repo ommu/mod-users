@@ -95,11 +95,11 @@ class UserOption extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\query\UserOptionQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserOption the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\users\models\query\UserOptionQuery(get_called_class());
+		return new \ommu\users\models\query\UserOption(get_called_class());
 	}
 
 	/**

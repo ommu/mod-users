@@ -133,11 +133,11 @@ class UserForgot extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\query\UserForgotQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserForgot the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\users\models\query\UserForgotQuery(get_called_class());
+		return new \ommu\users\models\query\UserForgot(get_called_class());
 	}
 
 	/**

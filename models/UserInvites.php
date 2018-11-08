@@ -167,11 +167,11 @@ class UserInvites extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\query\UserInvitesQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserInvites the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\users\models\query\UserInvitesQuery(get_called_class());
+		return new \ommu\users\models\query\UserInvites(get_called_class());
 	}
 
 	/**

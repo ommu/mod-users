@@ -113,11 +113,11 @@ class UserInviteHistory extends \app\components\ActiveRecord
 
 	/**
 	 * @inheritdoc
-	 * @return \ommu\users\models\query\UserInviteHistoryQuery the active query used by this AR class.
+	 * @return \ommu\users\models\query\UserInviteHistory the active query used by this AR class.
 	 */
 	public static function find()
 	{
-		return new \ommu\users\models\query\UserInviteHistoryQuery(get_called_class());
+		return new \ommu\users\models\query\UserInviteHistory(get_called_class());
 	}
 
 	/**
