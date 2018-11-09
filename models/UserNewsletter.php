@@ -49,7 +49,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip','level_search'];
 	public $email_i;
 
-	// Variable Search
+	// Search Variable
 	public $level_search;
 	public $user_search;
 	public $reference_search;

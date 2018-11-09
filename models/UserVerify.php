@@ -44,7 +44,7 @@ class UserVerify extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['code','verify_ip','modified_date','modified_search','deleted_date'];
 	public $email_i;
 
-	// Variable Search
+	// Search Variable
 	public $level_search;
 	public $user_search;
 	public $modified_search;

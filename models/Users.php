@@ -81,7 +81,7 @@ class Users extends \app\components\ActiveRecord
 	public $reference_id_i;
 	public $invite_code_i;
 
-	// Variable Search
+	// Search Variable
 	public $level_search;
 	public $language_search;
 	public $user_search;

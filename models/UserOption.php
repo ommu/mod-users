@@ -37,7 +37,7 @@ class UserOption extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = [];
 
-	// Variable Search
+	// Search Variable
 	public $user_search;
 
 	/**

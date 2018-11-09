@@ -21,8 +21,6 @@
 namespace ommu\users\models\view;
 
 use Yii;
-use yii\helpers\Url;
-use yii\helpers\Html;
 
 class UserSetting extends \app\components\ActiveRecord
 {

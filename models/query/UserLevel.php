@@ -9,6 +9,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 2 May 2018, 13:29 WIB
+ * @modified date 9 November 2018, 09:06 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -25,7 +26,7 @@ class UserLevel extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserLevel[]|array
 	 */
 	public function all($db = null)
@@ -34,7 +35,7 @@ class UserLevel extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserLevel|array|null
 	 */
 	public function one($db = null)

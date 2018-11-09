@@ -45,7 +45,7 @@ class UserSetting extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = [];
 
-	// Variable Search
+	// Search Variable
 	public $modified_search;
 
 	/**

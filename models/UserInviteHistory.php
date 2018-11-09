@@ -37,7 +37,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['code','invite_ip','expired_date'];
 
-	// Variable Search
+	// Search Variable
 	public $user_search;
 	public $email_search;
 	public $level_search;

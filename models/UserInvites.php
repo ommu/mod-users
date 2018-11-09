@@ -51,7 +51,7 @@ class UserInvites extends \app\components\ActiveRecord
 	public $email_i;
 	public $old_invites_i;
 
-	// Variable Search
+	// Search Variable
 	public $user_search;
 	public $email_search;
 	public $level_search;
