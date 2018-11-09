@@ -10,7 +10,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 9 October 2017, 11:22 WIB
- * @modified date 8 November 2018, 12:47 WIB
+ * @modified date 9 November 2018, 07:13 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -22,7 +22,6 @@ use app\libraries\grid\GridView;
 use yii\widgets\Pjax;
 use app\libraries\MenuContent;
 use app\libraries\MenuOption;
-use app\components\Utility;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Settings'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
@@ -55,6 +54,8 @@ $this->params['menu']['option'] = [
 			<div class="clearfix"></div>
 		</div>
 		<div class="x_content">
+
+<div class="user-level-index">
 <?php Pjax::begin(); ?>
 
 <?php //echo $this->render('/setting/level/_search', ['model'=>$searchModel]); ?>
@@ -98,6 +99,7 @@ echo GridView::widget([
 ]); ?>
 
 <?php Pjax::end(); ?>
+</div>
 		</div>
 	</div>
 </div>
@@ -110,9 +112,11 @@ echo GridView::widget([
 
 	<div class="x_panel">
 		<div class="x_content">
-			<?php echo $this->render('_form', [
-				'model' => $model,
-			]); ?>
+			<div class="user-setting-update">
+				<?php echo $this->render('_form', [
+					'model' => $model,
+				]); ?>
+			</div>
 		</div>
 	</div>
 </div>
