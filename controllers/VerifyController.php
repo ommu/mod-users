@@ -37,7 +37,7 @@ use ommu\users\models\search\UserVerify as UserVerifySearch;
 class VerifyController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

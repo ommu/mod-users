@@ -21,7 +21,7 @@ use ommu\users\models\Users as UsersModel;
 class Users extends UsersModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -34,7 +34,7 @@ class Users extends UsersModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

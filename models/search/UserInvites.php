@@ -23,7 +23,7 @@ use ommu\users\models\UserInvites as UserInvitesModel;
 class UserInvites extends UserInvitesModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class UserInvites extends UserInvitesModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

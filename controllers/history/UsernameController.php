@@ -34,7 +34,7 @@ use ommu\users\models\search\UserHistoryUsername as UserHistoryUsernameSearch;
 class UsernameController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

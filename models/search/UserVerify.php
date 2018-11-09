@@ -23,7 +23,7 @@ use ommu\users\models\UserVerify as UserVerifyModel;
 class UserVerify extends UserVerifyModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class UserVerify extends UserVerifyModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

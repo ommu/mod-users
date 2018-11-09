@@ -39,7 +39,7 @@ class InviteController extends Controller
 	use \ommu\traits\FileTrait;
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

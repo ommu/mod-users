@@ -94,7 +94,7 @@ class UserOption extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\query\UserOption the active query used by this AR class.
 	 */
 	public static function find()

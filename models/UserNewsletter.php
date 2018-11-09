@@ -185,7 +185,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\query\UserNewsletter the active query used by this AR class.
 	 */
 	public static function find()

@@ -25,7 +25,7 @@ class UserNewsletterHistory extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserNewsletterHistory[]|array
 	 */
 	public function all($db = null)
@@ -34,7 +34,7 @@ class UserNewsletterHistory extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserNewsletterHistory|array|null
 	 */
 	public function one($db = null)

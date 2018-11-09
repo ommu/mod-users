@@ -37,7 +37,7 @@ use ommu\users\models\search\UserForgot as UserForgotSearch;
 class ForgotController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

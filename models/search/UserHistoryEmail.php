@@ -23,7 +23,7 @@ use ommu\users\models\UserHistoryEmail as UserHistoryEmailModel;
 class UserHistoryEmail extends UserHistoryEmailModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

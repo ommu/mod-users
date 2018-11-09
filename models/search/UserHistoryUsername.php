@@ -23,7 +23,7 @@ use ommu\users\models\UserHistoryUsername as UserHistoryUsernameModel;
 class UserHistoryUsername extends UserHistoryUsernameModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class UserHistoryUsername extends UserHistoryUsernameModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

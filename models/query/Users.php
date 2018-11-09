@@ -25,7 +25,7 @@ class Users extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\Users[]|array
 	 */
 	public function all($db = null)
@@ -34,7 +34,7 @@ class Users extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\Users|array|null
 	 */
 	public function one($db = null)

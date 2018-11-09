@@ -23,7 +23,7 @@ use ommu\users\models\UserNewsletter as UserNewsletterModel;
 class UserNewsletter extends UserNewsletterModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class UserNewsletter extends UserNewsletterModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

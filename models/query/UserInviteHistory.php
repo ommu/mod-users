@@ -25,7 +25,7 @@ class UserInviteHistory extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserInviteHistory[]|array
 	 */
 	public function all($db = null)
@@ -34,7 +34,7 @@ class UserInviteHistory extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserInviteHistory|array|null
 	 */
 	public function one($db = null)

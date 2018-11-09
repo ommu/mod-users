@@ -25,7 +25,7 @@ class UserOption extends \yii\db\ActiveQuery
 	*/
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserOption[]|array
 	 */
 	public function all($db = null)
@@ -34,7 +34,7 @@ class UserOption extends \yii\db\ActiveQuery
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserOption|array|null
 	 */
 	public function one($db = null)

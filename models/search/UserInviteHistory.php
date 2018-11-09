@@ -23,7 +23,7 @@ use ommu\users\models\UserInviteHistory as UserInviteHistoryModel;
 class UserInviteHistory extends UserInviteHistoryModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class UserInviteHistory extends UserInviteHistoryModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

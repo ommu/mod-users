@@ -15,12 +15,12 @@ namespace ommu\users;
 class Module extends \app\components\Module
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public $controllerNamespace = 'ommu\users\controllers';
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function init()
 	{

@@ -34,7 +34,7 @@ use ommu\users\models\search\UserInviteHistory as UserInviteHistorySearch;
 class InviteController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

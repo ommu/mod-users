@@ -23,7 +23,7 @@ use ommu\users\models\UserHistoryPassword as UserHistoryPasswordModel;
 class UserHistoryPassword extends UserHistoryPasswordModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class UserHistoryPassword extends UserHistoryPasswordModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

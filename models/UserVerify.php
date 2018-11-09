@@ -132,7 +132,7 @@ class UserVerify extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\query\UserVerify the active query used by this AR class.
 	 */
 	public static function find()

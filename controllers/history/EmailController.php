@@ -34,7 +34,7 @@ use ommu\users\models\search\UserHistoryEmail as UserHistoryEmailSearch;
 class EmailController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

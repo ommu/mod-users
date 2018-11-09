@@ -23,7 +23,7 @@ use ommu\users\models\UserForgot as UserForgotModel;
 class UserForgot extends UserForgotModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
@@ -35,7 +35,7 @@ class UserForgot extends UserForgotModel
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{

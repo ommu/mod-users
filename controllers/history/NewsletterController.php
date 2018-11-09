@@ -34,7 +34,7 @@ use ommu\users\models\search\UserNewsletterHistory as UserNewsletterHistorySearc
 class NewsletterController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

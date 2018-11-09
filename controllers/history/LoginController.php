@@ -34,7 +34,7 @@ use ommu\users\models\search\UserHistoryLogin as UserHistoryLoginSearch;
 class LoginController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{

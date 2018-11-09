@@ -34,7 +34,7 @@ use ommu\users\models\search\UserHistoryPassword as UserHistoryPasswordSearch;
 class PasswordController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{
