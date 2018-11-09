@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 9 October 2017, 11:21 WIB
- * @modified date 2 May 2018, 13:34 WIB
+ * @modified date 8 November 2018, 12:39 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_setting".
@@ -70,10 +70,10 @@ class UserSetting extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['license', 'permission', 'meta_description', 'meta_keyword', 'forgot_diff_type', 'forgot_difference', 'verify_diff_type', 'verify_difference', 'invite_diff_type', 'invite_difference', 'invite_order'], 'required'],
+			[['license', 'permission', 'meta_description', 'meta_keyword', 'forgot_difference', 'verify_difference', 'invite_difference', 'invite_order'], 'required'],
 			[['permission', 'forgot_difference', 'verify_difference', 'invite_difference', 'modified_id'], 'integer'],
 			[['meta_description', 'meta_keyword', 'forgot_diff_type', 'verify_diff_type', 'invite_diff_type', 'invite_order'], 'string'],
-			[['modified_date'], 'safe'],
+			[['forgot_diff_type','verify_diff_type', 'invite_diff_type', 'modified_date'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
 	}
@@ -166,7 +166,7 @@ class UserSetting extends \app\components\ActiveRecord
 		$this->templateColumns['forgot_diff_type'] = [
 			'attribute' => 'forgot_diff_type',
 			'value' => function($model, $key, $index, $column) {
-				return $model->forgot_diff_type;
+				return self::getForgotDiffType($model->forgot_diff_type);
 			},
 		];
 		$this->templateColumns['forgot_difference'] = [
@@ -178,7 +178,7 @@ class UserSetting extends \app\components\ActiveRecord
 		$this->templateColumns['verify_diff_type'] = [
 			'attribute' => 'verify_diff_type',
 			'value' => function($model, $key, $index, $column) {
-				return $model->verify_diff_type;
+				return self::getForgotDiffType($model->verify_diff_type);
 			},
 		];
 		$this->templateColumns['verify_difference'] = [
@@ -190,7 +190,7 @@ class UserSetting extends \app\components\ActiveRecord
 		$this->templateColumns['invite_diff_type'] = [
 			'attribute' => 'invite_diff_type',
 			'value' => function($model, $key, $index, $column) {
-				return $model->invite_diff_type;
+				return self::getForgotDiffType($model->invite_diff_type);
 			},
 		];
 		$this->templateColumns['invite_difference'] = [
@@ -202,7 +202,7 @@ class UserSetting extends \app\components\ActiveRecord
 		$this->templateColumns['invite_order'] = [
 			'attribute' => 'invite_order',
 			'value' => function($model, $key, $index, $column) {
-				return $model->invite_order;
+				return self::getInviteOrder($model->invite_order);
 			},
 		];
 		$this->templateColumns['modified_date'] = [
@@ -258,30 +258,35 @@ class UserSetting extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * get Module License
+	 * function getForgotDiffType
 	 */
-	public static function getLicense($source='1234567890', $length=16, $char=4)
+	public static function getForgotDiffType($value=null)
 	{
-		$mod = $length%$char;
-		if($mod == 0)
-			$sep = ($length/$char);
-		else
-			$sep = (int)($length/$char)+1;
-		
-		$sourceLength = strlen($source);
-		$random = '';
-		for ($i = 0; $i < $length; $i++)
-			$random .= $source[rand(0, $sourceLength - 1)];
-		
-		$license = '';
-		for ($i = 0; $i < $sep; $i++) {
-			if($i != $sep-1)
-				$license .= substr($random,($i*$char),$char).'-';
-			else
-				$license .= substr($random,($i*$char),$char);
-		}
+		$items = array(
+			'0' => Yii::t('app', 'Day'),
+			'1' => Yii::t('app', 'Hour'),
+		);
 
-		return $license;
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getInviteOrder
+	 */
+	public static function getInviteOrder($value=null)
+	{
+		$items = array(
+			'asc' => Yii::t('app', 'Ascending'),
+			'desc' => Yii::t('app', 'Descending'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
 	}
 
 	/**
@@ -290,6 +295,19 @@ class UserSetting extends \app\components\ActiveRecord
 	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
+			if($this->forgot_difference != '') {
+				if($this->forgot_diff_type == '')
+					$this->addError('forgot_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('forgot_diff_type')]));
+			}
+			if($this->verify_difference != '') {
+				if($this->verify_diff_type == '')
+					$this->addError('verify_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('verify_diff_type')]));
+			}
+			if($this->invite_difference != '') {
+				if($this->invite_diff_type == '')
+					$this->addError('invite_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('invite_diff_type')]));
+			}
+			
 			if(!$this->isNewRecord)
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 		}

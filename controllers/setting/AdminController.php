@@ -28,8 +28,8 @@ namespace ommu\users\controllers\setting;
 use Yii;
 use yii\filters\VerbFilter;
 use app\components\Controller;
-use ommu\users\models\UserSetting;
 use mdm\admin\components\AccessControl;
+use ommu\users\models\UserSetting;
 use ommu\users\models\search\UserLevel as UserLevelSearch;
 
 class AdminController extends Controller
