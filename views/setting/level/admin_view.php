@@ -9,27 +9,30 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 07:46 WIB
- * @modified date 4 May 2018, 09:02 WIB
+ * @modified date 9 November 2018, 10:32 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
-use yii\helpers\Html;
+use Yii;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
+use ommu\users\models\UserLevel;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $model->title->message;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['setting/admin/index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Info'), 'url' => Url::to(['update', 'id' => $model->level_id]), 'icon' => 'info'],
-	['label' => Yii::t('app', 'User'), 'url' => Url::to(['user', 'id' => $model->level_id]), 'icon' => 'users'],
-	['label' => Yii::t('app', 'Message'), 'url' => Url::to(['message', 'id' => $model->level_id]), 'icon' => 'comment'],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->level_id]), 'icon' => 'pencil'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->level_id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Info'), 'url' => Url::to(['update', 'id'=>$model->level_id]), 'icon' => 'info'],
+	['label' => Yii::t('app', 'User'), 'url' => Url::to(['user', 'id'=>$model->level_id]), 'icon' => 'users'],
+	['label' => Yii::t('app', 'Message'), 'url' => Url::to(['message', 'id'=>$model->level_id]), 'icon' => 'comment'],
+	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->level_id]), 'icon' => 'pencil'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->level_id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
 ];
 ?>
+
+<div class="user-level-view">
 
 <?php echo DetailView::widget([
 	'model' => $model,
@@ -40,11 +43,11 @@ $this->params['menu']['content'] = [
 		'level_id',
 		[
 			'attribute' => 'name_i',
-			'value' => isset($model->title) ? $model->title->message : '-',
+			'value' => $model->name_i,
 		],
 		[
 			'attribute' => 'desc_i',
-			'value' => isset($model->description) ? $model->description->message : '-',
+			'value' => $model->desc_i,
 		],
 		[
 			'attribute' => 'default',
@@ -58,7 +61,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'message_allow',
-			'value' => $model->message_allow == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => $this->filterYesNo($model->message_allow),
 		],
 		[
 			'attribute' => 'message_limit',
@@ -66,11 +69,11 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'profile_block',
-			'value' => $model->profile_block == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getProfileBlock($model->profile_block),
 		],
 		[
 			'attribute' => 'profile_search',
-			'value' => $model->profile_search == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getProfileSearch($model->profile_search),
 		],
 		[
 			'attribute' => 'profile_privacy',
@@ -82,39 +85,39 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'profile_style',
-			'value' => $model->profile_style == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' =>  UserLevel::getProfileStyle($model->profile_style),
 		],
 		[
 			'attribute' => 'profile_style_sample',
-			'value' => $model->profile_style_sample == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getProfileStyleSample($model->profile_style_sample),
 		],
 		[
 			'attribute' => 'profile_status',
-			'value' => $model->profile_status == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getProfileStatus($model->profile_status),
 		],
 		[
 			'attribute' => 'profile_invisible',
-			'value' => $model->profile_invisible == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getProfileInvisible($model->profile_invisible),
 		],
 		[
 			'attribute' => 'profile_views',
-			'value' => $model->profile_views == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getProfileViews($model->profile_views),
 		],
 		[
 			'attribute' => 'profile_change',
-			'value' => $model->profile_change == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getProfileChangeUsername($model->profile_change),
 		],
 		[
 			'attribute' => 'profile_delete',
-			'value' => $model->profile_delete == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getProfileDeleted($model->profile_delete),
 		],
 		[
 			'attribute' => 'photo_allow',
-			'value' => $model->photo_allow == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No'),
+			'value' => UserLevel::getPhotoAllow($model->photo_allow),
 		],
 		[
 			'attribute' => 'photo_size',
-			'value' => serialize($model->photo_size),
+			'value' => UserLevel::getSize($model->photo_size),
 		],
 		[
 			'attribute' => 'photo_exts',
@@ -139,3 +142,5 @@ $this->params['menu']['content'] = [
 		'slug',
 	],
 ]) ?>
+
+</div>

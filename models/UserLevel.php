@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 07:43 WIB
- * @modified date 2 May 2018, 13:29 WIB
+ * @modified date 9 November 2018, 09:06 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_level".
@@ -62,20 +62,14 @@ class UserLevel extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['desc_i','creation_search','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','slug','modified_date','modified_search'];
+	public $gridForbiddenColumn = ['desc_i','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','creation_date','creation_search','modified_date','modified_search','slug'];
 	public $name_i;
 	public $desc_i;
 
-	// Variable Search
+	// Search Variable
 	public $creation_search;
 	public $modified_search;
-	public $active_search;
-	public $pending_search;
-	public $noverified_search;
-	public $blocked_search;
-	public $user_search;
 
-	const SCENARIO_INFO = 'info';
 	const SCENARIO_USER = 'user';
 	const SCENARIO_MESSAGE = 'message';
 
@@ -115,24 +109,26 @@ class UserLevel extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['default', 'message_allow', 'message_limit', 'profile_block', 'profile_search', 'profile_privacy', 'profile_comments', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'photo_size', 'photo_exts', 'name_i', 'desc_i'], 'required'],
+			[['default', 'name_i', 'desc_i'], 'required'],
+			[['profile_block', 'profile_search', 'profile_privacy', 'profile_comments', 'photo_allow', 'photo_size', 'photo_exts', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete'], 'required', 'on' => self::SCENARIO_USER],
+			[['message_allow', 'message_limit'], 'required', 'on' => self::SCENARIO_MESSAGE],
 			[['name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
 			[['photo_exts', 'name_i', 'desc_i'], 'string'],
 			//[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], 'serialize'],
 			[['creation_date', 'modified_date'], 'safe'],
+			[['slug', 'name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
-			[['slug', 'name_i'], 'string', 'max' => 32],
+			[['slug'], 'string', 'max' => 32],
 		];
 	}
 
 	// get scenarios
 	public function scenarios()
 	{
-		return [
-			self::SCENARIO_INFO => ['default','name_i','name_i'],
-			self::SCENARIO_USER => ['profile_block','profile_search','profile_privacy','profile_comments','photo_allow','photo_size','photo_exts','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete'],
-			self::SCENARIO_MESSAGE => ['message_allow','message_limit'],
-		];
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_USER] = ['profile_block','profile_search','profile_privacy','profile_comments','photo_allow','photo_size','photo_exts','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete'];
+		$scenarios[self::SCENARIO_MESSAGE] = ['message_allow','message_limit'];
+		return $scenarios;
 	}
 
 	/**
@@ -146,23 +142,20 @@ class UserLevel extends \app\components\ActiveRecord
 			'desc' => Yii::t('app', 'Description'),
 			'default' => Yii::t('app', 'Default'),
 			'signup' => Yii::t('app', 'Signup'),
-			'message_allow' => Yii::t('attribute', 'Can users block other users?'),
-			'message_limit' => Yii::t('attribute', 'Message Limit'),
-			'message_limit[i]' => Yii::t('app', 'Message Limit'),
-			'message_limit[inbox]' => Yii::t('app', 'Inbox'),
-			'message_limit[outbox]' => Yii::t('app', 'Outbox'),
-			'profile_block' => Yii::t('attribute', 'Can users block other users?'),
-			'profile_search' => Yii::t('attribute', 'Search Privacy Options'),
-			'profile_privacy' => Yii::t('attribute', 'Profile Privacy'),
-			'profile_comments' => Yii::t('attribute', 'Profile Comments'),
+			'message_allow' => Yii::t('app', 'Can users block other users?'),
+			'message_limit' => Yii::t('app', 'Message Limit'),
+			'profile_block' => Yii::t('app', 'Can users block other users?'),
+			'profile_search' => Yii::t('app', 'Search Privacy Options'),
+			'profile_privacy' => Yii::t('app', 'Profile Privacy'),
+			'profile_comments' => Yii::t('app', 'Profile Comments'),
 			'profile_style' => Yii::t('app', 'Profile Style'),
-			'profile_style_sample' => Yii::t('attribute', 'Profile Style Sample'),
-			'profile_status' => Yii::t('attribute', 'Allow profile status messages?'),
-			'profile_invisible' => Yii::t('attribute', 'Allow users to go invisible?'),
-			'profile_views' => Yii::t('attribute', 'Allow users to see who viewed their profile?'),
-			'profile_change' => Yii::t('attribute', 'Allow username change?'),
-			'profile_delete' => Yii::t('attribute', 'Allow account deletion?'),
-			'photo_allow' => Yii::t('attribute', 'Allow User Photos?'),
+			'profile_style_sample' => Yii::t('app', 'Profile Style Sample'),
+			'profile_status' => Yii::t('app', 'Allow profile status messages?'),
+			'profile_invisible' => Yii::t('app', 'Allow users to go invisible?'),
+			'profile_views' => Yii::t('app', 'Allow users to see who viewed their profile?'),
+			'profile_change' => Yii::t('app', 'Allow username change?'),
+			'profile_delete' => Yii::t('app', 'Allow account deletion?'),
+			'photo_allow' => Yii::t('app', 'Allow User Photos?'),
 			'photo_size' => Yii::t('app', 'Photo Size'),
 			'photo_exts' => Yii::t('app', 'Photo Ext'),
 			'creation_date' => Yii::t('app', 'Creation Date'),
@@ -174,11 +167,12 @@ class UserLevel extends \app\components\ActiveRecord
 			'desc_i' => Yii::t('app', 'Description'),
 			'creation_search' => Yii::t('app', 'Creation'),
 			'modified_search' => Yii::t('app', 'Modified'),
-			'active_search' => Yii::t('app', 'Active'),
-			'pending_search' => Yii::t('app', 'Pending'),
-			'noverified_search' => Yii::t('app', 'Noverified'),
-			'blocked_search' => Yii::t('app', 'Blocked'),
-			'user_search' => Yii::t('app', 'Users'),
+			'photo_size[i]' => Yii::t('app', 'Photo Size'),
+			'photo_size[width]' => Yii::t('app', 'Photo Width'),
+			'photo_size[height]' => Yii::t('app', 'Photo Height'),
+			'message_limit[i]' => Yii::t('app', 'Message Limit'),
+			'message_limit[inbox]' => Yii::t('app', 'Message Inbox'),
+			'message_limit[outbox]' => Yii::t('app', 'Message Outbox'),
 		];
 	}
 
@@ -231,7 +225,7 @@ class UserLevel extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\query\UserLevel the active query used by this AR class.
 	 */
 	public static function find()
@@ -254,13 +248,13 @@ class UserLevel extends \app\components\ActiveRecord
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->title) ? $model->title->message : '-';
+				return $model->name_i;
 			},
 		];
 		$this->templateColumns['desc_i'] = [
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
-				return isset($model->description) ? $model->description->message : '-';
+				return $model->desc_i;
 			},
 		];
 		$this->templateColumns['message_limit'] = [
@@ -295,10 +289,10 @@ class UserLevel extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
-			'filter' => Html::input('date', 'creation_date', Yii::$app->request->get('creation_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'creation_date'),
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('creation')) {
@@ -311,10 +305,10 @@ class UserLevel extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'modified_date'),
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
@@ -419,8 +413,8 @@ class UserLevel extends \app\components\ActiveRecord
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['active_search'] = [
-			'attribute' => 'active_search',
+		$this->templateColumns['userActive'] = [
+			'attribute' => 'view.user_active',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'active']);
@@ -429,8 +423,8 @@ class UserLevel extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['pending_search'] = [
-			'attribute' => 'pending_search',
+		$this->templateColumns['userPending'] = [
+			'attribute' => 'view.user_pending',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'pending']);
@@ -439,8 +433,8 @@ class UserLevel extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['noverified_search'] = [
-			'attribute' => 'noverified_search',
+		$this->templateColumns['userNoverified'] = [
+			'attribute' => 'view.user_noverified',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'noverified']);
@@ -449,8 +443,8 @@ class UserLevel extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['blocked_search'] = [
-			'attribute' => 'blocked_search',
+		$this->templateColumns['userBlocked'] = [
+			'attribute' => 'view.user_blocked',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'blocked']);
@@ -459,8 +453,8 @@ class UserLevel extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['user_search'] = [
-			'attribute' => 'user_search',
+		$this->templateColumns['userAll'] = [
+			'attribute' => 'view.user_all',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'all']);
@@ -494,17 +488,17 @@ class UserLevel extends \app\components\ActiveRecord
 	/**
 	 * User get information
 	 */
-	public static function getInfo($column=null)
+	public static function getInfo($id, $column=null)
 	{
 		if($column != null) {
 			$model = self::find()
 				->select([$column])
-				->where(['level_id' => 1])
+				->where(['level_id' => $id])
 				->one();
 			return $model->$column;
 			
 		} else {
-			$model = self::findOne(1);
+			$model = self::findOne($id);
 			return $model;
 		}
 	}
@@ -514,8 +508,8 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public static function getLevel($type=null, $array=true) 
 	{
-		$model = self::find()->alias('t')
-			->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
+		$model = self::find()->alias('t');
+		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
 		if($type == 'member')
 			$model->andWhere(['not in', 't.level_id', [1]]);
 		if($type == 'admin')
@@ -523,17 +517,238 @@ class UserLevel extends \app\components\ActiveRecord
 
 		$model = $model->orderBy('title.message ASC')->all();
 
-		if($array == true) {
-			$items = [];
-			if($model !== null) {
-				foreach($model as $val) {
-					$items[$val->level_id] = $val->title->message;
-				}
-				return $items;
-			} else
-				return false;
-		} else 
-			return $model;
+		if($array == true)
+			return \yii\helpers\ArrayHelper::map($model, 'level_id', 'name_i');
+
+		return $model;
+	}
+
+	/**
+	 * function getMessageAllow
+	 */
+	public static function getMessageAllow($value=null)
+	{
+		$items = array(
+			2 => Yii::t('app', 'Everyone - users can send private messages to anyone.'),
+			1 => Yii::t('app', 'Friends only - users can send private messages to their friends only.'),
+			0 => Yii::t('app', 'Nobody - users cannot send private messages.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getMessageLimit
+	 */
+	public static function getMessageLimit($value=null)
+	{
+		$items = array(
+			5 => 5,
+			10 => 10,
+			20 => 20,
+			30 => 30,
+			40 => 40,
+			50 => 50,
+			100 => 100,
+			200 => 200,
+			500 => 500,
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfileBlock
+	 */
+	public static function getProfileBlock($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, users can block other users.'),
+			0 => Yii::t('app', 'No, users cannot block other users.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfileSearch
+	 */
+	public static function getProfileSearch($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, allow users to exclude themselves from search results. '),
+			0 => Yii::t('app', 'No, force all users to be included in search results.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfilePrivacy
+	 */
+	public static function getProfilePrivacy()
+	{
+		$items = array(
+			1 => Yii::t('app', 'Everyone'),
+			2 => Yii::t('app', 'All Registered Users'),
+			3 => Yii::t('app', 'Only My Friends and Everyone within My Subnetwork'),
+			4 => Yii::t('app', 'Only My Friends and Their Friends within My Subnetwork'),
+			5 => Yii::t('app', 'Only My Friends'),
+			6 => Yii::t('app', 'Only Me'),
+		);
+
+		return $items;
+	}
+
+	/**
+	 * function getProfileStyle
+	 */
+	public static function getProfileStyle($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, users can add custom CSS styles to their profiles.'),
+			0 => Yii::t('app', 'No, users cannot add custom CSS styles to their profiles.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfileStyleSample
+	 */
+	public static function getProfileStyleSample($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, users can choose from the provided sample CSS.'),
+			0 => Yii::t('app', 'No, users can not choose from the provided sample CSS.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfileStatus
+	 */
+	public static function getProfileStatus($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, allow users to have a "status" message.'),
+			0 => Yii::t('app', 'No, users cannot have a "status" message.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfileInvisible
+	 */
+	public static function getProfileInvisible($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, allow users to go invisible.'),
+			0 => Yii::t('app', 'No, do not allow users to go invisible.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfileViews
+	 */
+	public static function getProfileViews($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, allow users to see who has viewed their profile.'),
+			0 => Yii::t('app', 'No, do not allow users to see who has viewed their profile.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfileChangeUsername
+	 */
+	public static function getProfileChangeUsername($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, allow users to change their username.'),
+			0 => Yii::t('app', 'No, do not allow users to change their username.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getProfileDeleted
+	 */
+	public static function getProfileDeleted($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, allow users to delete their account.'),
+			0 => Yii::t('app', 'No, do not allow users to delete their account.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getPhotoAllow
+	 */
+	public static function getPhotoAllow($value=null)
+	{
+		$items = array(
+			1 => Yii::t('app', 'Yes, users can upload a photo.'),
+			0 => Yii::t('app', 'No, users can not upload a photo.'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
+	 * function getSize
+	 */
+	public static function getSize($banner_size)
+	{
+		if(empty($banner_size))
+			return '-';
+
+		return $banner_size['width'].'x'.$banner_size['height'];
 	}
 
 	/**
@@ -552,7 +767,7 @@ class UserLevel extends \app\components\ActiveRecord
 	/**
 	 * after find attributes
 	 */
-	public function afterFind() 
+	public function afterFind()
 	{
 		$this->name_i = isset($this->title) ? $this->title->message : '';
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
@@ -560,7 +775,6 @@ class UserLevel extends \app\components\ActiveRecord
 		$this->profile_privacy = unserialize($this->profile_privacy);
 		$this->profile_comments = unserialize($this->profile_comments);
 		$this->photo_size = unserialize($this->photo_size);
-		
 		$photo_exts = unserialize($this->photo_exts);
 		if(!empty($photo_exts))
 			$this->photo_exts = $this->formatFileType($photo_exts, false);
@@ -569,9 +783,27 @@ class UserLevel extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
+			if($this->photo_size['width'] == '' && $this->photo_size['height'] == '')
+				$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size')]));
+			else {
+				if($this->photo_size['width'] == '')
+					$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[width]')]));
+				else if($this->photo_size['height'] == '')
+					$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[height]')]));
+			}
+
+			if($this->message_limit['inbox'] == '' && $this->message_limit['outbox'] == '')
+				$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit')]));
+			else {
+				if($this->message_limit['inbox'] == '')
+					$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[inbox]')]));
+				else if($this->message_limit['outbox'] == '')
+					$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[outbox]')]));
+			}
+
 			if($this->isNewRecord)
 				$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 			else
@@ -598,7 +830,9 @@ class UserLevel extends \app\components\ActiveRecord
 				$name->message = $this->name_i;
 				if($name->save())
 					$this->name = $name->id;
-				
+
+				$this->slug = $this->urlTitle($this->name_i);
+
 			} else {
 				$name = SourceMessage::findOne($this->name);
 				$name->message = $this->name_i;
@@ -611,21 +845,22 @@ class UserLevel extends \app\components\ActiveRecord
 				$desc->message = $this->desc_i;
 				if($desc->save())
 					$this->desc = $desc->id;
-				
+
 			} else {
 				$desc = SourceMessage::findOne($this->desc);
 				$desc->message = $this->desc_i;
 				$desc->save();
 			}
 
-			//if($this->scenario == 'user') {
+			// if($this->scenario == 'message')
+				$this->message_limit = serialize($this->message_limit);
+
+			// } else if($this->scenario == 'user') {
 				$this->profile_privacy = serialize($this->profile_privacy);
 				$this->profile_comments = serialize($this->profile_comments);
 				$this->photo_size = serialize($this->photo_size);
 				$this->photo_exts = serialize($this->formatFileType($this->photo_exts));
-
-			//} else if($this->scenario == 'message')
-				$this->message_limit = serialize($this->message_limit);
+			// }
 
 			// user level set to default
 			if($this->default == 1)

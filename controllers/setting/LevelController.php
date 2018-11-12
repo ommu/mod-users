@@ -23,7 +23,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 07:46 WIB
- * @modified date 4 May 2018, 09:02 WIB
+ * @modified date 9 November 2018, 10:32 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -40,7 +40,7 @@ use ommu\users\models\search\UserLevel as UserLevelSearch;
 class LevelController extends Controller
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function behaviors()
 	{
@@ -96,13 +96,12 @@ class LevelController extends Controller
 	public function actionCreate()
 	{
 		$model = new UserLevel();
-		$model->scenario = UserLevel::SCENARIO_INFO;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success created.'));
-				return $this->redirect(['update', 'id' => $model->level_id]);
+				return $this->redirect(['update', 'id'=>$model->level_id]);
 			} 
 		}
 
@@ -123,14 +122,13 @@ class LevelController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->findModel($id);
-		$model->scenario = UserLevel::SCENARIO_INFO;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-				return $this->redirect(['update', 'id' => $model->level_id]);
+				return $this->redirect(['update', 'id'=>$model->level_id]);
 			}
 		}
 
@@ -225,7 +223,7 @@ class LevelController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-				return $this->redirect(['user', 'id' => $model->level_id]);
+				return $this->redirect(['user', 'id'=>$model->level_id]);
 			}
 		}
 	
@@ -253,14 +251,14 @@ class LevelController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-				return $this->redirect(['message', 'id' => $model->level_id]);
+				return $this->redirect(['message', 'id'=>$model->level_id]);
 			}
 		}
 	
 		$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
 		$this->view->description = Yii::t('app', 'Facilitating user interactivity is the key to developing a successful social network. Allowing private messages between users is an excellent way to increase interactivity. From this page, you can enable the private messaging feature and configure its settings.');
 		$this->view->keywords = '';
-		return $this->render('admin_messsge', [
+		return $this->render('admin_message', [
 			'model' => $model,
 		]);
 	}
@@ -274,9 +272,9 @@ class LevelController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserLevel::findOne($id)) !== null) 
+		if(($model = UserLevel::findOne($id)) !== null)
 			return $model;
-		else
-			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

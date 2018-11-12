@@ -28,7 +28,7 @@ use ommu\users\models\UserSetting;
 		'class' => 'form-horizontal form-label-left',
 		//'enctype' => 'multipart/form-data',
 	],
-	'enableClientValidation' => true,
+	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
 ]); ?>
@@ -55,7 +55,7 @@ echo $form->field($model, 'permission', ['template' => '{label}<div class="col-m
 	->label($model->getAttributeLabel('meta_keyword'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php $forgotDiffType = UserSetting::getForgotDiffType();
-$forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}{error}</div>', 'options' => ['tag' => null]])
+$forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}</div>', 'options' => ['tag' => null]])
 	->dropDownList($forgotDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('forgot_diff_type'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
@@ -64,7 +64,7 @@ $forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '<di
 	->label($model->getAttributeLabel('forgot_difference'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php $verifyDiffType = UserSetting::getForgotDiffType();
-$verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}{error}</div>', 'options' => ['tag' => null]])
+$verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}</div>', 'options' => ['tag' => null]])
 	->dropDownList($verifyDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('verify_diff_type'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
@@ -73,7 +73,7 @@ $verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '<di
 	->label($model->getAttributeLabel('verify_difference'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php $inviteDiffType = UserSetting::getForgotDiffType();
-$invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}{error}</div>', 'options' => ['tag' => null]])
+$invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}</div>', 'options' => ['tag' => null]])
 	->dropDownList($inviteDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('invite_diff_type'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 

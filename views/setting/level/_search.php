@@ -10,68 +10,35 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 07:46 WIB
- * @modified date 4 May 2018, 09:02 WIB
+ * @modified date 9 November 2018, 10:32 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
+use Yii;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
 
-<div class="search-form">
+<div class="user-level-search search-form">
+
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
 		'method' => 'get',
+		'options' => [
+			'data-pjax' => 1
+		],
 	]); ?>
+
 		<?php echo $form->field($model, 'name_i');?>
 
 		<?php echo $form->field($model, 'desc_i');?>
 
-		<?php echo $form->field($model, 'default')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'signup')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'message_allow')
-			->checkbox();?>
-
 		<?php echo $form->field($model, 'message_limit');?>
-
-		<?php echo $form->field($model, 'profile_block')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'profile_search')
-			->checkbox();?>
 
 		<?php echo $form->field($model, 'profile_privacy');?>
 
 		<?php echo $form->field($model, 'profile_comments');?>
-
-		<?php echo $form->field($model, 'profile_style')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'profile_style_sample')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'profile_status')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'profile_invisible')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'profile_views')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'profile_change')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'profile_delete')
-			->checkbox();?>
-
-		<?php echo $form->field($model, 'photo_allow')
-			->checkbox();?>
 
 		<?php echo $form->field($model, 'photo_size');?>
 
@@ -89,9 +56,50 @@ use yii\widgets\ActiveForm;
 
 		<?php echo $form->field($model, 'slug');?>
 
+		<?php echo $form->field($model, 'default')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'signup')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'message_allow')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_block')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_search')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_style')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_style_sample')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_status')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_invisible')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_views')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_change')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'profile_delete')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'photo_allow')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
 		</div>
+
 	<?php ActiveForm::end(); ?>
+
 </div>

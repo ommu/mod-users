@@ -8,7 +8,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 07:45 WIB
- * @modified date 4 May 2018, 09:02 WIB
+ * @modified date 9 November 2018, 10:33 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -23,19 +23,18 @@ use ommu\users\models\UserLevel as UserLevelModel;
 class UserLevel extends UserLevelModel
 {
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function rules()
 	{
 		return [
 			[['level_id', 'name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
-			[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts', 'creation_date', 'modified_date', 'slug',
-				'name_i', 'desc_i', 'creation_search', 'modified_search', 'active_search', 'pending_search', 'noverified_search', 'blocked_search', 'user_search'], 'safe'],
+			[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts', 'creation_date', 'modified_date', 'slug', 'name_i', 'desc_i', 'creation_search', 'modified_search'], 'safe'],
 		];
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function scenarios()
 	{
@@ -57,17 +56,18 @@ class UserLevel extends UserLevelModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
 	{
 		$query = UserLevelModel::find()->alias('t');
 		$query->joinWith([
-			'view view', 
 			'title title', 
 			'description description', 
 			'creation creation', 
-			'modified modified'
+			'modified modified', 
+			'view view'
 		]);
 
 		// add conditions that should always apply here
@@ -92,23 +92,23 @@ class UserLevel extends UserLevelModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		$attributes['active_search'] = [
+		$attributes['view.user_active'] = [
 			'asc' => ['view.user_active' => SORT_ASC],
 			'desc' => ['view.user_active' => SORT_DESC],
 		];
-		$attributes['pending_search'] = [
+		$attributes['view.user_pending'] = [
 			'asc' => ['view.user_pending' => SORT_ASC],
 			'desc' => ['view.user_pending' => SORT_DESC],
 		];
-		$attributes['noverified_search'] = [
+		$attributes['view.user_noverified'] = [
 			'asc' => ['view.user_noverified' => SORT_ASC],
 			'desc' => ['view.user_noverified' => SORT_DESC],
 		];
-		$attributes['blocked_search'] = [
+		$attributes['view.user_blocked'] = [
 			'asc' => ['view.user_blocked' => SORT_ASC],
 			'desc' => ['view.user_blocked' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['view.user_all'] = [
 			'asc' => ['view.user_all' => SORT_ASC],
 			'desc' => ['view.user_all' => SORT_DESC],
 		];

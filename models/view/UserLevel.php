@@ -24,8 +24,6 @@
 namespace ommu\users\models\view;
 
 use Yii;
-use yii\helpers\Url;
-use yii\helpers\Html;
 
 class UserLevel extends \app\components\ActiveRecord
 {
@@ -73,11 +71,11 @@ class UserLevel extends \app\components\ActiveRecord
 	{
 		return [
 			'level_id' => Yii::t('app', 'Level'),
-			'user_active' => Yii::t('app', 'User Active'),
-			'user_pending' => Yii::t('app', 'User Pending'),
-			'user_noverified' => Yii::t('app', 'User Noverified'),
-			'user_blocked' => Yii::t('app', 'User Blocked'),
-			'user_all' => Yii::t('app', 'User All'),
+			'user_active' => Yii::t('app', 'Active'),
+			'user_pending' => Yii::t('app', 'Pending'),
+			'user_noverified' => Yii::t('app', 'Noverified'),
+			'user_blocked' => Yii::t('app', 'Blocked'),
+			'user_all' => Yii::t('app', 'Users'),
 		];
 	}
 

@@ -4,16 +4,18 @@
  * @var $this yii\web\View
  * @var $this ommu\users\controllers\setting\LevelController
  * @var $model ommu\users\models\UserLevel
+ * @var $searchModel ommu\users\models\search\UserLevel
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 07:46 WIB
- * @modified date 4 May 2018, 09:02 WIB
+ * @modified date 9 November 2018, 10:32 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
+use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\libraries\grid\GridView;
@@ -30,6 +32,8 @@ $this->params['menu']['option'] = [
 	['label' => Yii::t('app', 'Grid Option'), 'url' => 'javascript:void(0);'],
 ];
 ?>
+
+<div class="user-level-index">
 
 <?php Pjax::begin(); ?>
 
@@ -74,3 +78,4 @@ echo GridView::widget([
 ]); ?>
 
 <?php Pjax::end(); ?>
+</div>

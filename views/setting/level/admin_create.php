@@ -10,12 +10,12 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 07:46 WIB
- * @modified date 4 May 2018, 09:02 WIB
+ * @modified date 9 November 2018, 10:32 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
-use yii\helpers\Html;
+use Yii;
 use yii\helpers\Url;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
@@ -26,6 +26,10 @@ $this->params['menu']['content'] = [
 ];
 ?>
 
+<div class="user-level-create">
+
 <?php echo $this->render('_form', [
 	'model' => $model,
 ]); ?>
+
+</div>
