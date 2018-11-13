@@ -2,7 +2,7 @@
 /**
  * User Forgots (user-forgot)
  * @var $this yii\web\View
- * @var $this ommu\users\controllers\ForgotController
+ * @var $this ommu\users\controllers\manage\ForgotController
  * @var $model ommu\users\models\UserForgot
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

@@ -2,7 +2,7 @@
 /**
  * User Verifies (user-verify)
  * @var $this yii\web\View
- * @var $this ommu\users\controllers\VerifyController
+ * @var $this ommu\users\controllers\manage\VerifyController
  * @var $model ommu\users\models\UserVerify
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>

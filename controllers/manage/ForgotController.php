@@ -1,10 +1,10 @@
 <?php
 /**
- * VerifyController
+ * ForgotController
  * @var $this yii\web\View
- * @var $model ommu\users\models\UserVerify
+ * @var $model ommu\users\models\UserForgot
  *
- * VerifyController implements the CRUD actions for UserVerify model.
+ * ForgotController implements the CRUD actions for UserForgot model.
  * Reference start
  * TOC :
  *	Index
@@ -19,22 +19,22 @@
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
- * @created date 17 October 2017, 15:00 WIB
+ * @created date 17 October 2017, 15:01 WIB
  * @modified date 3 May 2018, 14:11 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
-
-namespace ommu\users\controllers;
+ 
+namespace ommu\users\controllers\manage;
 
 use Yii;
 use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use ommu\users\models\UserVerify;
-use ommu\users\models\search\UserVerify as UserVerifySearch;
+use ommu\users\models\UserForgot;
+use ommu\users\models\search\UserForgot as UserForgotSearch;
 
-class VerifyController extends Controller
+class ForgotController extends Controller
 {
 	/**
 	 * {@inheritdoc}
@@ -56,12 +56,12 @@ class VerifyController extends Controller
 	}
 
 	/**
-	 * Lists all UserVerify models.
+	 * Lists all UserForgot models.
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new UserVerifySearch();
+		$searchModel = new UserForgotSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		$gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -74,7 +74,7 @@ class VerifyController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User Verifies');
+		$this->view->title = Yii::t('app', 'User Forgots');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -85,24 +85,24 @@ class VerifyController extends Controller
 	}
 
 	/**
-	 * Creates a new UserVerify model.
+	 * Creates a new UserForgot model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
 	public function actionCreate()
 	{
-		$model = new UserVerify();
+		$model = new UserForgot();
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User verify success created.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success created.'));
 				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id' => $model->verify_id]);
-			}
+				//return $this->redirect(['view', 'id' => $model->forgot_id]);
+			} 
 		}
 
-		$this->view->title = Yii::t('app', 'Create User Verify');
+		$this->view->title = Yii::t('app', 'Create User Forgot');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_create', [
@@ -111,7 +111,7 @@ class VerifyController extends Controller
 	}
 
 	/**
-	 * Displays a single UserVerify model.
+	 * Displays a single UserForgot model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -119,7 +119,7 @@ class VerifyController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'User Verify', 'user-id' => $model->user->displayname]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'User Forgot', 'user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -128,7 +128,7 @@ class VerifyController extends Controller
 	}
 
 	/**
-	 * Deletes an existing UserVerify model.
+	 * Deletes an existing UserForgot model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -139,14 +139,14 @@ class VerifyController extends Controller
 		$model->publish = 2;
 
 		if($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User verify success deleted.'));
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success deleted.'));
 			return $this->redirect(['index']);
-			//return $this->redirect(['view', 'id' => $model->verify_id]);
+			//return $this->redirect(['view', 'id' => $model->forgot_id]);
 		}
 	}
 
 	/**
-	 * actionPublish an existing UserVerify model.
+	 * actionPublish an existing UserForgot model.
 	 * If publish is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -158,21 +158,21 @@ class VerifyController extends Controller
 		$model->publish = $replace;
 
 		if($model->save(false, ['publish'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User verify success updated.'));
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success updated.'));
 			return $this->redirect(['index']);
 		}
 	}
 
 	/**
-	 * Finds the UserVerify model based on its primary key value.
+	 * Finds the UserForgot model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return UserVerify the loaded model
+	 * @return UserForgot the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserVerify::findOne($id)) !== null) 
+		if(($model = UserForgot::findOne($id)) !== null) 
 			return $model;
 		else
 			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

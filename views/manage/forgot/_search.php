@@ -1,15 +1,15 @@
 <?php
 /**
- * User Verifies (user-verify)
+ * User Forgots (user-forgot)
  * @var $this yii\web\View
- * @var $this ommu\users\controllers\VerifyController
- * @var $model ommu\users\models\search\UserVerify
+ * @var $this ommu\users\controllers\manage\ForgotController
+ * @var $model ommu\users\models\search\UserForgot
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
- * @created date 17 October 2017, 15:00 WIB
+ * @created date 17 October 2017, 15:01 WIB
  * @modified date 3 May 2018, 14:11 WIB
  * @link https://github.com/ommu/mod-users
  *
@@ -31,10 +31,10 @@ use yii\widgets\ActiveForm;
 
 		<?php echo $form->field($model, 'code');?>
 
-		<?php echo $form->field($model, 'verify_date')
+		<?php echo $form->field($model, 'forgot_date')
 			->input('date');?>
 
-		<?php echo $form->field($model, 'verify_ip');?>
+		<?php echo $form->field($model, 'forgot_ip');?>
 
 		<?php echo $form->field($model, 'expired_date')
 			->input('date');?>
