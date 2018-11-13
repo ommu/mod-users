@@ -29,6 +29,7 @@
  * @property Users $reference
  * @property Users $user
  * @property UserNewsletterHistory[] $histories
+ * @property Users $subscribe
  * @property Users $modified
  *
  */
@@ -46,16 +47,16 @@ class UserNewsletter extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip','level_search'];
+	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip'];
 	public $email_i;
 
 	// Search Variable
-	public $level_search;
 	public $user_search;
 	public $reference_search;
 	public $subscribe_search;
-	public $register_search;
 	public $modified_search;
+	public $level_search;
+	public $register_search;
 
 	const SCENARIO_SINGLE_EMAIL = 'singleEmail';
 
@@ -84,9 +85,9 @@ class UserNewsletter extends \app\components\ActiveRecord
 			[['email_i'], 'required'],
 			[['status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id'], 'integer'],
 			[['email_i'], 'string'],
-			[['email', 'subscribe_date', 'subscribe_id', 'modified_date', 'updated_date', 'updated_ip'], 'safe'],
+			[['email_i'], 'safe'],
 			[['email_i'], 'email', 'on' => self::SCENARIO_SINGLE_EMAIL],
-			[['email'], 'string', 'max' => 32],
+			[['email'], 'string', 'max' => 64],
 			[['updated_ip'], 'string', 'max' => 20],
 			[['reference_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['reference_id' => 'user_id']],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
@@ -119,12 +120,12 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'updated_ip' => Yii::t('app', 'Updated Ip'),
 			'email_i' => Yii::t('app', 'Email'),
-			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),
 			'reference_search' => Yii::t('app', 'Reference'),
 			'subscribe_search' => Yii::t('app', 'Subscriber'),
-			'register_search' => Yii::t('app', 'Registered'),
 			'modified_search' => Yii::t('app', 'Modified'),
+			'level_search' => Yii::t('app', 'Level'),
+			'register_search' => Yii::t('app', 'Registered'),
 		];
 	}
 
@@ -133,7 +134,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 	 */
 	public function getInvites()
 	{
-		return $this->hasMany(UserInvites::className(), ['newsletter_id' => 'newsletter_id']);
+		return $this->hasMany(UserInvites::className(), ['newsletter_id' => 'newsletter_id'])
+			->andOnCondition(['publish' => 1]);
 	}
 
 	/**
@@ -155,17 +157,17 @@ class UserNewsletter extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getSubscribe()
+	public function getHistories()
 	{
-		return $this->hasOne(Users::className(), ['user_id' => 'subscribe_id']);
+		return $this->hasMany(UserNewsletterHistory::className(), ['newsletter_id' => 'newsletter_id']);
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getHistories()
+	public function getSubscribe()
 	{
-		return $this->hasMany(UserNewsletterHistory::className(), ['newsletter_id' => 'newsletter_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'subscribe_id']);
 	}
 
 	/**
@@ -205,7 +207,19 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
+		$this->templateColumns['email'] = [
+			'attribute' => 'email',
+			'value' => function($model, $key, $index, $column) {
+				return $model->email;
+			},
+		];
 		if(!Yii::$app->request->get('user')) {
+			$this->templateColumns['user_search'] = [
+				'attribute' => 'user_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->displayname : '-';
+				},
+			];
 			$this->templateColumns['level_search'] = [
 				'attribute' => 'level_search',
 				'filter' => UserLevel::getLevel(),
@@ -213,27 +227,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 					return isset($model->user->level) ? $model->user->level->title->message : '-';
 				},
 			];
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-				},
-			];
 		}
-		$this->templateColumns['email'] = [
-			'attribute' => 'email',
-			'value' => function($model, $key, $index, $column) {
-				return $model->email;
-			},
-		];
-		$this->templateColumns['subscribe_date'] = [
-			'attribute' => 'subscribe_date',
-			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->subscribe_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->subscribe_date, 'datetime') : '-';
-			},
-			'filter' => $this->filterDatepicker($this, 'subscribe_date'),
-			'format' => 'html',
-		];
 		if(!Yii::$app->request->get('subscribe')) {
 			$this->templateColumns['subscribe_search'] = [
 				'attribute' => 'subscribe_search',
@@ -250,6 +244,14 @@ class UserNewsletter extends \app\components\ActiveRecord
 				},
 			];
 		}
+		$this->templateColumns['subscribe_date'] = [
+			'attribute' => 'subscribe_date',
+			'value' => function($model, $key, $index, $column) {
+				return !in_array($model->subscribe_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->subscribe_date, 'datetime') : '-';
+			},
+			'filter' => $this->filterDatepicker($this, 'subscribe_date'),
+			'format' => 'html',
+		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
 			'value' => function($model, $key, $index, $column) {
@@ -280,21 +282,21 @@ class UserNewsletter extends \app\components\ActiveRecord
 				return $model->updated_ip;
 			},
 		];
-		$this->templateColumns['register_search'] = [
-			'attribute' => 'register_search',
-			'filter' => $this->filterYesNo(),
-			'value' => function($model, $key, $index, $column) {
-				return isset($model->view) ? $this->filterYesNo($model->view->register) : '-';
-			},
-			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
-		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['status', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->status, 'Subscribe,Unsubscribe');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['register_search'] = [
+			'attribute' => 'register_search',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				return $this->filterYesNo($model->view->register);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -321,37 +323,42 @@ class UserNewsletter extends \app\components\ActiveRecord
 
 	/**
 	 * insertNewsletter
+	 * 
 	 * condition
-	 ** 0 = newsletter not null
-	 ** 1 = newsletter save
-	 ** 2 = newsletter not save
+	 * 0 = newsletter not null
+	 * 1 = newsletter save
+	 * 2 = newsletter not save
 	 */
-	public static function insertNewsletter($email)
+	public static function insertNewsletter($email, $subscribe_id=null)
 	{
 		$email = strtolower($email);
+		if($subscribe_id === null)
+			$subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+
 		$newsletter = self::find()
 			->select(['newsletter_id'])
 			->where(['email' => $email])
 			->one();
-		
+
 		$condition = 0;
 		if($newsletter == null) {
 			$newsletter = new UserNewsletter();
 			$newsletter->scenario = self::SCENARIO_SINGLE_EMAIL;
 			$newsletter->email_i = $email;
+			$newsletter->subscribe_id = $subscribe_id;
 			if($newsletter->save())
 				$condition = 1;
 			else
 				$condition = 2;
 		}
-		
+
 		return $condition;
 	}
 
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
@@ -370,6 +377,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 				}
 				if($this->subscribe_id == null)
 					$this->subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 

@@ -19,12 +19,12 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:28 WIB
- * @modified date 7 May 2018, 15:59 WIB
+ * @modified date 14 November 2018, 01:24 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
  
-namespace ommu\users\controllers;
+namespace ommu\users\controllers\manage;
 
 use Yii;
 use yii\filters\VerbFilter;
@@ -75,7 +75,7 @@ class NewsletterController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User Newsletters');
+		$this->view->title = Yii::t('app', 'Newsletters');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -115,18 +115,17 @@ class NewsletterController extends Controller
 					}
 					Yii::$app->session->setFlash('success', Yii::t('app', 'Newsletter success created.<br/>{result}', ['result'=>$this->formatFileType($result, false, '<br/>')]));
 					return $this->redirect(['index']);
-					
+
 				} else {
 					if($model->save()) {
 						Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter {email} success created.', ['email'=>$model->email]));
 						return $this->redirect(['index']);
-						//return $this->redirect(['view', 'id' => $model->newsletter_id]);
 					}
 				}
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Create User Newsletter');
+		$this->view->title = Yii::t('app', 'Create Newsletter');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_create', [
@@ -143,7 +142,7 @@ class NewsletterController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {email}', ['model-class' => 'User Newsletter', 'email' => $model->email]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'Newsletter', 'user-id' => $model->email]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -192,9 +191,9 @@ class NewsletterController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserNewsletter::findOne($id)) !== null) 
+		if(($model = UserNewsletter::findOne($id)) !== null)
 			return $model;
-		else
-			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

@@ -2,7 +2,7 @@
 /**
  * User Newsletters (user-newsletter)
  * @var $this yii\web\View
- * @var $this ommu\users\controllers\NewsletterController
+ * @var $this ommu\users\controllers\manage\NewsletterController
  * @var $model ommu\users\models\search\UserNewsletter
  * @var $form yii\widgets\ActiveForm
  *

@@ -6,6 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 2 May 2018, 13:19 WIB
+ * @modified date 14 November 2018, 01:10 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_user_newsletter".
@@ -24,7 +25,8 @@
  * @property string $last_invite_user_id
  *
  * The followings are the available model relations:
- * @property Users $user
+ * @property Users $firstInvite
+ * @property Users $lastInvite
  *
  */
 
@@ -33,10 +35,12 @@ namespace ommu\users\models\view;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use ommu\users\models\Users as UsersModel;
+use ommu\users\models\Users;
 
 class UserNewsletter extends \app\components\ActiveRecord
 {
+	use \ommu\traits\UtilityTrait;
+
 	public $gridForbiddenColumn = [];
 
 	/**
@@ -87,7 +91,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'invite_by' => Yii::t('app', 'Invite By'),
 			'invites' => Yii::t('app', 'Invites'),
 			'invite_all' => Yii::t('app', 'Invite All'),
-			'invite_users' => Yii::t('app', 'Invite User'),
+			'invite_users' => Yii::t('app', 'Invite Users'),
 			'invite_user_all' => Yii::t('app', 'Invite User All'),
 			'first_invite_date' => Yii::t('app', 'First Invite Date'),
 			'first_invite_user_id' => Yii::t('app', 'First Invite User'),
@@ -99,17 +103,17 @@ class UserNewsletter extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getFirstUser()
+	public function getFirstInvite()
 	{
-		return $this->hasOne(UsersModel::className(), ['user_id' => 'first_invite_user_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'first_invite_user_id']);
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getLastUser()
+	public function getLastInvite()
 	{
-		return $this->hasOne(UsersModel::className(), ['user_id' => 'last_invite_user_id']);
+		return $this->hasOne(Users::className(), ['user_id' => 'last_invite_user_id']);
 	}
 
 	/**
@@ -133,7 +137,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 		$this->templateColumns['register'] = [
 			'attribute' => 'register',
 			'value' => function($model, $key, $index, $column) {
-				return $model->register == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $model->register;
 			},
 		];
 		$this->templateColumns['invite_by'] = [
@@ -168,10 +172,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['first_invite_date'] = [
 			'attribute' => 'first_invite_date',
-			'filter' => Html::input('date', 'first_invite_date', Yii::$app->request->get('first_invite_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->first_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->first_invite_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'first_invite_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['first_invite_user_id'] = [
@@ -182,10 +186,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['last_invite_date'] = [
 			'attribute' => 'last_invite_date',
-			'filter' => Html::input('date', 'last_invite_date', Yii::$app->request->get('last_invite_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->last_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->last_invite_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'last_invite_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['last_invite_user_id'] = [

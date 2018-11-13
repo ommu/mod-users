@@ -417,6 +417,7 @@ class UserInvites extends \app\components\ActiveRecord
 
 			if($this->isNewRecord || (!$this->isNewRecord && $this->old_invites_i != $this->invites))
 				$this->code = $this->uniqueCode(8,2);
+
 			$this->invite_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
