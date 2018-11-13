@@ -8,14 +8,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:27 WIB
- * @modified date 8 May 2018, 00:41 WIB
+ * @modified date 13 November 2018, 13:27 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 namespace ommu\users\models\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use ommu\users\models\UserInvites as UserInvitesModel;
@@ -28,9 +27,8 @@ class UserInvites extends UserInvitesModel
 	public function rules()
 	{
 		return [
-			[['invite_id', 'publish', 'newsletter_id', 'user_id', 'invites', 'modified_id'], 'integer'],
-			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'newsletter_search',
-				'user_search', 'email_search', 'level_search', 'inviter_search', 'modified_search'], 'safe'],
+			[['id', 'publish', 'newsletter_id', 'invites', 'inviter_id', 'modified_id'], 'integer'],
+			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'email_search', 'inviter_search', 'level_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -57,6 +55,7 @@ class UserInvites extends UserInvitesModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
@@ -64,9 +63,8 @@ class UserInvites extends UserInvitesModel
 		$query = UserInvitesModel::find()->alias('t');
 		$query->joinWith([
 			'newsletter newsletter', 
-			'newsletter.user user', 
-			'user inviter', 
-			'user.level.title level',
+			'inviter inviter', 
+			'inviter.level.title level',
 			'modified modified',
 		]);
 
@@ -76,10 +74,6 @@ class UserInvites extends UserInvitesModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['user_search'] = [
-			'asc' => ['user.displayname' => SORT_ASC],
-			'desc' => ['user.displayname' => SORT_DESC],
-		];
 		$attributes['email_search'] = [
 			'asc' => ['newsletter.email' => SORT_ASC],
 			'desc' => ['newsletter.email' => SORT_DESC],
@@ -98,7 +92,7 @@ class UserInvites extends UserInvitesModel
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
-			'defaultOrder' => ['invite_id' => SORT_DESC],
+			'defaultOrder' => ['id' => SORT_DESC],
 		]);
 
 		$this->load($params);
@@ -111,10 +105,10 @@ class UserInvites extends UserInvitesModel
 
 		// grid filtering conditions
 		$query->andFilterWhere([
-			't.invite_id' => $this->invite_id,
+			't.id' => $this->id,
 			't.newsletter_id' => isset($params['newsletter']) ? $params['newsletter'] : $this->newsletter_id,
-			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.invites' => $this->invites,
+			't.inviter_id' => isset($params['inviter']) ? $params['inviter'] : $this->inviter_id,
 			'cast(t.invite_date as date)' => $this->invite_date,
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
@@ -134,9 +128,8 @@ class UserInvites extends UserInvitesModel
 		$query->andFilterWhere(['like', 't.displayname', $this->displayname])
 			->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
 			->andFilterWhere(['like', 'newsletter.email', $this->email_search])
-			->andFilterWhere(['like', 'user.displayname', $this->inviter_search])
+			->andFilterWhere(['like', 'inviter.displayname', $this->inviter_search])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;

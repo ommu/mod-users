@@ -20,12 +20,12 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:27 WIB
- * @modified date 8 May 2018, 00:41 WIB
+ * @modified date 13 November 2018, 13:27 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
  
-namespace ommu\users\controllers;
+namespace ommu\users\controllers\manage;
 
 use Yii;
 use yii\filters\VerbFilter;
@@ -76,7 +76,7 @@ class InviteController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User Invites');
+		$this->view->title = Yii::t('app', 'Invites');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -105,10 +105,9 @@ class InviteController extends Controller
 
 			$result = [];
 			if($model->validate()) {
-				$user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 				if(count($email_i) > 1) {
 					foreach ($email_i as $email) {
-						$condition = UserInvites::insertInvite($email, $user_id);
+						$condition = UserInvites::insertInvite($email);
 						if($condition == 0)
 							$result[] = Yii::t('app', '{email} (skip)', array('email'=>$email));
 						else if($condition == 1)
@@ -120,18 +119,15 @@ class InviteController extends Controller
 					return $this->redirect(['index']);
 					
 				} else {
-					//if($model->save()) {
-					if(UserInvites::insertInvite($model->email_i, $user_id) == 1) {
-						//Yii::$app->session->setFlash('success', Yii::t('app', 'User {email} invite success created.', ['email'=>$model->newsletter->email]));
-						Yii::$app->session->setFlash('success', Yii::t('app', 'User {email} invite success created.', ['email'=>$model->email_i]));
+					if(UserInvites::insertInvite($model->email_i) == 1) {
+						Yii::$app->session->setFlash('success', Yii::t('app', '{email} invite success created.', ['email'=>$model->email_i]));
 						return $this->redirect(['index']);
-						//return $this->redirect(['view', 'id' => $model->invite_id]);
 					}
 				}
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Create User Invite');
+		$this->view->title = Yii::t('app', 'Create Invite');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_create', [
@@ -148,7 +144,7 @@ class InviteController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'User Invite', 'newsletter-id' => $model->newsletter->email]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {displayname}', ['model-class' => 'Invite', 'displayname' => $model->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -170,7 +166,6 @@ class InviteController extends Controller
 		if($model->save(false, ['publish'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success deleted.'));
 			return $this->redirect(['index']);
-			//return $this->redirect(['view', 'id' => $model->invite_id]);
 		}
 	}
 
@@ -201,9 +196,9 @@ class InviteController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserInvites::findOne($id)) !== null) 
+		if(($model = UserInvites::findOne($id)) !== null)
 			return $model;
-		else
-			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }
