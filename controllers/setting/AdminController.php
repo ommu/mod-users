@@ -114,11 +114,11 @@ class AdminController extends Controller
 	 * @param integer $id
 	 * @return mixed
 	 */
-	public function actionView($id)
+	public function actionView()
 	{
-		$model = $this->findModel($id);
+		$model = $this->findModel(1);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {id}', ['model-class' => 'Setting', 'id' => $model->id]);
+		$this->view->title = Yii::t('app', 'Detail User Settings');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
