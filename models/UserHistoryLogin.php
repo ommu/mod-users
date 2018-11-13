@@ -33,7 +33,7 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = [];
+	public $gridForbiddenColumn = ['lastlogin_from'];
 
 	// Search Variable
 	public $user_search;
