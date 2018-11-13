@@ -63,7 +63,6 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\UploadedFile;
-use ommu\users\models\Users;
 use app\models\CoreLanguages;
 use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;
@@ -584,14 +583,14 @@ class Users extends \app\components\ActiveRecord
 					// Auto Approve Users
 					if($setting->signup_approve == 1)
 						$this->enabled = 1;
-				
+
 					// Auto Verified Email User
 					if($setting->signup_verifyemail == 0)
 						$this->verified = 1;
-				
+
 					// Generate user by admin
 					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-					
+
 				} else {
 					$this->level_id = UserLevel::getDefault();
 					$this->enabled = $setting->signup_approve == 1 ? 1 : 0;
@@ -601,16 +600,16 @@ class Users extends \app\components\ActiveRecord
 					if(($setting->site_type == 1 && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
 						if($setting->signup_checkemail == 1 && $this->invite_code_i == '')
 							$this->addError('invite_code_i', Yii::t('phrase', '{attribute} tidak boleh kosong.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
-						
+
 						if($this->email != '') {
 							if($invite != null) {
 								if($invite->newsletter->user_id != null)
 									$this->addError('email', Yii::t('phrase', '{attribute} anda sudah terdaftar sebagai user, silahkan login.', ['attribute'=>$this->getAttributeLabel('email')]));
-									
+
 								else {
 									if($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user')
 										$this->addError('email', Yii::t('phrase', 'Maaf invite hanya bisa dilakukan oleh admin'));
-									
+
 									else {
 										if($setting->signup_checkemail == 1) {
 											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->invite_code_i);
@@ -627,7 +626,7 @@ class Users extends \app\components\ActiveRecord
 								}
 							} else
 								$this->addError('email', Yii::t('phrase', '{attribute} anda belum ada dalam daftar invite.', ['attribute'=>$this->getAttributeLabel('email')]));
-							
+
 						} else {
 							if($setting->signup_checkemail == 1)
 								$this->addError('invite_code_i', Yii::t('phrase', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));

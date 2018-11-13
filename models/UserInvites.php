@@ -340,9 +340,8 @@ class UserInvites extends \app\components\ActiveRecord
 				$invite->invites = $invite->invites+1;
 				if($invite->save())
 					$condition = 1;
-				else {
+				else
 					$condition = 2;
-				}
 			}
 		}
 

@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 17 October 2017, 14:20 WIB
- * @modified date 2 May 2018, 13:33 WIB
+ * @modified date 13 November 2018, 10:01 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_newsletter".
@@ -228,10 +228,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['subscribe_date'] = [
 			'attribute' => 'subscribe_date',
-			'filter' => Html::input('date', 'subscribe_date', Yii::$app->request->get('subscribe_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->subscribe_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->subscribe_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'subscribe_date'),
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('subscribe')) {
@@ -252,10 +252,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'modified_date'),
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
@@ -268,10 +268,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['updated_date'] = [
 			'attribute' => 'updated_date',
-			'filter' => Html::input('date', 'updated_date', Yii::$app->request->get('updated_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'updated_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['updated_ip'] = [

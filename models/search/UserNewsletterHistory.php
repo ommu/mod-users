@@ -8,14 +8,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:29 WIB
- * @modified date 7 May 2018, 09:01 WIB
+ * @modified date 13 November 2018, 23:44 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 namespace ommu\users\models\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use ommu\users\models\UserNewsletterHistory as UserNewsletterHistoryModel;
@@ -29,8 +28,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	{
 		return [
 			[['id', 'status', 'newsletter_id'], 'integer'],
-			[['updated_date', 'updated_ip',
-				'level_search', 'user_search', 'email_search'], 'safe'],
+			[['updated_date', 'updated_ip', 'email_search', 'level_search', 'user_search', 'register_search'], 'safe'],
 		];
 	}
 
@@ -57,6 +55,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
@@ -65,7 +64,8 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 		$query->joinWith([
 			'newsletter newsletter', 
 			'newsletter.user user',
-			'newsletter.user.level.title level'
+			'newsletter.user.level.title level',
+			'newsletter.view view', 
 		]);
 
 		// add conditions that should always apply here
@@ -74,6 +74,10 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
+		$attributes['email_search'] = [
+			'asc' => ['newsletter.email' => SORT_ASC],
+			'desc' => ['newsletter.email' => SORT_DESC],
+		];
 		$attributes['level_search'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
@@ -82,9 +86,9 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['email_search'] = [
-			'asc' => ['newsletter.email' => SORT_ASC],
-			'desc' => ['newsletter.email' => SORT_DESC],
+		$attributes['register_search'] = [
+			'asc' => ['view.register' => SORT_ASC],
+			'desc' => ['view.register' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -106,11 +110,12 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 			't.newsletter_id' => isset($params['newsletter']) ? $params['newsletter'] : $this->newsletter_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
 			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'view.register' => $this->register_search,
 		]);
 
 		$query->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
-			->andFilterWhere(['like', 'newsletter.email', $this->email_search]);
+			->andFilterWhere(['like', 'newsletter.email', $this->email_search])
+			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
 
 		return $dataProvider;
 	}

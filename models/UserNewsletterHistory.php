@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:38 WIB
- * @modified date 7 May 2018, 07:38 WIB
+ * @modified date 13 November 2018, 23:40 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_newsletter_history".
@@ -33,12 +33,13 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 
-	public $gridForbiddenColumn = [];
+	public $gridForbiddenColumn = ['updated_ip'];
 
 	// Search Variable
+	public $email_search;
 	public $level_search;
 	public $user_search;
-	public $email_search;
+	public $register_search;
 
 	/**
 	 * @return string the associated database table name
@@ -81,9 +82,10 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'newsletter_id' => Yii::t('app', 'Newsletter'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'updated_ip' => Yii::t('app', 'Updated Ip'),
+			'email_search' => Yii::t('app', 'Email'),
 			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),
-			'email_search' => Yii::t('app', 'Email'),
+			'register_search' => Yii::t('app', 'Registered'),
 		];
 	}
 
@@ -117,11 +119,10 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('newsletter')) {
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'filter' => UserLevel::getLevel(),
+			$this->templateColumns['email_search'] = [
+				'attribute' => 'email_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-';
+					return isset($model->newsletter) ? $model->newsletter->email : '-';
 				},
 			];
 			$this->templateColumns['user_search'] = [
@@ -130,19 +131,20 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 					return isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-';
 				},
 			];
-			$this->templateColumns['email_search'] = [
-				'attribute' => 'email_search',
+			$this->templateColumns['level_search'] = [
+				'attribute' => 'level_search',
+				'filter' => UserLevel::getLevel(),
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter) ? $model->newsletter->email : '-';
+					return isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-';
 				},
 			];
 		}
 		$this->templateColumns['updated_date'] = [
 			'attribute' => 'updated_date',
-			'filter' => Html::input('date', 'updated_date', Yii::$app->request->get('updated_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'updated_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['updated_ip'] = [
@@ -156,6 +158,15 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $model->status == 1 ? Yii::t('app', 'Subscribe') : Yii::t('app', 'Unsubscribe');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['register_search'] = [
+			'attribute' => 'register_search',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				return $this->filterYesNo($model->newsletter->view->register);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -178,27 +189,5 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			$model = self::findOne($id);
 			return $model;
 		}
-	}
-
-	/**
-	 * before validate attributes
-	 */
-	public function beforeValidate() 
-	{
-		if(parent::beforeValidate()) {
-			$this->updated_ip = $_SERVER['REMOTE_ADDR'];
-		}
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			//$this->updated_date = Yii::$app->formatter->asDate($this->updated_date, 'php:Y-m-d');
-		}
-		return true;
 	}
 }

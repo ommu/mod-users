@@ -17,7 +17,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:29 WIB
- * @modified date 7 May 2018, 09:01 WIB
+ * @modified date 13 November 2018, 23:44 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -70,7 +70,7 @@ class NewsletterController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User Newsletter Histories');
+		$this->view->title = Yii::t('app', 'Newsletter Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -89,7 +89,7 @@ class NewsletterController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'User Newsletter History', 'newsletter-id' => $model->newsletter->email]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {newsletter-id}', ['model-class' => 'Newsletter History', 'newsletter-id' => $model->newsletter->email]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -120,9 +120,9 @@ class NewsletterController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserNewsletterHistory::findOne($id)) !== null) 
+		if(($model = UserNewsletterHistory::findOne($id)) !== null)
 			return $model;
-		else
-			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }
