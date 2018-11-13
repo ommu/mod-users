@@ -9,23 +9,24 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:28 WIB
- * @modified date 7 May 2018, 09:01 WIB
+ * @modified date 13 November 2018, 11:54 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
-use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Invite Histories'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Invite Histories'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $model->invite->displayname;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
+	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
 ];
 ?>
+
+<div class="user-invite-history-view">
 
 <?php echo DetailView::widget([
 	'model' => $model,
@@ -35,8 +36,20 @@ $this->params['menu']['content'] = [
 	'attributes' => [
 		'id',
 		[
-			'attribute' => 'invite_search',
-			'value' => isset($model->invite) ? $model->invite->newsletter->user->username : '-',
+			'attribute' => 'email_search',
+			'value' => isset($model->invite->newsletter) ? $model->invite->newsletter->email : '-',
+		],
+		[
+			'attribute' => 'displayname_search',
+			'value' => isset($model->invite) ? $model->invite->displayname : '-',
+		],
+		[
+			'attribute' => 'inviter_search',
+			'value' => isset($model->invite->inviter) ? $model->invite->inviter->displayname : '-',
+		],
+		[
+			'attribute' => 'level_search',
+			'value' => isset($model->invite->inviter->level) ? $model->invite->inviter->level->title->message : '-',
 		],
 		'code',
 		[
@@ -50,7 +63,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'view.expired',
-			'value' => isset($model->view) ? ($model->view->expired == 1 ? Yii::t('app', 'Yes') : Yii::t('app', 'No')) : '-',
+			'value' => $this->filterYesNo($model->view->expired),
 		],
 		[
 			'attribute' => 'view.verify_day_left',
@@ -62,3 +75,5 @@ $this->params['menu']['content'] = [
 		],
 	],
 ]) ?>
+
+</div>

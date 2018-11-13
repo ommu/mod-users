@@ -8,14 +8,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:28 WIB
- * @modified date 7 May 2018, 09:01 WIB
+ * @modified date 13 November 2018, 11:54 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 namespace ommu\users\models\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use ommu\users\models\UserInviteHistory as UserInviteHistoryModel;
@@ -29,8 +28,7 @@ class UserInviteHistory extends UserInviteHistoryModel
 	{
 		return [
 			[['id', 'invite_id'], 'integer'],
-			[['code', 'invite_date', 'invite_ip', 'expired_date',
-				'user_search', 'email_search', 'level_search', 'inviter_search', 'expired_search'], 'safe'],
+			[['code', 'invite_date', 'invite_ip', 'expired_date', 'email_search', 'displayname_search', 'inviter_search', 'level_search', 'expired_search'], 'safe'],
 		];
 	}
 
@@ -57,18 +55,18 @@ class UserInviteHistory extends UserInviteHistoryModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
 	{
 		$query = UserInviteHistoryModel::find()->alias('t');
 		$query->joinWith([
-			'view view',
 			'invite invite',
 			'invite.newsletter newsletter',
-			'invite.newsletter.user user',
-			'invite.user inviter',
-			'invite.user.level.title level',
+			'invite.inviter inviter',
+			'invite.inviter.level.title level',
+			'view view',
 		]);
 
 		// add conditions that should always apply here
@@ -77,13 +75,13 @@ class UserInviteHistory extends UserInviteHistoryModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['user_search'] = [
-			'asc' => ['user.displayname' => SORT_ASC],
-			'desc' => ['user.displayname' => SORT_DESC],
-		];
 		$attributes['email_search'] = [
 			'asc' => ['newsletter.email' => SORT_ASC],
 			'desc' => ['newsletter.email' => SORT_DESC],
+		];
+		$attributes['displayname_search'] = [
+			'asc' => ['invite.displayname' => SORT_ASC],
+			'desc' => ['invite.displayname' => SORT_DESC],
 		];
 		$attributes['inviter_search'] = [
 			'asc' => ['inviter.displayname' => SORT_ASC],
@@ -122,8 +120,8 @@ class UserInviteHistory extends UserInviteHistoryModel
 
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
 			->andFilterWhere(['like', 'newsletter.email', $this->email_search])
+			->andFilterWhere(['like', 'invite.displayname', $this->displayname_search])
 			->andFilterWhere(['like', 'inviter.displayname', $this->inviter_search]);
 
 		return $dataProvider;

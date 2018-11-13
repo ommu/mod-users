@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:38 WIB
- * @modified date 7 May 2018, 07:06 WIB
+ * @modified date 13 November 2018, 11:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_invite_history".
@@ -38,10 +38,10 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['code','invite_ip','expired_date'];
 
 	// Search Variable
-	public $user_search;
 	public $email_search;
-	public $level_search;
+	public $displayname_search;
 	public $inviter_search;
+	public $level_search;
 	public $expired_search;
 
 	/**
@@ -71,7 +71,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			[['invite_date', 'expired_date'], 'safe'],
 			[['code'], 'string', 'max' => 16],
 			[['invite_ip'], 'string', 'max' => 20],
-			[['invite_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserInvites::className(), 'targetAttribute' => ['invite_id' => 'invite_id']],
+			[['invite_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserInvites::className(), 'targetAttribute' => ['invite_id' => 'id']],
 		];
 	}
 
@@ -87,10 +87,10 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'invite_date' => Yii::t('app', 'Invite Date'),
 			'invite_ip' => Yii::t('app', 'Invite Ip'),
 			'expired_date' => Yii::t('app', 'Expired Date'),
-			'user_search' => Yii::t('app', 'User'),
 			'email_search' => Yii::t('app', 'Email'),
-			'level_search' => Yii::t('app', 'Level'),
+			'displayname_search' => Yii::t('app', 'Displayname'),
 			'inviter_search' => Yii::t('app', 'Inviter'),
+			'level_search' => Yii::t('app', 'Level'),
 			'expired_search' => Yii::t('app', 'Expired'),
 		];
 	}
@@ -100,7 +100,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	 */
 	public function getInvite()
 	{
-		return $this->hasOne(UserInvites::className(), ['invite_id' => 'invite_id']);
+		return $this->hasOne(UserInvites::className(), ['id' => 'invite_id']);
 	}
 
 	/**
@@ -133,29 +133,29 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('invite')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite->newsletter->user) ? $model->invite->newsletter->user->displayname : '-';
-				},
-			];
 			$this->templateColumns['email_search'] = [
 				'attribute' => 'email_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->invite->newsletter) ? $model->invite->newsletter->email : '-';
 				},
 			];
+			$this->templateColumns['displayname_search'] = [
+				'attribute' => 'displayname_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->invite) ? $model->invite->displayname : '-';
+				},
+			];
 			$this->templateColumns['inviter_search'] = [
 				'attribute' => 'inviter_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite->user) ? $model->invite->user->displayname : '-';
+					return isset($model->invite->inviter) ? $model->invite->inviter->displayname : '-';
 				},
 			];
 			$this->templateColumns['level_search'] = [
 				'attribute' => 'level_search',
 				'filter' => UserLevel::getLevel(),
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite->user->level) ? $model->invite->user->level->title->message : '-';
+					return isset($model->invite->inviter->level) ? $model->invite->inviter->level->title->message : '-';
 				},
 			];
 		}
@@ -167,10 +167,10 @@ class UserInviteHistory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['invite_date'] = [
 			'attribute' => 'invite_date',
-			'filter' => Html::input('date', 'invite_date', Yii::$app->request->get('invite_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->invite_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'invite_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['invite_ip'] = [
@@ -190,10 +190,10 @@ class UserInviteHistory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['expired_date'] = [
 			'attribute' => 'expired_date',
-			'filter' => Html::input('date', 'expired_date', Yii::$app->request->get('expired_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->expired_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->expired_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'expired_date'),
 			'format' => 'html',
 		];
 	}
@@ -214,27 +214,5 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			$model = self::findOne($id);
 			return $model;
 		}
-	}
-
-	/**
-	 * before validate attributes
-	 */
-	public function beforeValidate() 
-	{
-		if(parent::beforeValidate()) {
-			$this->invite_ip = $_SERVER['REMOTE_ADDR'];
-		}
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			//$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d');
-		}
-		return true;
 	}
 }

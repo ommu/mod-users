@@ -17,7 +17,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:28 WIB
- * @modified date 7 May 2018, 09:01 WIB
+ * @modified date 13 November 2018, 11:54 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -70,7 +70,7 @@ class InviteController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User Invite Histories');
+		$this->view->title = Yii::t('app', 'Invite Histories');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -89,7 +89,7 @@ class InviteController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {invite-id}', ['model-class' => 'User Invite History', 'invite-id' => $model->invite->newsletter->email]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {invite-id}', ['model-class' => 'Invite History', 'invite-id' => $model->invite->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -120,9 +120,9 @@ class InviteController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserInviteHistory::findOne($id)) !== null) 
+		if(($model = UserInviteHistory::findOne($id)) !== null)
 			return $model;
-		else
-			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

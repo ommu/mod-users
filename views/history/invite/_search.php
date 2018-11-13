@@ -10,21 +10,35 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 23 October 2017, 08:28 WIB
- * @modified date 7 May 2018, 09:01 WIB
+ * @modified date 13 November 2018, 11:54 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use ommu\users\models\UserLevel;
 ?>
 
-<div class="search-form">
+<div class="user-invite-history-search search-form">
+
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
 		'method' => 'get',
+		'options' => [
+			'data-pjax' => 1
+		],
 	]); ?>
-		<?php echo $form->field($model, 'invite_search');?>
+
+		<?php echo $form->field($model, 'email_search');?>
+
+		<?php echo $form->field($model, 'displayname_search');?>
+
+		<?php echo $form->field($model, 'inviter_search');?>
+
+		<?php $level = UserLevel::getLevel();
+		echo $form->field($model, 'level_search')
+			->dropDownList($level, ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'code');?>
 
@@ -36,9 +50,14 @@ use yii\widgets\ActiveForm;
 		<?php echo $form->field($model, 'expired_date')
 			->input('date');?>
 
+		<?php echo $form->field($model, 'expired_search')
+			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
 		</div>
+
 	<?php ActiveForm::end(); ?>
+
 </div>
