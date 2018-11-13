@@ -8,14 +8,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:36 WIB
- * @modified date 5 May 2018, 02:17 WIB
+ * @modified date 13 November 2018, 00:03 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 namespace ommu\users\models\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use ommu\users\models\UserHistoryEmail as UserHistoryEmailModel;
@@ -29,8 +28,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 	{
 		return [
 			[['id', 'user_id'], 'integer'],
-			[['email', 'update_date',
-				'level_search', 'user_search'], 'safe'],
+			[['email', 'update_date', 'user_search', 'level_search'], 'safe'],
 		];
 	}
 
@@ -57,6 +55,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
@@ -73,13 +72,13 @@ class UserHistoryEmail extends UserHistoryEmailModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['level_search'] = [
-			'asc' => ['level.message' => SORT_ASC],
-			'desc' => ['level.message' => SORT_DESC],
-		];
 		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
+		];
+		$attributes['level_search'] = [
+			'asc' => ['level.message' => SORT_ASC],
+			'desc' => ['level.message' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,

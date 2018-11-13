@@ -17,7 +17,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:39 WIB
- * @modified date 5 May 2018, 02:18 WIB
+ * @modified date 13 November 2018, 01:17 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -70,7 +70,7 @@ class PasswordController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User History Passwords');
+		$this->view->title = Yii::t('app', 'History Passwords');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -89,7 +89,7 @@ class PasswordController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'User History Password', 'user-id' => $model->user->username]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'History Password', 'user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -120,9 +120,9 @@ class PasswordController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserHistoryPassword::findOne($id)) !== null) 
+		if(($model = UserHistoryPassword::findOne($id)) !== null)
 			return $model;
-		else
-			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

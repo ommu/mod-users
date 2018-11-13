@@ -17,7 +17,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:36 WIB
- * @modified date 5 May 2018, 02:17 WIB
+ * @modified date 13 November 2018, 00:03 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -70,7 +70,7 @@ class EmailController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User History Emails');
+		$this->view->title = Yii::t('app', 'History Emails');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -89,7 +89,7 @@ class EmailController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'User History Email', 'user-id' => $model->user->username]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'History Email', 'user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -120,9 +120,9 @@ class EmailController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserHistoryEmail::findOne($id)) !== null) 
+		if(($model = UserHistoryEmail::findOne($id)) !== null)
 			return $model;
-		else
-			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

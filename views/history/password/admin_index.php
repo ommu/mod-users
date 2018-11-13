@@ -4,12 +4,13 @@
  * @var $this yii\web\View
  * @var $this ommu\users\controllers\history\PasswordController
  * @var $model ommu\users\models\UserHistoryPassword
+ * @var $searchModel ommu\users\models\search\UserHistoryPassword
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:39 WIB
- * @modified date 5 May 2018, 02:18 WIB
+ * @modified date 13 November 2018, 01:17 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -22,7 +23,7 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Personal'), 'url' => Url::to(['member/index']), 'icon' => 'table'],
+	['label' => Yii::t('app', 'Back To Personal'), 'url' => Url::to(['manage/admin/index']), 'icon' => 'table'],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
@@ -30,6 +31,7 @@ $this->params['menu']['option'] = [
 ];
 ?>
 
+<div class="user-history-password-index">
 <?php Pjax::begin(); ?>
 
 <?php //echo $this->render('_search', ['model'=>$searchModel]); ?>
@@ -47,16 +49,16 @@ array_push($columnData, [
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
 			$url = Url::to(['view', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail User History Password')]);
+			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail History Password')]);
 		},
 		'update' => function ($url, $model, $key) {
 			$url = Url::to(['update', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User History Password')]);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update History Password')]);
 		},
 		'delete' => function ($url, $model, $key) {
 			$url = Url::to(['delete', 'id'=>$model->primaryKey]);
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
-				'title' => Yii::t('app', 'Delete User History Password'),
+				'title' => Yii::t('app', 'Delete History Password'),
 				'data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
 				'data-method'  => 'post',
 			]);
@@ -73,3 +75,4 @@ echo GridView::widget([
 ]); ?>
 
 <?php Pjax::end(); ?>
+</div>

@@ -413,7 +413,7 @@ class UserLevel extends \app\components\ActiveRecord
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
-		$this->templateColumns['userActive'] = [
+		$this->templateColumns['user_active'] = [
 			'attribute' => 'view.user_active',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
@@ -423,7 +423,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['userPending'] = [
+		$this->templateColumns['user_pending'] = [
 			'attribute' => 'view.user_pending',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
@@ -433,7 +433,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['userNoverified'] = [
+		$this->templateColumns['user_noverified'] = [
 			'attribute' => 'view.user_noverified',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
@@ -443,7 +443,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['userBlocked'] = [
+		$this->templateColumns['user_blocked'] = [
 			'attribute' => 'view.user_blocked',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
@@ -453,7 +453,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		$this->templateColumns['userAll'] = [
+		$this->templateColumns['user_all'] = [
 			'attribute' => 'view.user_all',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {

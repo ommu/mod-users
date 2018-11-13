@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:32 WIB
- * @modified date 5 May 2018, 02:01 WIB
+ * @modified date 12 November 2018, 23:52 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_history_email".
@@ -27,15 +27,16 @@ namespace ommu\users\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use ommu\users\models\Users;
 
 class UserHistoryEmail extends \app\components\ActiveRecord
 {
+	use \ommu\traits\UtilityTrait;
+
 	public $gridForbiddenColumn = [];
 
 	// Search Variable
-	public $level_search;
 	public $user_search;
+	public $level_search;
 
 	/**
 	 * @return string the associated database table name
@@ -59,10 +60,10 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email'], 'required'],
+			[['user_id', 'email'], 'required'],
 			[['user_id'], 'integer'],
 			[['update_date'], 'safe'],
-			[['email'], 'string', 'max' => 32],
+			[['email'], 'string', 'max' => 64],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
 	}
@@ -77,8 +78,8 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'email' => Yii::t('app', 'Email'),
 			'update_date' => Yii::t('app', 'Update Date'),
-			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),
+			'level_search' => Yii::t('app', 'Level'),
 		];
 	}
 
@@ -88,6 +89,15 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 	public function getUser()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * @return \ommu\users\models\query\UserHistoryEmail the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\users\models\query\UserHistoryEmail(get_called_class());
 	}
 
 	/**
@@ -103,17 +113,17 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'filter' => UserLevel::getLevel(),
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user->level) ? $model->user->level->title->message : '-';
-				},
-			];
 			$this->templateColumns['user_search'] = [
 				'attribute' => 'user_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
+				},
+			];
+			$this->templateColumns['level_search'] = [
+				'attribute' => 'level_search',
+				'filter' => UserLevel::getLevel(),
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->level->title->message : '-';
 				},
 			];
 		}
@@ -125,10 +135,10 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['update_date'] = [
 			'attribute' => 'update_date',
-			'filter' => Html::input('date', 'update_date', Yii::$app->request->get('update_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'update_date'),
 			'format' => 'html',
 		];
 	}
@@ -154,7 +164,7 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)

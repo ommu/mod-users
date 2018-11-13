@@ -10,21 +10,33 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:39 WIB
- * @modified date 5 May 2018, 02:17 WIB
+ * @modified date 13 November 2018, 01:16 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use ommu\users\models\UserLevel;
 ?>
 
-<div class="search-form">
+<div class="user-history-login-search search-form">
+
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
 		'method' => 'get',
+		'options' => [
+			'data-pjax' => 1
+		],
 	]); ?>
+
 		<?php echo $form->field($model, 'user_search');?>
+
+		<?php $level = UserLevel::getLevel();
+		echo $form->field($model, 'level_search')
+			->dropDownList($level, ['prompt'=>'']);?>
+
+		<?php echo $form->field($model, 'email_search');?>
 
 		<?php echo $form->field($model, 'lastlogin_date')
 			->input('date');?>
@@ -37,5 +49,7 @@ use yii\widgets\ActiveForm;
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
 			<?php echo Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
 		</div>
+
 	<?php ActiveForm::end(); ?>
+
 </div>

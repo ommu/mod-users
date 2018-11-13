@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:37 WIB
- * @modified date 5 May 2018, 02:02 WIB
+ * @modified date 12 November 2018, 23:53 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_history_login".
@@ -28,15 +28,16 @@ namespace ommu\users\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use ommu\users\models\Users;
 
 class UserHistoryLogin extends \app\components\ActiveRecord
 {
+	use \ommu\traits\UtilityTrait;
+
 	public $gridForbiddenColumn = [];
 
 	// Search Variable
-	public $level_search;
 	public $user_search;
+	public $level_search;
 	public $email_search;
 
 	/**
@@ -61,7 +62,7 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['lastlogin_ip', 'lastlogin_from'], 'required'],
+			[['user_id', 'lastlogin_ip', 'lastlogin_from'], 'required'],
 			[['user_id'], 'integer'],
 			[['lastlogin_date'], 'safe'],
 			[['lastlogin_ip', 'lastlogin_from'], 'string', 'max' => 32],
@@ -80,8 +81,8 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 			'lastlogin_date' => Yii::t('app', 'Lastlogin Date'),
 			'lastlogin_ip' => Yii::t('app', 'Lastlogin Ip'),
 			'lastlogin_from' => Yii::t('app', 'Lastlogin From'),
-			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),
+			'level_search' => Yii::t('app', 'Level'),
 			'email_search' => Yii::t('app', 'Email'),
 		];
 	}
@@ -92,6 +93,15 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 	public function getUser()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * @return \ommu\users\models\query\UserHistoryLogin the active query used by this AR class.
+	 */
+	public static function find()
+	{
+		return new \ommu\users\models\query\UserHistoryLogin(get_called_class());
 	}
 
 	/**
@@ -107,17 +117,17 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'filter' => UserLevel::getLevel(),
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user->level) ? $model->user->level->title->message : '-';
-				},
-			];
 			$this->templateColumns['user_search'] = [
 				'attribute' => 'user_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
+				},
+			];
+			$this->templateColumns['level_search'] = [
+				'attribute' => 'level_search',
+				'filter' => UserLevel::getLevel(),
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->level->title->message : '-';
 				},
 			];
 			$this->templateColumns['email_search'] = [
@@ -129,10 +139,10 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['lastlogin_date'] = [
 			'attribute' => 'lastlogin_date',
-			'filter' => Html::input('date', 'lastlogin_date', Yii::$app->request->get('lastlogin_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'lastlogin_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['lastlogin_ip'] = [
@@ -170,12 +180,11 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord)
 				$this->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-
 			$this->lastlogin_ip = $_SERVER['REMOTE_ADDR'];
 		}
 		return true;
