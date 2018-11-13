@@ -128,15 +128,6 @@ class UserNewsletter extends UserNewsletterModel
 			'view.register' => $this->register_search,
 		]);
 
-		/*
-		if(isset($params['register_search']) && $params['register_search'] != '') {
-			if($params['register_search'] == 1)
-				$query->andFilterWhere(['is not', 't.user_id', null]);
-			else if($params['register_search'] == 0)
-				$query->andFilterWhere(['is', 't.user_id', null]);
-		}
-		*/
-
 		$query->andFilterWhere(['like', 't.email', $this->email])
 			->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
 			->andFilterWhere(['like', 'user.displayname', $this->user_search])
