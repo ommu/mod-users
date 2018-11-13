@@ -615,9 +615,13 @@ class Users extends \app\components\ActiveRecord
 										if($setting->signup_checkemail == 1) {
 											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->invite_code_i);
 											if($inviteCode == null)
-												$this->addError('invite_code_i', Yii::t('phrase', '{attribute} expired atau tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
-											else
-												$this->reference_id_i = $inviteCode->user_id;
+												$this->addError('invite_code_i', Yii::t('phrase', '{attribute} tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+											else {
+												if($inviteCode->view->expired)
+													$this->addError('invite_code_i', Yii::t('phrase', '{attribute} expired', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+												else
+													$this->reference_id_i = $inviteCode->user_id;
+											}
 										}
 									}
 								}

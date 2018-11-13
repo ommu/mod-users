@@ -38,7 +38,6 @@ namespace ommu\users\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use ommu\users\models\Users;
 use app\models\CoreSettings;
 
 class UserInvites extends \app\components\ActiveRecord
@@ -351,14 +350,14 @@ class UserInvites extends \app\components\ActiveRecord
 	}
 
 	// getInvite
-	public static function getInvite($email) 
+	public static function getInvite($email)
 	{
 		$email = strtolower($email);
 		$model = self::find()->alias('t')
 			->leftJoin(sprintf('%s newsletter', UserNewsletter::tableName()), 't.newsletter_id=newsletter.newsletter_id')
 			->select(['t.id', 't.newsletter_id'])
 			->where(['t.publish' => 1])
-			->andWhere(['is not', 't.user_id', null])
+			->andWhere(['is not', 't.inviter_id', null])
 			->andWhere(['newsletter.email' => $email])
 			->orderBy('t.id DESC')
 			->one();
@@ -371,12 +370,12 @@ class UserInvites extends \app\components\ActiveRecord
 	{
 		$email = strtolower($email);
 		$model = UserInviteHistory::find()->alias('t')
-			->leftJoin(sprintf('%s invite', UserInvites::tableName()), 't.id=invite.id')
+			->leftJoin(sprintf('%s invite', UserInvites::tableName()), 't.invite_id=invite.id')
 			->leftJoin(sprintf('%s newsletter', UserNewsletter::tableName()), 'invite.newsletter_id=newsletter.newsletter_id')
-			->select(['t.id', 't.id'])
+			->select(['t.id', 't.invite_id'])
 			->where(['t.code' => $code])
 			->andWhere(['invite.publish' => 1])
-			->andWhere(['newsletter.status' => 1])
+			// ->andWhere(['newsletter.status' => 1])
 			->andWhere(['newsletter.email' => $email])
 			->orderBy('t.id DESC')
 			->one();
