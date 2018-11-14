@@ -441,6 +441,7 @@ class UserInvites extends \app\components\ActiveRecord
 					$this->newsletter_id = $newsletter->newsletter_id;
 				else {
 					$newsletter = new UserNewsletter();
+					$newsletter->status = 0;
 					$newsletter->email_i = $this->email_i;
 					if($newsletter->save())
 						$this->newsletter_id = $newsletter->newsletter_id;

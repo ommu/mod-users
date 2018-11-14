@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = $model->user->displayname;
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->forgot_id]), 'icon' => 'pencil'],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->forgot_id]), 'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'method' => 'post', 'icon' => 'trash'],
 ];
 ?>
@@ -39,6 +38,7 @@ $this->params['menu']['content'] = [
 		[
 			'attribute' => 'publish',
 			'value' => $model->publish == 0 ? '-' : $this->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish),
+			'format' => 'raw',
 		],
 		[
 			'attribute' => 'user_search',

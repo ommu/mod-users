@@ -15,10 +15,10 @@
  * @property integer $newsletter_id
  * @property integer $status
  * @property integer $user_id
- * @property integer $reference_id
  * @property string $email
- * @property string $subscribe_date
+ * @property integer $reference_id
  * @property integer $subscribe_id
+ * @property string $creation_date
  * @property string $modified_date
  * @property integer $modified_id
  * @property string $updated_date
@@ -111,10 +111,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'newsletter_id' => Yii::t('app', 'Newsletter'),
 			'status' => Yii::t('app', 'Status'),
 			'user_id' => Yii::t('app', 'User'),
-			'reference_id' => Yii::t('app', 'Reference'),
 			'email' => Yii::t('app', 'Email'),
-			'subscribe_date' => Yii::t('app', 'Subscribe Date'),
+			'reference_id' => Yii::t('app', 'Reference'),
 			'subscribe_id' => Yii::t('app', 'Subscriber'),
+			'creation_date' => Yii::t('app', 'Creation Date'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
@@ -244,12 +244,12 @@ class UserNewsletter extends \app\components\ActiveRecord
 				},
 			];
 		}
-		$this->templateColumns['subscribe_date'] = [
-			'attribute' => 'subscribe_date',
+		$this->templateColumns['creation_date'] = [
+			'attribute' => 'creation_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->subscribe_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->subscribe_date, 'datetime') : '-';
+				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
 			},
-			'filter' => $this->filterDatepicker($this, 'subscribe_date'),
+			'filter' => $this->filterDatepicker($this, 'creation_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['modified_date'] = [
@@ -282,21 +282,21 @@ class UserNewsletter extends \app\components\ActiveRecord
 				return $model->updated_ip;
 			},
 		];
+		$this->templateColumns['register_search'] = [
+			'attribute' => 'register_search',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				return $this->filterYesNo($model->view->register);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['status', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->status, 'Subscribe,Unsubscribe');
-			},
-			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
-		];
-		$this->templateColumns['register_search'] = [
-			'attribute' => 'register_search',
-			'filter' => $this->filterYesNo(),
-			'value' => function($model, $key, $index, $column) {
-				return $this->filterYesNo($model->view->register);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',

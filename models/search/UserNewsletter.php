@@ -28,7 +28,7 @@ class UserNewsletter extends UserNewsletterModel
 	{
 		return [
 			[['newsletter_id', 'status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id'], 'integer'],
-			[['email', 'subscribe_date', 'modified_date', 'updated_date', 'updated_ip', 'user_search', 'reference_search', 'subscribe_search', 'modified_search', 'level_search', 'register_search'], 'safe'],
+			[['email', 'creation_date', 'modified_date', 'updated_date', 'updated_ip', 'user_search', 'reference_search', 'subscribe_search', 'modified_search', 'level_search', 'register_search'], 'safe'],
 		];
 	}
 
@@ -119,8 +119,8 @@ class UserNewsletter extends UserNewsletterModel
 			't.status' => $this->status,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			't.reference_id' => isset($params['reference']) ? $params['reference'] : $this->reference_id,
-			'cast(t.subscribe_date as date)' => $this->subscribe_date,
 			't.subscribe_id' => isset($params['subscribe']) ? $params['subscribe'] : $this->subscribe_id,
+			'cast(t.creation_date as date)' => $this->creation_date,
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,

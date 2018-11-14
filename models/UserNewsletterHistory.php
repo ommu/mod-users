@@ -153,20 +153,20 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 				return $model->updated_ip;
 			},
 		];
-		$this->templateColumns['status'] = [
-			'attribute' => 'status',
-			'filter' => $this->filterYesNo(),
-			'value' => function($model, $key, $index, $column) {
-				return $model->status == 1 ? Yii::t('app', 'Subscribe') : Yii::t('app', 'Unsubscribe');
-			},
-			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
-		];
 		$this->templateColumns['register_search'] = [
 			'attribute' => 'register_search',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->newsletter->view->register);
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+		];
+		$this->templateColumns['status'] = [
+			'attribute' => 'status',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				return $model->status == 1 ? Yii::t('app', 'Subscribe') : Yii::t('app', 'Unsubscribe');
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',

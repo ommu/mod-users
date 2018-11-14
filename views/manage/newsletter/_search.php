@@ -42,7 +42,7 @@ use ommu\users\models\UserLevel;
 
 		<?php echo $form->field($model, 'reference_search');?>
 
-		<?php echo $form->field($model, 'subscribe_date')
+		<?php echo $form->field($model, 'creation_date')
 			->input('date');?>
 
 		<?php echo $form->field($model, 'modified_date')
