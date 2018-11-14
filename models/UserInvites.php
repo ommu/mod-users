@@ -51,10 +51,10 @@ class UserInvites extends \app\components\ActiveRecord
 	public $old_invites_i;
 
 	// Search Variable
-	public $email_search;
 	public $inviter_search;
-	public $level_search;
 	public $modified_search;
+	public $email_search;
+	public $level_search;
 
 	const SCENARIO_FORM = 'createForm';
 	const SCENARIO_SINGLE_EMAIL = 'singleEmail';
@@ -123,10 +123,10 @@ class UserInvites extends \app\components\ActiveRecord
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'email_i' => Yii::t('app', 'Email'),
-			'email_search' => Yii::t('app', 'Email'),
 			'inviter_search' => Yii::t('app', 'Inviter'),
-			'level_search' => Yii::t('app', 'Level'),
 			'modified_search' => Yii::t('app', 'Modified'),
+			'email_search' => Yii::t('app', 'Email'),
+			'level_search' => Yii::t('app', 'Level'),
 		];
 	}
 

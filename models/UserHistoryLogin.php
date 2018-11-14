@@ -62,7 +62,7 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['user_id'], 'required'],
+			[['user_id', 'lastlogin_from'], 'required'],
 			[['user_id'], 'integer'],
 			[['lastlogin_ip', 'lastlogin_from'], 'string', 'max' => 32],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],

@@ -28,7 +28,7 @@ class UserInvites extends UserInvitesModel
 	{
 		return [
 			[['id', 'publish', 'newsletter_id', 'invites', 'inviter_id', 'modified_id'], 'integer'],
-			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'email_search', 'inviter_search', 'level_search', 'modified_search'], 'safe'],
+			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'inviter_search', 'modified_search', 'email_search', 'level_search'], 'safe'],
 		];
 	}
 
@@ -64,8 +64,8 @@ class UserInvites extends UserInvitesModel
 		$query->joinWith([
 			'newsletter newsletter', 
 			'inviter inviter', 
-			'inviter.level.title level',
 			'modified modified',
+			'inviter.level.title level',
 		]);
 
 		// add conditions that should always apply here
@@ -74,21 +74,21 @@ class UserInvites extends UserInvitesModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['email_search'] = [
-			'asc' => ['newsletter.email' => SORT_ASC],
-			'desc' => ['newsletter.email' => SORT_DESC],
-		];
 		$attributes['inviter_search'] = [
 			'asc' => ['inviter.displayname' => SORT_ASC],
 			'desc' => ['inviter.displayname' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
-			'asc' => ['level.message' => SORT_ASC],
-			'desc' => ['level.message' => SORT_DESC],
-		];
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
+		];
+		$attributes['email_search'] = [
+			'asc' => ['newsletter.email' => SORT_ASC],
+			'desc' => ['newsletter.email' => SORT_DESC],
+		];
+		$attributes['level_search'] = [
+			'asc' => ['level.message' => SORT_ASC],
+			'desc' => ['level.message' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -128,9 +128,9 @@ class UserInvites extends UserInvitesModel
 		$query->andFilterWhere(['like', 't.displayname', $this->displayname])
 			->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
-			->andFilterWhere(['like', 'newsletter.email', $this->email_search])
 			->andFilterWhere(['like', 'inviter.displayname', $this->inviter_search])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+			->andFilterWhere(['like', 'modified.displayname', $this->modified_search])
+			->andFilterWhere(['like', 'newsletter.email', $this->email_search]);
 
 		return $dataProvider;
 	}
