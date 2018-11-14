@@ -10,7 +10,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 17 October 2017, 15:00 WIB
- * @modified date 3 May 2018, 14:11 WIB
+ * @modified date 14 November 2018, 13:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -18,6 +18,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
+
+<div class="user-verify-form">
 
 <?php $form = ActiveForm::begin([
 	'options' => [
@@ -43,3 +45,5 @@ use yii\widgets\ActiveForm;
 </div>
 
 <?php ActiveForm::end(); ?>
+
+</div>

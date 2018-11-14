@@ -20,7 +20,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 17 October 2017, 15:00 WIB
- * @modified date 3 May 2018, 14:11 WIB
+ * @modified date 14 November 2018, 13:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -74,7 +74,7 @@ class VerifyController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'User Verifies');
+		$this->view->title = Yii::t('app', 'Verifies');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -98,11 +98,11 @@ class VerifyController extends Controller
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User verify success created.'));
 				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id' => $model->verify_id]);
+				//return $this->redirect(['view', 'id'=>$model->verify_id]);
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Create User Verify');
+		$this->view->title = Yii::t('app', 'Create Verify');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_create', [
@@ -119,7 +119,7 @@ class VerifyController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'User Verify', 'user-id' => $model->user->displayname]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'Verify', 'user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_view', [
@@ -141,7 +141,6 @@ class VerifyController extends Controller
 		if($model->save(false, ['publish'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User verify success deleted.'));
 			return $this->redirect(['index']);
-			//return $this->redirect(['view', 'id' => $model->verify_id]);
 		}
 	}
 
@@ -154,6 +153,9 @@ class VerifyController extends Controller
 	public function actionPublish($id)
 	{
 		$model = $this->findModel($id);
+		if($model->publish == 0)
+			throw new \yii\web\NotAcceptableHttpException(Yii::t('app', 'The requested page does not exist.'));
+
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
@@ -172,9 +174,9 @@ class VerifyController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserVerify::findOne($id)) !== null) 
+		if(($model = UserVerify::findOne($id)) !== null)
 			return $model;
-		else
-			throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+
+		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}
 }

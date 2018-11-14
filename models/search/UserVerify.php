@@ -8,14 +8,13 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 17 October 2017, 15:00 WIB
- * @modified date 3 May 2018, 14:11 WIB
+ * @modified date 14 November 2018, 13:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 namespace ommu\users\models\search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use ommu\users\models\UserVerify as UserVerifyModel;
@@ -29,8 +28,7 @@ class UserVerify extends UserVerifyModel
 	{
 		return [
 			[['verify_id', 'publish', 'user_id', 'modified_id'], 'integer'],
-			[['code', 'verify_date', 'verify_ip', 'expired_date', 'modified_date', 'deleted_date',
-				'level_search', 'user_search', 'email_i', 'modified_search', 'expired_search'], 'safe'],
+			[['code', 'verify_date', 'verify_ip', 'expired_date', 'modified_date', 'deleted_date', 'email_i', 'user_search', 'modified_search', 'level_search', 'expired_search'], 'safe'],
 		];
 	}
 
@@ -57,16 +55,17 @@ class UserVerify extends UserVerifyModel
 	 * Creates data provider instance with search query applied
 	 *
 	 * @param array $params
+	 *
 	 * @return ActiveDataProvider
 	 */
 	public function search($params)
 	{
 		$query = UserVerifyModel::find()->alias('t');
 		$query->joinWith([
-			'view view', 
 			'user user', 
+			'modified modified',
 			'user.level.title level', 
-			'modified modified'
+			'view view', 
 		]);
 
 		// add conditions that should always apply here
@@ -75,21 +74,21 @@ class UserVerify extends UserVerifyModel
 		]);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['level_search'] = [
-			'asc' => ['level.message' => SORT_ASC],
-			'desc' => ['level.message' => SORT_DESC],
+		$attributes['email_i'] = [
+			'asc' => ['user.email' => SORT_ASC],
+			'desc' => ['user.email' => SORT_DESC],
 		];
 		$attributes['user_search'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['email_i'] = [
-			'asc' => ['user.email' => SORT_ASC],
-			'desc' => ['user.email' => SORT_DESC],
-		];
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
+		];
+		$attributes['level_search'] = [
+			'asc' => ['level.message' => SORT_ASC],
+			'desc' => ['level.message' => SORT_DESC],
 		];
 		$attributes['expired_search'] = [
 			'asc' => ['view.expired' => SORT_ASC],
@@ -132,8 +131,8 @@ class UserVerify extends UserVerifyModel
 
 		$query->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.verify_ip', $this->verify_ip])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
 			->andFilterWhere(['like', 'user.email', $this->email_i])
+			->andFilterWhere(['like', 'user.displayname', $this->user_search])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
 		return $dataProvider;
