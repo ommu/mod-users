@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 17 October 2017, 14:17 WIB
- * @modified date 2 May 2018, 13:32 WIB
+ * @modified date 14 November 2018, 13:49 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_user_forgot".
@@ -45,9 +45,9 @@ class UserForgot extends \app\components\ActiveRecord
 	public $email_i;
 
 	// Search Variable
-	public $level_search;
 	public $user_search;
 	public $modified_search;
+	public $level_search;
 	public $expired_search;
 
 	/**
@@ -72,12 +72,10 @@ class UserForgot extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['code', 'forgot_ip', 'email_i'], 'required'],
+			[['email_i'], 'required'],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
-			[['user_id', 'forgot_date', 'expired_date', 'modified_date', 'deleted_date'], 'safe'],
 			[['email_i'], 'email'],
-			[['code'], 'string', 'max' => 64],
-			[['email_i'], 'string', 'max' => 32],
+			[['code', 'email_i'], 'string', 'max' => 64],
 			[['forgot_ip'], 'string', 'max' => 20],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
@@ -99,10 +97,10 @@ class UserForgot extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'deleted_date' => Yii::t('app', 'Deleted Date'),
-			'level_search' => Yii::t('app', 'Level'),
-			'user_search' => Yii::t('app', 'User'),
 			'email_i' => Yii::t('app', 'Email'),
+			'user_search' => Yii::t('app', 'User'),
 			'modified_search' => Yii::t('app', 'Modified'),
+			'level_search' => Yii::t('app', 'Level'),
 			'expired_search' => Yii::t('app', 'Expired'),
 		];
 	}
@@ -153,17 +151,17 @@ class UserForgot extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('user')) {
+			$this->templateColumns['user_search'] = [
+				'attribute' => 'user_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->user) ? $model->user->displayname : '-';
+				},
+			];
 			$this->templateColumns['level_search'] = [
 				'attribute' => 'level_search',
 				'filter' => UserLevel::getLevel(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user->level) ? $model->user->level->title->message : '-';
-				},
-			];
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
 				},
 			];
 			$this->templateColumns['email_i'] = [
@@ -181,10 +179,10 @@ class UserForgot extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['forgot_date'] = [
 			'attribute' => 'forgot_date',
-			'filter' => Html::input('date', 'forgot_date', Yii::$app->request->get('forgot_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->forgot_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->forgot_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'forgot_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['forgot_ip'] = [
@@ -195,18 +193,18 @@ class UserForgot extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['expired_date'] = [
 			'attribute' => 'expired_date',
-			'filter' => Html::input('date', 'expired_date', Yii::$app->request->get('expired_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->expired_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->expired_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'expired_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'modified_date'),
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
@@ -219,10 +217,10 @@ class UserForgot extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['deleted_date'] = [
 			'attribute' => 'deleted_date',
-			'filter' => Html::input('date', 'deleted_date', Yii::$app->request->get('deleted_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->deleted_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->deleted_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'deleted_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['expired_search'] = [
@@ -269,18 +267,18 @@ class UserForgot extends \app\components\ActiveRecord
 	/**
 	 * before validate attributes
 	 */
-	public function beforeValidate() 
+	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				if(preg_match('/@/', $this->email_i)) {
 					$user = Users::find()
-						->select(['user_id','email'])
+						->select(['user_id'])
 						->where(['email' => $this->email_i])
 						->one();
 				} else {
 					$user = Users::find()
-						->select(['user_id','username'])
+						->select(['user_id'])
 						->where(['username' => $this->email_i])
 						->one();
 				}
@@ -291,19 +289,9 @@ class UserForgot extends \app\components\ActiveRecord
 
 				$this->code = $this->uniqueCode();
 				$this->forgot_ip = $_SERVER['REMOTE_ADDR'];
+
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-		}
-		return true;
-	}
-
-	/**
-	 * before save attributes
-	 */
-	public function beforeSave($insert)
-	{
-		if(parent::beforeSave($insert)) {
-			//$this->expired_date = Yii::$app->formatter->asDate($this->expired_date, 'php:Y-m-d H:i:s');
 		}
 		return true;
 	}

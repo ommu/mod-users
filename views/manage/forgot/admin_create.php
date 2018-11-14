@@ -10,15 +10,14 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 17 October 2017, 15:01 WIB
- * @modified date 3 May 2018, 14:11 WIB
+ * @modified date 14 November 2018, 13:51 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
-use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Forgots'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Forgots'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Create');
 
 $this->params['menu']['content'] = [
@@ -26,6 +25,10 @@ $this->params['menu']['content'] = [
 ];
 ?>
 
+<div class="user-forgot-create">
+
 <?php echo $this->render('_form', [
 	'model' => $model,
 ]); ?>
+
+</div>
