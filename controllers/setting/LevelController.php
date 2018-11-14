@@ -183,7 +183,7 @@ class LevelController extends Controller
 		$replace = $model->default == 1 ? 0 : 1;
 		$model->default = $replace;
 		
-		if($model->save(false, ['default'])) {
+		if($model->save(false, ['default','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
 			return $this->redirect(['index']);
 		}
@@ -201,7 +201,7 @@ class LevelController extends Controller
 		$replace = $model->signup == 1 ? 0 : 1;
 		$model->signup = $replace;
 		
-		if($model->save(false, ['signup'])) {
+		if($model->save(false, ['signup','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
 			return $this->redirect(['index']);
 		}

@@ -176,7 +176,7 @@ class NewsletterController extends Controller
 		$replace = $model->status == 1 ? 0 : 1;
 		$model->status = $replace;
 		
-		if($model->save(false, ['status'])) {
+		if($model->save(false, ['status','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter success updated.'));
 			return $this->redirect(['index']);
 		}
