@@ -63,9 +63,8 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['status', 'newsletter_id', 'updated_ip'], 'required'],
+			[['status', 'newsletter_id'], 'required'],
 			[['status', 'newsletter_id'], 'integer'],
-			[['updated_date'], 'safe'],
 			[['updated_ip'], 'string', 'max' => 20],
 			[['newsletter_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserNewsletter::className(), 'targetAttribute' => ['newsletter_id' => 'newsletter_id']],
 		];

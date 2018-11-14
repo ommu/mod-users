@@ -73,7 +73,7 @@ class UserSetting extends \app\components\ActiveRecord
 			[['license', 'permission', 'meta_description', 'meta_keyword', 'forgot_difference', 'verify_difference', 'invite_difference', 'invite_order'], 'required'],
 			[['permission', 'forgot_difference', 'verify_difference', 'invite_difference', 'modified_id'], 'integer'],
 			[['meta_description', 'meta_keyword', 'forgot_diff_type', 'verify_diff_type', 'invite_diff_type', 'invite_order'], 'string'],
-			[['forgot_diff_type','verify_diff_type', 'invite_diff_type', 'modified_date'], 'safe'],
+			[['forgot_diff_type','verify_diff_type', 'invite_diff_type'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
 	}

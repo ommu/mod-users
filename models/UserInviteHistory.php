@@ -66,9 +66,8 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['invite_id', 'code', 'invite_ip'], 'required'],
+			[['invite_id', 'code'], 'required'],
 			[['invite_id'], 'integer'],
-			[['invite_date', 'expired_date'], 'safe'],
 			[['code'], 'string', 'max' => 16],
 			[['invite_ip'], 'string', 'max' => 20],
 			[['invite_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserInvites::className(), 'targetAttribute' => ['invite_id' => 'id']],

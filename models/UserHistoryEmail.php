@@ -62,7 +62,6 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 		return [
 			[['user_id', 'email'], 'required'],
 			[['user_id'], 'integer'],
-			[['update_date'], 'safe'],
 			[['email'], 'string', 'max' => 64],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];

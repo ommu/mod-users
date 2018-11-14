@@ -63,7 +63,6 @@ class UserHistoryPassword extends \app\components\ActiveRecord
 		return [
 			[['user_id', 'password'], 'required'],
 			[['user_id'], 'integer'],
-			[['update_date'], 'safe'],
 			[['password'], 'string', 'max' => 32],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];

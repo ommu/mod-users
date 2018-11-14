@@ -115,7 +115,6 @@ class UserLevel extends \app\components\ActiveRecord
 			[['name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
 			[['photo_exts', 'name_i', 'desc_i'], 'string'],
 			//[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], 'serialize'],
-			[['creation_date', 'modified_date'], 'safe'],
 			[['slug', 'name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
 			[['slug'], 'string', 'max' => 32],
