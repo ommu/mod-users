@@ -6,35 +6,17 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 2 May 2018, 13:20 WIB
+ * @modified date 15 November 2018, 10:40 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "_users".
  *
  * The followings are the available columns in table "_users":
  * @property integer $user_id
+ * @property string $displayname
  * @property string $token_key
  * @property string $token_password
  * @property string $token_oauth
- * @property integer $emails
- * @property string $email_lastchange_date
- * @property integer $email_lastchange_days
- * @property integer $email_lastchange_hours
- * @property integer $usernames
- * @property string $username_lastchange_date
- * @property integer $username_lastchange_days
- * @property integer $username_lastchange_hours
- * @property integer $passwords
- * @property string $password_lastchange_date
- * @property integer $password_lastchange_days
- * @property integer $password_lastchange_hours
- * @property integer $logins
- * @property string $lastlogin_date
- * @property integer $lastlogin_days
- * @property integer $lastlogin_hours
- * @property string $lastlogin_from
- *
- * The followings are the available model relations:
- * @property Users $user
  *
  */
 
@@ -78,9 +60,10 @@ class Users extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['user_id', 'emails', 'email_lastchange_days', 'email_lastchange_hours', 'usernames', 'username_lastchange_days', 'username_lastchange_hours', 'passwords', 'password_lastchange_days', 'password_lastchange_hours', 'logins', 'lastlogin_days', 'lastlogin_hours'], 'integer'],
-			[['email_lastchange_date', 'username_lastchange_date', 'password_lastchange_date', 'lastlogin_date'], 'safe'],
-			[['token_key', 'token_password', 'token_oauth', 'lastlogin_from'], 'string', 'max' => 32],
+			[['user_id'], 'required'],
+			[['user_id'], 'integer'],
+			[['displayname'], 'string', 'max' => 65],
+			[['token_key', 'token_password', 'token_oauth'], 'string', 'max' => 32],
 		];
 	}
 
@@ -91,26 +74,10 @@ class Users extends \app\components\ActiveRecord
 	{
 		return [
 			'user_id' => Yii::t('app', 'User'),
+			'displayname' => Yii::t('app', 'Displayname'),
 			'token_key' => Yii::t('app', 'Token Key'),
 			'token_password' => Yii::t('app', 'Token Password'),
 			'token_oauth' => Yii::t('app', 'Token Oauth'),
-			'emails' => Yii::t('app', 'Emails'),
-			'email_lastchange_date' => Yii::t('app', 'Email Lastchange Date'),
-			'email_lastchange_days' => Yii::t('app', 'Email Lastchange Day'),
-			'email_lastchange_hours' => Yii::t('app', 'Email Lastchange Hour'),
-			'usernames' => Yii::t('app', 'Usernames'),
-			'username_lastchange_date' => Yii::t('app', 'Username Lastchange Date'),
-			'username_lastchange_days' => Yii::t('app', 'Username Lastchange Day'),
-			'username_lastchange_hours' => Yii::t('app', 'Username Lastchange Hour'),
-			'passwords' => Yii::t('app', 'Passwords'),
-			'password_lastchange_date' => Yii::t('app', 'Password Lastchange Date'),
-			'password_lastchange_days' => Yii::t('app', 'Password Lastchange Day'),
-			'password_lastchange_hours' => Yii::t('app', 'Password Lastchange Hour'),
-			'logins' => Yii::t('app', 'Logins'),
-			'lastlogin_date' => Yii::t('app', 'Lastlogin Date'),
-			'lastlogin_days' => Yii::t('app', 'Lastlogin Day'),
-			'lastlogin_hours' => Yii::t('app', 'Lastlogin Hour'),
-			'lastlogin_from' => Yii::t('app', 'Lastlogin From'),
 		];
 	}
 
@@ -148,116 +115,6 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'token_oauth',
 			'value' => function($model, $key, $index, $column) {
 				return $model->token_oauth;
-			},
-		];
-		$this->templateColumns['emails'] = [
-			'attribute' => 'emails',
-			'value' => function($model, $key, $index, $column) {
-				return $model->emails;
-			},
-		];
-		$this->templateColumns['email_lastchange_date'] = [
-			'attribute' => 'email_lastchange_date',
-			'filter' => Html::input('date', 'email_lastchange_date', Yii::$app->request->get('email_lastchange_date'), ['class'=>'form-control']),
-			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->email_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->email_lastchange_date, 'datetime') : '-';
-			},
-			'format' => 'html',
-		];
-		$this->templateColumns['email_lastchange_days'] = [
-			'attribute' => 'email_lastchange_days',
-			'value' => function($model, $key, $index, $column) {
-				return $model->email_lastchange_days;
-			},
-		];
-		$this->templateColumns['email_lastchange_hours'] = [
-			'attribute' => 'email_lastchange_hours',
-			'value' => function($model, $key, $index, $column) {
-				return $model->email_lastchange_hours;
-			},
-		];
-		$this->templateColumns['usernames'] = [
-			'attribute' => 'usernames',
-			'value' => function($model, $key, $index, $column) {
-				return $model->usernames;
-			},
-		];
-		$this->templateColumns['username_lastchange_date'] = [
-			'attribute' => 'username_lastchange_date',
-			'filter' => Html::input('date', 'username_lastchange_date', Yii::$app->request->get('username_lastchange_date'), ['class'=>'form-control']),
-			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->username_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->username_lastchange_date, 'datetime') : '-';
-			},
-			'format' => 'html',
-		];
-		$this->templateColumns['username_lastchange_days'] = [
-			'attribute' => 'username_lastchange_days',
-			'value' => function($model, $key, $index, $column) {
-				return $model->username_lastchange_days;
-			},
-		];
-		$this->templateColumns['username_lastchange_hours'] = [
-			'attribute' => 'username_lastchange_hours',
-			'value' => function($model, $key, $index, $column) {
-				return $model->username_lastchange_hours;
-			},
-		];
-		$this->templateColumns['passwords'] = [
-			'attribute' => 'passwords',
-			'value' => function($model, $key, $index, $column) {
-				return $model->passwords;
-			},
-		];
-		$this->templateColumns['password_lastchange_date'] = [
-			'attribute' => 'password_lastchange_date',
-			'filter' => Html::input('date', 'password_lastchange_date', Yii::$app->request->get('password_lastchange_date'), ['class'=>'form-control']),
-			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->password_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->password_lastchange_date, 'datetime') : '-';
-			},
-			'format' => 'html',
-		];
-		$this->templateColumns['password_lastchange_days'] = [
-			'attribute' => 'password_lastchange_days',
-			'value' => function($model, $key, $index, $column) {
-				return $model->password_lastchange_days;
-			},
-		];
-		$this->templateColumns['password_lastchange_hours'] = [
-			'attribute' => 'password_lastchange_hours',
-			'value' => function($model, $key, $index, $column) {
-				return $model->password_lastchange_hours;
-			},
-		];
-		$this->templateColumns['logins'] = [
-			'attribute' => 'logins',
-			'value' => function($model, $key, $index, $column) {
-				return $model->logins;
-			},
-		];
-		$this->templateColumns['lastlogin_date'] = [
-			'attribute' => 'lastlogin_date',
-			'filter' => Html::input('date', 'lastlogin_date', Yii::$app->request->get('lastlogin_date'), ['class'=>'form-control']),
-			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
-			},
-			'format' => 'html',
-		];
-		$this->templateColumns['lastlogin_days'] = [
-			'attribute' => 'lastlogin_days',
-			'value' => function($model, $key, $index, $column) {
-				return $model->lastlogin_days;
-			},
-		];
-		$this->templateColumns['lastlogin_hours'] = [
-			'attribute' => 'lastlogin_hours',
-			'value' => function($model, $key, $index, $column) {
-				return $model->lastlogin_hours;
-			},
-		];
-		$this->templateColumns['lastlogin_from'] = [
-			'attribute' => 'lastlogin_from',
-			'value' => function($model, $key, $index, $column) {
-				return $model->lastlogin_from;
 			},
 		];
 	}

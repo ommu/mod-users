@@ -9,6 +9,7 @@
  * TOC :
  *	Index
  *	Create
+ *	Update
  *	View
  *	Delete
  *	RunAction
@@ -21,6 +22,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 14 November 2018, 15:16 WIB
+ * @modified date 15 November 2018, 09:50 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -113,6 +115,33 @@ class PhoneController extends Controller
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_create', [
+			'model' => $model,
+		]);
+	}
+
+	/**
+	 * Updates an existing UserPhones model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionUpdate($id)
+	{
+		$model = $this->findModel($id);
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User phone success updated.'));
+				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id'=>$model->phone_id]);
+			}
+		}
+
+		$this->view->title = Yii::t('app', 'Update {model-class}: {user-id}', ['model-class' => 'Phone', 'user-id' => $model->user->displayname]);
+		$this->view->description = '';
+		$this->view->keywords = '';
+		return $this->render('admin_update', [
 			'model' => $model,
 		]);
 	}
