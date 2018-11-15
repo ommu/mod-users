@@ -6,7 +6,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 Ommu Platform (www.ommu.co)
  * @created date 8 October 2017, 05:31 WIB
- * @modified date 2 May 2018, 13:29 WIB
+ * @modified date 15 November 2018, 07:02 WIB
  * @link https://github.com/ommu/mod-users
  *
  * This is the model class for table "ommu_users".
@@ -23,7 +23,6 @@
  * @property string $last_name
  * @property string $displayname
  * @property string $password
- * @property string $photos
  * @property string $salt
  * @property integer $deactivate
  * @property integer $search
@@ -39,20 +38,22 @@
  * @property string $lastlogin_from
  * @property string $update_date
  * @property string $update_ip
+ * @property string $auth_key
+ * @property string $jwt_claims
  *
  * The followings are the available model relations:
  * @property UserForgot[] $forgots
  * @property UserHistoryEmail[] $emails
  * @property UserHistoryLogin[] $logins
  * @property UserHistoryPassword[] $passwords
- * @property UserHistoryUsername[] $usernames
  * @property UserInvites[] $invites
  * @property UserNewsletter[] $newsletters
- * @property UserOption $option
+ * @property UserNewsletter[] $references
+ * @property UserOption $userOption
+ * @property UserPhones[] $phones
  * @property UserVerify[] $verifies
- * @property UserLevel $level
  * @property CoreLanguages $language
- * @property Users $user
+ * @property UserLevel $level
  * @property Users $modified
  *
  */
@@ -62,10 +63,10 @@ namespace ommu\users\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
-use yii\web\UploadedFile;
 use app\models\CoreLanguages;
 use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;
+use ommu\users\models\view\UserHistory as UserHistoryView;
 
 class Users extends \app\components\ActiveRecord
 {
@@ -73,18 +74,17 @@ class Users extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = [];
-	public $old_photos_i;
-	public $oldPassword;
-	public $newPassword;
-	public $confirmPassword;
 	public $reference_id_i;
 	public $invite_code_i;
 
+	public $oldPassword;
+	public $newPassword;
+	public $confirmPassword;
+
 	// Search Variable
-	public $level_search;
-	public $language_search;
-	public $user_search;
 	public $modified_search;
+
+	const SCENARIO_ADMIN = 'adminForm';
 
 	/**
 	 * @return string the associated database table name
@@ -108,15 +108,26 @@ class Users extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email', 'username', 'first_name', 'last_name', 'displayname', 'password', 'salt', 'creation_ip', 'lastlogin_ip', 'lastlogin_from', 'update_ip'], 'required'],
+			[['level_id', 'email'], 'required'],
+			// [['email', 'first_name', 'last_name', 'password', 'lastlogin_ip', 'lastlogin_from', 'update_ip'], 'required'],
 			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
-			[['displayname', 'photos', 'old_photos_i'], 'string'],
-			[['photos', 'creation_date', 'modified_date', 'lastlogin_date', 'update_date', 'old_photos_i'], 'safe'],
-			[['email', 'username', 'first_name', 'last_name', 'password', 'salt', 'lastlogin_from'], 'string', 'max' => 32],
+			[['auth_key', 'jwt_claims'], 'string'],
+			[['email'], 'email'],
+			[['modified_date', 'lastlogin_date', 'update_date'], 'safe'],
+			[['email', 'password'], 'string', 'max' => 64],
+			[['username', 'first_name', 'last_name', 'salt', 'lastlogin_from'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
-			[['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserLevel::className(), 'targetAttribute' => ['level_id' => 'level_id']],
 			[['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => CoreLanguages::className(), 'targetAttribute' => ['language_id' => 'language_id']],
+			[['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserLevel::className(), 'targetAttribute' => ['level_id' => 'level_id']],
 		];
+	}
+
+	// get scenarios
+	public function scenarios()
+	{
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_ADMIN] = ['enabled', 'verified'];
+		return $scenarios;
 	}
 
 	/**
@@ -136,7 +147,6 @@ class Users extends \app\components\ActiveRecord
 			'last_name' => Yii::t('app', 'Last Name'),
 			'displayname' => Yii::t('app', 'Displayname'),
 			'password' => Yii::t('app', 'Password'),
-			'photos' => Yii::t('app', 'Photos'),
 			'salt' => Yii::t('app', 'Salt'),
 			'deactivate' => Yii::t('app', 'Deactivate'),
 			'search' => Yii::t('app', 'Search'),
@@ -152,10 +162,9 @@ class Users extends \app\components\ActiveRecord
 			'lastlogin_from' => Yii::t('app', 'Lastlogin From'),
 			'update_date' => Yii::t('app', 'Update Date'),
 			'update_ip' => Yii::t('app', 'Update Ip'),
-			'old_photos_i' => Yii::t('app', 'Old Photos'),
-			'level_search' => Yii::t('app', 'Level'),
-			'language_search' => Yii::t('app', 'Language'),
-			'user_search' => Yii::t('app', 'User'),
+			'auth_key' => Yii::t('app', 'Auth Key'),
+			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
+			'invite_code_i' => Yii::t('app', 'Invite Code'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -165,7 +174,8 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function getForgots()
 	{
-		return $this->hasMany(UserForgot::className(), ['user_id' => 'user_id']);
+		return $this->hasMany(UserForgot::className(), ['user_id' => 'user_id'])
+			->andOnCondition(['publish' => 1]);
 	}
 
 	/**
@@ -195,23 +205,24 @@ class Users extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getUsernames()
-	{
-		return $this->hasMany(UserHistoryUsername::className(), ['user_id' => 'user_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
 	public function getInvites()
 	{
-		return $this->hasMany(UserInvites::className(), ['user_id' => 'user_id']);
+		return $this->hasMany(UserInvites::className(), ['inviter_id' => 'user_id'])
+			->andOnCondition(['publish' => 1]);
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
 	public function getNewsletters()
+	{
+		return $this->hasMany(UserNewsletter::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getReferences()
 	{
 		return $this->hasMany(UserNewsletter::className(), ['reference_id' => 'user_id']);
 	}
@@ -227,9 +238,19 @@ class Users extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
+	public function getPhones()
+	{
+		return $this->hasMany(UserPhones::className(), ['user_id' => 'user_id'])
+			->andOnCondition(['publish' => 1]);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
 	public function getVerifies()
 	{
-		return $this->hasMany(UserVerify::className(), ['user_id' => 'user_id']);
+		return $this->hasMany(UserVerify::className(), ['user_id' => 'user_id'])
+			->andOnCondition(['publish' => 1]);
 	}
 
 	/**
@@ -265,6 +286,14 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getHistory()
+	{
+		return $this->hasOne(UserHistoryView::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
 	 * {@inheritdoc}
 	 * @return \ommu\users\models\query\Users the active query used by this AR class.
 	 */
@@ -276,7 +305,7 @@ class Users extends \app\components\ActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	public function init()
+	public function init() 
 	{
 		parent::init();
 
@@ -286,19 +315,21 @@ class Users extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('level')) {
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
+			$this->templateColumns['level_id'] = [
+				'attribute' => 'level_id',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->level) ? $model->level->name : '-';
+					return isset($model->level) ? $model->level->title->message : '-';
 				},
+				'filter' => UserLevel::getLevel(),
 			];
 		}
 		if(!Yii::$app->request->get('language')) {
-			$this->templateColumns['language_search'] = [
-				'attribute' => 'language_search',
+			$this->templateColumns['language_id'] = [
+				'attribute' => 'language_id',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->language) ? $model->language->name : '-';
 				},
+				'filter' => CoreLanguages::getLanguage(),
 			];
 		}
 		$this->templateColumns['email'] = [
@@ -337,12 +368,6 @@ class Users extends \app\components\ActiveRecord
 				return $model->password;
 			},
 		];
-		$this->templateColumns['photos'] = [
-			'attribute' => 'photos',
-			'value' => function($model, $key, $index, $column) {
-				return $model->photos;
-			},
-		];
 		$this->templateColumns['salt'] = [
 			'attribute' => 'salt',
 			'value' => function($model, $key, $index, $column) {
@@ -351,10 +376,10 @@ class Users extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
-			'filter' => Html::input('date', 'creation_date', Yii::$app->request->get('creation_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'creation_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['creation_ip'] = [
@@ -365,10 +390,10 @@ class Users extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
-			'filter' => Html::input('date', 'modified_date', Yii::$app->request->get('modified_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'modified_date'),
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
@@ -381,10 +406,10 @@ class Users extends \app\components\ActiveRecord
 		}
 		$this->templateColumns['lastlogin_date'] = [
 			'attribute' => 'lastlogin_date',
-			'filter' => Html::input('date', 'lastlogin_date', Yii::$app->request->get('lastlogin_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'lastlogin_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['lastlogin_ip'] = [
@@ -401,10 +426,10 @@ class Users extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['update_date'] = [
 			'attribute' => 'update_date',
-			'filter' => Html::input('date', 'update_date', Yii::$app->request->get('update_date'), ['class'=>'form-control']),
 			'value' => function($model, $key, $index, $column) {
 				return !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'datetime') : '-';
 			},
+			'filter' => $this->filterDatepicker($this, 'update_date'),
 			'format' => 'html',
 		];
 		$this->templateColumns['update_ip'] = [
@@ -412,6 +437,16 @@ class Users extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return $model->update_ip;
 			},
+		];
+		$this->templateColumns['deactivate'] = [
+			'attribute' => 'deactivate',
+			'filter' => $this->filterYesNo(),
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['deactivate', 'id'=>$model->primaryKey]);
+				return $this->quickAction($url, $model->deactivate, 'Active,Deactivate');
+			},
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
 		];
 		$this->templateColumns['search'] = [
 			'attribute' => 'search',
@@ -447,10 +482,9 @@ class Users extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['enabled'] = [
 			'attribute' => 'enabled',
-			'filter' => $this->filterYesNo(),
+			'filter' => self::getEnabled(),
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['enabled', 'id'=>$model->primaryKey]);
-				return $this->quickAction($url, $model->enabled, '0=null, 1=enable, 2=blocked');
+				return self::getEnabled($model->enabled);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -461,16 +495,6 @@ class Users extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['verified', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->verified, 'Verified,Unverified');
-			},
-			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
-		];
-		$this->templateColumns['deactivate'] = [
-			'attribute' => 'deactivate',
-			'filter' => $this->filterYesNo(),
-			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['deactivate', 'id'=>$model->primaryKey]);
-				return $this->quickAction($url, $model->deactivate, 'Active,Deactivate');
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -496,12 +520,29 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * function getEnabled
+	 */
+	public static function getEnabled($value=null)
+	{
+		$items = array(
+			'0' => Yii::t('app', 'Disable'),
+			'1' => Yii::t('app', 'Enable'),
+			'2' => Yii::t('app', 'Blocked'),
+		);
+
+		if($value !== null)
+			return $items[$value];
+		else
+			return $items;
+	}
+
+	/**
 	 * @param returnAlias set true jika ingin kembaliannya path alias atau false jika ingin string
 	 * relative path. default true.
 	 */
 	public static function getUploadPath($returnAlias=true) 
 	{
-		return ($returnAlias ? Yii::getAlias('@webroot/public/user') : 'public/user');
+		return ($returnAlias ? Yii::getAlias('@webroot/public/users') : 'public/users');
 	}
 
 	/**
@@ -510,14 +551,6 @@ class Users extends \app\components\ActiveRecord
 	public static function hashPassword($salt, $password)
 	{
 		return md5($salt.$password);
-	}
-
-	/**
-	 * after find attributes
-	 */
-	public function afterFind() 
-	{
-		$this->old_photos_i = $this->photos;
 	}
 
 	/**
@@ -535,23 +568,6 @@ class Users extends \app\components\ActiveRecord
 			->one();
 
 		if(parent::beforeValidate()) {
-			$photo_exts = $this->formatFileType($this->level->photo_exts);
-			if(empty($photo_exts))
-				$photo_exts = [];
-			$photos = UploadedFile::getInstance($this, 'photos');
-
-			if($photos instanceof UploadedFile && !$photos->getHasError()) {
-				if(!in_array(strtolower($photos->getExtension()), $photo_exts)) {
-					$this->addError('photos', Yii::t('app', 'The file {name} cannot be uploaded. Only files with these extensions are allowed: {extensions}', array(
-						'{name}'=>$photos->name,
-						'{extensions}'=>$this->formatFileType($photo_exts, false),
-					)));
-				}
-			} /* else {
-				//if(!$this->isNewRecord)
-					$this->addError('photos', Yii::t('app', '{attribute} cannot be blank.', array('{attribute}'=>$this->getAttributeLabel('photos'))));
-			} */
-
 			if($this->isNewRecord) {
 				/**
 				 * Default action
@@ -580,16 +596,9 @@ class Users extends \app\components\ActiveRecord
 				}
 
 				if(in_array($controller, ['admin','personal'])) {
-					// Auto Approve Users
-					if($setting->signup_approve == 1)
-						$this->enabled = 1;
-
-					// Auto Verified Email User
-					if($setting->signup_verifyemail == 0)
-						$this->verified = 1;
-
-					// Generate user by admin
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+					$this->enabled = 1;																	// Auto Approve Users
+					$this->verified = 1;																// Auto Verified Email User
+					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;		// Generate user by admin
 
 				} else {
 					$this->level_id = UserLevel::getDefault();
@@ -599,42 +608,43 @@ class Users extends \app\components\ActiveRecord
 					// Signup by Invite (Admin or User)
 					if(($setting->site_type == 1 && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
 						if($setting->signup_checkemail == 1 && $this->invite_code_i == '')
-							$this->addError('invite_code_i', Yii::t('phrase', '{attribute} tidak boleh kosong.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+							$this->addError('invite_code_i', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
 
 						if($this->email != '') {
 							if($invite != null) {
 								if($invite->newsletter->user_id != null)
-									$this->addError('email', Yii::t('phrase', '{attribute} anda sudah terdaftar sebagai user, silahkan login.', ['attribute'=>$this->getAttributeLabel('email')]));
+									$this->addError('email', Yii::t('app', '{email} sudah terdaftar sebagai user, silahkan login.', ['attribute'=>$this->email]));
 
 								else {
 									if($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user')
-										$this->addError('email', Yii::t('phrase', 'Maaf invite hanya bisa dilakukan oleh admin'));
+										$this->addError('email', Yii::t('app', 'Invite hanya bisa dilakukan oleh admin'));
 
 									else {
 										if($setting->signup_checkemail == 1) {
 											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->invite_code_i);
 											if($inviteCode == null)
-												$this->addError('invite_code_i', Yii::t('phrase', '{attribute} tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+												$this->addError('invite_code_i', Yii::t('app', '{attribute} {invite-code-i} tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('invite_code_i'), 'invite-code-i'=>$this->invite_code_i]));
 											else {
 												if($inviteCode->view->expired)
-													$this->addError('invite_code_i', Yii::t('phrase', '{attribute} expired', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+													$this->addError('invite_code_i', Yii::t('app', '{attribute} {invite-code-i} expired', ['attribute'=>$this->getAttributeLabel('invite_code_i'), 'invite-code-i'=>$this->invite_code_i]));
 												else
-													$this->reference_id_i = $inviteCode->user_id;
+													$this->reference_id_i = $inviteCode->invite->inviter_id;
 											}
 										}
 									}
 								}
 							} else
-								$this->addError('email', Yii::t('phrase', '{attribute} anda belum ada dalam daftar invite.', ['attribute'=>$this->getAttributeLabel('email')]));
+								$this->addError('email', Yii::t('app', '{email} belum ada dalam daftar invite.', ['attribute'=>$this->email]));
 
 						} else {
 							if($setting->signup_checkemail == 1)
-								$this->addError('invite_code_i', Yii::t('phrase', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+								$this->addError('invite_code_i', Yii::t('app', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
 						}
 					}
 				}
 
 				// Username required
+				/*
 				if($setting->signup_username == 1 && $oauthCondition == 0) {
 					$username = strtolower($this->username);
 					if($this->username != '') {
@@ -643,10 +653,11 @@ class Users extends \app\components\ActiveRecord
 							->where(['username' => $username])
 							->one();
 						if($user != null)
-							$this->addError('username', Yii::t('phrase', '{attribute} already in use', ['attribute'=>$this->getAttributeLabel('username')]));
+							$this->addError('username', Yii::t('app', '{attribute} already in use', ['attribute'=>$this->getAttributeLabel('username')]));
 					} else
-						$this->addError('username', Yii::t('phrase', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
+						$this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
 				}
+				*/
 
 				// Random password
 				if($setting->signup_random == 1 || $oauthCondition == 1) {
@@ -665,6 +676,7 @@ class Users extends \app\components\ActiveRecord
 				if(in_array($controller, ['admin','personal'])) {
 					$this->modified_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
 					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+
 				} else {
 					// User modify
 					if(!in_array($controller, array('password')))
@@ -683,7 +695,7 @@ class Users extends \app\components\ActiveRecord
 	{
 		if(parent::beforeSave($insert)) {
 			$this->email = strtolower($this->email);
-			$this->username = strtolower($this->username);
+			// $this->username = strtolower($this->username);
 			if($this->newPassword != '')
 				$this->password = self::hashPassword($this->salt, $this->newPassword);
 		}
