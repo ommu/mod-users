@@ -92,6 +92,7 @@ class ForgotController extends Controller
 	public function actionCreate()
 	{
 		$model = new UserForgot();
+		$model->scenario = UserForgot::SCENARIO_WITH_FORM;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());

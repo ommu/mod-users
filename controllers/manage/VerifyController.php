@@ -92,6 +92,7 @@ class VerifyController extends Controller
 	public function actionCreate()
 	{
 		$model = new UserVerify();
+		$model->scenario = UserVerify::SCENARIO_WITH_FORM;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());

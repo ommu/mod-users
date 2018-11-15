@@ -50,6 +50,8 @@ class UserVerify extends \app\components\ActiveRecord
 	public $level_search;
 	public $expired_search;
 
+	const SCENARIO_WITH_FORM = 'withForm';
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -72,13 +74,22 @@ class UserVerify extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email_i'], 'required'],
+			[['user_id'], 'required'],
+			[['email_i'], 'required', 'on' => self::SCENARIO_WITH_FORM],
 			[['publish', 'user_id', 'modified_id'], 'integer'],
 			[['email_i'], 'email'],
 			[['code', 'email_i'], 'string', 'max' => 64],
 			[['verify_ip'], 'string', 'max' => 20],
 			[['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'user_id']],
 		];
+	}
+
+	// get scenarios
+	public function scenarios()
+	{
+		$scenarios = parent::scenarios();
+		$scenarios[self::SCENARIO_WITH_FORM] = ['user_id','email_i'];
+		return $scenarios;
 	}
 
 	/**
@@ -271,22 +282,23 @@ class UserVerify extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-				if(preg_match('/@/', $this->email_i)) {
-					$user = Users::find()
-						->select(['user_id'])
-						->where(['email' => $this->email_i])
-						->one();
-				} else {
-					$user = Users::find()
-						->select(['user_id'])
-						->where(['username' => $this->email_i])
-						->one();
+				if($this->user_id == null) {
+					if(preg_match('/@/', $this->email_i)) {
+						$user = Users::find()
+							->select(['user_id'])
+							->where(['email' => $this->email_i])
+							->one();
+					} else {
+						$user = Users::find()
+							->select(['user_id'])
+							->where(['username' => $this->email_i])
+							->one();
+					}
+					if($user === null)
+						$this->addError('email_i', Yii::t('app', '{attribute} {email-i} belum terdaftar sebagai member.', ['attribute'=>$this->getAttributeLabel('email_i'), 'email-i'=>$this->email_i]));
+					else
+						$this->user_id = $user->user_id;
 				}
-				if($user === null)
-					$this->addError('email_i', Yii::t('app', '{attribute} {email-i} belum terdaftar sebagai member.', ['attribute'=>$this->getAttributeLabel('email_i'), 'email-i'=>$this->email_i]));
-				else
-					$this->user_id = $user->user_id;
-
 				$this->code = $this->uniqueCode();
 				$this->verify_ip = $_SERVER['REMOTE_ADDR'];
 
