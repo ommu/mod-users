@@ -18,6 +18,7 @@
  */
 
 use yii\helpers\Url;
+use app\models\CoreSettings;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Create');
@@ -25,12 +26,18 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Create');
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
 ];
+
+$setting = CoreSettings::find()
+	->select(['signup_approve', 'signup_verifyemail', 'signup_random'])
+	->where(['id' => 1])
+	->one();
 ?>
 
 <div class="users-create">
 
 <?php echo $this->render('_form', [
 	'model' => $model,
+	'setting' => $setting,
 ]); ?>
 
 </div>

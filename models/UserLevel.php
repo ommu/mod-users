@@ -510,9 +510,9 @@ class UserLevel extends \app\components\ActiveRecord
 		$model = self::find()->alias('t');
 		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
 		if($type == 'member')
-			$model->andWhere(['not in', 't.level_id', [1]]);
+			$model->andWhere(['not in', 't.level_id', [1,2]]);
 		if($type == 'admin')
-			$model->andWhere(['t.level_id' => 1]);
+			$model->andWhere(['in','t.level_id', [1,2]]);
 
 		$model = $model->orderBy('title.message ASC')->all();
 

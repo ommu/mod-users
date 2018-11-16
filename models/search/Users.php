@@ -14,9 +14,11 @@
 
 namespace ommu\users\models\search;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use ommu\users\models\Users as UsersModel;
+use ommu\users\models\UserLevel;
 
 class Users extends UsersModel
 {
@@ -26,7 +28,7 @@ class Users extends UsersModel
 	public function rules()
 	{
 		return [
-			[['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
+			[['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id', 'block_i'], 'integer'],
 			[['email', 'username', 'first_name', 'last_name', 'displayname', 'password', 'salt', 'creation_date', 'creation_ip', 'modified_date', 'lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims', 'modified_search'], 'safe'],
 		];
 	}
@@ -88,6 +90,10 @@ class Users extends UsersModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
+		$attributes['block_i'] = [
+			'asc' => ['t.enabled' => SORT_ASC],
+			'desc' => ['t.enabled' => SORT_DESC],
+		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['user_id' => SORT_DESC],
@@ -106,7 +112,6 @@ class Users extends UsersModel
 			't.user_id' => $this->user_id,
 			't.enabled' => $this->enabled,
 			't.verified' => $this->verified,
-			't.level_id' => isset($params['level']) ? $params['level'] : $this->level_id,
 			't.language_id' => isset($params['language']) ? $params['language'] : $this->language_id,
 			't.deactivate' => $this->deactivate,
 			't.search' => $this->search,
@@ -118,7 +123,31 @@ class Users extends UsersModel
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.lastlogin_date as date)' => $this->lastlogin_date,
 			'cast(t.update_date as date)' => $this->update_date,
+			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 		]);
+
+		if(isset($params['block_i'])) {
+			if($params['block_i'] == 1)
+				$query->andFilterWhere(['t.enabled' => 2]);
+			else if($params['block_i'] === '0')
+				$query->andFilterWhere(['in', 't.enabled', [0,1]]);
+			else
+				$query->andFilterWhere(['t.enabled' => $this->enabled]);
+		} else
+			$query->andFilterWhere(['t.enabled' => $this->enabled]);
+
+		if(isset($params['level']))
+			$query->andFilterWhere(['t.level_id' => $params['level']]);
+		else {
+			$controller = strtolower(Yii::$app->controller->id);
+			if(in_array($controller, ['manage/admin','manage/personal'])) {
+				$level = UserLevel::getLevel($controller == 'manage/admin' ? 'admin' : 'member');
+				$query->andFilterWhere(['in', 't.level_id', array_flip($level)])
+					->andFilterWhere(['t.level_id' => $this->level_id]);
+			} else
+				$query->andFilterWhere(['t.level_id' => $this->level_id]);
+		}
+			
 
 		$query->andFilterWhere(['like', 't.email', $this->email])
 			->andFilterWhere(['like', 't.username', $this->username])
