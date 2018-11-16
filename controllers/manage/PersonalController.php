@@ -124,10 +124,12 @@ class PersonalController extends Controller
 	public function actionUpdate($id)
 	{
 		$model = $this->findModel($id);
-		$model->scenario = Users::SCENARIO_ADMIN_EDIT;
 
 		if(Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
+			$postData = Yii::$app->request->post();
+			$model->load($postData);
+			if($postData['password'])
+				$model->scenario = Users::SCENARIO_ADMIN_EDIT;
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));

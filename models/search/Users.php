@@ -123,7 +123,6 @@ class Users extends UsersModel
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.lastlogin_date as date)' => $this->lastlogin_date,
 			'cast(t.update_date as date)' => $this->update_date,
-			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 		]);
 
 		if(isset($params['block_i'])) {
@@ -147,7 +146,6 @@ class Users extends UsersModel
 			} else
 				$query->andFilterWhere(['t.level_id' => $this->level_id]);
 		}
-			
 
 		$query->andFilterWhere(['like', 't.email', $this->email])
 			->andFilterWhere(['like', 't.username', $this->username])

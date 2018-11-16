@@ -79,7 +79,7 @@ class Users extends \app\components\ActiveRecord
 	public $block_i;
 	public $reference_id_i;
 	public $invite_code_i;
-	public $password_i;
+	public $old_password_i;
 	public $confirm_password_i;
 
 	public $oldPassword;
@@ -113,17 +113,16 @@ class Users extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['level_id', 'email', 'password'], 'required'],
-			[['first_name', 'last_name'], 'required', 'on' => self::SCENARIO_ADMIN],
-			[['first_name', 'last_name', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_ADMIN_EDIT],
-			// [['email', 'first_name', 'last_name', 'password', 'lastlogin_ip', 'lastlogin_from', 'update_ip'], 'required'],
+			[['level_id', 'email'], 'required'],
+			[['first_name', 'last_name', 'password'], 'required', 'on' => self::SCENARIO_ADMIN],
+			[['first_name', 'last_name', 'password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_ADMIN_EDIT],
 			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
 			[['email', 'username'], 'unique'],
-			[['modified_date', 'lastlogin_date', 'update_date'], 'safe'],
+			[['first_name', 'last_name', 'password', 'lastlogin_date'], 'safe'],
 			[['email', 'password'], 'string', 'max' => 64],
-			[['username', 'first_name', 'last_name', 'salt', 'lastlogin_from', 'password_i', 'confirm_password_i'], 'string', 'max' => 32],
+			[['username', 'first_name', 'last_name', 'salt', 'lastlogin_from', 'confirm_password_i'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
 			[['invite_code_i'], 'string', 'max' => 16],
 			['password', 'compare', 'compareAttribute' => 'confirm_password_i'],
@@ -177,7 +176,6 @@ class Users extends \app\components\ActiveRecord
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
 			'block_i' => Yii::t('app', 'Block'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
-			'password_i' => Yii::t('app', 'Password'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
@@ -620,6 +618,7 @@ class Users extends \app\components\ActiveRecord
 	{
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
+		$this->old_password_i = $this->password;
 	}
 
 	/**
@@ -776,7 +775,10 @@ class Users extends \app\components\ActiveRecord
 		if(parent::beforeSave($insert)) {
 			$this->email = strtolower($this->email);
 			// $this->username = strtolower($this->username);
-			$this->setPassword($this->password);
+			if($this->password)
+				$this->setPassword($this->password);
+			else
+				$this->password = $this->old_password_i;
 		}
 		return true;
 	}
