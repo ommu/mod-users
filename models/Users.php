@@ -18,7 +18,6 @@
  * @property integer $level_id
  * @property integer $language_id
  * @property string $email
- * @property string $username
  * @property string $first_name
  * @property string $last_name
  * @property string $displayname
@@ -74,7 +73,7 @@ class Users extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['language_id','username','first_name','last_name','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
+	public $gridForbiddenColumn = ['language_id','first_name','last_name','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
 	public $old_enabled_i;
 	public $old_verified_i;
 	public $block_i;
@@ -120,10 +119,10 @@ class Users extends \app\components\ActiveRecord
 			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
-			[['email', 'username'], 'unique'],
+			[['email'], 'unique'],
 			[['first_name', 'last_name', 'password', 'lastlogin_date'], 'safe'],
 			[['email', 'password'], 'string', 'max' => 64],
-			[['username', 'first_name', 'last_name', 'salt', 'lastlogin_from', 'confirm_password_i'], 'string', 'max' => 32],
+			[['first_name', 'last_name', 'salt', 'lastlogin_from', 'confirm_password_i'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
 			[['invite_code_i'], 'string', 'max' => 16],
 			['password', 'compare', 'compareAttribute' => 'confirm_password_i'],
@@ -153,7 +152,6 @@ class Users extends \app\components\ActiveRecord
 			'level_id' => Yii::t('app', 'Level'),
 			'language_id' => Yii::t('app', 'Language'),
 			'email' => Yii::t('app', 'Email'),
-			'username' => Yii::t('app', 'Username'),
 			'first_name' => Yii::t('app', 'First Name'),
 			'last_name' => Yii::t('app', 'Last Name'),
 			'displayname' => Yii::t('app', 'Displayname'),
@@ -359,12 +357,6 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'email',
 			'value' => function($model, $key, $index, $column) {
 				return $model->email;
-			},
-		];
-		$this->templateColumns['username'] = [
-			'attribute' => 'username',
-			'value' => function($model, $key, $index, $column) {
-				return $model->username;
 			},
 		];
 		$this->templateColumns['first_name'] = [
@@ -655,7 +647,6 @@ class Users extends \app\components\ActiveRecord
 				 * Created Users
 				 *
 				 * Default register member
-				 * Username required
 				 * Random password
 				 */
 				$oauthCondition = 0;
@@ -733,22 +724,6 @@ class Users extends \app\components\ActiveRecord
 					}
 				}
 
-				// Username required
-				/*
-				if($setting->signup_username == 1 && $oauthCondition == 0) {
-					$username = strtolower($this->username);
-					if($this->username != '') {
-						$user = self::find()
-							->select(['user_id'])
-							->where(['username' => $username])
-							->one();
-						if($user != null)
-							$this->addError('username', Yii::t('app', '{attribute} already in use', ['attribute'=>$this->getAttributeLabel('username')]));
-					} else
-						$this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
-				}
-				*/
-
 				// Random password
 				if($setting->signup_random == 1 || $oauthCondition == 1) {
 					$this->password = $this->uniqueCode(8,1);
@@ -788,7 +763,6 @@ class Users extends \app\components\ActiveRecord
 	{
 		if(parent::beforeSave($insert)) {
 			$this->email = strtolower($this->email);
-			// $this->username = strtolower($this->username);
 			if($this->password)
 				$this->setPassword($this->password);
 			else

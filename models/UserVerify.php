@@ -283,17 +283,10 @@ class UserVerify extends \app\components\ActiveRecord
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				if($this->user_id == null) {
-					if(preg_match('/@/', $this->email_i)) {
-						$user = Users::find()
-							->select(['user_id'])
-							->where(['email' => $this->email_i])
-							->one();
-					} else {
-						$user = Users::find()
-							->select(['user_id'])
-							->where(['username' => $this->email_i])
-							->one();
-					}
+					$user = Users::find()
+						->select(['user_id'])
+						->where(['email' => $this->email_i])
+						->one();
 					if($user === null)
 						$this->addError('email_i', Yii::t('app', '{attribute} {email-i} belum terdaftar sebagai member.', ['attribute'=>$this->getAttributeLabel('email_i'), 'email-i'=>$this->email_i]));
 					else

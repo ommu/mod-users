@@ -58,7 +58,6 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->language) ? $model->language->name : '-',
 		],
 		'email:email',
-		'username',
 		'first_name',
 		'last_name',
 		'displayname',

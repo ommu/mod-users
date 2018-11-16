@@ -138,7 +138,7 @@ class AdminController extends PersonalController
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {username}', ['model-class' => 'User', 'username' => $model->displayname]);
+		$this->view->title = Yii::t('app', 'Update {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
 		$this->view->description = Yii::t('app', 'Complete the form below to add/edit this admin account. Note that normal admins will not be able to delete or modify the superadmin account. If you want to change this admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');
 		$this->view->keywords = '';
 		return $this->render('/manage/personal/admin_update', [
@@ -155,7 +155,7 @@ class AdminController extends PersonalController
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {username}', ['model-class' => 'User', 'username' => $model->displayname]);
+		$this->view->title = Yii::t('app', 'Detail {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('/manage/personal/admin_view', [

@@ -29,7 +29,7 @@ class Users extends UsersModel
 	{
 		return [
 			[['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id', 'block_i'], 'integer'],
-			[['email', 'username', 'first_name', 'last_name', 'displayname', 'password', 'salt', 'creation_date', 'creation_ip', 'modified_date', 'lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims', 'modified_search'], 'safe'],
+			[['email', 'first_name', 'last_name', 'displayname', 'password', 'salt', 'creation_date', 'creation_ip', 'modified_date', 'lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -148,7 +148,6 @@ class Users extends UsersModel
 		}
 
 		$query->andFilterWhere(['like', 't.email', $this->email])
-			->andFilterWhere(['like', 't.username', $this->username])
 			->andFilterWhere(['like', 't.first_name', $this->first_name])
 			->andFilterWhere(['like', 't.last_name', $this->last_name])
 			->andFilterWhere(['like', 't.displayname', $this->displayname])
