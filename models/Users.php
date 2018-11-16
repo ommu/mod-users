@@ -67,13 +67,14 @@ use app\models\CoreLanguages;
 use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;
 use ommu\users\models\view\UserHistory as UserHistoryView;
+use ommu\member\models\view\MemberUser;
 
 class Users extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['language_id','username','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
+	public $gridForbiddenColumn = ['language_id','username','first_name','last_name','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
 	public $old_enabled_i;
 	public $old_verified_i;
 	public $block_i;
@@ -303,6 +304,15 @@ class Users extends \app\components\ActiveRecord
 	public function getHistory()
 	{
 		return $this->hasOne(UserHistoryView::className(), ['user_id' => 'user_id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUser()
+	{
+		return $this->hasOne(MemberUser::className(), ['user_id' => 'user_id'])
+			->andOnCondition(['profile_id' => 1]);
 	}
 
 	/**
@@ -616,6 +626,10 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function afterFind()
 	{
+		if(!isset($this->user))
+			$this->displayname = $this->view->displayname;
+		else
+			$this->displayname = $this->user->member->displayname;
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
 		$this->old_password_i = $this->password;
