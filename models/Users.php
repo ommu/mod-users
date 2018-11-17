@@ -67,6 +67,7 @@ use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;
 use ommu\users\models\view\UserHistory as UserHistoryView;
 use ommu\member\models\view\MemberUser;
+use ommu\member\models\Members;
 
 class Users extends \app\components\ActiveRecord
 {
@@ -76,7 +77,6 @@ class Users extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['language_id','first_name','last_name','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
 	public $old_enabled_i;
 	public $old_verified_i;
-	public $block_i;
 	public $reference_id_i;
 	public $invite_code_i;
 	public $old_password_i;
@@ -173,7 +173,6 @@ class Users extends \app\components\ActiveRecord
 			'update_ip' => Yii::t('app', 'Update Ip'),
 			'auth_key' => Yii::t('app', 'Auth Key'),
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
-			'block_i' => Yii::t('app', 'Block'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
 			'modified_search' => Yii::t('app', 'Modified'),
@@ -311,6 +310,15 @@ class Users extends \app\components\ActiveRecord
 	{
 		return $this->hasOne(MemberUser::className(), ['user_id' => 'user_id'])
 			->andOnCondition(['profile_id' => 1]);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getMember()
+	{
+		return $this->hasOne(Members::className(), ['member_id' => 'member_id'])
+			->via('user');
 	}
 
 	/**
@@ -497,20 +505,10 @@ class Users extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['enabled'] = [
 			'attribute' => 'enabled',
-			'filter' => self::getEnabledFilter(),
+			'filter' => self::getEnabled(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['enabled', 'id'=>$model->primaryKey]);
-				return $model->enabled == 2 ? '-' : $this->quickAction($url, $model->enabled, 'Enable,Disable');
-			},
-			'contentOptions' => ['class'=>'center'],
-			'format' => 'raw',
-		];
-		$this->templateColumns['block_i'] = [
-			'attribute' => 'block_i',
-			'filter' => $this->filterYesNo(),
-			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['block', 'id'=>$model->primaryKey]);
-				return $model->enabled == 2 ? Yii::t('app', 'Yes') : Yii::t('app', 'No');
+				return $model->enabled == 2 ? Yii::t('app', 'Block') : $this->quickAction($url, $model->enabled, 'Enable,Disable');
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -563,19 +561,6 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * function getEnabled
-	 */
-	public static function getEnabledFilter()
-	{
-		$items = array(
-			'0' => Yii::t('app', 'Disable'),
-			'1' => Yii::t('app', 'Enable'),
-		);
-
-		return $items;
-	}
-
-	/**
 	 * @param returnAlias set true jika ingin kembaliannya path alias atau false jika ingin string
 	 * relative path. default true.
 	 */
@@ -618,10 +603,8 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function afterFind()
 	{
-		if(!isset($this->user))
-			$this->displayname = $this->view->displayname;
-		else
-			$this->displayname = $this->user->member->displayname;
+		if(!isset($this->member))
+			$this->displayname = $this->member->displayname;
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
 		$this->old_password_i = $this->password;

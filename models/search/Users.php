@@ -28,7 +28,7 @@ class Users extends UsersModel
 	public function rules()
 	{
 		return [
-			[['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id', 'block_i'], 'integer'],
+			[['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
 			[['email', 'first_name', 'last_name', 'displayname', 'password', 'salt', 'creation_date', 'creation_ip', 'modified_date', 'lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims', 'modified_search'], 'safe'],
 		];
 	}
@@ -65,7 +65,8 @@ class Users extends UsersModel
 		$query->joinWith([
 			'level.title level', 
 			'language language', 
-			'modified modified'
+			'modified modified', 
+			'member member'
 		]);
 
 		// add conditions that should always apply here
@@ -89,10 +90,6 @@ class Users extends UsersModel
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
-		];
-		$attributes['block_i'] = [
-			'asc' => ['t.enabled' => SORT_ASC],
-			'desc' => ['t.enabled' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -124,16 +121,6 @@ class Users extends UsersModel
 			'cast(t.lastlogin_date as date)' => $this->lastlogin_date,
 			'cast(t.update_date as date)' => $this->update_date,
 		]);
-
-		if(isset($params['block_i'])) {
-			if($params['block_i'] == 1)
-				$query->andFilterWhere(['t.enabled' => 2]);
-			else if($params['block_i'] === '0')
-				$query->andFilterWhere(['in', 't.enabled', [0,1]]);
-			else
-				$query->andFilterWhere(['t.enabled' => $this->enabled]);
-		} else
-			$query->andFilterWhere(['t.enabled' => $this->enabled]);
 
 		if(isset($params['level']))
 			$query->andFilterWhere(['t.level_id' => $params['level']]);
