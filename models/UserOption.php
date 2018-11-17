@@ -2,11 +2,11 @@
 /**
  * UserOption
  * 
- * @author Agus Susilo <smartgdi@gmail.com>
- * @contact (+62)857-297-29382
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 26 March 2018, 07:28 WIB
- * @modified date 3 May 2018, 13:49 WIB
+ * @modified date 17 November 2018, 13:18 WIB
  * @modified by Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
  * @link https://github.com/ommu/mod-users
@@ -15,10 +15,10 @@
  *
  * The followings are the available columns in table "ommu_user_option":
  * @property integer $option_id
- * @property integer $ommu_status
  * @property integer $invite_limit
  * @property integer $invite_success
  * @property string $signup_from
+ * @property integer $change_password
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -36,9 +36,6 @@ class UserOption extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 
 	public $gridForbiddenColumn = [];
-
-	// Search Variable
-	public $user_search;
 
 	/**
 	 * @return string the associated database table name
@@ -62,10 +59,11 @@ class UserOption extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['signup_from'], 'required'],
-			[['option_id', 'ommu_status', 'invite_limit', 'invite_success'], 'integer'],
+			[['option_id'], 'required'],
+			[['option_id', 'invite_limit', 'invite_success', 'change_password'], 'integer'],
 			[['signup_from'], 'string'],
 			[['option_id'], 'unique'],
+			[['signup_from'], 'safe'],
 			[['option_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['option_id' => 'user_id']],
 		];
 	}
@@ -77,11 +75,10 @@ class UserOption extends \app\components\ActiveRecord
 	{
 		return [
 			'option_id' => Yii::t('app', 'Option'),
-			'ommu_status' => Yii::t('app', 'Ommu Status'),
 			'invite_limit' => Yii::t('app', 'Invite Limit'),
 			'invite_success' => Yii::t('app', 'Invite Success'),
 			'signup_from' => Yii::t('app', 'Signup From'),
-			'user_search' => Yii::t('app', 'User'),
+			'change_password' => Yii::t('app', 'Change Password'),
 		];
 	}
 
@@ -114,14 +111,12 @@ class UserOption extends \app\components\ActiveRecord
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-				},
-			];
-		}
+		$this->templateColumns['option_id'] = [
+			'attribute' => 'option_id',
+			'value' => function($model, $key, $index, $column) {
+				return $model->option_id;
+			},
+		];
 		$this->templateColumns['invite_limit'] = [
 			'attribute' => 'invite_limit',
 			'value' => function($model, $key, $index, $column) {
@@ -140,11 +135,11 @@ class UserOption extends \app\components\ActiveRecord
 				return $model->signup_from;
 			},
 		];
-		$this->templateColumns['ommu_status'] = [
-			'attribute' => 'ommu_status',
+		$this->templateColumns['change_password'] = [
+			'attribute' => 'change_password',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $this->filterYesNo($model->ommu_status);
+				return $this->filterYesNo($model->change_password);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];
