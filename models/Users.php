@@ -18,8 +18,6 @@
  * @property integer $level_id
  * @property integer $language_id
  * @property string $email
- * @property string $first_name
- * @property string $last_name
  * @property string $displayname
  * @property string $password
  * @property string $salt
@@ -74,7 +72,7 @@ class Users extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['language_id','first_name','last_name','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
+	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
 	public $old_enabled_i;
 	public $old_verified_i;
 	public $reference_id_i;
@@ -113,16 +111,16 @@ class Users extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['level_id', 'email'], 'required'],
-			[['first_name', 'last_name', 'password'], 'required', 'on' => self::SCENARIO_ADMIN],
-			[['first_name', 'last_name', 'password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_ADMIN_EDIT],
+			[['level_id', 'email', 'displayname'], 'required'],
+			[['password'], 'required', 'on' => self::SCENARIO_ADMIN],
+			[['password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_ADMIN_EDIT],
 			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
 			[['email'], 'unique'],
-			[['first_name', 'last_name', 'password', 'lastlogin_date'], 'safe'],
-			[['email', 'password'], 'string', 'max' => 64],
-			[['first_name', 'last_name', 'salt', 'lastlogin_from', 'confirm_password_i'], 'string', 'max' => 32],
+			[['password', 'confirm_password_i'], 'safe'],
+			[['email', 'displayname', 'password'], 'string', 'max' => 64],
+			[['salt', 'lastlogin_from', 'confirm_password_i'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
 			[['invite_code_i'], 'string', 'max' => 16],
 			['password', 'compare', 'compareAttribute' => 'confirm_password_i'],
@@ -135,8 +133,8 @@ class Users extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_ADMIN] = ['enabled','verified','level_id','email','first_name','last_name','password'];
-		$scenarios[self::SCENARIO_ADMIN_EDIT] = ['enabled','verified','level_id','email','first_name','last_name','password','confirm_password_i'];
+		$scenarios[self::SCENARIO_ADMIN] = ['enabled','verified','level_id','email','displayname','password'];
+		$scenarios[self::SCENARIO_ADMIN_EDIT] = ['enabled','verified','level_id','email','displayname','password','confirm_password_i'];
 		return $scenarios;
 	}
 
@@ -152,8 +150,6 @@ class Users extends \app\components\ActiveRecord
 			'level_id' => Yii::t('app', 'Level'),
 			'language_id' => Yii::t('app', 'Language'),
 			'email' => Yii::t('app', 'Email'),
-			'first_name' => Yii::t('app', 'First Name'),
-			'last_name' => Yii::t('app', 'Last Name'),
 			'displayname' => Yii::t('app', 'Displayname'),
 			'password' => Yii::t('app', 'Password'),
 			'salt' => Yii::t('app', 'Salt'),
@@ -365,18 +361,6 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'email',
 			'value' => function($model, $key, $index, $column) {
 				return $model->email;
-			},
-		];
-		$this->templateColumns['first_name'] = [
-			'attribute' => 'first_name',
-			'value' => function($model, $key, $index, $column) {
-				return $model->first_name;
-			},
-		];
-		$this->templateColumns['last_name'] = [
-			'attribute' => 'last_name',
-			'value' => function($model, $key, $index, $column) {
-				return $model->last_name;
 			},
 		];
 		$this->templateColumns['displayname'] = [

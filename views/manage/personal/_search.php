@@ -44,10 +44,6 @@ use app\models\CoreLanguages;
 
 		<?php echo $form->field($model, 'email');?>
 
-		<?php echo $form->field($model, 'first_name');?>
-
-		<?php echo $form->field($model, 'last_name');?>
-
 		<?php echo $form->field($model, 'displayname');?>
 
 		<?php echo $form->field($model, 'password');?>

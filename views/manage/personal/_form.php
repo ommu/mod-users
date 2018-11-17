@@ -55,13 +55,9 @@ if(count($level) == 1) {
 	->textInput(['type'=>'email'])
 	->label($model->getAttributeLabel('email'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
-<?php echo $form->field($model, 'first_name', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'displayname', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
 	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('first_name'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
-
-<?php echo $form->field($model, 'last_name', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
-	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('last_name'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('displayname'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {
 if(!$model->isNewRecord && !$model->getErrors())
