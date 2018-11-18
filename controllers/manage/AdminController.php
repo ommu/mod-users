@@ -33,9 +33,10 @@ namespace ommu\users\controllers\manage;
 use Yii;
 use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
-use ommu\users\models\Users;
+// use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
 use ommu\users\controllers\manage\PersonalController;
+use app\modules\user\models\Users;
 
 class AdminController extends PersonalController
 {
@@ -96,7 +97,7 @@ class AdminController extends PersonalController
 	public function actionCreate()
 	{
 		$model = new Users();
-		$model->scenario = Users::SCENARIO_ADMIN;
+		$model->scenario = Users::SCENARIO_ADMIN_CREATE;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -129,7 +130,7 @@ class AdminController extends PersonalController
 			$postData = Yii::$app->request->post();
 			$model->load($postData);
 			if($postData['password'])
-				$model->scenario = Users::SCENARIO_ADMIN_EDIT;
+				$model->scenario = Users::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD;
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
