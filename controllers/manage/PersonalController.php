@@ -34,8 +34,9 @@ use Yii;
 use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
-use ommu\users\models\Users;
+// use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
+use app\modules\user\models\Users;
 
 class PersonalController extends Controller
 {
@@ -96,7 +97,7 @@ class PersonalController extends Controller
 	public function actionCreate()
 	{
 		$model = new Users();
-		$model->scenario = Users::SCENARIO_ADMIN;
+		$model->scenario = Users::SCENARIO_ADMIN_CREATE;
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
@@ -129,7 +130,7 @@ class PersonalController extends Controller
 			$postData = Yii::$app->request->post();
 			$model->load($postData);
 			if($postData['password'])
-				$model->scenario = Users::SCENARIO_ADMIN_EDIT;
+				$model->scenario = Users::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD;
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
@@ -189,7 +190,7 @@ class PersonalController extends Controller
 		$replace = $model->verified == 1 ? 0 : 1;
 		$model->verified = $replace;
 		
-		if($model->save(false, ['verified','modified_id'])) {
+		if($model->save(false, ['verified','modified_date','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
 			return $this->redirect(['index']);
 		}
@@ -207,7 +208,7 @@ class PersonalController extends Controller
 		$replace = $model->enabled == 1 ? 0 : 1;
 		$model->enabled = $replace;
 		
-		if($model->save(false, ['enabled','modified_id'])) {
+		if($model->save(false, ['enabled','modified_date','modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
 			return $this->redirect(['index']);
 		}

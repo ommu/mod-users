@@ -18,7 +18,7 @@
  * @property integer $invite_limit
  * @property integer $invite_success
  * @property string $signup_from
- * @property integer $change_password
+ * @property integer $ecc4_password
  *
  * The followings are the available model relations:
  * @property Users $user
@@ -60,7 +60,7 @@ class UserOption extends \app\components\ActiveRecord
 	{
 		return [
 			[['option_id'], 'required'],
-			[['option_id', 'invite_limit', 'invite_success', 'change_password'], 'integer'],
+			[['option_id', 'invite_limit', 'invite_success', 'ecc4_password'], 'integer'],
 			[['signup_from'], 'string'],
 			[['option_id'], 'unique'],
 			[['signup_from'], 'safe'],
@@ -78,7 +78,7 @@ class UserOption extends \app\components\ActiveRecord
 			'invite_limit' => Yii::t('app', 'Invite Limit'),
 			'invite_success' => Yii::t('app', 'Invite Success'),
 			'signup_from' => Yii::t('app', 'Signup From'),
-			'change_password' => Yii::t('app', 'Change Password'),
+			'ecc4_password' => Yii::t('app', 'ECC4 Password'),
 		];
 	}
 
@@ -135,11 +135,11 @@ class UserOption extends \app\components\ActiveRecord
 				return $model->signup_from;
 			},
 		];
-		$this->templateColumns['change_password'] = [
-			'attribute' => 'change_password',
+		$this->templateColumns['ecc4_password'] = [
+			'attribute' => 'ecc4_password',
 			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
-				return $this->filterYesNo($model->change_password);
+				return $this->filterYesNo($model->ecc4_password);
 			},
 			'contentOptions' => ['class'=>'center'],
 		];

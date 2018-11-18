@@ -73,21 +73,24 @@ class Users extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
-	public $old_enabled_i;
-	public $old_verified_i;
-	public $reference_id_i;
 	public $invite_code_i;
 	public $old_password_i;
 	public $confirm_password_i;
 
-	public $oldPassword;
-	public $newPassword;
+	public $old_enabled_i;
+	public $old_verified_i;
+	public $reference_id_i;
+	public $password_i;
 
 	// Search Variable
 	public $modified_search;
 
-	const SCENARIO_ADMIN = 'adminForm';
-	const SCENARIO_ADMIN_EDIT = 'adminEditForm';
+	const SCENARIO_ADMIN_CREATE = 'adminCreate';
+	const SCENARIO_ADMIN_UPDATE_WITH_PASSWORD = 'adminUpdateWithPassword';
+	const SCENARIO_REGISTER = 'register';
+	const SCENARIO_REGISTER_WITH_INVITE_CODE = 'registerWithInviteCode';
+	const SCENARIO_RESET_PASSWORD = 'resetPassword';
+	const SCENARIO_CHANGE_PASSWORD = 'changePassword';
 
 	/**
 	 * @return string the associated database table name
@@ -112,18 +115,22 @@ class Users extends \app\components\ActiveRecord
 	{
 		return [
 			[['level_id', 'email', 'displayname'], 'required'],
-			[['password'], 'required', 'on' => self::SCENARIO_ADMIN],
-			[['password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_ADMIN_EDIT],
+			[['password'], 'required', 'on' => self::SCENARIO_ADMIN_CREATE],
+			[['password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
+			[['password'], 'required', 'on' => self::SCENARIO_REGISTER],
+			[['password', 'invite_code_i'], 'required', 'on' => self::SCENARIO_REGISTER_WITH_INVITE_CODE],
+			[['password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_RESET_PASSWORD],
+			[['old_password_i', 'password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
 			[['email'], 'unique'],
 			[['password', 'confirm_password_i'], 'safe'],
+			['password', 'compare', 'compareAttribute' => 'confirm_password_i'],
 			[['email', 'displayname', 'password'], 'string', 'max' => 64],
-			[['salt', 'lastlogin_from', 'confirm_password_i'], 'string', 'max' => 32],
+			[['salt', 'lastlogin_from'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
 			[['invite_code_i'], 'string', 'max' => 16],
-			['password', 'compare', 'compareAttribute' => 'confirm_password_i'],
 			[['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => CoreLanguages::className(), 'targetAttribute' => ['language_id' => 'language_id']],
 			[['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserLevel::className(), 'targetAttribute' => ['level_id' => 'level_id']],
 		];
@@ -133,8 +140,12 @@ class Users extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_ADMIN] = ['enabled','verified','level_id','email','displayname','password'];
-		$scenarios[self::SCENARIO_ADMIN_EDIT] = ['enabled','verified','level_id','email','displayname','password','confirm_password_i'];
+		$scenarios[self::SCENARIO_ADMIN_CREATE] = ['enabled', 'verified', 'level_id', 'email', 'displayname', 'password'];
+		$scenarios[self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD] = ['enabled', 'verified', 'level_id', 'email', 'displayname', 'password', 'confirm_password_i'];
+		$scenarios[self::SCENARIO_REGISTER] = ['email', 'displayname', 'password'];
+		$scenarios[self::SCENARIO_REGISTER_WITH_INVITE_CODE] = ['email', 'displayname', 'password', 'invite_code_i'];
+		$scenarios[self::SCENARIO_RESET_PASSWORD] = ['password', 'confirm_password_i'];
+		$scenarios[self::SCENARIO_CHANGE_PASSWORD] = ['old_password_i', 'password', 'confirm_password_i'];
 		return $scenarios;
 	}
 
@@ -170,6 +181,7 @@ class Users extends \app\components\ActiveRecord
 			'auth_key' => Yii::t('app', 'Auth Key'),
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
+			'old_password_i' => Yii::t('app', 'Old Password'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
@@ -591,7 +603,7 @@ class Users extends \app\components\ActiveRecord
 			$this->displayname = $this->member->displayname;
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
-		$this->old_password_i = $this->password;
+		$this->password_i = $this->password;
 	}
 
 	/**
@@ -599,9 +611,7 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		$module = strtolower(Yii::$app->controller->module->id);
 		$controller = strtolower(Yii::$app->controller->id);
-		$action = strtolower(Yii::$app->controller->action->id);
 
 		$setting = CoreSettings::find()
 			->select(['site_oauth','site_type','signup_username','signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
@@ -621,7 +631,7 @@ class Users extends \app\components\ActiveRecord
 					$oauthCondition = 1;
 
 				$this->salt = $this->uniqueCode(32,1);
-				
+
 				// User Reference
 				$this->reference_id_i = null;
 				if($this->email != '') {
@@ -636,7 +646,7 @@ class Users extends \app\components\ActiveRecord
 					}
 				}
 
-				if($this->scenario == self::SCENARIO_ADMIN) {
+				if($this->scenario == self::SCENARIO_ADMIN_CREATE) {
 					// Auto Approve Users
 					if($setting->signup_approve == 1)
 						$this->enabled = 1;
@@ -708,13 +718,13 @@ class Users extends \app\components\ActiveRecord
 				 */
 				
 				// Admin modify member
-				if($this->scenario == self::SCENARIO_ADMIN_EDIT) {
+				if(in_array($controller, ['manage/personal','manage/admnin'])) {
 					$this->modified_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
 					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
 				} else {
 					// User modify
-					if(!in_array($controller, array('password')))
+					if(!in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD]))
 						$this->update_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
 				}
@@ -730,10 +740,15 @@ class Users extends \app\components\ActiveRecord
 	{
 		if(parent::beforeSave($insert)) {
 			$this->email = strtolower($this->email);
-			if($this->password)
+
+			if($insert)
 				$this->setPassword($this->password);
-			else
-				$this->password = $this->old_password_i;
+			else {
+				if($this->password)
+					$this->setPassword($this->password);
+				else
+					$this->password = $this->password_i;
+			}
 		}
 		return true;
 	}
@@ -785,6 +800,8 @@ class Users extends \app\components\ActiveRecord
 				}
 			}
 
+			// Send account information
+
 			// Send welcome email
 			if($setting->signup_welcome == 1) {
 				$signup_welcome = 1;
@@ -797,7 +814,11 @@ class Users extends \app\components\ActiveRecord
 
 		} else {
 			// Send new account information
+
 			// Send success email verification
+			if ($this->verified != $this->old_verified_i && $this->verified == 1) {
+				$verified = 1;
+			}
 		}
 	}
 
