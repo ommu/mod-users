@@ -665,13 +665,10 @@ class Users extends \app\components\ActiveRecord
 
 					// Signup by Invite (Admin or User)
 					if(($setting->site_type == 1 && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
-						if($setting->signup_checkemail == 1 && $this->invite_code_i == '')
-							$this->addError('invite_code_i', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
-
 						if($this->email != '') {
 							if($invite != null) {
 								if($invite->newsletter->user_id != null)
-									$this->addError('email', Yii::t('app', '{email} sudah terdaftar sebagai user, silahkan login.', ['attribute'=>$this->email]));
+									$this->addError('email', Yii::t('app', '{email} sudah terdaftar sebagai user, silahkan login.', ['email'=>$this->email]));
 
 								else {
 									if($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user')
@@ -692,7 +689,7 @@ class Users extends \app\components\ActiveRecord
 									}
 								}
 							} else
-								$this->addError('email', Yii::t('app', '{email} belum ada dalam daftar invite.', ['attribute'=>$this->email]));
+								$this->addError('email', Yii::t('app', '{email} belum ada dalam daftar invite.', ['email'=>$this->email]));
 
 						} else {
 							if($setting->signup_checkemail == 1)
