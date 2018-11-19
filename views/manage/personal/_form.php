@@ -22,7 +22,6 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use ommu\users\models\Users;
 use ommu\users\models\UserLevel;
-use app\models\CoreLanguages;
 ?>
 
 <div class="users-form">
@@ -30,7 +29,6 @@ use app\models\CoreLanguages;
 <?php $form = ActiveForm::begin([
 	'options' => [
 		'class' => 'form-horizontal form-label-left',
-		'enctype' => 'multipart/form-data',
 	],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,

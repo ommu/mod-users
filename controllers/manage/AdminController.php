@@ -11,9 +11,6 @@
  *	Create
  *	Update
  *	View
- *	Delete
- *	Enabled
- *	Verified
  *
  *	findModel
  *
@@ -21,9 +18,6 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 15 November 2018, 07:04 WIB
- * @modified date 15 November 2018, 07:04 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -36,6 +30,7 @@ use mdm\admin\components\AccessControl;
 // use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
 use ommu\users\controllers\manage\PersonalController;
+use ommu\users\models\UserLevel;
 use app\modules\user\models\Users;
 
 class AdminController extends PersonalController
@@ -173,7 +168,13 @@ class AdminController extends PersonalController
 	 */
 	protected function findModel($id)
 	{
-		if(($model = Users::findOne($id)) !== null)
+		$level = UserLevel::getLevel('admin');
+		$model = Users::find()
+			->where(['user_id' => $id])
+			->andWhere(['in', 'level_id', array_flip($level)])
+			->one();
+		
+		if($model !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
