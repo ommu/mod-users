@@ -66,7 +66,6 @@ class Users extends UsersModel
 			'level.title level', 
 			'language language', 
 			'modified modified', 
-			'member member'
 		]);
 
 		// add conditions that should always apply here

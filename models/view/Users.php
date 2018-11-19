@@ -13,7 +13,6 @@
  *
  * The followings are the available columns in table "_users":
  * @property integer $user_id
- * @property string $displayname
  * @property string $token_key
  * @property string $token_password
  * @property string $token_oauth
@@ -62,7 +61,6 @@ class Users extends \app\components\ActiveRecord
 		return [
 			[['user_id'], 'required'],
 			[['user_id'], 'integer'],
-			[['displayname'], 'string', 'max' => 65],
 			[['token_key', 'token_password', 'token_oauth'], 'string', 'max' => 32],
 		];
 	}
@@ -74,7 +72,6 @@ class Users extends \app\components\ActiveRecord
 	{
 		return [
 			'user_id' => Yii::t('app', 'User'),
-			'displayname' => Yii::t('app', 'Displayname'),
 			'token_key' => Yii::t('app', 'Token Key'),
 			'token_password' => Yii::t('app', 'Token Password'),
 			'token_oauth' => Yii::t('app', 'Token Oauth'),
