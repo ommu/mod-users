@@ -43,7 +43,7 @@ echo $form->field($model, 'password', ['template' => '{label}<div class="col-md-
 	->label($model->getAttributeLabel('password'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']);
 } ?>
 
-<?php if($setting->site_type == 1 && $setting->signup_inviteonly != 0) {
+<?php if($setting->site_type == 1 && $setting->signup_inviteonly != 0 && $setting->signup_checkemail == 1) {
 echo $form->field($model, 'invite_code_i', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
 	->passwordInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('invite_code_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']);
