@@ -21,12 +21,25 @@ namespace ommu\users\controllers;
 
 use Yii;
 use app\components\Controller;
+use mdm\admin\components\AccessControl;
 // use ommu\users\models\Users;
 use app\models\CoreSettings;
 use app\modules\user\models\Users;
 
 class SignupController extends Controller
 {
+	/**
+	 * {@inheritdoc}
+	 */
+	public function behaviors()
+	{
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+			],
+		];
+	}
+
 	/**
 	 * Lists all Users models.
 	 * @return mixed
@@ -58,5 +71,9 @@ class SignupController extends Controller
 			'model' => $model,
 			'setting' => $setting,
 		]);
+	}
+
+	public function allowAction(): array {
+		return ['index'];
 	}
 }

@@ -126,7 +126,9 @@ class Users extends \app\components\ActiveRecord
 			[['email'], 'email'],
 			[['email'], 'unique'],
 			[['password', 'confirm_password_i'], 'safe'],
-			['password', 'compare', 'compareAttribute' => 'confirm_password_i'],
+			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
+			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
+			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			[['email', 'displayname', 'password'], 'string', 'max' => 64],
 			[['salt', 'lastlogin_from'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
@@ -761,18 +763,13 @@ class Users extends \app\components\ActiveRecord
 			->select(['site_type', 'site_title', 'signup_welcome', 'signup_adminemail'])
 			->where(['id' => 1])
 			->one();
-
-		// Generate Verification Code
-		if ($this->verified != $this->old_verified_i && $this->verified == 0) {
-			$verify = new UserVerify;
-			$verify->user_id = $this->user_id;
-			$verify->save();
-		}
+		$verifyCondition = 0;
 
 		if($insert) {
 			/**
 			 * Created Users
 			 * 
+			 * Generate verification code
 			 * Update referensi newsletter
 			 * Send welcome email
 			 * Send account information
@@ -780,10 +777,19 @@ class Users extends \app\components\ActiveRecord
 			 *
 			 * Update User
 			 * 
+			 * Generate verification code
 			 * Send new account information
 			 * Send success email verification
 			 *
 			 */
+
+			// Generate verification code
+			if ($this->verified == 0) {
+				$verify = new UserVerify;
+				$verify->user_id = $this->user_id;
+				if($verify->save())
+					$verifyCondition = 1;
+			}
 
 			// Update referensi newsletter
 			if($setting->site_type == 1 && $this->reference_id_i != null) {
@@ -810,6 +816,13 @@ class Users extends \app\components\ActiveRecord
 			}
 
 		} else {
+			// Generate verification code
+			if ($verifyCondition == 0 && $this->verified != $this->old_verified_i && $this->verified == 0)) {
+				$verify = new UserVerify;
+				$verify->user_id = $this->user_id;
+				$verify->save();
+			}
+
 			// Send new account information
 
 			// Send success email verification

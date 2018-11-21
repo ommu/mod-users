@@ -49,9 +49,12 @@ echo $form->field($model, 'invite_code_i', ['template' => '{label}<div class="co
 	->label($model->getAttributeLabel('invite_code_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']);
 } ?>
 
-<div class="text-center w-100">
-	<?php echo Html::submitButton(Yii::t('app', 'SIGN UP'), ['class' =>  'btn btn-success']); ?>
-	<?php echo Html::submitButton(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-primary']); ?>
+<div class="ln_solid"></div>
+<div class="form-group">
+	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
+		<?php echo Html::submitButton(Yii::t('app', 'SIGN UP'), ['class' =>  'btn btn-success']); ?>
+		<?php echo Html::submitButton(Yii::t('app', 'CANCEL'), ['class' => 'btn btn-primary']); ?>
+	</div>
 </div>
 
 <?php ActiveForm::end(); ?>
