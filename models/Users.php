@@ -763,7 +763,6 @@ class Users extends \app\components\ActiveRecord
 			->select(['site_type', 'site_title', 'signup_welcome', 'signup_adminemail'])
 			->where(['id' => 1])
 			->one();
-		$verifyCondition = 0;
 
 		if($insert) {
 			/**
@@ -787,8 +786,7 @@ class Users extends \app\components\ActiveRecord
 			if ($this->verified == 0) {
 				$verify = new UserVerify;
 				$verify->user_id = $this->user_id;
-				if($verify->save())
-					$verifyCondition = 1;
+				$verify->save();
 			}
 
 			// Update referensi newsletter
@@ -817,7 +815,7 @@ class Users extends \app\components\ActiveRecord
 
 		} else {
 			// Generate verification code
-			if ($verifyCondition == 0 && $this->verified != $this->old_verified_i && $this->verified == 0)) {
+			if ($this->verified != $this->old_verified_i && $this->verified == 0) {
 				$verify = new UserVerify;
 				$verify->user_id = $this->user_id;
 				$verify->save();
