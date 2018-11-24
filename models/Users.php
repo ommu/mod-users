@@ -618,11 +618,9 @@ class Users extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 		
-		if(isset($this->member)) {
-			$this->username = $this->member->username;
-			$this->displayname = $this->member->displayname;
-		}
-		$this->language = $this->languageRltn->code;
+		$this->username = isset($this->member) ? $this->member->username : '';
+		$this->displayname = isset($this->member) ? $this->member->displayname : $this->displayname;
+		$this->language = isset($this->languageRltn) ? $this->languageRltn->code : '';
 
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
