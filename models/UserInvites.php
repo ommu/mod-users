@@ -387,6 +387,8 @@ class UserInvites extends \app\components\ActiveRecord
 	 */
 	public function afterFind() 
 	{
+		parent::afterFind();
+
 		$this->old_invites_i = $this->invites;
 	}
 

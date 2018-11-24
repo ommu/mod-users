@@ -768,6 +768,8 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public function afterFind()
 	{
+		parent::afterFind();
+
 		$this->name_i = isset($this->title) ? $this->title->message : '';
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
 		$this->message_limit = unserialize($this->message_limit);

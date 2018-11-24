@@ -29,7 +29,7 @@ class Users extends UsersModel
 	{
 		return [
 			[['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
-			[['email', 'displayname', 'password', 'salt', 'creation_date', 'creation_ip', 'modified_date', 'lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims', 'modified_search'], 'safe'],
+			[['email', 'displayname', 'password', 'salt', 'creation_date', 'creation_ip', 'modified_date', 'lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims', 'username', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -66,6 +66,7 @@ class Users extends UsersModel
 			'level.title level', 
 			'language language', 
 			'modified modified', 
+			'member member', 
 		]);
 
 		// add conditions that should always apply here
@@ -90,6 +91,16 @@ class Users extends UsersModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
+		if(isset($this->member)) {
+			$attributes['username'] = [
+				'asc' => ['member.username' => SORT_ASC],
+				'desc' => ['member.username' => SORT_DESC],
+			];
+			$attributes['displayname'] = [
+				'asc' => ['member.displayname' => SORT_ASC],
+				'desc' => ['member.displayname' => SORT_DESC],
+			];
+		}
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['user_id' => SORT_DESC],
@@ -134,7 +145,6 @@ class Users extends UsersModel
 		}
 
 		$query->andFilterWhere(['like', 't.email', $this->email])
-			->andFilterWhere(['like', 't.displayname', $this->displayname])
 			->andFilterWhere(['like', 't.password', $this->password])
 			->andFilterWhere(['like', 't.salt', $this->salt])
 			->andFilterWhere(['like', 't.creation_ip', $this->creation_ip])
@@ -144,6 +154,12 @@ class Users extends UsersModel
 			->andFilterWhere(['like', 't.auth_key', $this->auth_key])
 			->andFilterWhere(['like', 't.jwt_claims', $this->jwt_claims])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+
+		if(isset($this->member)) {
+			$query->andFilterWhere(['like', 'member.username', $this->username])
+				->andFilterWhere(['like', 'member.displayname', $this->displayname]);
+		} else
+			$query->andFilterWhere(['like', 't.displayname', $this->displayname]);
 
 		return $dataProvider;
 	}

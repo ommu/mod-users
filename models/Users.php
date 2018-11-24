@@ -46,7 +46,7 @@
  * @property UserInvites[] $invites
  * @property UserNewsletter[] $newsletters
  * @property UserNewsletter[] $references
- * @property UserOption $userOption
+ * @property UserOption $option
  * @property UserPhones[] $phones
  * @property UserVerify[] $verifies
  * @property CoreLanguages $language
@@ -73,6 +73,8 @@ class Users extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 
 	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
+	public $username;
+	public $language;
 	public $invite_code_i;
 	public $old_password_i;
 	public $confirm_password_i;
@@ -84,6 +86,9 @@ class Users extends \app\components\ActiveRecord
 
 	// Search Variable
 	public $modified_search;
+
+	const STATUS_ACTIVE = 1;
+	const STATUS_BLOCK = 2;
 
 	const SCENARIO_ADMIN_CREATE = 'adminCreate';
 	const SCENARIO_ADMIN_UPDATE_WITH_PASSWORD = 'adminUpdateWithPassword';
@@ -182,6 +187,8 @@ class Users extends \app\components\ActiveRecord
 			'update_ip' => Yii::t('app', 'Update Ip'),
 			'auth_key' => Yii::t('app', 'Auth Key'),
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
+			'username' => Yii::t('app', 'Username'),
+			'language' => Yii::t('app', 'Language'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
 			'old_password_i' => Yii::t('app', 'Old Password'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
@@ -284,7 +291,7 @@ class Users extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getLanguage()
+	public function getLanguageRltn()
 	{
 		return $this->hasOne(CoreLanguages::className(), ['language_id' => 'language_id']);
 	}
@@ -357,7 +364,7 @@ class Users extends \app\components\ActiveRecord
 			$this->templateColumns['level_id'] = [
 				'attribute' => 'level_id',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->level) ? $model->level->title->message : '-';
+					return isset($model->level) ? $model->level->name_i : '-';
 				},
 				'filter' => UserLevel::getLevel($controller == 'manage/admin' ? 'admin' : 'member'),
 			];
@@ -366,7 +373,7 @@ class Users extends \app\components\ActiveRecord
 			$this->templateColumns['language_id'] = [
 				'attribute' => 'language_id',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->language) ? $model->language->name : '-';
+					return isset($model->languageRltn) ? $model->languageRltn->name : '-';
 				},
 				'filter' => CoreLanguages::getLanguage(),
 			];
@@ -377,6 +384,14 @@ class Users extends \app\components\ActiveRecord
 				return $model->email;
 			},
 		];
+		if(isset($this->member)) {
+			$this->templateColumns['username'] = [
+				'attribute' => 'username',
+				'value' => function($model, $key, $index, $column) {
+					return $model->username;
+				},
+			];
+		}
 		$this->templateColumns['displayname'] = [
 			'attribute' => 'displayname',
 			'value' => function($model, $key, $index, $column) {
@@ -568,14 +583,6 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * User Salt
-	 */
-	public static function hashPassword($salt, $password)
-	{
-		return md5($salt.$password);
-	}
-
-	/**
 	 * Validates password
 	 *
 	 * @param  string  $password password to validate
@@ -597,12 +604,26 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function generateAuthKey()
+	{
+		$this->auth_key = Yii::$app->security->generateRandomKey();
+	}
+
+	/**
 	 * after find attributes
 	 */
 	public function afterFind()
 	{
-		if(!isset($this->member))
+		parent::afterFind();
+		
+		if(isset($this->member)) {
+			$this->username = $this->member->username;
 			$this->displayname = $this->member->displayname;
+		}
+		$this->language = $this->languageRltn->code;
+
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
 		$this->password_i = $this->password;
@@ -740,9 +761,10 @@ class Users extends \app\components\ActiveRecord
 		if(parent::beforeSave($insert)) {
 			$this->email = strtolower($this->email);
 
-			if($insert)
+			if($this->isNewRecord) {
 				$this->setPassword($this->password);
-			else {
+				$this->generateAuthKey();
+			} else {
 				if($this->password)
 					$this->setPassword($this->password);
 				else
@@ -828,19 +850,5 @@ class Users extends \app\components\ActiveRecord
 				$verified = 1;
 			}
 		}
-	}
-
-	public function getBiodata()
-	{
-		return $this->hasOne(\app\modules\cv\models\CvBiodata::className(), ['user_id' => 'user_id']);
-	}
-
-	public function fields()
-	{
-		$fields = parent::fields();
-		$fields['bio_id'] = function($model) {
-			return isset($model->biodata) ? $model->biodata->bio_id : '0';
-		};
-		return $fields;
 	}
 }
