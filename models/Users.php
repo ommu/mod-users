@@ -291,7 +291,7 @@ class Users extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getLanguageRltn()
+	public function getLanguage()
 	{
 		return $this->hasOne(CoreLanguages::className(), ['language_id' => 'language_id']);
 	}
@@ -373,7 +373,7 @@ class Users extends \app\components\ActiveRecord
 			$this->templateColumns['language_id'] = [
 				'attribute' => 'language_id',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->languageRltn) ? $model->languageRltn->name : '-';
+					return isset($model->language) ? $model->language->name : '-';
 				},
 				'filter' => CoreLanguages::getLanguage(),
 			];
@@ -620,7 +620,6 @@ class Users extends \app\components\ActiveRecord
 		
 		$this->username = isset($this->member) ? $this->member->username : '';
 		$this->displayname = isset($this->member) ? $this->member->displayname : $this->displayname;
-		$this->language = isset($this->languageRltn) ? $this->languageRltn->code : '';
 
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;

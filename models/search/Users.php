@@ -64,7 +64,7 @@ class Users extends UsersModel
 		$query = UsersModel::find()->alias('t');
 		$query->joinWith([
 			'level.title level', 
-			'languageRltn languageRltn', 
+			'language language', 
 			'modified modified', 
 			'member member', 
 		]);
@@ -84,8 +84,8 @@ class Users extends UsersModel
 			'desc' => ['level.message' => SORT_DESC],
 		];
 		$attributes['language_id'] = [
-			'asc' => ['languageRltn.name' => SORT_ASC],
-			'desc' => ['languageRltn.name' => SORT_DESC],
+			'asc' => ['language.name' => SORT_ASC],
+			'desc' => ['language.name' => SORT_DESC],
 		];
 		$attributes['modified_search'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
