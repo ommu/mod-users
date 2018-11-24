@@ -74,7 +74,6 @@ class Users extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
 	public $username;
-	public $language;
 	public $invite_code_i;
 	public $old_password_i;
 	public $confirm_password_i;
@@ -86,9 +85,6 @@ class Users extends \app\components\ActiveRecord
 
 	// Search Variable
 	public $modified_search;
-
-	const STATUS_ACTIVE = 1;
-	const STATUS_BLOCK = 2;
 
 	const SCENARIO_ADMIN_CREATE = 'adminCreate';
 	const SCENARIO_ADMIN_UPDATE_WITH_PASSWORD = 'adminUpdateWithPassword';
@@ -766,6 +762,9 @@ class Users extends \app\components\ActiveRecord
 					$this->setPassword($this->password);
 				else
 					$this->password = $this->password_i;
+
+				if(!$this->auth_key)
+					$this->generateAuthKey();
 			}
 		}
 		return true;
