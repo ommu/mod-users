@@ -184,7 +184,6 @@ class Users extends \app\components\ActiveRecord
 			'auth_key' => Yii::t('app', 'Auth Key'),
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
 			'username' => Yii::t('app', 'Username'),
-			'language' => Yii::t('app', 'Language'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
 			'old_password_i' => Yii::t('app', 'Old Password'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),

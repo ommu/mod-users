@@ -2,7 +2,7 @@
 /**
  * Login (login)
  * @var $this yii\web\View
- * @var $this app\modules\user\controllers\LoginController
+ * @var $this ommu\users\controllers\LoginController
  * @var $model app\modules\user\models\LoginForm
  * @var $form yii\widgets\ActiveForm
  *
@@ -10,7 +10,7 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 Ommu Platform (www.ommu.co)
  * @created date 25 November 2018, 13:58 WIB
- * @link https://github.com/ommu/ommu
+ * @link https://github.com/ommu/mod-users
  *
  */
 
