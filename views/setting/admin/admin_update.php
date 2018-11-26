@@ -19,14 +19,14 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\libraries\grid\GridView;
 use yii\widgets\Pjax;
-use app\libraries\MenuContent;
-use app\libraries\MenuOption;
+use app\themes\gentelella\libraries\MenuContent;
+use app\themes\gentelella\libraries\MenuOption;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Settings'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'icon' => 'plus-square'],
+	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'plus-square'],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],

@@ -21,9 +21,12 @@ use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = $this->title;
 
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Add Phone'), 'url' => Url::to(['create']), 'icon' => 'plus-square'],
-];
+$user = Yii::$app->request->get('user');
+if($user) {
+	$this->params['menu']['content'] = [
+		['label' => Yii::t('app', 'Add Phone'), 'url' => Url::to(['create', 'user'=>$user]), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'plus-square'],
+	];
+}
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
 	['label' => Yii::t('app', 'Grid Option'), 'url' => 'javascript:void(0);'],
@@ -52,7 +55,7 @@ array_push($columnData, [
 		},
 		'update' => function ($url, $model, $key) {
 			$url = Url::to(['update', 'id'=>$model->primaryKey]);
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Phone')]);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update Phone'), 'class'=>'modal-btn']);
 		},
 		'delete' => function ($url, $model, $key) {
 			$url = Url::to(['delete', 'id'=>$model->primaryKey]);
