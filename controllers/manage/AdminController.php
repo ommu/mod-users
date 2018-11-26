@@ -100,13 +100,17 @@ class AdminController extends PersonalController
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User success created.'));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
-			} 
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\yii\widgets\ActiveForm::validate($model));
+			}
 		}
 
 		$this->view->title = Yii::t('app', 'Create User');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('/manage/personal/admin_create', [
+		return $this->oRender('/manage/personal/admin_create', [
 			'model' => $model,
 		]);
 	}
@@ -131,13 +135,17 @@ class AdminController extends PersonalController
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\yii\widgets\ActiveForm::validate($model));
 			}
 		}
 
 		$this->view->title = Yii::t('app', 'Update {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
 		$this->view->description = Yii::t('app', 'Complete the form below to add/edit this admin account. Note that normal admins will not be able to delete or modify the superadmin account. If you want to change this admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');
 		$this->view->keywords = '';
-		return $this->render('/manage/personal/admin_update', [
+		return $this->oRender('/manage/personal/admin_update', [
 			'model' => $model,
 		]);
 	}

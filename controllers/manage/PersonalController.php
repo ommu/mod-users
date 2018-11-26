@@ -105,13 +105,17 @@ class PersonalController extends Controller
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User success created.'));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
-			} 
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\yii\widgets\ActiveForm::validate($model));
+			}
 		}
 
 		$this->view->title = Yii::t('app', 'Create User');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_create', [
+		return $this->oRender('admin_create', [
 			'model' => $model,
 		]);
 	}
@@ -136,13 +140,17 @@ class PersonalController extends Controller
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\yii\widgets\ActiveForm::validate($model));
 			}
 		}
 
 		$this->view->title = Yii::t('app', 'Update {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
 		$this->view->description = Yii::t('app', 'To edit this users\'s account, make changes to the form below. If you want to temporarily prevent this user from logging in, you can set the user account to "disabled" below.');
 		$this->view->keywords = '';
-		return $this->render('admin_update', [
+		return $this->oRender('admin_update', [
 			'model' => $model,
 		]);
 	}
