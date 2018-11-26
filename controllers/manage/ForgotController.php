@@ -100,13 +100,17 @@ class ForgotController extends Controller
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success created.'));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->forgot_id]);
-			} 
+
+			} else {
+				if(Yii::$app->request->isAjax)
+					return \yii\helpers\Json::encode(\yii\widgets\ActiveForm::validate($model));
+			}
 		}
 
 		$this->view->title = Yii::t('app', 'Create Forgot');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_create', [
+		return $this->oRender('admin_create', [
 			'model' => $model,
 		]);
 	}
