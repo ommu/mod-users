@@ -74,6 +74,7 @@ class Users extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
 	public $username;
+	public $photos;
 	public $invite_code_i;
 	public $old_password_i;
 	public $confirm_password_i;
@@ -184,6 +185,7 @@ class Users extends \app\components\ActiveRecord
 			'auth_key' => Yii::t('app', 'Auth Key'),
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
 			'username' => Yii::t('app', 'Username'),
+			'photos' => Yii::t('app', 'Photos'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
 			'old_password_i' => Yii::t('app', 'Old Password'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
@@ -354,6 +356,13 @@ class Users extends \app\components\ActiveRecord
 			'header' => Yii::t('app', 'No'),
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
+		];
+		$this->templateColumns['photos'] = [
+			'attribute' => 'photos',
+			'value' => function($model, $key, $index, $column) {
+				return Html::img(join('/', [Url::Base(), $model->photos]), ['alt' => $model->displayname]);
+			},
+			'format' => 'html',
 		];
 		if($controller == 'manage/admin' && !Yii::$app->request->get('level')) {
 			$this->templateColumns['level_id'] = [
@@ -569,15 +578,6 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @param returnAlias set true jika ingin kembaliannya path alias atau false jika ingin string
-	 * relative path. default true.
-	 */
-	public static function getUploadPath($returnAlias=true) 
-	{
-		return ($returnAlias ? Yii::getAlias('@webroot/public/users') : 'public/users');
-	}
-
-	/**
 	 * Validates password
 	 *
 	 * @param  string  $password password to validate
@@ -615,7 +615,11 @@ class Users extends \app\components\ActiveRecord
 		
 		$this->username = isset($this->member) ? $this->member->username : '';
 		$this->displayname = isset($this->member) ? $this->member->displayname : $this->displayname;
-
+		if(isset($this->member)) {
+			$uploadPath = join('/', [Members::getUploadPath(false), $this->user->member_id]);
+			$photos = $this->member->photo_profile ? join('/', [$uploadPath, $this->member->photo_profile]) : '';
+		}
+		$this->photos = $photos ? $photos : join('/', [Members::getUploadPath(false), 'default.png']);
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
 		$this->password_i = $this->password;

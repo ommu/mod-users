@@ -54,6 +54,11 @@ $this->params['menu']['content'] = [
 			'attribute' => 'language_id',
 			'value' => isset($model->language) ? $model->language->name : '-',
 		],
+		[
+			'attribute' => 'photos',
+			'value' => Html::img(join('/', [Url::Base(), $model->photos]), ['alt' => $model->displayname]),
+			'format' => 'raw',
+		],
 		'email:email',
 		'displayname',
 		'password',

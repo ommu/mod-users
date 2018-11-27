@@ -35,6 +35,7 @@ use Yii;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use ommu\users\models\view\UserVerify as UserVerifyView;
+use yii\validators\EmailValidator;
 
 class UserVerify extends \app\components\ActiveRecord
 {
@@ -282,7 +283,8 @@ class UserVerify extends \app\components\ActiveRecord
 	{
 		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
-				if($this->user_id == null) {
+				$validator = new EmailValidator();
+				if($this->scenario == self::SCENARIO_WITH_FORM && $validator->validate($this->email_i) === true && $this->user_id == null) {
 					$user = Users::find()
 						->select(['user_id'])
 						->where(['email' => $this->email_i])
