@@ -199,7 +199,7 @@ class Users extends \app\components\ActiveRecord
 	public function getForgots()
 	{
 		return $this->hasMany(UserForgot::className(), ['user_id' => 'user_id'])
-			->andOnCondition([sprintf('%s.publish1', UserForgot::tableName()) => 1]);
+			->andOnCondition([sprintf('%s.publish', UserForgot::tableName()) => 1]);
 	}
 
 	/**
@@ -232,7 +232,7 @@ class Users extends \app\components\ActiveRecord
 	public function getInvites()
 	{
 		return $this->hasMany(UserInvites::className(), ['inviter_id' => 'user_id'])
-			->andOnCondition([sprintf('%s.publish1', UserInvites::tableName()) => 1]);
+			->andOnCondition([sprintf('%s.publish', UserInvites::tableName()) => 1]);
 	}
 
 	/**
@@ -265,7 +265,7 @@ class Users extends \app\components\ActiveRecord
 	public function getPhones()
 	{
 		return $this->hasMany(UserPhones::className(), ['user_id' => 'user_id'])
-			->andOnCondition([sprintf('%s.publish1', UserPhones::tableName()) => 1]);
+			->andOnCondition([sprintf('%s.publish', UserPhones::tableName()) => 1]);
 	}
 
 	/**
@@ -274,7 +274,7 @@ class Users extends \app\components\ActiveRecord
 	public function getVerifies()
 	{
 		return $this->hasMany(UserVerify::className(), ['user_id' => 'user_id'])
-			->andOnCondition([sprintf('%s.publish1', UserVerify::tableName()) => 1]);
+			->andOnCondition([sprintf('%s.publish', UserVerify::tableName()) => 1]);
 	}
 
 	/**
