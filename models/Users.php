@@ -52,6 +52,9 @@
  * @property CoreLanguages $language
  * @property UserLevel $level
  * @property Users $modified
+ * @property MemberUser $user
+ * @property Members $member
+ * @property Assignments[] $assignments
  *
  */
 
@@ -78,6 +81,7 @@ class Users extends \app\components\ActiveRecord
 	public $invite_code_i;
 	public $old_password_i;
 	public $confirm_password_i;
+	public $assignment_i;
 
 	public $old_enabled_i;
 	public $old_verified_i;
@@ -186,6 +190,7 @@ class Users extends \app\components\ActiveRecord
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
 			'username' => Yii::t('app', 'Username'),
 			'photos' => Yii::t('app', 'Photos'),
+			'assignment_i' => Yii::t('app', 'Assignments'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
 			'old_password_i' => Yii::t('app', 'Old Password'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
@@ -333,6 +338,14 @@ class Users extends \app\components\ActiveRecord
 	{
 		return $this->hasOne(Members::className(), ['member_id' => 'member_id'])
 			->via('user');
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getAssignments()
+	{
+		return $this->hasMany(Assignments::className(), ['user_id' => 'user_id']);
 	}
 
 	/**
@@ -620,6 +633,7 @@ class Users extends \app\components\ActiveRecord
 			$photos = $this->member->photo_profile ? join('/', [$uploadPath, $this->member->photo_profile]) : '';
 		}
 		$this->photos = $photos ? $photos : join('/', [Members::getUploadPath(false), 'default.png']);
+		$this->assignment_i = isset($this->assignments) ? \yii\helpers\ArrayHelper::map($this->assignments, 'item_name', 'item_name') : '';
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
 		$this->password_i = $this->password;

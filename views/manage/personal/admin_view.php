@@ -115,6 +115,10 @@ $this->params['menu']['content'] = [
 			'attribute' => 'jwt_claims',
 			'value' => $model->jwt_claims ? $model->jwt_claims : '-',
 		],
+		[
+			'attribute' => 'assignment_i',
+			'value' => is_array($model->assignment_i) && !empty($model->assignment_i) ? implode(', ', $model->assignment_i) : '-',
+		],
 	],
 ]) ?>
 
