@@ -45,7 +45,8 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'email_search',
-			'value' => isset($model->user) ? $model->user->email : '-',
+			'value' => isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-',
+			'format' => 'html',
 		],
 		'password',
 		[

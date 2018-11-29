@@ -179,8 +179,9 @@ class UserForgot extends \app\components\ActiveRecord
 			$this->templateColumns['email_i'] = [
 				'attribute' => 'email_i',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->email : '-';
+					return isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-';
 				},
+				'format' => 'html',
 			];
 		}
 		$this->templateColumns['code'] = [

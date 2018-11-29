@@ -43,7 +43,8 @@ $this->params['menu']['content'] = [
 		'displayname',
 		[
 			'attribute' => 'email_search',
-			'value' => isset($model->newsletter) ? $model->newsletter->email : '-',
+			'value' => isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-',
+			'format' => 'html',
 		],
 		'code',
 		'invites',

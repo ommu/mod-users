@@ -129,8 +129,9 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 		$this->templateColumns['email'] = [
 			'attribute' => 'email',
 			'value' => function($model, $key, $index, $column) {
-				return $model->email;
+				return Yii::$app->formatter->asEmail($model->email);
 			},
+			'format' => 'html',
 		];
 		$this->templateColumns['update_date'] = [
 			'attribute' => 'update_date',

@@ -398,8 +398,9 @@ class Users extends \app\components\ActiveRecord
 		$this->templateColumns['email'] = [
 			'attribute' => 'email',
 			'value' => function($model, $key, $index, $column) {
-				return $model->email;
+				return Yii::$app->formatter->asEmail($model->email);
 			},
+			'format' => 'html',
 		];
 		if(isset($this->member)) {
 			$this->templateColumns['username'] = [

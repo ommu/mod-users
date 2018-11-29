@@ -121,8 +121,9 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			$this->templateColumns['email_search'] = [
 				'attribute' => 'email_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter) ? $model->newsletter->email : '-';
+					return isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-';
 				},
+				'format' => 'html',
 			];
 			$this->templateColumns['user_search'] = [
 				'attribute' => 'user_search',

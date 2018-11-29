@@ -135,8 +135,9 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			$this->templateColumns['email_search'] = [
 				'attribute' => 'email_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite->newsletter) ? $model->invite->newsletter->email : '-';
+					return isset($model->invite->newsletter) ? Yii::$app->formatter->asEmail($model->invite->newsletter->email) : '-';
 				},
+				'format' => 'html',
 			];
 			$this->templateColumns['displayname_search'] = [
 				'attribute' => 'displayname_search',

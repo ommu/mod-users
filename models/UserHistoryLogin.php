@@ -132,8 +132,9 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 			$this->templateColumns['email_search'] = [
 				'attribute' => 'email_search',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->email : '-';
+					return isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-';
 				},
+				'format' => 'html',
 			];
 		}
 		$this->templateColumns['lastlogin_date'] = [
