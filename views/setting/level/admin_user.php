@@ -19,6 +19,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use ommu\users\models\UserLevel;
+use ommu\users\models\Assignments;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id'=>$model->level_id]];
@@ -52,6 +53,11 @@ $this->params['menu']['content'] = [
 echo $form->field($model, 'profile_block', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', 'If set to "yes", users can block other users from sending them private messages, requesting their friendship, and viewing their profile. This helps fight spam and network abuse.').'</span>{input}{error}</div>'])
 ->radioList($profileBlock, ['class'=>'desc pt-10', 'separator'=>'<br />'])
 	->label($model->getAttributeLabel('profile_block'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+
+<?php $assignments = Assignments::getRoles();
+echo $form->field($model, 'assignment_roles', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><span class="small-px">'.Yii::t('app', '').'</span>{input}{error}</div>'])
+	->checkboxList($assignments, ['class'=>'desc pt-10', 'separator'=>'<br />'])
+	->label($model->getAttributeLabel('assignment_roles'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php $profileSearch = UserLevel::getProfileSearch();
 echo $form->field($model, 'profile_search', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12"><div class="h5">'.$model->getAttributeLabel('profile_search').'</div><span class="small-px">'.Yii::t('app', 'If you enable this feature, users will be able to exclude themselves from search results and the lists of users on the homepage (such as Recent Signups). Otherwise, all users will be included in search results.').'</span>{input}{error}</div>'])

@@ -28,7 +28,7 @@ class UserLevel extends UserLevelModel
 	{
 		return [
 			[['level_id', 'name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
-			[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts', 'creation_date', 'modified_date', 'slug', 'name_i', 'desc_i', 'creation_search', 'modified_search'], 'safe'],
+			[['assignment_roles', 'message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts', 'creation_date', 'modified_date', 'slug', 'name_i', 'desc_i', 'creation_search', 'modified_search'], 'safe'],
 		];
 	}
 
@@ -152,7 +152,8 @@ class UserLevel extends UserLevelModel
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 		]);
 
-		$query->andFilterWhere(['like', 't.message_limit', $this->message_limit])
+		$query->andFilterWhere(['like', 't.assignment_roles', $this->assignment_roles])
+			->andFilterWhere(['like', 't.message_limit', $this->message_limit])
 			->andFilterWhere(['like', 't.profile_privacy', $this->profile_privacy])
 			->andFilterWhere(['like', 't.profile_comments', $this->profile_comments])
 			->andFilterWhere(['like', 't.photo_size', $this->photo_size])

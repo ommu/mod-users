@@ -130,4 +130,15 @@ class Assignments extends \app\components\ActiveRecord
 	{
 		return Yii::$app->authManager->assignmentTable;
 	}
+
+    /**
+     * Returns all roles in the system.
+     * @return Role[] all roles in the system. The array is indexed by the role names.
+     */
+	public static function getRoles()
+	{
+		$roles = Yii::$app->authManager->getRoles();
+
+		return \yii\helpers\ArrayHelper::map($roles, 'name', 'name');
+	}
 }

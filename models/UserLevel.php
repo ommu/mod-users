@@ -17,6 +17,7 @@
  * @property integer $desc
  * @property integer $default
  * @property integer $signup
+ * @property string $assignment_roles
  * @property integer $message_allow
  * @property string $message_limit
  * @property integer $profile_block
@@ -62,7 +63,7 @@ class UserLevel extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['desc_i','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','creation_date','creation_search','modified_date','modified_search','slug'];
+	public $gridForbiddenColumn = ['desc_i','assignment_roles','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','creation_date','creation_search','modified_date','modified_search','slug'];
 	public $name_i;
 	public $desc_i;
 
@@ -110,11 +111,11 @@ class UserLevel extends \app\components\ActiveRecord
 	{
 		return [
 			[['default', 'name_i', 'desc_i'], 'required'],
-			[['profile_block', 'profile_search', 'profile_privacy', 'profile_comments', 'photo_allow', 'photo_size', 'photo_exts', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete'], 'required', 'on' => self::SCENARIO_USER],
+			[['assignment_roles', 'profile_block', 'profile_search', 'profile_privacy', 'profile_comments', 'photo_allow', 'photo_size', 'photo_exts', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete'], 'required', 'on' => self::SCENARIO_USER],
 			[['message_allow', 'message_limit'], 'required', 'on' => self::SCENARIO_MESSAGE],
 			[['name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
 			[['photo_exts', 'name_i', 'desc_i'], 'string'],
-			//[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], 'serialize'],
+			//[['assignment_roles', 'message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], 'serialize'],
 			[['slug', 'name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
 			[['slug'], 'string', 'max' => 32],
@@ -125,7 +126,7 @@ class UserLevel extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_USER] = ['profile_block','profile_search','profile_privacy','profile_comments','photo_allow','photo_size','photo_exts','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete'];
+		$scenarios[self::SCENARIO_USER] = ['assignment_roles','profile_block','profile_search','profile_privacy','profile_comments','photo_allow','photo_size','photo_exts','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete'];
 		$scenarios[self::SCENARIO_MESSAGE] = ['message_allow','message_limit'];
 		return $scenarios;
 	}
@@ -141,6 +142,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'desc' => Yii::t('app', 'Description'),
 			'default' => Yii::t('app', 'Default'),
 			'signup' => Yii::t('app', 'Signup'),
+			'assignment_roles' => Yii::t('app', 'Assignment Roles'),
 			'message_allow' => Yii::t('app', 'Can users block other users?'),
 			'message_limit' => Yii::t('app', 'Message Limit'),
 			'profile_block' => Yii::t('app', 'Can users block other users?'),
@@ -254,6 +256,12 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'desc_i',
 			'value' => function($model, $key, $index, $column) {
 				return $model->desc_i;
+			},
+		];
+		$this->templateColumns['assignment_roles'] = [
+			'attribute' => 'assignment_roles',
+			'value' => function($model, $key, $index, $column) {
+				return $this->formatFileType($model->assignment_roles, false);
 			},
 		];
 		$this->templateColumns['message_limit'] = [
@@ -772,10 +780,14 @@ class UserLevel extends \app\components\ActiveRecord
 
 		$this->name_i = isset($this->title) ? $this->title->message : '';
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
+
 		$this->message_limit = unserialize($this->message_limit);
 		$this->profile_privacy = unserialize($this->profile_privacy);
 		$this->profile_comments = unserialize($this->profile_comments);
 		$this->photo_size = unserialize($this->photo_size);
+
+		$this->assignment_roles = $this->formatFileType($this->assignment_roles, true, '#');
+
 		$photo_exts = unserialize($this->photo_exts);
 		if(!empty($photo_exts))
 			$this->photo_exts = $this->formatFileType($photo_exts, false);
@@ -857,6 +869,7 @@ class UserLevel extends \app\components\ActiveRecord
 				$this->message_limit = serialize($this->message_limit);
 
 			// } else if($this->scenario == 'user') {
+				$this->assignment_roles = $this->formatFileType($this->assignment_roles, false, '#');
 				$this->profile_privacy = serialize($this->profile_privacy);
 				$this->profile_comments = serialize($this->profile_comments);
 				$this->photo_size = serialize($this->photo_size);
