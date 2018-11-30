@@ -79,7 +79,7 @@ class Users extends \app\components\ActiveRecord
 	public $username;
 	public $photos;
 	public $invite_code_i;
-	public $old_password_i;
+	public $current_password_i;
 	public $confirm_password_i;
 	public $assignment_i;
 
@@ -126,7 +126,7 @@ class Users extends \app\components\ActiveRecord
 			[['password'], 'required', 'on' => self::SCENARIO_REGISTER],
 			[['password', 'invite_code_i'], 'required', 'on' => self::SCENARIO_REGISTER_WITH_INVITE_CODE],
 			[['password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_RESET_PASSWORD],
-			[['old_password_i', 'password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
+			[['current_password_i', 'password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
@@ -135,6 +135,7 @@ class Users extends \app\components\ActiveRecord
 			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_CHANGE_PASSWORD],
+			['current_password_i', 'validatePassword', 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			[['email', 'displayname', 'password'], 'string', 'max' => 64],
 			[['salt', 'lastlogin_from'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
@@ -153,7 +154,7 @@ class Users extends \app\components\ActiveRecord
 		$scenarios[self::SCENARIO_REGISTER] = ['email', 'displayname', 'password'];
 		$scenarios[self::SCENARIO_REGISTER_WITH_INVITE_CODE] = ['email', 'displayname', 'password', 'invite_code_i'];
 		$scenarios[self::SCENARIO_RESET_PASSWORD] = ['password', 'confirm_password_i'];
-		$scenarios[self::SCENARIO_CHANGE_PASSWORD] = ['old_password_i', 'password', 'confirm_password_i'];
+		$scenarios[self::SCENARIO_CHANGE_PASSWORD] = ['current_password_i', 'password', 'confirm_password_i'];
 		return $scenarios;
 	}
 
@@ -192,7 +193,7 @@ class Users extends \app\components\ActiveRecord
 			'photos' => Yii::t('app', 'Photos'),
 			'assignment_i' => Yii::t('app', 'Assignments'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
-			'old_password_i' => Yii::t('app', 'Old Password'),
+			'current_password_i' => Yii::t('app', 'Current Password'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
@@ -599,7 +600,7 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function validatePassword($password)
 	{
-		return Yii::$app->security->validatePassword($password, $this->password);
+		return Yii::$app->security->validatePassword($password, $this->password_i);
 	}
 
 	/* http://php.net/manual/en/function.password-hash.php
@@ -633,7 +634,7 @@ class Users extends \app\components\ActiveRecord
 			$uploadPath = join('/', [Members::getUploadPath(false), $this->user->member_id]);
 			$photos = $this->member->photo_profile ? join('/', [$uploadPath, $this->member->photo_profile]) : '';
 		}
-		$this->photos = $photos ? $photos : join('/', [Members::getUploadPath(false), 'default.png']);
+		$this->photos = ($photos != '' && file_exists($photos)) ? $photos : join('/', [Members::getUploadPath(false), 'default.png']);
 		$this->assignment_i = isset($this->assignments) ? \yii\helpers\ArrayHelper::map($this->assignments, 'item_name', 'item_name') : '';
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
