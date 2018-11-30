@@ -49,7 +49,7 @@
  * @property UserOption $option
  * @property UserPhones[] $phones
  * @property UserVerify[] $verifies
- * @property CoreLanguages $language
+ * @property CoreLanguages $languageRltn
  * @property UserLevel $level
  * @property Users $modified
  * @property MemberUser $user
@@ -294,7 +294,7 @@ class Users extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getLanguage()
+	public function getLanguageRltn()
 	{
 		return $this->hasOne(CoreLanguages::className(), ['language_id' => 'language_id']);
 	}
@@ -391,7 +391,7 @@ class Users extends \app\components\ActiveRecord
 			$this->templateColumns['language_id'] = [
 				'attribute' => 'language_id',
 				'value' => function($model, $key, $index, $column) {
-					return isset($model->language) ? $model->language->name : '-';
+					return isset($model->languageRltn) ? $model->languageRltn->name : '-';
 				},
 				'filter' => CoreLanguages::getLanguage(),
 			];
