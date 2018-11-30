@@ -78,9 +78,9 @@ class Users extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
 	public $username;
 	public $photos;
-	public $invite_code_i;
-	public $current_password_i;
-	public $confirm_password_i;
+	public $inviteCode;
+	public $currentPassword;
+	public $confirmPassword;
 
 	public $old_enabled_i;
 	public $old_verified_i;
@@ -122,24 +122,24 @@ class Users extends \app\components\ActiveRecord
 		return [
 			[['level_id', 'email', 'displayname'], 'required'],
 			[['password'], 'required', 'on' => self::SCENARIO_ADMIN_CREATE],
-			[['password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
+			[['password', 'confirmPassword'], 'required', 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			[['password'], 'required', 'on' => self::SCENARIO_REGISTER],
-			[['password', 'invite_code_i'], 'required', 'on' => self::SCENARIO_REGISTER_WITH_INVITE_CODE],
-			[['password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_RESET_PASSWORD],
-			[['current_password_i', 'password', 'confirm_password_i'], 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
+			[['password', 'inviteCode'], 'required', 'on' => self::SCENARIO_REGISTER_WITH_INVITE_CODE],
+			[['password', 'confirmPassword'], 'required', 'on' => self::SCENARIO_RESET_PASSWORD],
+			[['currentPassword', 'password', 'confirmPassword'], 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
 			[['email'], 'unique'],
-			[['password', 'confirm_password_i'], 'safe'],
-			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
-			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
-			['password', 'compare', 'compareAttribute' => 'confirm_password_i', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_CHANGE_PASSWORD],
-			['current_password_i', 'validatePassword', 'on' => self::SCENARIO_CHANGE_PASSWORD],
+			[['password', 'confirmPassword'], 'safe'],
+			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
+			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
+			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_CHANGE_PASSWORD],
+			['currentPassword', 'validatePassword', 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			[['email', 'displayname', 'password'], 'string', 'max' => 64],
 			[['salt', 'lastlogin_from'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
-			[['invite_code_i'], 'string', 'max' => 16],
+			[['inviteCode'], 'string', 'max' => 16],
 			[['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => CoreLanguages::className(), 'targetAttribute' => ['language_id' => 'language_id']],
 			[['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserLevel::className(), 'targetAttribute' => ['level_id' => 'level_id']],
 		];
@@ -150,11 +150,11 @@ class Users extends \app\components\ActiveRecord
 	{
 		$scenarios = parent::scenarios();
 		$scenarios[self::SCENARIO_ADMIN_CREATE] = ['enabled', 'verified', 'level_id', 'email', 'displayname', 'password'];
-		$scenarios[self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD] = ['enabled', 'verified', 'level_id', 'email', 'displayname', 'password', 'confirm_password_i'];
+		$scenarios[self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD] = ['enabled', 'verified', 'level_id', 'email', 'displayname', 'password', 'confirmPassword'];
 		$scenarios[self::SCENARIO_REGISTER] = ['email', 'displayname', 'password'];
-		$scenarios[self::SCENARIO_REGISTER_WITH_INVITE_CODE] = ['email', 'displayname', 'password', 'invite_code_i'];
-		$scenarios[self::SCENARIO_RESET_PASSWORD] = ['password', 'confirm_password_i'];
-		$scenarios[self::SCENARIO_CHANGE_PASSWORD] = ['current_password_i', 'password', 'confirm_password_i'];
+		$scenarios[self::SCENARIO_REGISTER_WITH_INVITE_CODE] = ['email', 'displayname', 'password', 'inviteCode'];
+		$scenarios[self::SCENARIO_RESET_PASSWORD] = ['password', 'confirmPassword'];
+		$scenarios[self::SCENARIO_CHANGE_PASSWORD] = ['currentPassword', 'password', 'confirmPassword'];
 		return $scenarios;
 	}
 
@@ -191,9 +191,9 @@ class Users extends \app\components\ActiveRecord
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
 			'username' => Yii::t('app', 'Username'),
 			'photos' => Yii::t('app', 'Photos'),
-			'invite_code_i' => Yii::t('app', 'Invite Code'),
-			'current_password_i' => Yii::t('app', 'Current Password'),
-			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
+			'inviteCode' => Yii::t('app', 'Invite Code'),
+			'currentPassword' => Yii::t('app', 'Current Password'),
+			'confirmPassword' => Yii::t('app', 'Confirm Password'),
 			'assignment_i' => Yii::t('app', 'Assignments'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
@@ -721,12 +721,12 @@ class Users extends \app\components\ActiveRecord
 
 									else {
 										if($setting->signup_checkemail == 1) {
-											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->invite_code_i);
+											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->inviteCode);
 											if($inviteCode == null)
-												$this->addError('invite_code_i', Yii::t('app', '{attribute} {invite-code-i} tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('invite_code_i'), 'invite-code-i'=>$this->invite_code_i]));
+												$this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('inviteCode'), 'invite-code-i'=>$this->inviteCode]));
 											else {
 												if($inviteCode->view->expired)
-													$this->addError('invite_code_i', Yii::t('app', '{attribute} {invite-code-i} expired', ['attribute'=>$this->getAttributeLabel('invite_code_i'), 'invite-code-i'=>$this->invite_code_i]));
+													$this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} expired', ['attribute'=>$this->getAttributeLabel('inviteCode'), 'invite-code-i'=>$this->inviteCode]));
 												else
 													$this->reference_id_i = $inviteCode->invite->inviter_id;
 											}
@@ -738,7 +738,7 @@ class Users extends \app\components\ActiveRecord
 
 						} else {
 							if($setting->signup_checkemail == 1)
-								$this->addError('invite_code_i', Yii::t('app', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('invite_code_i')]));
+								$this->addError('inviteCode', Yii::t('app', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('inviteCode')]));
 						}
 					}
 				}

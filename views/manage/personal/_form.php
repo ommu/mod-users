@@ -63,9 +63,9 @@ echo $form->field($model, 'password', ['template' => '{label}<div class="col-md-
 } ?>
 
 <?php if(!$model->isNewRecord) {
-echo $form->field($model, 'confirm_password_i', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+echo $form->field($model, 'confirmPassword', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
 	->passwordInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('confirm_password_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']);
+	->label($model->getAttributeLabel('confirmPassword'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']);
 } ?>
 
 <?php if(($model->isNewRecord && $setting->signup_approve == 0) || !$model->isNewRecord) {
