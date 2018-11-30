@@ -81,12 +81,12 @@ class Users extends \app\components\ActiveRecord
 	public $invite_code_i;
 	public $current_password_i;
 	public $confirm_password_i;
-	public $assignment_i;
 
 	public $old_enabled_i;
 	public $old_verified_i;
 	public $reference_id_i;
 	public $password_i;
+	public $assignment_i;
 
 	// Search Variable
 	public $modified_search;
@@ -191,10 +191,10 @@ class Users extends \app\components\ActiveRecord
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
 			'username' => Yii::t('app', 'Username'),
 			'photos' => Yii::t('app', 'Photos'),
-			'assignment_i' => Yii::t('app', 'Assignments'),
 			'invite_code_i' => Yii::t('app', 'Invite Code'),
 			'current_password_i' => Yii::t('app', 'Current Password'),
 			'confirm_password_i' => Yii::t('app', 'Confirm Password'),
+			'assignment_i' => Yii::t('app', 'Assignments'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -600,7 +600,7 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function validatePassword($password)
 	{
-		return Yii::$app->security->validatePassword($password, $this->password_i);
+		return Yii::$app->security->validatePassword($password, $this->password);
 	}
 
 	/* http://php.net/manual/en/function.password-hash.php
@@ -622,6 +622,15 @@ class Users extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * @param returnAlias set true jika ingin kembaliannya path alias atau false jika ingin string
+	 * relative path. default true.
+	 */
+	public static function getUploadPath($returnAlias=true) 
+	{
+		return ($returnAlias ? Yii::getAlias('@webroot/public/users') : 'public/users');
+	}
+
+	/**
 	 * after find attributes
 	 */
 	public function afterFind()
@@ -633,12 +642,13 @@ class Users extends \app\components\ActiveRecord
 		if(isset($this->member)) {
 			$uploadPath = join('/', [Members::getUploadPath(false), $this->user->member_id]);
 			$photos = $this->member->photo_profile ? join('/', [$uploadPath, $this->member->photo_profile]) : '';
-		}
-		$this->photos = ($photos != '' && file_exists($photos)) ? $photos : join('/', [Members::getUploadPath(false), 'default.png']);
-		$this->assignment_i = isset($this->assignments) ? \yii\helpers\ArrayHelper::map($this->assignments, 'item_name', 'item_name') : '';
+			$this->photos = ($photos != '' && file_exists($photos)) ? $photos : join('/', [Members::getUploadPath(false), 'default.png']);
+		} else
+			$this->photos = join('/', [self::getUploadPath(false), 'default.png']);
 		$this->old_enabled_i = $this->enabled;
 		$this->old_verified_i = $this->verified;
 		$this->password_i = $this->password;
+		$this->assignment_i = isset($this->assignments) ? \yii\helpers\ArrayHelper::map($this->assignments, 'item_name', 'item_name') : '';
 	}
 
 	/**
