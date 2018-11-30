@@ -59,6 +59,11 @@ $this->params['menu']['content'] = [
 			'format' => 'raw',
 		],
 		[
+			'attribute' => 'assignment_roles',
+			'value' => $this->formatFileType($model->assignment_roles, false, '<br/>'),
+			'format' => 'html',
+		],
+		[
 			'attribute' => 'message_allow',
 			'value' => $this->filterYesNo($model->message_allow),
 		],

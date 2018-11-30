@@ -115,7 +115,7 @@ class UserLevel extends \app\components\ActiveRecord
 			[['message_allow', 'message_limit'], 'required', 'on' => self::SCENARIO_MESSAGE],
 			[['name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
 			[['photo_exts', 'name_i', 'desc_i'], 'string'],
-			//[['assignment_roles', 'message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], 'serialize'],
+			//[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], 'serialize'],
 			[['slug', 'name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
 			[['slug'], 'string', 'max' => 32],
