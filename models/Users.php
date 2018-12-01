@@ -659,7 +659,7 @@ class Users extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 
 		$setting = CoreSettings::find()
-			->select(['site_oauth','site_type','signup_username','signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
+			->select(['site_oauth','site_type','signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
 			->where(['id' => 1])
 			->one();
 
@@ -686,7 +686,9 @@ class Users extends \app\components\ActiveRecord
 						->one();
 					$invite = UserInvites::getInvite($this->email);
 					if($invite != null && $invite->newsletter->user_id == null) {
-						$reference_id_i = $settingUser->invite_order == 'asc' ? $invite->newsletter->view->first_invite_user_id : $invite->newsletter->view->last_invite_user_id;
+						$reference_id_i = $settingUser->invite_order == 'asc' ? 
+							$invite->newsletter->view->first_invite_user_id : 
+							$invite->newsletter->view->last_invite_user_id;
 						$this->reference_id_i = $reference_id_i;
 					}
 				}
