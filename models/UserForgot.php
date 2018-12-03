@@ -313,9 +313,10 @@ class UserForgot extends \app\components\ActiveRecord
 
 		if($insert) {
 			$template = 'users_forgot-password';
+			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
 			$emailSubject = $this->parseMailSubject($template);
 			$emailBody = $this->parseMailBody($template, [
-				'displayname' => $this->user->displayname ? $this->user->displayname : $this->user->email, 
+				'displayname' => $displayname,
 				'forgot-link' => Url::to(['password/reset', 'cd'=>$this->code], true),
 			]);
 

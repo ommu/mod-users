@@ -74,6 +74,7 @@ class Users extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
+	use \ommu\mailer\components\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
 	public $username;
@@ -854,12 +855,37 @@ class Users extends \app\components\ActiveRecord
 
 			// Send welcome email
 			if($setting->signup_welcome == 1) {
-				$signup_welcome = 1;
+				$template = 'users_welcome';
+				$displayname = $this->displayname ? $this->displayname : $this->email;
+				$emailSubject = $this->parseMailSubject($template);
+				$emailBody = $this->parseMailBody($template, [
+					'displayname' => $displayname,
+				]);
+	
+				Yii::$app->mailer->compose()
+					->setFrom($this->getMailFrom())
+					->setTo([$this->email => $displayname])
+					->setSubject($emailSubject)
+					->setHtmlBody($emailBody)
+					->send();
 			}
 
 			// Send new account to email administrator
 			if($setting->signup_adminemail == 1) {
-				$signup_adminemail = 1;
+				$template = 'users_signup-member-info';
+				$displayname = $this->displayname ? $this->displayname : $this->email;
+				$emailSubject = $this->parseMailSubject($template);
+				$emailBody = $this->parseMailBody($template, [
+					'displayname' => $displayname,
+					'email' => $this->email,
+				]);
+	
+				Yii::$app->mailer->compose()
+					->setFrom($this->getMailFrom())
+					->setTo($this->getMailAdmin())
+					->setSubject($emailSubject)
+					->setHtmlBody($emailBody)
+					->send();
 			}
 
 		} else {

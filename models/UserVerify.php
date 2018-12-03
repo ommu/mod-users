@@ -313,9 +313,10 @@ class UserVerify extends \app\components\ActiveRecord
 
 		if($insert) {
 			$template = 'users_verify-email';
+			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
 			$emailSubject = $this->parseMailSubject($template);
 			$emailBody = $this->parseMailBody($template, [
-				'displayname' => $this->user->displayname ? $this->user->displayname : $this->user->email,
+				'displayname' => $displayname,
 				'email' => $this->user->email,
 				'verify-link' => Url::to(['verify/email', 'cd'=>$this->code], true),
 			]);
