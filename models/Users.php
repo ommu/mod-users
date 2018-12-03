@@ -912,6 +912,22 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Send new account information
+			if(!in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD])) {
+				$template = 'users_account-change-password';
+				$displayname = $this->displayname ? $this->displayname : $this->email;
+				$emailSubject = $this->parseMailSubject($template);
+				$emailBody = $this->parseMailBody($template, [
+					'displayname' => $displayname,
+					'contact-link' => Url::to(['site/contact'], true),
+				]);
+	
+				Yii::$app->mailer->compose()
+					->setFrom($this->getMailFrom())
+					->setTo([$this->email => $displayname])
+					->setSubject($emailSubject)
+					->setHtmlBody($emailBody)
+					->send();
+			}
 
 			// Send success email verification
 			if ($this->verified != $this->old_verified_i && $this->verified == 1) {
