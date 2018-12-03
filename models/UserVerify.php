@@ -295,7 +295,7 @@ class UserVerify extends \app\components\ActiveRecord
 					else
 						$this->user_id = $user->user_id;
 				}
-				$this->code = $this->uniqueCode();
+				$this->code = Yii::$app->security->generateRandomString(64);
 				$this->verify_ip = $_SERVER['REMOTE_ADDR'];
 
 			} else
@@ -313,10 +313,12 @@ class UserVerify extends \app\components\ActiveRecord
 
 		if($insert) {
 			$template = 'users_verify-email';
-			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
-			$verifylink = Url::to(['email/verify', 'code'=>$this->code], true);
 			$emailSubject = $this->parseMailSubject($template);
-			$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'verify-link'=>$verifylink]);
+			$emailBody = $this->parseMailBody($template, [
+				'displayname' => $this->user->displayname ? $this->user->displayname : $this->user->email,
+				'email' => $this->user->email,
+				'verify-link' => Url::to(['verify/email', 'cd'=>$this->code], true),
+			]);
 
 			Yii::$app->mailer->compose()
 				->setFrom($this->getMailFrom())

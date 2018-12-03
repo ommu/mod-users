@@ -295,7 +295,7 @@ class UserForgot extends \app\components\ActiveRecord
 					else
 						$this->user_id = $user->user_id;
 				}
-				$this->code = $this->uniqueCode();
+				$this->code = Yii::$app->security->generateRandomString(64);
 				$this->forgot_ip = $_SERVER['REMOTE_ADDR'];
 
 			} else
@@ -313,11 +313,11 @@ class UserForgot extends \app\components\ActiveRecord
 
 		if($insert) {
 			$template = 'users_forgot-password';
-			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
-			$forgotlink = Url::to(['password/reset', 'cd'=>$this->code, 'lstlgntkn'=>$this->user->view->token_oauth], true);
-
 			$emailSubject = $this->parseMailSubject($template);
-			$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'forgot-link'=>$forgotlink]);
+			$emailBody = $this->parseMailBody($template, [
+				'displayname' => $this->user->displayname ? $this->user->displayname : $this->user->email, 
+				'forgot-link' => Url::to(['password/reset', 'cd'=>$this->code], true),
+			]);
 
 			Yii::$app->mailer->compose()
 				->setFrom($this->getMailFrom())
