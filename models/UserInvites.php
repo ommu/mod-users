@@ -419,7 +419,7 @@ class UserInvites extends \app\components\ActiveRecord
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
 			if($this->isNewRecord || (!$this->isNewRecord && $this->old_invites_i != $this->invites))
-				$this->code = $this->uniqueCode(8,2);
+				$this->code = Yii::$app->security->generateRandomString(16);
 
 			$this->invite_ip = $_SERVER['REMOTE_ADDR'];
 		}

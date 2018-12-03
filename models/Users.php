@@ -676,7 +676,7 @@ class Users extends \app\components\ActiveRecord
 				if($this->scenario == 'login' && $setting->site_oauth == 1)
 					$oauthCondition = 1;
 
-				$this->salt = $this->uniqueCode(32,1);
+				$this->salt = Yii::$app->security->generateRandomString(32);
 
 				// User Reference
 				$this->reference_id_i = null;
@@ -748,7 +748,7 @@ class Users extends \app\components\ActiveRecord
 
 				// Random password
 				if($setting->signup_random == 1 || $oauthCondition == 1) {
-					$this->password = $this->uniqueCode(8,1);
+					$this->password = Yii::$app->security->generateRandomString(8);
 					$this->verified = 1;
 				}
 
