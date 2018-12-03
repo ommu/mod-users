@@ -810,7 +810,7 @@ class Users extends \app\components\ActiveRecord
 		parent::afterSave($insert, $changedAttributes);
 
 		$setting = CoreSettings::find()
-			->select(['site_type', 'site_title', 'signup_welcome', 'signup_adminemail'])
+			->select(['site_type', 'signup_welcome', 'signup_adminemail'])
 			->where(['id' => 1])
 			->one();
 
