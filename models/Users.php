@@ -852,6 +852,21 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Send account information
+			$template = 'users_account-info';
+			$displayname = $this->displayname ? $this->displayname : $this->email;
+			$emailSubject = $this->parseMailSubject($template);
+			$emailBody = $this->parseMailBody($template, [
+				'displayname' => $displayname,
+				'email' => $this->email,
+				'forgot-link' => Url::to(['user/password/forgot'], true),
+			]);
+
+			Yii::$app->mailer->compose()
+				->setFrom($this->getMailFrom())
+				->setTo([$this->email => $displayname])
+				->setSubject($emailSubject)
+				->setHtmlBody($emailBody)
+				->send();
 
 			// Send welcome email
 			if($setting->signup_welcome == 1) {

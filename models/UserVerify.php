@@ -318,7 +318,7 @@ class UserVerify extends \app\components\ActiveRecord
 			$emailBody = $this->parseMailBody($template, [
 				'displayname' => $displayname,
 				'email' => $this->user->email,
-				'verify-link' => Url::to(['verify/email', 'cd'=>$this->code], true),
+				'verify-link' => Url::to(['user/verify/email', 'cd'=>$this->code], true),
 			]);
 
 			Yii::$app->mailer->compose()
