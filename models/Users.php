@@ -77,17 +77,18 @@ class Users extends \app\components\ActiveRecord
 	use \ommu\mailer\components\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
-	public $username;
-	public $photos;
 	public $inviteCode;
 	public $currentPassword;
 	public $confirmPassword;
 
-	public $old_enabled_i;
-	public $old_verified_i;
-	public $reference_id_i;
-	public $password_i;
+	public $username;
+	public $photos;
 	public $assignment_i;
+	public $password_i;
+	public $password_send_i;
+	public $enabled_i;
+	public $verified_i;
+	public $reference_id_i;
 
 	// Search Variable
 	public $modified_search;
@@ -190,11 +191,11 @@ class Users extends \app\components\ActiveRecord
 			'update_ip' => Yii::t('app', 'Update Ip'),
 			'auth_key' => Yii::t('app', 'Auth Key'),
 			'jwt_claims' => Yii::t('app', 'Jwt Claims'),
-			'username' => Yii::t('app', 'Username'),
-			'photos' => Yii::t('app', 'Photos'),
 			'inviteCode' => Yii::t('app', 'Invite Code'),
 			'currentPassword' => Yii::t('app', 'Current Password'),
 			'confirmPassword' => Yii::t('app', 'Confirm Password'),
+			'username' => Yii::t('app', 'Username'),
+			'photos' => Yii::t('app', 'Photos'),
 			'assignment_i' => Yii::t('app', 'Assignments'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
@@ -646,8 +647,8 @@ class Users extends \app\components\ActiveRecord
 			$this->photos = ($photos != '' && file_exists($photos)) ? $photos : join('/', [Members::getUploadPath(false), 'default.png']);
 		} else
 			$this->photos = join('/', [self::getUploadPath(false), 'default.png']);
-		$this->old_enabled_i = $this->enabled;
-		$this->old_verified_i = $this->verified;
+		$this->enabled_i = $this->enabled;
+		$this->verified_i = $this->verified;
 		$this->password_i = $this->password;
 		$this->assignment_i = isset($this->assignments) ? \yii\helpers\ArrayHelper::map($this->assignments, 'item_name', 'item_name') : '';
 	}
@@ -783,12 +784,20 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function beforeSave($insert)
 	{
+		$setting = CoreSettings::find()
+			->select(['signup_random'])
+			->where(['id' => 1])
+			->one();
+
 		if(parent::beforeSave($insert)) {
 			$this->email = strtolower($this->email);
 
 			if($this->isNewRecord) {
 				$this->setPassword($this->password);
 				$this->generateAuthKey();
+				if($setting->signup_random == 1)
+					$this->password_send_i = $this->password;
+
 			} else {
 				if($this->password)
 					$this->setPassword($this->password);
@@ -905,14 +914,14 @@ class Users extends \app\components\ActiveRecord
 
 		} else {
 			// Generate verification code
-			if ($this->verified != $this->old_verified_i && $this->verified == 0) {
+			if ($this->verified != $this->verified_i && $this->verified == 0) {
 				$verify = new UserVerify;
 				$verify->user_id = $this->user_id;
 				$verify->save();
 			}
 
 			// Send new account information
-			if(!in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD])) {
+			if(in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD])) {
 				$template = 'users_account-change-password';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
 				$emailSubject = $this->parseMailSubject($template);
@@ -930,7 +939,7 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Send success email verification
-			if ($this->verified != $this->old_verified_i && $this->verified == 1) {
+			if ($this->verified != $this->verified_i && $this->verified == 1) {
 				$verified = 1;
 			}
 		}
