@@ -81,6 +81,7 @@ class Users extends \app\components\ActiveRecord
 	public $currentPassword;
 	public $confirmPassword;
 
+	public $language;
 	public $username;
 	public $photos;
 	public $assignment_i;
@@ -639,6 +640,7 @@ class Users extends \app\components\ActiveRecord
 	{
 		parent::afterFind();
 		
+		$this->language = isset($this->languageRltn) ? $this->languageRltn->code : '';
 		$this->username = isset($this->member) ? $this->member->username : '';
 		$this->displayname = isset($this->member) ? $this->member->displayname : $this->displayname;
 		if(isset($this->member)) {
