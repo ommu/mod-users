@@ -435,10 +435,9 @@ class Users extends \app\components\ActiveRecord
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->creation_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'creation_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['creation_ip'] = [
 			'attribute' => 'creation_ip',
@@ -449,10 +448,9 @@ class Users extends \app\components\ActiveRecord
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->modified_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
-			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
 			$this->templateColumns['modified_search'] = [
@@ -465,10 +463,9 @@ class Users extends \app\components\ActiveRecord
 		$this->templateColumns['lastlogin_date'] = [
 			'attribute' => 'lastlogin_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'lastlogin_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['lastlogin_ip'] = [
 			'attribute' => 'lastlogin_ip',
@@ -485,10 +482,9 @@ class Users extends \app\components\ActiveRecord
 		$this->templateColumns['update_date'] = [
 			'attribute' => 'update_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->update_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'update_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['update_ip'] = [
 			'attribute' => 'update_ip',

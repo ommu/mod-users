@@ -168,10 +168,9 @@ class UserInviteHistory extends \app\components\ActiveRecord
 		$this->templateColumns['invite_date'] = [
 			'attribute' => 'invite_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->invite_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->invite_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'invite_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['invite_ip'] = [
 			'attribute' => 'invite_ip',
@@ -191,10 +190,9 @@ class UserInviteHistory extends \app\components\ActiveRecord
 		$this->templateColumns['expired_date'] = [
 			'attribute' => 'expired_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->expired_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->expired_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->expired_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'expired_date'),
-			'format' => 'html',
 		];
 	}
 

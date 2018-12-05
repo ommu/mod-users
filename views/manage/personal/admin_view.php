@@ -85,12 +85,12 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'creation_date',
-			'value' => !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
 		],
 		'creation_ip',
 		[
 			'attribute' => 'modified_date',
-			'value' => !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
 		],
 		[
 			'attribute' => 'modified_search',
@@ -98,13 +98,13 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'lastlogin_date',
-			'value' => !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium'),
 		],
 		'lastlogin_ip',
 		'lastlogin_from',
 		[
 			'attribute' => 'update_date',
-			'value' => !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->update_date, 'medium'),
 		],
 		'update_ip',
 		[

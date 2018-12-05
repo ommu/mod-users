@@ -140,10 +140,9 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 		$this->templateColumns['lastlogin_date'] = [
 			'attribute' => 'lastlogin_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'lastlogin_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['lastlogin_ip'] = [
 			'attribute' => 'lastlogin_ip',

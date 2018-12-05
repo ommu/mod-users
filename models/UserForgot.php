@@ -193,10 +193,9 @@ class UserForgot extends \app\components\ActiveRecord
 		$this->templateColumns['forgot_date'] = [
 			'attribute' => 'forgot_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->forgot_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->forgot_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->forgot_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'forgot_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['forgot_ip'] = [
 			'attribute' => 'forgot_ip',
@@ -207,18 +206,16 @@ class UserForgot extends \app\components\ActiveRecord
 		$this->templateColumns['expired_date'] = [
 			'attribute' => 'expired_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->expired_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->expired_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->expired_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'expired_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['modified_date'] = [
 			'attribute' => 'modified_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->modified_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
-			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('modified')) {
 			$this->templateColumns['modified_search'] = [
@@ -231,10 +228,9 @@ class UserForgot extends \app\components\ActiveRecord
 		$this->templateColumns['deleted_date'] = [
 			'attribute' => 'deleted_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->deleted_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->deleted_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->deleted_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'deleted_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['expired_search'] = [
 			'attribute' => 'expired_search',

@@ -59,11 +59,11 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'creation_date',
-			'value' => !in_array($model->creation_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->creation_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
 		],
 		[
 			'attribute' => 'modified_date',
-			'value' => !in_array($model->modified_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->modified_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
 		],
 		[
 			'attribute' => 'modified_search',
@@ -71,7 +71,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'updated_date',
-			'value' => !in_array($model->updated_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->updated_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
 		],
 		'updated_ip',
 		[
@@ -96,7 +96,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'view.first_invite_date',
-			'value' => isset($model->view) ? (!in_array($model->view->first_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->view->first_invite_date, 'datetime') : '-') : '-',
+			'value' => isset($model->view) ? Yii::$app->formatter->asDatetime($model->view->first_invite_date, 'medium') : '-',
 		],
 		[
 			'attribute' => 'view.first_invite_user_id',
@@ -104,7 +104,7 @@ $this->params['menu']['content'] = [
 		],
 		[
 			'attribute' => 'view.last_invite_date',
-			'value' => isset($model->view) ? (!in_array($model->view->last_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->view->last_invite_date, 'datetime') : '-') : '-',
+			'value' => isset($model->view) ? Yii::$app->formatter->asDatetime($model->view->last_invite_date, 'medium') : '-',
 		],
 		[
 			'attribute' => 'view.last_invite_user_id',

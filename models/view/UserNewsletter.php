@@ -173,10 +173,9 @@ class UserNewsletter extends \app\components\ActiveRecord
 		$this->templateColumns['first_invite_date'] = [
 			'attribute' => 'first_invite_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->first_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->first_invite_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->first_invite_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'first_invite_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['first_invite_user_id'] = [
 			'attribute' => 'first_invite_user_id',
@@ -187,10 +186,9 @@ class UserNewsletter extends \app\components\ActiveRecord
 		$this->templateColumns['last_invite_date'] = [
 			'attribute' => 'last_invite_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->last_invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->last_invite_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->last_invite_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'last_invite_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['last_invite_user_id'] = [
 			'attribute' => 'last_invite_user_id',

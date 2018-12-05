@@ -127,10 +127,9 @@ class UserHistory extends \app\components\ActiveRecord
 		$this->templateColumns['email_lastchange_date'] = [
 			'attribute' => 'email_lastchange_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->email_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->email_lastchange_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->email_lastchange_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'email_lastchange_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['email_lastchange_days'] = [
 			'attribute' => 'email_lastchange_days',
@@ -153,10 +152,9 @@ class UserHistory extends \app\components\ActiveRecord
 		$this->templateColumns['password_lastchange_date'] = [
 			'attribute' => 'password_lastchange_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->password_lastchange_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->password_lastchange_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->password_lastchange_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'password_lastchange_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['password_lastchange_days'] = [
 			'attribute' => 'password_lastchange_days',
@@ -179,10 +177,9 @@ class UserHistory extends \app\components\ActiveRecord
 		$this->templateColumns['lastlogin_date'] = [
 			'attribute' => 'lastlogin_date',
 			'value' => function($model, $key, $index, $column) {
-				return !in_array($model->lastlogin_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->lastlogin_date, 'datetime') : '-';
+				return Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium');
 			},
 			'filter' => $this->filterDatepicker($this, 'lastlogin_date'),
-			'format' => 'html',
 		];
 		$this->templateColumns['lastlogin_days'] = [
 			'attribute' => 'lastlogin_days',

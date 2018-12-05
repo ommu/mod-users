@@ -51,7 +51,7 @@ $this->params['menu']['content'] = [
 		'password',
 		[
 			'attribute' => 'update_date',
-			'value' => !in_array($model->update_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->update_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->update_date, 'medium'),
 		],
 	],
 ]) ?>

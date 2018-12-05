@@ -55,12 +55,12 @@ $this->params['menu']['content'] = [
 		'code',
 		[
 			'attribute' => 'invite_date',
-			'value' => !in_array($model->invite_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->invite_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->invite_date, 'medium'),
 		],
 		'invite_ip',
 		[
 			'attribute' => 'expired_date',
-			'value' => !in_array($model->expired_date, ['0000-00-00 00:00:00','1970-01-01 00:00:00','0002-12-02 07:07:12','-0001-11-30 00:00:00']) ? Yii::$app->formatter->format($model->expired_date, 'datetime') : '-',
+			'value' => Yii::$app->formatter->asDatetime($model->expired_date, 'medium'),
 		],
 		[
 			'attribute' => 'view.expired',
