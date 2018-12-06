@@ -39,6 +39,14 @@ class Assignments extends \app\components\ActiveRecord
 	{
 		return self::getTableName();
 	}
+	
+	/**
+	 * @return \yii\db\Connection the database connection used by this AR class.
+	 */
+	public static function getDb()
+	{
+		return Yii::$app->get('sweeto');
+	}
 
 	/**
 	 * @return array validation rules for model attributes.
