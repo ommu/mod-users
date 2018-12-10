@@ -135,6 +135,7 @@ class PersonalController extends Controller
 			$model->load($postData);
 			if($postData['password'])
 				$model->scenario = Users::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD;
+			$model->isForm = true;
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));

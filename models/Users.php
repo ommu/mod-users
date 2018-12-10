@@ -52,8 +52,6 @@
  * @property CoreLanguages $languageRltn
  * @property UserLevel $level
  * @property Users $modified
- * @property MemberUser $user
- * @property Members $member
  * @property Assignments[] $assignments
  *
  */
@@ -67,8 +65,6 @@ use app\models\CoreLanguages;
 use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;
 use ommu\users\models\view\UserHistory as UserHistoryView;
-use ommu\member\models\view\MemberUser;
-use ommu\member\models\Members;
 
 class Users extends \app\components\ActiveRecord
 {
@@ -82,8 +78,8 @@ class Users extends \app\components\ActiveRecord
 	public $confirmPassword;
 
 	public $language;
-	public $username;
 	public $photos;
+	public $isForm = false;
 	public $assignment_i;
 	public $password_i;
 	public $password_send_i;
@@ -187,7 +183,6 @@ class Users extends \app\components\ActiveRecord
 			'inviteCode' => Yii::t('app', 'Invite Code'),
 			'currentPassword' => Yii::t('app', 'Current Password'),
 			'confirmPassword' => Yii::t('app', 'Confirm Password'),
-			'username' => Yii::t('app', 'Username'),
 			'photos' => Yii::t('app', 'Photos'),
 			'assignment_i' => Yii::t('app', 'Assignments'),
 			'modified_search' => Yii::t('app', 'Modified'),
@@ -321,24 +316,6 @@ class Users extends \app\components\ActiveRecord
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function getUser()
-	{
-		return $this->hasOne(MemberUser::className(), ['user_id' => 'user_id'])
-			->andOnCondition(['profile_id' => 1]);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getMember()
-	{
-		return $this->hasOne(Members::className(), ['member_id' => 'member_id'])
-			->via('user');
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
 	public function getAssignments()
 	{
 		return $this->hasMany(Assignments::className(), ['user_id' => 'user_id']);
@@ -398,14 +375,6 @@ class Users extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
-		if(isset($this->member)) {
-			$this->templateColumns['username'] = [
-				'attribute' => 'username',
-				'value' => function($model, $key, $index, $column) {
-					return $model->username;
-				},
-			];
-		}
 		$this->templateColumns['displayname'] = [
 			'attribute' => 'displayname',
 			'value' => function($model, $key, $index, $column) {
@@ -629,14 +598,7 @@ class Users extends \app\components\ActiveRecord
 		parent::afterFind();
 		
 		$this->language = isset($this->languageRltn) ? $this->languageRltn->code : '';
-		$this->username = isset($this->member) ? $this->member->username : '';
-		$this->displayname = isset($this->member) ? $this->member->displayname : $this->displayname;
-		if(isset($this->member)) {
-			$uploadPath = join('/', [Members::getUploadPath(false), $this->user->member_id]);
-			$photos = $this->member->photo_profile ? join('/', [$uploadPath, $this->member->photo_profile]) : '';
-			$this->photos = ($photos != '' && file_exists($photos)) ? $photos : join('/', [Members::getUploadPath(false), 'default.png']);
-		} else
-			$this->photos = join('/', [self::getUploadPath(false), 'default.png']);
+		$this->photos = join('/', [self::getUploadPath(false), 'default.png']);
 		$this->enabled_i = $this->enabled;
 		$this->verified_i = $this->verified;
 		$this->password_i = $this->password;
@@ -651,7 +613,7 @@ class Users extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 
 		$setting = CoreSettings::find()
-			->select(['site_oauth','site_type','signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
+			->select(['site_oauth','signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
 			->where(['id' => 1])
 			->one();
 
@@ -703,7 +665,7 @@ class Users extends \app\components\ActiveRecord
 					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
 
 					// Signup by Invite (Admin or User)
-					if(($setting->site_type == 1 && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
+					if((Yii::$app->isSocialMedia() && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
 						if($this->email != '') {
 							if($invite != null) {
 								if($invite->newsletter->user_id != null)
@@ -789,11 +751,11 @@ class Users extends \app\components\ActiveRecord
 					$this->password_send_i = $this->password;
 
 			} else {
-				if($this->password)
+				if($this->isForm && $this->password)
 					$this->setPassword($this->password);
 				else
 					$this->password = $this->password_i;
-
+	
 				if(!$this->auth_key)
 					$this->generateAuthKey();
 			}
@@ -809,7 +771,7 @@ class Users extends \app\components\ActiveRecord
 		parent::afterSave($insert, $changedAttributes);
 
 		$setting = CoreSettings::find()
-			->select(['site_type', 'signup_welcome', 'signup_adminemail'])
+			->select(['signup_welcome', 'signup_adminemail'])
 			->where(['id' => 1])
 			->one();
 
@@ -839,7 +801,7 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Update referensi newsletter
-			if($setting->site_type == 1 && $this->reference_id_i != null) {
+			if(Yii::$app->isSocialMedia() && $this->reference_id_i != null) {
 				$newsletter = UserNewsletter::find()
 					->select(['newsletter_id', 'user_id', 'reference_id'])
 					->where(['email' => $this->email])

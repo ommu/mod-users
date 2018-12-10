@@ -66,7 +66,7 @@ class Users extends UsersModel
 			'level.title level', 
 			'languageRltn languageRltn', 
 			'modified modified', 
-			'member member', 
+			// 'member member', 
 		]);
 
 		// add conditions that should always apply here
@@ -91,16 +91,16 @@ class Users extends UsersModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		if(isset($this->member)) {
-			$attributes['username'] = [
-				'asc' => ['member.username' => SORT_ASC],
-				'desc' => ['member.username' => SORT_DESC],
-			];
-			$attributes['displayname'] = [
-				'asc' => ['member.displayname' => SORT_ASC],
-				'desc' => ['member.displayname' => SORT_DESC],
-			];
-		}
+		// if(isset($this->member)) {
+		// 	$attributes['username'] = [
+		// 		'asc' => ['member.username' => SORT_ASC],
+		// 		'desc' => ['member.username' => SORT_DESC],
+		// 	];
+		// 	$attributes['displayname'] = [
+		// 		'asc' => ['member.displayname' => SORT_ASC],
+		// 		'desc' => ['member.displayname' => SORT_DESC],
+		// 	];
+		// }
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['user_id' => SORT_DESC],
@@ -155,10 +155,10 @@ class Users extends UsersModel
 			->andFilterWhere(['like', 't.jwt_claims', $this->jwt_claims])
 			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
 
-		if(isset($this->member)) {
-			$query->andFilterWhere(['like', 'member.username', $this->username])
-				->andFilterWhere(['like', 'member.displayname', $this->displayname]);
-		} else
+		// if(isset($this->member)) {
+		// 	$query->andFilterWhere(['like', 'member.username', $this->username])
+		// 		->andFilterWhere(['like', 'member.displayname', $this->displayname]);
+		// } else
 			$query->andFilterWhere(['like', 't.displayname', $this->displayname]);
 
 		return $dataProvider;
