@@ -335,7 +335,7 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function init() 
 	{
-		$controller = strtolower(Yii::$app->controller->id);
+		$controller = isset(Yii::$app->controller) ? strtolower(Yii::$app->controller->id) : '';
 		parent::init();
 
 		$this->templateColumns['_no'] = [
