@@ -58,22 +58,9 @@ class AdminController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->redirect(['update']);
-	}
-
-	/**
-	 * Updates an existing UserSetting model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionUpdate()
-	{
 		$this->layout = 'admin_default';
 
-		$model = UserSetting::findOne(1);
-		if($model === null)
-			$model = new UserSetting();
+		$model = $this->findModel(1);
 
 		$searchModel = new UserLevelSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -88,20 +75,10 @@ class AdminController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		if(Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-
-			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User setting success updated.'));
-				return $this->redirect(['update']);
-				//return $this->redirect(['view', 'id'=>$model->id]);
-			}
-		}
-
 		$this->view->title = Yii::t('app', 'User Settings');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_update', [
+		return $this->render('admin_index', [
 			'model' => $model,
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
@@ -110,18 +87,31 @@ class AdminController extends Controller
 	}
 
 	/**
-	 * Displays a single UserSetting model.
+	 * Updates an existing UserSetting model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id
 	 * @return mixed
 	 */
-	public function actionView()
+	public function actionUpdate()
 	{
-		$model = $this->findModel(1);
+		$model = UserSetting::findOne(1);
+		if($model === null)
+			$model = new UserSetting();
 
-		$this->view->title = Yii::t('app', 'Detail User Settings');
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User setting success updated.'));
+				return $this->redirect(['index']);
+				//return $this->redirect(['view', 'id'=>$model->id]);
+			}
+		}
+
+		$this->view->title = Yii::t('app', 'User Settings');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_view', [
+		return $this->render('admin_update', [
 			'model' => $model,
 		]);
 	}

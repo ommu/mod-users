@@ -27,8 +27,6 @@ class Module extends \app\components\Module
 	public function init()
 	{
 		parent::init();
-
-		// custom initialization code goes here
 	}
 
 	/**
@@ -36,9 +34,9 @@ class Module extends \app\components\Module
 	 */
 	public function getViewPath() 
 	{
-		if(preg_match('/app/', get_class(Yii::$app->controller)))
-			return Yii::getAlias('@app/modules/users/views');
-		else
+		if(!preg_match('/app/', get_class(Yii::$app->controller)))
 			return Yii::getAlias('@ommu/users/views');
+
+		return parent::getViewPath();
 	}
 }
