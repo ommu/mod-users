@@ -140,20 +140,17 @@ echo GridView::widget([
 			'value' => $model->meta_keyword ? $model->meta_keyword : '-',
 		],
 		[
-			'attribute' => 'forgot_diff_type',
-			'value' => UserSetting::getForgotDiffType($model->forgot_diff_type),
+			'attribute' => 'forgot_difference',
+			'value' => $model->forgot_difference.' '.UserSetting::getForgotDiffType($model->forgot_diff_type),
 		],
-		'forgot_difference',
 		[
-			'attribute' => 'verify_diff_type',
-			'value' => UserSetting::getForgotDiffType($model->verify_diff_type),
+			'attribute' => 'verify_difference',
+			'value' => $model->verify_difference.' '.UserSetting::getForgotDiffType($model->verify_diff_type),
 		],
-		'verify_difference',
 		[
-			'attribute' => 'invite_diff_type',
-			'value' => UserSetting::getForgotDiffType($model->invite_diff_type),
+			'attribute' => 'invite_difference',
+			'value' => $model->invite_difference.' '.UserSetting::getForgotDiffType($model->invite_diff_type),
 		],
-		'invite_difference',
 		[
 			'attribute' => 'invite_order',
 			'value' => UserSetting::getInviteOrder($model->invite_order),
