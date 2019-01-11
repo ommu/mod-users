@@ -39,8 +39,6 @@ use ommu\users\models\Users;
 
 class UserNewsletter extends \app\components\ActiveRecord
 {
-	use \ommu\traits\UtilityTrait;
-
 	public $gridForbiddenColumn = [];
 
 	/**

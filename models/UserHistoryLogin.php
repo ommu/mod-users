@@ -31,8 +31,6 @@ use yii\helpers\Html;
 
 class UserHistoryLogin extends \app\components\ActiveRecord
 {
-	use \ommu\traits\UtilityTrait;
-
 	public $gridForbiddenColumn = ['lastlogin_from'];
 
 	// Search Variable

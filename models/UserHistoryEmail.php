@@ -30,8 +30,6 @@ use yii\helpers\Html;
 
 class UserHistoryEmail extends \app\components\ActiveRecord
 {
-	use \ommu\traits\UtilityTrait;
-
 	public $gridForbiddenColumn = [];
 
 	// Search Variable

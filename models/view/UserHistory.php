@@ -36,8 +36,6 @@ use yii\helpers\Html;
 
 class UserHistory extends \app\components\ActiveRecord
 {
-	use \ommu\traits\UtilityTrait;
-
 	public $gridForbiddenColumn = [];
 
 	/**

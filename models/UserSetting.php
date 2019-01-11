@@ -41,8 +41,6 @@ use ommu\users\models\view\UserSetting as UserSettingView;
 
 class UserSetting extends \app\components\ActiveRecord
 {
-	use \ommu\traits\UtilityTrait;
-
 	public $gridForbiddenColumn = [];
 
 	// Search Variable
