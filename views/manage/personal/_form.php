@@ -16,7 +16,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use app\components\ActiveForm;
 use ommu\users\models\Users;
 use ommu\users\models\UserLevel;
 ?>
@@ -24,9 +24,6 @@ use ommu\users\models\UserLevel;
 <div class="users-form">
 
 <?php $form = ActiveForm::begin([
-	'options' => [
-		'class' => 'form-horizontal form-label-left',
-	],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,

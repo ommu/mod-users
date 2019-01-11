@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use app\components\ActiveForm;
 use ommu\users\models\UserLevel;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
@@ -36,10 +36,6 @@ $this->params['menu']['content'] = [
 
 <div class="user-level-update-message">
 <?php $form = ActiveForm::begin([
-	'options' => [
-		'class' => 'form-horizontal form-label-left',
-		//'enctype' => 'multipart/form-data',
-	],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,

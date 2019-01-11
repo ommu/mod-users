@@ -16,17 +16,13 @@
  */
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use app\components\ActiveForm;
 use ommu\users\models\UserSetting;
 ?>
 
 <div class="user-setting-form">
 
 <?php $form = ActiveForm::begin([
-	'options' => [
-		'class' => 'form-horizontal form-label-left',
-		//'enctype' => 'multipart/form-data',
-	],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,

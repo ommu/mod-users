@@ -16,7 +16,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use app\components\ActiveForm;
 use ommu\users\models\Users;
 use ommu\users\models\UserLevel;
 use app\models\CoreLanguages;
@@ -33,7 +33,6 @@ echo $action.'<br/>';
 
 <?php $form = ActiveForm::begin([
 	'options' => [
-		'class' => 'form-horizontal form-label-left',
 		'enctype' => 'multipart/form-data',
 	],
 	'enableClientValidation' => false,

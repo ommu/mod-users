@@ -103,7 +103,7 @@ class AdminController extends PersonalController
 
 			} else {
 				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\yii\widgets\ActiveForm::validate($model));
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
 			}
 		}
 
@@ -139,7 +139,7 @@ class AdminController extends PersonalController
 
 			} else {
 				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\yii\widgets\ActiveForm::validate($model));
+					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
 			}
 		}
 
