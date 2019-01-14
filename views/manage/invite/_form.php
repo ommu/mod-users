@@ -17,6 +17,7 @@
 
 use yii\helpers\Html;
 use app\components\ActiveForm;
+use ommu\users\models\UserLevel;
 ?>
 
 <div class="user-invites-form">
@@ -32,6 +33,18 @@ use app\components\ActiveForm;
 <?php echo $form->field($model, 'email_i', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
 	->textarea(['rows'=>2,'rows'=>6])
 	->label($model->getAttributeLabel('email_i'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+
+<?php if(!Yii::$app->isSocialMedia()) {
+	$level = UserLevel::getLevel();
+	if(count($level) == 1) {
+		$model->level_id = key($level);
+		echo $form->field($model, 'level_id')->hiddenInput()->label(false);
+	} else {
+		echo $form->field($model, 'level_id', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+			->dropDownList($level, ['prompt'=>''])
+			->label($model->getAttributeLabel('level_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']);
+	}
+} ?>
 
 <div class="ln_solid"></div>
 <div class="form-group">

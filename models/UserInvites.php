@@ -15,6 +15,7 @@
  * @property integer $id
  * @property integer $publish
  * @property integer $newsletter_id
+ * @property integer $level_id
  * @property string $displayname
  * @property string $code
  * @property integer $invites
@@ -73,9 +74,10 @@ class UserInvites extends \app\components\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['email_i'], 'required', 'on' => self::SCENARIO_FORM],
-			[['email_i'], 'required', 'on' => self::SCENARIO_SINGLE_EMAIL],
-			[['publish', 'newsletter_id', 'invites', 'inviter_id', 'modified_id', 'old_invites_i'], 'integer'],
+			[['level_id', 'email_i'], 'required'],
+			// [['email_i'], 'required', 'on' => self::SCENARIO_FORM],
+			// [['email_i'], 'required', 'on' => self::SCENARIO_SINGLE_EMAIL],
+			[['publish', 'newsletter_id', 'level_id', 'invites', 'inviter_id', 'modified_id', 'old_invites_i'], 'integer'],
 			[['email_i'], 'string'],
 			[['email_i'], 'email', 'on' => self::SCENARIO_SINGLE_EMAIL],
 			[['email_i'], 'safe'],
@@ -84,6 +86,7 @@ class UserInvites extends \app\components\ActiveRecord
 			[['invite_ip'], 'string', 'max' => 20],
 			[['newsletter_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserNewsletter::className(), 'targetAttribute' => ['newsletter_id' => 'newsletter_id']],
 			[['inviter_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['inviter_id' => 'user_id']],
+			[['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserLevel::className(), 'targetAttribute' => ['level_id' => 'level_id']],
 		];
 	}
 
@@ -91,8 +94,8 @@ class UserInvites extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_FORM] = ['email_i'];
-		$scenarios[self::SCENARIO_SINGLE_EMAIL] = ['email_i'];
+		$scenarios[self::SCENARIO_FORM] = ['level_id', 'email_i'];
+		$scenarios[self::SCENARIO_SINGLE_EMAIL] = ['level_id', 'email_i'];
 		return $scenarios;
 	}
 
@@ -105,6 +108,7 @@ class UserInvites extends \app\components\ActiveRecord
 			'id' => Yii::t('app', 'ID'),
 			'publish' => Yii::t('app', 'Publish'),
 			'newsletter_id' => Yii::t('app', 'Newsletter'),
+			'level_id' => Yii::t('app', 'Level'),
 			'displayname' => Yii::t('app', 'Displayname'),
 			'code' => Yii::t('app', 'Code'),
 			'invites' => Yii::t('app', 'Invites'),
@@ -155,6 +159,14 @@ class UserInvites extends \app\components\ActiveRecord
 	}
 
 	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getLevel()
+	{
+		return $this->hasOne(UserLevel::className(), ['level_id' => 'level_id']);
+	}
+
+	/**
 	 * {@inheritdoc}
 	 * @return \ommu\users\models\query\UserInvites the active query used by this AR class.
 	 */
@@ -188,6 +200,15 @@ class UserInvites extends \app\components\ActiveRecord
 					return isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-';
 				},
 				'format' => 'html',
+			];
+		}
+		if(!Yii::$app->request->get('level')) {
+			$this->templateColumns['level_id'] = [
+				'attribute' => 'level_id',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->level) ? $model->level->name_i : '-';
+				},
+				'filter' => UserLevel::getLevel(),
 			];
 		}
 		if(!Yii::$app->request->get('inviter')) {
@@ -403,6 +424,9 @@ class UserInvites extends \app\components\ActiveRecord
 				}
 				if($this->inviter_id == null)
 					$this->inviter_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+
+				if(Yii::$app->isSocialMedia())
+					$this->level_id = UserLevel::getDefault();
 
 			} else
 				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
