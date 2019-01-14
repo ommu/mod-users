@@ -480,37 +480,48 @@ class UserInvites extends \app\components\ActiveRecord
 			->where(['id' => 1])
 			->one();
 		
-		// if($this->newsletter->user_id == null) {
-		// 	$displayname = $this->displayname ? $this->displayname : $this->newsletter->email;
-		// 	$inviter = $this->inviter->displayname ? $this->inviter->displayname : $this->inviter->email;
-		// 	$singuplink = $setting->signup_checkemail == 1 ? Url::to(['signup/index', 'code'=>$this->code], true) : Url::to(['signup/index'], true);
+		if($this->newsletter->user_id == null) {
+			$displayname = $this->displayname ? $this->displayname : $this->newsletter->email;
+			$inviter = $this->inviter->displayname ? $this->inviter->displayname : $this->inviter->email;
+			$singuplink = $setting->signup_checkemail == 1 ? Url::to(['signup/index', 'code'=>$this->code], true) : Url::to(['signup/index'], true);
 			
-		// 	if($insert) {
-		// 		$template = $setting->signup_checkemail == 1 ? 'users_invite-code' : 'users_invite';
-		// 		$emailSubject = $this->parseMailSubject($template);
-		// 		$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'inviter'=>$inviter, 'singup-link'=>$singuplink, 'invite-code'=>$this->code]);
+			// if($insert) {
+			// 	$template = $setting->signup_checkemail == 1 ? 'invite-code' : 'invite';
+			// 	$emailSubject = $this->parseMailSubject($template);
+			// 	$emailBody = $this->parseMailBody($template, [
+			// 		'displayname'=>$displayname, 
+			// 		'inviter'=>$inviter, 
+			// 		'singup-link'=>$singuplink, 
+			// 		'invite-code'=>$this->code,
+			// 	]);
 
-		// 		Yii::$app->mailer->compose()
-		// 			->setFrom($this->getMailFrom())
-		// 			->setTo([$this->newsletter->email => $displayname])
-		// 			->setSubject($emailSubject)
-		// 			->setHtmlBody($emailBody)
-		// 			->send();
+			// 	Yii::$app->mailer->compose()
+			// 		->setFrom($this->getMailFrom())
+			// 		->setTo([$this->newsletter->email => $displayname])
+			// 		->setSubject($emailSubject)
+			// 		->setHtmlBody($emailBody)
+			// 		->send();
 
-		// 	} else {
-		// 		if($this->old_invites_i != $this->invites) {
-		// 			$template = $setting->signup_checkemail == 1 ? 'users_invite-2nd-code' : 'users_invite-2nd';
-		// 			$emailSubject = $this->parseMailSubject($template);
-		// 			$emailBody = $this->parseMailBody($template, ['displayname'=>$displayname, 'invites'=>$this->invites, 'inviter'=>$inviter, 'singup-link'=>$singuplink, 'invite-code'=>$this->code]);
+			// } else {
+			// 	if($this->old_invites_i != $this->invites) {
+			// 		$template = $setting->signup_checkemail == 1 ? 'invite-2nd-code' : 'invite-2nd';
+			// 		$emailSubject = $this->parseMailSubject($template);
+			// 		$emailBody = $this->parseMailBody($template, [
+			// 			'displayname'=>$displayname, 
+			// 			'invites'=>$this->invites, 
+			// 			'inviter'=>$inviter, 
+			// 			'singup-link'=>$singuplink, 
+			// 			'invite-code'=>$this->code,
+			// 		]);
 	
-		// 			Yii::$app->mailer->compose()
-		// 				->setFrom($this->getMailFrom())
-		// 				->setTo([$this->newsletter->email => $displayname])
-		// 				->setSubject($emailSubject)
-		// 				->setHtmlBody($emailBody)
-		// 				->send();
-		// 		}
-		// 	}
-		// }
+			// 		Yii::$app->mailer->compose()
+			// 			->setFrom($this->getMailFrom())
+			// 			->setTo([$this->newsletter->email => $displayname])
+			// 			->setSubject($emailSubject)
+			// 			->setHtmlBody($emailBody)
+			// 			->send();
+			// 	}
+			// }
+		}
 	}
 }

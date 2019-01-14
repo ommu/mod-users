@@ -813,7 +813,7 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Send account information
-			$template = 'users_account-info';
+			$template = 'account-info';
 			$displayname = $this->displayname ? $this->displayname : $this->email;
 			$emailSubject = $this->parseMailSubject($template);
 			$emailBody = $this->parseMailBody($template, [
@@ -831,7 +831,7 @@ class Users extends \app\components\ActiveRecord
 
 			// Send welcome email
 			if($setting->signup_welcome == 1) {
-				$template = 'users_welcome';
+				$template = 'signup-welcome';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
 				$emailSubject = $this->parseMailSubject($template);
 				$emailBody = $this->parseMailBody($template, [
@@ -848,7 +848,7 @@ class Users extends \app\components\ActiveRecord
 
 			// Send new account to email administrator
 			if($setting->signup_adminemail == 1) {
-				$template = 'users_signup-member-info';
+				$template = 'signup-member-info';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
 				$emailSubject = $this->parseMailSubject($template);
 				$emailBody = $this->parseMailBody($template, [
@@ -874,7 +874,7 @@ class Users extends \app\components\ActiveRecord
 
 			// Send new account information
 			if(in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD])) {
-				$template = 'users_account-change-password';
+				$template = 'account-change-password';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
 				$emailSubject = $this->parseMailSubject($template);
 				$emailBody = $this->parseMailBody($template, [

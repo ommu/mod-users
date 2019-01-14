@@ -299,7 +299,7 @@ class UserForgot extends \app\components\ActiveRecord
 		parent::afterSave($insert, $changedAttributes);
 
 		if($insert) {
-			$template = 'users_forgot-password';
+			$template = 'forgot-password';
 			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
 			$emailSubject = $this->parseMailSubject($template);
 			$emailBody = $this->parseMailBody($template, [

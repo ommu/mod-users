@@ -299,7 +299,7 @@ class UserVerify extends \app\components\ActiveRecord
 		parent::afterSave($insert, $changedAttributes);
 
 		if($insert) {
-			$template = 'users_verify-email';
+			$template = 'verify-email';
 			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
 			$emailSubject = $this->parseMailSubject($template);
 			$emailBody = $this->parseMailBody($template, [
