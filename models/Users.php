@@ -657,7 +657,8 @@ class Users extends \app\components\ActiveRecord
 						$this->verified = 1;
 
 					// Generate user by admin
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+					if($this->modified_id == null)
+						$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
 				} else {
 					$this->level_id = UserLevel::getDefault();
@@ -718,7 +719,8 @@ class Users extends \app\components\ActiveRecord
 				// Admin modify member
 				if(in_array($controller, ['manage/personal','manage/admnin'])) {
 					$this->modified_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+					if($this->modified_id == null)
+						$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
 				} else {
 					// User modify

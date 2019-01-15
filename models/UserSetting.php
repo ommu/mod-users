@@ -297,8 +297,10 @@ class UserSetting extends \app\components\ActiveRecord
 					$this->addError('invite_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('invite_diff_type')]));
 			}
 			
-			if(!$this->isNewRecord)
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			if(!$this->isNewRecord) {
+				if($this->modified_id == null)
+					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			}
 		}
 		return true;
 	}

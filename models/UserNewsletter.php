@@ -368,8 +368,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 				if($this->subscribe_id == null)
 					$this->subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
 
-			} else
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			} else {
+				if($this->modified_id == null)
+					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			}
 
 			$this->updated_ip = $_SERVER['REMOTE_ADDR'];
 		}

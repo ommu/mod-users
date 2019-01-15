@@ -428,8 +428,10 @@ class UserInvites extends \app\components\ActiveRecord
 				if(Yii::$app->isSocialMedia())
 					$this->level_id = UserLevel::getDefault();
 
-			} else
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			} else {
+				if($this->modified_id == null)
+					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			}
 
 			if($this->isNewRecord || (!$this->isNewRecord && $this->old_invites_i != $this->invites))
 				$this->code = Yii::$app->security->generateRandomString(16);

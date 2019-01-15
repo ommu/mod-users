@@ -285,8 +285,10 @@ class UserForgot extends \app\components\ActiveRecord
 				$this->code = Yii::$app->security->generateRandomString(64);
 				$this->forgot_ip = $_SERVER['REMOTE_ADDR'];
 
-			} else
-				$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			} else {
+				if($this->modified_id == null)
+					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+			}
 		}
 		return true;
 	}
