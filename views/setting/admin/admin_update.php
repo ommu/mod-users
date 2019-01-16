@@ -15,12 +15,7 @@
  *
  */
 
-use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
-use yii\widgets\Pjax;
-use app\components\menu\MenuContent;
-use app\components\menu\MenuOption;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Settings'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');

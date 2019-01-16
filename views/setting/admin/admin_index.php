@@ -24,8 +24,7 @@ use app\components\menu\MenuOption;
 use yii\widgets\DetailView;
 use ommu\users\models\UserSetting;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Settings'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('app', 'User Settings');
 
 $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'plus-square'],
@@ -56,8 +55,6 @@ $this->params['menu']['option'] = [
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-
-<div class="user-level-index">
 <?php Pjax::begin(); ?>
 
 <?php //echo $this->render('/setting/level/_search', ['model'=>$searchModel]); ?>
@@ -101,7 +98,6 @@ echo GridView::widget([
 ]); ?>
 
 <?php Pjax::end(); ?>
-</div>
 			</div>
 		</div>
 	</div>
@@ -109,6 +105,11 @@ echo GridView::widget([
 
 <div class="row">
 	<div class="col-md-12 col-sm-12 col-xs-12">
+		<?php if(Yii::$app->session->hasFlash('success'))
+			echo $this->flashMessage(Yii::$app->session->getFlash('success'));
+		else if(Yii::$app->session->hasFlash('error'))
+			echo $this->flashMessage(Yii::$app->session->getFlash('error'), 'danger');?>
+
 		<div class="x_panel">
 			<div class="x_title">
 				<ul class="nav navbar-right panel_toolbox">
@@ -118,60 +119,66 @@ echo GridView::widget([
 				<div class="clearfix"></div>
 			</div>
 			<div class="x_content">
-<div class="user-setting-view">
-<?php echo DetailView::widget([
-	'model' => $model,
-	'options' => [
-		'class'=>'table table-striped detail-view',
-	],
-	'attributes' => [
-		'id',
-		'license',
-		[
-			'attribute' => 'permission',
-			'value' => UserSetting::getPermission($model->permission),
+<div class="user-level-index">
+<?php if(!$model->isNewRecord) {
+	echo DetailView::widget([
+		'model' => $model,
+		'options' => [
+			'class'=>'table table-striped detail-view',
 		],
-		[
-			'attribute' => 'meta_description',
-			'value' => $model->meta_description ? $model->meta_description : '-',
+		'attributes' => [
+			'id',
+			'license',
+			[
+				'attribute' => 'permission',
+				'value' => UserSetting::getPermission($model->permission),
+			],
+			[
+				'attribute' => 'meta_description',
+				'value' => $model->meta_description ? $model->meta_description : '-',
+			],
+			[
+				'attribute' => 'meta_keyword',
+				'value' => $model->meta_keyword ? $model->meta_keyword : '-',
+			],
+			[
+				'attribute' => 'forgot_difference',
+				'value' => $model->forgot_difference.' '.UserSetting::getForgotDiffType($model->forgot_diff_type),
+			],
+			[
+				'attribute' => 'verify_difference',
+				'value' => $model->verify_difference.' '.UserSetting::getForgotDiffType($model->verify_diff_type),
+			],
+			[
+				'attribute' => 'invite_difference',
+				'value' => $model->invite_difference.' '.UserSetting::getForgotDiffType($model->invite_diff_type),
+			],
+			[
+				'attribute' => 'invite_order',
+				'value' => UserSetting::getInviteOrder($model->invite_order),
+			],
+			[
+				'attribute' => 'modified_date',
+				'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+			],
+			[
+				'attribute' => 'modified_search',
+				'value' => isset($model->modified) ? $model->modified->displayname : '-',
+			],
+			[
+				'attribute' => '',
+				'value' => Html::a(Yii::t('app', 'Update'), Url::to(['update']), [
+					'class' => 'btn btn-success',
+				]),
+				'format' => 'raw',
+			],
 		],
-		[
-			'attribute' => 'meta_keyword',
-			'value' => $model->meta_keyword ? $model->meta_keyword : '-',
-		],
-		[
-			'attribute' => 'forgot_difference',
-			'value' => $model->forgot_difference.' '.UserSetting::getForgotDiffType($model->forgot_diff_type),
-		],
-		[
-			'attribute' => 'verify_difference',
-			'value' => $model->verify_difference.' '.UserSetting::getForgotDiffType($model->verify_diff_type),
-		],
-		[
-			'attribute' => 'invite_difference',
-			'value' => $model->invite_difference.' '.UserSetting::getForgotDiffType($model->invite_diff_type),
-		],
-		[
-			'attribute' => 'invite_order',
-			'value' => UserSetting::getInviteOrder($model->invite_order),
-		],
-		[
-			'attribute' => 'modified_date',
-			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-		],
-		[
-			'attribute' => 'modified_search',
-			'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		],
-		[
-			'attribute' => '',
-			'value' => Html::a(Yii::t('app', 'Update'), Url::to(['update']), [
-				'class' => 'btn btn-success',
-			]),
-			'format' => 'raw',
-		],
-	],
-]) ?>
+	]);
+} else {
+	echo $this->render('_form', [
+		'model' => $model,
+	]);
+}?>
 </div>
 			</div>
 		</div>

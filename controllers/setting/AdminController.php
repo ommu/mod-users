@@ -60,7 +60,18 @@ class AdminController extends Controller
 	{
 		$this->layout = 'admin_default';
 
-		$model = $this->findModel(1);
+		$model = UserSetting::findOne(1);
+		if($model === null)
+			$model = new UserSetting();
+
+		if(Yii::$app->request->isPost) {
+			$model->load(Yii::$app->request->post());
+
+			if($model->save()) {
+				Yii::$app->session->setFlash('success', Yii::t('app', 'User setting success updated.'));
+				return $this->redirect(['index']);
+			}
+		}
 
 		$searchModel = new UserLevelSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -103,8 +114,7 @@ class AdminController extends Controller
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User setting success updated.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id'=>$model->id]);
+				return $this->redirect(['update']);
 			}
 		}
 
