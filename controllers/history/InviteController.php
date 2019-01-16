@@ -1,7 +1,7 @@
 <?php
 /**
  * InviteController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserInviteHistory
  *
  * InviteController implements the CRUD actions for UserInviteHistory model.

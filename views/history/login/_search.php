@@ -1,10 +1,10 @@
 <?php
 /**
  * User History Logins (user-history-login)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\history\LoginController
  * @var $model ommu\users\models\search\UserHistoryLogin
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

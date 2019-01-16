@@ -1,7 +1,7 @@
 <?php
 /**
  * ForgotController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserForgot
  *
  * ForgotController implements the CRUD actions for UserForgot model.

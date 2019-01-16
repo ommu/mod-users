@@ -1,7 +1,7 @@
 <?php
 /**
  * PhoneController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserPhones
  *
  * PhoneController implements the CRUD actions for UserPhones model.

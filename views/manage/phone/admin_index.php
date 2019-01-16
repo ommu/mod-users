@@ -1,7 +1,7 @@
 <?php
 /**
  * User Phones (user-phones)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\manage\PhoneController
  * @var $model ommu\users\models\UserPhones
  * @var $searchModel ommu\users\models\search\UserPhones
@@ -16,7 +16,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = $this->title;

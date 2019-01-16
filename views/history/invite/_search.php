@@ -1,10 +1,10 @@
 <?php
 /**
  * User Invite Histories (user-invite-history)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\history\InviteController
  * @var $model ommu\users\models\search\UserInviteHistory
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

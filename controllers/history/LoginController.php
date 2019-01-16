@@ -1,7 +1,7 @@
 <?php
 /**
  * LoginController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserHistoryLogin
  *
  * LoginController implements the CRUD actions for UserHistoryLogin model.

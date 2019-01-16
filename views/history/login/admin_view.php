@@ -1,7 +1,7 @@
 <?php
 /**
  * User History Logins (user-history-login)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\history\LoginController
  * @var $model ommu\users\models\UserHistoryLogin
  *

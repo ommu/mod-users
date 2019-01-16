@@ -1,7 +1,7 @@
 <?php
 /**
  * User Invites (user-invites)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\manage\InviteController
  * @var $model ommu\users\models\UserInvites
  *

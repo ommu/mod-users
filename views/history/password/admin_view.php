@@ -1,7 +1,7 @@
 <?php
 /**
  * User History Passwords (user-history-password)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\history\PasswordController
  * @var $model ommu\users\models\UserHistoryPassword
  *

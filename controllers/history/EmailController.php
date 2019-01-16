@@ -1,7 +1,7 @@
 <?php
 /**
  * EmailController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserHistoryEmail
  *
  * EmailController implements the CRUD actions for UserHistoryEmail model.

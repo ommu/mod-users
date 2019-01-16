@@ -1,7 +1,7 @@
 <?php
 /**
  * VerifyController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserVerify
  *
  * VerifyController implements the CRUD actions for UserVerify model.

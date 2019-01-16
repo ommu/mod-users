@@ -1,7 +1,7 @@
 <?php
 /**
  * User History Emails (user-history-email)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\history\EmailController
  * @var $model ommu\users\models\UserHistoryEmail
  *

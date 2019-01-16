@@ -1,7 +1,7 @@
 <?php
 /**
  * LevelController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserLevel
  *
  * LevelController implements the CRUD actions for UserLevel model.

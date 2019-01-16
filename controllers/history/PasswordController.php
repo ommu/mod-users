@@ -1,7 +1,7 @@
 <?php
 /**
  * PasswordController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserHistoryPassword
  *
  * PasswordController implements the CRUD actions for UserHistoryPassword model.

@@ -1,7 +1,7 @@
 <?php
 /**
  * User Invite Histories (user-invite-history)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\history\InviteController
  * @var $model ommu\users\models\UserInviteHistory
  * @var $searchModel ommu\users\models\search\UserInviteHistory
@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = $this->title;

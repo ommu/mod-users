@@ -1,7 +1,7 @@
 <?php
 /**
  * PersonalController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\Users
  *
  * PersonalController implements the CRUD actions for Users model.

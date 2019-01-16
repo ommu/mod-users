@@ -1,7 +1,7 @@
 <?php
 /**
  * Users (users)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\manage\PersonalController
  * @var $model ommu\users\models\Users
  *

@@ -1,7 +1,7 @@
 <?php
 /**
  * NewsletterController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserNewsletter
  *
  * NewsletterController implements the CRUD actions for UserNewsletter model.

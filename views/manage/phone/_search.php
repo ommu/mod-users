@@ -1,10 +1,10 @@
 <?php
 /**
  * User Phones (user-phones)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\manage\PhoneController
  * @var $model ommu\users\models\search\UserPhones
- * @var $form yii\widgets\ActiveForm
+ * @var $form app\components\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

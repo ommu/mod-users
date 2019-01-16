@@ -1,7 +1,7 @@
 <?php
 /**
  * User Invite Histories (user-invite-history)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\history\InviteController
  * @var $model ommu\users\models\UserInviteHistory
  *

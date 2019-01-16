@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $model ommu\users\models\UserSetting
  *
  * AdminController implements the CRUD actions for UserSetting model.

@@ -1,7 +1,7 @@
 <?php
 /**
  * User Levels (user-level)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\setting\LevelController
  * @var $model ommu\users\models\UserLevel
  *

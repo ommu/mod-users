@@ -1,7 +1,7 @@
 <?php
 /**
  * User Newsletters (user-newsletter)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\manage\NewsletterController
  * @var $model ommu\users\models\UserNewsletter
  * @var $searchModel ommu\users\models\search\UserNewsletter
@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\libraries\grid\GridView;
+use app\components\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->params['breadcrumbs'][] = $this->title;

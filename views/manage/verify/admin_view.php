@@ -1,7 +1,7 @@
 <?php
 /**
  * User Verifies (user-verify)
- * @var $this yii\web\View
+ * @var $this app\components\View
  * @var $this ommu\users\controllers\manage\VerifyController
  * @var $model ommu\users\models\UserVerify
  *
