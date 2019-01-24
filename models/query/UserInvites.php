@@ -42,6 +42,14 @@ class UserInvites extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
+	 */
+	public function deleted() 
+	{
+		return $this->andWhere(['publish' => 2]);
+	}
+
+	/**
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserInvites[]|array
 	 */
 	public function all($db = null)

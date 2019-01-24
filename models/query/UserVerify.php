@@ -42,6 +42,14 @@ class UserVerify extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
+	 */
+	public function deleted() 
+	{
+		return $this->andWhere(['publish' => 2]);
+	}
+
+	/**
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\UserVerify[]|array
 	 */
 	public function all($db = null)
