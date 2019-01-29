@@ -78,6 +78,9 @@ class Users extends \app\components\ActiveRecord
 	public $confirmPassword;
 
 	public $language;
+	public $username;
+	public $first_name;
+	public $last_name;
 	public $photos;
 	public $isForm = false;
 	public $assignment_i;
@@ -183,7 +186,6 @@ class Users extends \app\components\ActiveRecord
 			'inviteCode' => Yii::t('app', 'Invite Code'),
 			'currentPassword' => Yii::t('app', 'Current Password'),
 			'confirmPassword' => Yii::t('app', 'Confirm Password'),
-			'photos' => Yii::t('app', 'Photos'),
 			'assignment_i' => Yii::t('app', 'Assignments'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
@@ -757,7 +759,7 @@ class Users extends \app\components\ActiveRecord
 					$this->setPassword($this->password);
 				else
 					$this->password = $this->password_i;
-	
+
 				if(!$this->auth_key)
 					$this->generateAuthKey();
 			}
