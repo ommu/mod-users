@@ -37,8 +37,8 @@
 namespace ommu\users\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use ommu\users\models\view\UserNewsletter as UserNewsletterView;
 
 class UserNewsletter extends \app\components\ActiveRecord

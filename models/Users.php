@@ -59,8 +59,8 @@
 namespace ommu\users\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use app\models\CoreLanguages;
 use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;

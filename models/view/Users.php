@@ -22,8 +22,8 @@
 namespace ommu\users\models\view;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 class Users extends \app\components\ActiveRecord
 {

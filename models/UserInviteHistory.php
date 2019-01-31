@@ -27,8 +27,8 @@
 namespace ommu\users\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use ommu\users\models\view\UserInviteHistory as UserInviteHistoryView;
 
 class UserInviteHistory extends \app\components\ActiveRecord

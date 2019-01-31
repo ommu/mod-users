@@ -32,8 +32,8 @@
 namespace ommu\users\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use ommu\users\models\view\UserForgot as UserForgotView;
 
 class UserForgot extends \app\components\ActiveRecord
