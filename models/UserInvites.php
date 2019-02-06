@@ -270,8 +270,7 @@ class UserInvites extends \app\components\ActiveRecord
 		$this->templateColumns['invites'] = [
 			'attribute' => 'invites',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['history/invite/index', 'invite'=>$model->primaryKey]);
-				return Html::a($model->invites, $url);
+				return Html::a($model->invites, ['history/invite/index', 'invite'=>$model->primaryKey]);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',

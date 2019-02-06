@@ -414,8 +414,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'view.user_active',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'active']);
-				return Html::a($model->view->user_active, $url);
+				return Html::a($model->view->user_active, ['personal/index', 'level'=>$model->primaryKey, 'status'=>'active']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -424,8 +423,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'view.user_pending',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'pending']);
-				return Html::a($model->view->user_pending, $url);
+				return Html::a($model->view->user_pending, ['personal/index', 'level'=>$model->primaryKey, 'status'=>'pending']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -434,8 +432,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'view.user_noverified',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'noverified']);
-				return Html::a($model->view->user_noverified, $url);
+				return Html::a($model->view->user_noverified, ['personal/index', 'level'=>$model->primaryKey, 'status'=>'noverified']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -444,8 +441,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'view.user_blocked',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'blocked']);
-				return Html::a($model->view->user_blocked, $url);
+				return Html::a($model->view->user_blocked, ['personal/index', 'level'=>$model->primaryKey, 'status'=>'blocked']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
@@ -454,8 +450,7 @@ class UserLevel extends \app\components\ActiveRecord
 			'attribute' => 'view.user_all',
 			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['personal/index', 'level'=>$model->primaryKey, 'status'=>'all']);
-				return Html::a($model->view->user_all, $url);
+				return Html::a($model->view->user_all, ['personal/index', 'level'=>$model->primaryKey, 'status'=>'all']);
 			},
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
