@@ -18,6 +18,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\ArrayHelper;
 
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -47,11 +48,11 @@ array_push($columnData, [
 	],
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
-			$url = Url::to(['view', 'id'=>$model->primaryKey]);
+			$url = Url::to(ArrayHelper::merge(['view', 'id'=>$model->primaryKey], Yii::$app->request->get()));
 			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail User')]);
 		},
 		'update' => function ($url, $model, $key) {
-			$url = Url::to(['update', 'id'=>$model->primaryKey]);
+			$url = Url::to(ArrayHelper::merge(['update', 'id'=>$model->primaryKey], Yii::$app->request->get()));
 			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User'), 'class'=>'modal-btn']);
 		},
 		'delete' => function ($url, $model, $key) {
