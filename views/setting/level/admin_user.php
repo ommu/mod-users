@@ -65,13 +65,13 @@ echo $form->field($model, 'profile_search', ['template' => '{label}<div class="c
 	->hint(Yii::t('app', 'If you enable this feature, users will be able to exclude themselves from search results and the lists of users on the homepage (such as Recent Signups). Otherwise, all users will be included in search results.')); ?>
 
 <?php $profilePrivacy = UserLevel::getProfilePrivacy();
-echo $form->field($model, 'profile_privacy', ['template' => '<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3"><div class="h5">'.$model->getAttributeLabel('profile_privacy').'</div>{hint}{input}{error}</div>'])
+echo $form->field($model, 'profile_privacy', ['template' => '<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3"><div class="h5">'.$model->getAttributeLabel('profile_privacy').'</div>{hint}{input}{error}</div>'])
 	->checkboxList($profilePrivacy, ['class'=>'desc pt-10', 'separator'=>'<br />'])
 	->label($model->getAttributeLabel('profile_privacy'), ['class'=>'control-label col-md-6 col-sm-9 col-xs-12'])
 	->hint(Yii::t('app', 'Your users can choose from any of the options checked below when they decide who can see their profile. If you do not check any options, everyone will be allowed to view profiles.')); ?>
 
 <?php $profileComments = UserLevel::getProfilePrivacy();
-echo $form->field($model, 'profile_comments', ['template' => '<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3"><div class="h5">'.$model->getAttributeLabel('profile_comments').'</div>{hint}{input}{error}</div>'])
+echo $form->field($model, 'profile_comments', ['template' => '<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3"><div class="h5">'.$model->getAttributeLabel('profile_comments').'</div>{hint}{input}{error}</div>'])
 	->checkboxList($profileComments, ['class'=>'desc pt-10', 'separator' => '<br />'])
 	->label($model->getAttributeLabel('profile_comments'), ['class'=>'control-label col-md-6 col-sm-9 col-xs-12'])
 	->hint(Yii::t('app', 'Your users can choose from any of the options checked below when they decide who can post comments on their profile. If you do not check any options, everyone will be allowed to post comments on profiles.')); ?>
@@ -91,7 +91,7 @@ echo $form->field($model, 'photo_allow')
 	->label($model->getAttributeLabel('photo_size'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php $model->photo_size = serialize($model->photo_size);
-echo $form->field($model, 'photo_size', ['template' => '<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">{hint}'.$photo_size_width.$photo_size_height.'{error}</div>'])
+echo $form->field($model, 'photo_size', ['template' => '<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">{hint}'.$photo_size_width.$photo_size_height.'{error}</div>'])
 	->label($model->getAttributeLabel('photo_size'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12'])
 	->hint(Yii::t('app', 'If you have selected "Yes" above, please input the maximum dimensions for the user photos. If your users upload a photo that is larger than these dimensions, the server will attempt to scale them down automatically. This feature requires that your PHP server is compiled with support for the GD Libraries.')); ?>
 
@@ -143,8 +143,8 @@ echo $form->field($model, 'profile_delete')
 	->hint(Yii::t('app', 'Enable this feature if you would like to allow your users to delete their account manually.')); ?>
 
 <div class="ln_solid"></div>
-<div class="form-group">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
+<div class="form-group row">
+	<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>

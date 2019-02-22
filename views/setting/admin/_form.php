@@ -55,27 +55,27 @@ echo $form->field($model, 'permission')
 <?php $forgotDiffType = UserSetting::getForgotDiffType();
 $forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}</div>', 'options' => ['tag' => null]])
 	->dropDownList($forgotDiffType, ['prompt' => ''])
-	->label($model->getAttributeLabel('forgot_diff_type'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('forgot_diff_type')); ?>
 
-<?php echo $form->field($model, 'forgot_difference', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$forgot_diff_type.'<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">{error}</div>'])
+<?php echo $form->field($model, 'forgot_difference', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$forgot_diff_type.'<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">{error}</div>'])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('forgot_difference'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php $verifyDiffType = UserSetting::getForgotDiffType();
 $verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}</div>', 'options' => ['tag' => null]])
 	->dropDownList($verifyDiffType, ['prompt' => ''])
-	->label($model->getAttributeLabel('verify_diff_type'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('verify_diff_type')); ?>
 
-<?php echo $form->field($model, 'verify_difference', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$verify_diff_type.'<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">{error}</div>'])
+<?php echo $form->field($model, 'verify_difference', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$verify_diff_type.'<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">{error}</div>'])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('verify_difference'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
 <?php $inviteDiffType = UserSetting::getForgotDiffType();
 $invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '<div class="col-md-3 col-sm-5 col-xs-6">{input}</div>', 'options' => ['tag' => null]])
 	->dropDownList($inviteDiffType, ['prompt' => ''])
-	->label($model->getAttributeLabel('invite_diff_type'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('invite_diff_type')); ?>
 
-<?php echo $form->field($model, 'invite_difference', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$invite_diff_type.'<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">{error}</div>'])
+<?php echo $form->field($model, 'invite_difference', ['template' => '{label}<div class="col-md-3 col-sm-4 col-xs-6">{input}</div>'.$invite_diff_type.'<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">{error}</div>'])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('invite_difference'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
 
@@ -85,8 +85,8 @@ echo $form->field($model, 'invite_order')
 	->label($model->getAttributeLabel('invite_order')); ?>
 
 <div class="ln_solid"></div>
-<div class="form-group">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-sm-offset-3">
+<div class="form-group row">
+	<div class="col-md-6 col-sm-9 col-xs-12 offset-sm-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>
