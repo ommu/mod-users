@@ -33,6 +33,7 @@ echo $action.'<br/>';
 
 <?php $form = ActiveForm::begin([
 	'options' => [
+		'class' => 'form-horizontal form-label-left',
 		'enctype' => 'multipart/form-data',
 	],
 	'enableClientValidation' => false,
@@ -43,87 +44,87 @@ echo $action.'<br/>';
 <?php //echo $form->errorSummary($model);?>
 
 <?php $level = UserLevel::getLevel();
-echo $form->field($model, 'level_id', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+echo $form->field($model, 'level_id')
 	->dropDownList($level, ['prompt'=>''])
-	->label($model->getAttributeLabel('level_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('level_id')); ?>
 
 <?php $language = CoreLanguages::getLanguage();
-echo $form->field($model, 'language_id', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+echo $form->field($model, 'language_id')
 	->dropDownList($language, ['prompt'=>''])
-	->label($model->getAttributeLabel('language_id'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('language_id')); ?>
 
-<?php echo $form->field($model, 'email', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'email')
 	->textInput(['type'=>'email'])
-	->label($model->getAttributeLabel('email'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('email')); ?>
 
-<?php echo $form->field($model, 'displayname', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'displayname')
 	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('displayname'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('displayname')); ?>
 
-<?php echo $form->field($model, 'password', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'password')
 	->passwordInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('password'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('password')); ?>
 
-<?php echo $form->field($model, 'salt', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'salt')
 	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('salt'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('salt')); ?>
 
-<?php echo $form->field($model, 'creation_ip', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'creation_ip')
 	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('creation_ip'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('creation_ip')); ?>
 
-<?php echo $form->field($model, 'modified_date', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'modified_date')
 	->textInput(['type' => 'date'])
-	->label($model->getAttributeLabel('modified_date'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('modified_date')); ?>
 
-<?php echo $form->field($model, 'lastlogin_date', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'lastlogin_date')
 	->textInput(['type' => 'date'])
-	->label($model->getAttributeLabel('lastlogin_date'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('lastlogin_date')); ?>
 
-<?php echo $form->field($model, 'lastlogin_ip', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'lastlogin_ip')
 	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('lastlogin_ip'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('lastlogin_ip')); ?>
 
-<?php echo $form->field($model, 'lastlogin_from', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'lastlogin_from')
 	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('lastlogin_from'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('lastlogin_from')); ?>
 
-<?php echo $form->field($model, 'update_date', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'update_date')
 	->textInput(['type' => 'date'])
-	->label($model->getAttributeLabel('update_date'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('update_date')); ?>
 
-<?php echo $form->field($model, 'update_ip', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+<?php echo $form->field($model, 'update_ip')
 	->textInput(['maxlength'=>true])
-	->label($model->getAttributeLabel('update_ip'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('update_ip')); ?>
 
 <?php $enabled = Users::getEnabled();
-echo $form->field($model, 'enabled', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12">{input}{error}</div>'])
+echo $form->field($model, 'enabled')
 	->dropDownList($enabled, ['prompt'=>''])
-	->label($model->getAttributeLabel('enabled'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('enabled')); ?>
 
-<?php echo $form->field($model, 'verified', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+<?php echo $form->field($model, 'verified')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('verified'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('verified')); ?>
 
-<?php echo $form->field($model, 'deactivate', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+<?php echo $form->field($model, 'deactivate')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('deactivate'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('deactivate')); ?>
 
-<?php echo $form->field($model, 'search', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+<?php echo $form->field($model, 'search')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('search'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('search')); ?>
 
-<?php echo $form->field($model, 'invisible', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+<?php echo $form->field($model, 'invisible')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('invisible'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('invisible')); ?>
 
-<?php echo $form->field($model, 'privacy', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+<?php echo $form->field($model, 'privacy')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('privacy'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('privacy')); ?>
 
-<?php echo $form->field($model, 'comments', ['template' => '{label}<div class="col-md-6 col-sm-9 col-xs-12 checkbox">{input}{error}</div>'])
+<?php echo $form->field($model, 'comments')
 	->checkbox(['label'=>''])
-	->label($model->getAttributeLabel('comments'), ['class'=>'control-label col-md-3 col-sm-3 col-xs-12']); ?>
+	->label($model->getAttributeLabel('comments')); ?>
 
 <div class="ln_solid"></div>
 <div class="form-group">
