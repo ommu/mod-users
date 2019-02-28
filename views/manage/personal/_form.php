@@ -75,7 +75,7 @@ echo $form->field($model, 'enabled')
 
 <?php if(($model->isNewRecord && $setting->signup_verifyemail == 1) || !$model->isNewRecord) {
 echo $form->field($model, 'verified')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('verified'));
 } ?>
 

@@ -35,13 +35,13 @@ use app\components\ActiveForm;
 	->label($model->getAttributeLabel('phone_number')); ?>
 
 <?php echo $form->field($model, 'verified')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('verified')); ?>
 
 <?php if($model->isNewRecord && !$model->getErrors())
 	$model->publish = 1;
 echo $form->field($model, 'publish')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('publish')); ?>
 
 <div class="ln_solid"></div>

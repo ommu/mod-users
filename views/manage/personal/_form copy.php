@@ -103,27 +103,27 @@ echo $form->field($model, 'enabled')
 	->label($model->getAttributeLabel('enabled')); ?>
 
 <?php echo $form->field($model, 'verified')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('verified')); ?>
 
 <?php echo $form->field($model, 'deactivate')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('deactivate')); ?>
 
 <?php echo $form->field($model, 'search')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('search')); ?>
 
 <?php echo $form->field($model, 'invisible')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('invisible')); ?>
 
 <?php echo $form->field($model, 'privacy')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('privacy')); ?>
 
 <?php echo $form->field($model, 'comments')
-	->checkbox(['label'=>''])
+	->checkbox()
 	->label($model->getAttributeLabel('comments')); ?>
 
 <div class="ln_solid"></div>
