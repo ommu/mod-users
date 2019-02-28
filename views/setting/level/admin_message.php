@@ -51,12 +51,12 @@ echo $form->field($model, 'message_allow', ['template' => '{label}{beginWrapper}
 	->hint(Yii::t('app', 'If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.')); ?>
 
 <?php $messageLimit = UserLevel::getMessageLimit();
-$message_limit_inbox = $form->field($model, 'message_limit[inbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 offset-sm-3', 'hint'=>'col-md-3 col-sm-5 col-xs-6 pt-5'], 'options' => ['tag' => null]])
+$message_limit_inbox = $form->field($model, 'message_limit[inbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 offset-sm-3', 'hint'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->dropDownList($messageLimit, ['prompt' => ''])
 	->label($model->getAttributeLabel('message_limit[inbox]'))
 	->hint(Yii::t('app', 'conversations in inbox folder.')); ?>
 
-<?php $message_limit_outbox = $form->field($model, 'message_limit[outbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 offset-sm-3', 'hint'=>'col-md-3 col-sm-5 col-xs-6 pt-5'], 'options' => ['tag' => null]])
+<?php $message_limit_outbox = $form->field($model, 'message_limit[outbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 offset-sm-3', 'hint'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->dropDownList($messageLimit, ['prompt' => ''])
 	->label($model->getAttributeLabel('message_limit[outbox]'))
 	->hint(Yii::t('app', 'conversations in outbox folder.')); ?>
