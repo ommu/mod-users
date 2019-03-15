@@ -57,9 +57,12 @@ class UserPhones extends UserPhonesModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserPhonesModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserPhonesModel::find()->alias('t');
+		else
+			$query = UserPhonesModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'user user', 
 			'creation creation', 

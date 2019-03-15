@@ -58,9 +58,12 @@ class UserNewsletter extends UserNewsletterModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserNewsletterModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserNewsletterModel::find()->alias('t');
+		else
+			$query = UserNewsletterModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'user user', 
 			'reference reference', 

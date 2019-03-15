@@ -59,9 +59,12 @@ class Users extends UsersModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UsersModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UsersModel::find()->alias('t');
+		else
+			$query = UsersModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'level.title level', 
 			'languageRltn languageRltn', 

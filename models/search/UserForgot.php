@@ -58,9 +58,12 @@ class UserForgot extends UserForgotModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserForgotModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserForgotModel::find()->alias('t');
+		else
+			$query = UserForgotModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'user user', 
 			'modified modified',

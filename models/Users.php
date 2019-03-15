@@ -589,7 +589,7 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public static function getUploadPath($returnAlias=true) 
 	{
-		return ($returnAlias ? Yii::getAlias('@webroot/public/users') : 'public/users');
+		return ($returnAlias ? Yii::getAlias('@public/users') : 'public/users');
 	}
 
 	/**

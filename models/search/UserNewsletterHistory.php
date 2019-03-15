@@ -58,9 +58,12 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserNewsletterHistoryModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserNewsletterHistoryModel::find()->alias('t');
+		else
+			$query = UserNewsletterHistoryModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'newsletter newsletter', 
 			'newsletter.user user',

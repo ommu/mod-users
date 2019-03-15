@@ -58,9 +58,12 @@ class UserLevel extends UserLevelModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserLevelModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserLevelModel::find()->alias('t');
+		else
+			$query = UserLevelModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'title title', 
 			'description description', 

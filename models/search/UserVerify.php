@@ -58,9 +58,12 @@ class UserVerify extends UserVerifyModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserVerifyModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserVerifyModel::find()->alias('t');
+		else
+			$query = UserVerifyModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'user user', 
 			'modified modified',

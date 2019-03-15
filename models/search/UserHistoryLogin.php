@@ -58,9 +58,12 @@ class UserHistoryLogin extends UserHistoryLoginModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserHistoryLoginModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserHistoryLoginModel::find()->alias('t');
+		else
+			$query = UserHistoryLoginModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'user user',
 			'user.level.title level',

@@ -58,9 +58,12 @@ class UserHistoryEmail extends UserHistoryEmailModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserHistoryEmailModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserHistoryEmailModel::find()->alias('t');
+		else
+			$query = UserHistoryEmailModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'user user',
 			'user.level.title level',

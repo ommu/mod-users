@@ -58,9 +58,12 @@ class UserHistoryPassword extends UserHistoryPasswordModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserHistoryPasswordModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserHistoryPasswordModel::find()->alias('t');
+		else
+			$query = UserHistoryPasswordModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'user user',
 			'user.level.title level',

@@ -58,9 +58,12 @@ class UserInviteHistory extends UserInviteHistoryModel
 	 *
 	 * @return ActiveDataProvider
 	 */
-	public function search($params)
+	public function search($params, $column=null)
 	{
-		$query = UserInviteHistoryModel::find()->alias('t');
+		if(!($column && is_array($column)))
+			$query = UserInviteHistoryModel::find()->alias('t');
+		else
+			$query = UserInviteHistoryModel::find()->alias('t')->select($column);
 		$query->joinWith([
 			'invite invite',
 			'invite.newsletter newsletter',
