@@ -21,12 +21,12 @@ use app\components\ActiveForm;
 use ommu\users\models\UserLevel;
 use ommu\users\models\Assignments;
 
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => Url::to(['setting/admin/index'])];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id'=>$model->level_id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'User');
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['setting/admin/index']), 'icon' => 'table'],
 	['label' => Yii::t('app', 'Info'), 'url' => Url::to(['view', 'id'=>$model->level_id]), 'icon' => 'info'],
 	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->level_id]), 'icon' => 'pencil'],
 	['label' => Yii::t('app', 'User'), 'url' => Url::to(['user', 'id'=>$model->level_id]), 'icon' => 'users'],

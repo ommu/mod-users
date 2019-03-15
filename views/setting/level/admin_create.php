@@ -17,12 +17,9 @@
 
 use yii\helpers\Url;
 
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => Url::to(['setting/admin/index'])];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Create');
-
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['setting/admin/index']), 'icon' => 'table'],
-];
 ?>
 
 <div class="user-level-create">

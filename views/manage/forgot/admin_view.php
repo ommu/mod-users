@@ -21,7 +21,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Forgots'), 'url' => 
 $this->params['breadcrumbs'][] = $model->user->displayname;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Manage'), 'url' => Url::to(['index']), 'icon' => 'table'],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->forgot_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon'=>'trash'],
 ];
 ?>
