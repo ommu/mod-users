@@ -1,10 +1,10 @@
 <?php
 /**
- * PersonalController
+ * MemberController
  * @var $this app\components\View
  * @var $model ommu\users\models\Users
  *
- * PersonalController implements the CRUD actions for Users model.
+ * MemberController implements the CRUD actions for Users model.
  * Reference start
  * TOC :
  *	Index
@@ -38,7 +38,7 @@ use mdm\admin\components\AccessControl;
 use ommu\users\models\search\Users as UsersSearch;
 use app\modules\user\models\Users;
 
-class PersonalController extends Controller
+class MemberController extends Controller
 {
 	/**
 	 * {@inheritdoc}

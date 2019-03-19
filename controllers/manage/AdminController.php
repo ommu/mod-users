@@ -29,11 +29,11 @@ use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 // use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
-use ommu\users\controllers\manage\PersonalController;
+use ommu\users\controllers\manage\MemberController;
 use ommu\users\models\UserLevel;
 use app\modules\user\models\Users;
 
-class AdminController extends PersonalController
+class AdminController extends MemberController
 {
 	/**
 	 * {@inheritdoc}

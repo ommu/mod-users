@@ -2,7 +2,7 @@
 /**
  * Users (users)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\manage\PersonalController
+ * @var $this ommu\users\controllers\manage\MemberController
  * @var $model ommu\users\models\search\Users
  * @var $form app\components\ActiveForm
  *
