@@ -2,7 +2,7 @@
 /**
  * Users (users)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\o\MemberController
+ * @var $this ommu\users\controllers\MemberController
  * @var $model ommu\users\models\Users
  * @var $form app\components\ActiveForm
  *
@@ -34,7 +34,7 @@ use ommu\users\models\UserLevel;
 
 <?php 
 $controller = strtolower(Yii::$app->controller->id);
-$level = UserLevel::getLevel($controller == 'manage/admin' ? 'admin' : 'member');
+$level = UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member');
 if(count($level) == 1) {
 	$model->level_id = key($level);
 	echo $form->field($model, 'level_id')->hiddenInput()->label(false);

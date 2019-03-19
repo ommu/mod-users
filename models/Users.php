@@ -352,13 +352,13 @@ class Users extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
-		if($controller == 'manage/admin' && !Yii::$app->request->get('level')) {
+		if($controller == 'admin' && !Yii::$app->request->get('level')) {
 			$this->templateColumns['level_id'] = [
 				'attribute' => 'level_id',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->level) ? $model->level->name_i : '-';
 				},
-				'filter' => UserLevel::getLevel($controller == 'manage/admin' ? 'admin' : 'member'),
+				'filter' => UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member'),
 			];
 		}
 		if(!Yii::$app->request->get('language')) {
@@ -719,7 +719,7 @@ class Users extends \app\components\ActiveRecord
 				 */
 				
 				// Admin modify member
-				if(in_array($controller, ['manage/personal','manage/admnin'])) {
+				if(in_array($controller, ['member','admin'])) {
 					$this->modified_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
 					if($this->modified_id == null)
 						$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;

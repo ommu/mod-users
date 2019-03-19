@@ -139,8 +139,8 @@ class Users extends UsersModel
 			$query->andFilterWhere(['t.level_id' => $params['level']]);
 		else {
 			$controller = strtolower(Yii::$app->controller->id);
-			if(in_array($controller, ['manage/admin','manage/personal'])) {
-				$level = UserLevel::getLevel($controller == 'manage/admin' ? 'admin' : 'member');
+			if(in_array($controller, ['admin','member'])) {
+				$level = UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member');
 				$query->andFilterWhere(['in', 't.level_id', array_flip($level)])
 					->andFilterWhere(['t.level_id' => $this->level_id]);
 			} else

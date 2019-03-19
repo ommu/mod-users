@@ -1,19 +1,16 @@
 <?php
 /**
- * MemberController
+ * AdminController
  * @var $this app\components\View
  * @var $model ommu\users\models\Users
  *
- * MemberController implements the CRUD actions for Users model.
+ * AdminController implements the CRUD actions for Users model.
  * Reference start
  * TOC :
  *	Index
  *	Create
  *	Update
  *	View
- *	Delete
- *	Enabled
- *	Verified
  *
  *	findModel
  *
@@ -21,24 +18,22 @@
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 15 November 2018, 07:04 WIB
- * @modified date 15 November 2018, 07:04 WIB
- * @modified by Putra Sudaryanto <putra@sudaryanto.id>
- * @contact (+62)856-299-4114
  * @link https://github.com/ommu/mod-users
  *
  */
  
-namespace ommu\users\controllers\o;
+namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
-use app\components\Controller;
 use mdm\admin\components\AccessControl;
 // use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
+use ommu\users\controllers\MemberController;
+use ommu\users\models\UserLevel;
 use app\modules\user\models\Users;
 
-class MemberController extends Controller
+class AdminController extends MemberController
 {
 	/**
 	 * {@inheritdoc}
@@ -79,10 +74,10 @@ class MemberController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Personals');
-		$this->view->description = Yii::t('app', 'This page lists all of the users that exist on your social network. For more information about a specific user, click on the "edit" link in its row. Click the "login" link to login as a specific user. Use the filter fields to find specific users based on your criteria. To view all users on your system, leave all the filter fields blank.');
+		$this->view->title = Yii::t('app', 'Administrators');
+		$this->view->description = Yii::t('app', 'Your social network can have more than one administrator. This is useful if you want to have a staff of admins who maintain your social network. However, the first admin to be created (upon installation) is the "superadmin" and cannot be deleted. The superadmin can create and delete other admin accounts. All admin accounts on your system are listed below.');
 		$this->view->keywords = '';
-		return $this->render('admin_index', [
+		return $this->render('/member/admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
@@ -115,7 +110,7 @@ class MemberController extends Controller
 		$this->view->title = Yii::t('app', 'Create User');
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->oRender('admin_create', [
+		return $this->oRender('/member/admin_create', [
 			'model' => $model,
 		]);
 	}
@@ -149,9 +144,9 @@ class MemberController extends Controller
 		}
 
 		$this->view->title = Yii::t('app', 'Update {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
-		$this->view->description = Yii::t('app', 'To edit this users\'s account, make changes to the form below. If you want to temporarily prevent this user from logging in, you can set the user account to "disabled" below.');
+		$this->view->description = Yii::t('app', 'Complete the form below to add/edit this admin account. Note that normal admins will not be able to delete or modify the superadmin account. If you want to change this admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');
 		$this->view->keywords = '';
-		return $this->oRender('admin_update', [
+		return $this->oRender('/member/admin_update', [
 			'model' => $model,
 		]);
 	}
@@ -168,59 +163,9 @@ class MemberController extends Controller
 		$this->view->title = Yii::t('app', 'Detail {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_view', [
+		return $this->render('/member/admin_view', [
 			'model' => $model,
 		]);
-	}
-
-	/**
-	 * Deletes an existing Users model.
-	 * If deletion is successful, the browser will be redirected to the 'index' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionDelete($id)
-	{
-		$this->findModel($id)->delete();
-		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User success deleted.'));
-		return $this->redirect(['index']);
-	}
-
-	/**
-	 * actionVerified an existing Users model.
-	 * If verified is successful, the browser will be redirected to the 'index' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionVerified($id)
-	{
-		$model = $this->findModel($id);
-		$replace = $model->verified == 1 ? 0 : 1;
-		$model->verified = $replace;
-		
-		if($model->save(false, ['verified','modified_date','modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
-			return $this->redirect(['index']);
-		}
-	}
-
-	/**
-	 * actionEnabled an existing Users model.
-	 * If enabled is successful, the browser will be redirected to the 'index' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionEnabled($id)
-	{
-		$model = $this->findModel($id);
-		$replace = $model->enabled == 1 ? 0 : 1;
-		$model->enabled = $replace;
-		
-		if($model->save(false, ['enabled','modified_date','modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
-			return $this->redirect(['index']);
-		}
 	}
 
 	/**
@@ -232,7 +177,13 @@ class MemberController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = Users::findOne($id)) !== null)
+		$level = UserLevel::getLevel('admin');
+		$model = Users::find()
+			->where(['user_id' => $id])
+			->andWhere(['in', 'level_id', array_flip($level)])
+			->one();
+		
+		if($model !== null)
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));

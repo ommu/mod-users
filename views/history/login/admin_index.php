@@ -24,7 +24,7 @@ use yii\helpers\ArrayHelper;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
-	// ['label' => Yii::t('app', 'Back To Personal'), 'url' => Url::to(['manage/admin/index']), 'icon' => 'table'],
+	// ['label' => Yii::t('app', 'Back To Member'), 'url' => Url::to(['admin/index']), 'icon' => 'table'],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
