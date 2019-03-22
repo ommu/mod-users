@@ -1,0 +1,34 @@
+userlevel_submenu:
+  view:
+    label: Info
+    url:
+      0: 'setting/level/view'
+      id: $_GET*id
+    select: action
+  update:
+    label: Update
+    url:
+      0: 'setting/level/update'
+      id: $_GET*id
+    select: action
+  user:
+    label: User
+    url:
+      0: 'setting/level/user'
+      id: $_GET*id
+    select: action
+  message:
+    label: Message
+    url:
+      0: 'setting/level/message'
+      id: $_GET*id
+    select: action
+  delete:
+    label: Delete
+    url:
+      0: 'setting/level/delete'
+      id: $_GET*id
+    htmlOptions:
+      data-confirm: Are you sure you want to delete this item?
+      data-method: post
+    select: action

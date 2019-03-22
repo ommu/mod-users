@@ -21,14 +21,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' =>
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title->message, 'url' => ['view', 'id'=>$model->level_id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Info');
-
-$this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Info'), 'url' => Url::to(['view', 'id'=>$model->level_id]), 'icon' => 'info'],
-	['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->level_id]), 'icon' => 'pencil'],
-	['label' => Yii::t('app', 'User'), 'url' => Url::to(['user', 'id'=>$model->level_id]), 'icon' => 'users'],
-	['label' => Yii::t('app', 'Message'), 'url' => Url::to(['message', 'id'=>$model->level_id]), 'icon' => 'comment'],
-	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->level_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post'], 'icon' => 'trash'],
-];
 ?>
 
 <div class="user-level-update">
