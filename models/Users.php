@@ -615,7 +615,7 @@ class Users extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 
 		$setting = CoreSettings::find()
-			->select(['site_oauth','signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
+			->select(['signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
 			->where(['id' => 1])
 			->one();
 
@@ -627,10 +627,6 @@ class Users extends \app\components\ActiveRecord
 				 * Default register member
 				 * Random password
 				 */
-				$oauthCondition = 0;
-				if($this->scenario == 'login' && $setting->site_oauth == 1)
-					$oauthCondition = 1;
-
 				$this->salt = Yii::$app->security->generateRandomString(32);
 
 				// User Reference
@@ -668,7 +664,7 @@ class Users extends \app\components\ActiveRecord
 					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
 
 					// Signup by Invite (Admin or User)
-					if((Yii::$app->isSocialMedia() && $setting->signup_inviteonly != 0) && $oauthCondition == 0) {
+					if(Yii::$app->isSocialMedia() && $setting->signup_inviteonly != 0) {
 						if($this->email != '') {
 							if($invite != null) {
 								if($invite->newsletter->user_id != null)
@@ -703,7 +699,7 @@ class Users extends \app\components\ActiveRecord
 				}
 
 				// Random password
-				if($setting->signup_random == 1 || $oauthCondition == 1) {
+				if($setting->signup_random == 1) {
 					$this->password = Yii::$app->security->generateRandomString(8);
 					$this->verified = 1;
 				}
