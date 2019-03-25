@@ -114,7 +114,9 @@ class UserLevel extends \app\components\ActiveRecord
 		];
 	}
 
-	// get scenarios
+	/**
+	 * {@inheritdoc}
+	 */
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
@@ -853,10 +855,10 @@ class UserLevel extends \app\components\ActiveRecord
 				$desc->save();
 			}
 
-			// if($this->scenario == 'message')
+			// if($this->scenario == self::SCENARIO_MESSAGE)
 				$this->message_limit = serialize($this->message_limit);
 
-			// } else if($this->scenario == 'user') {
+			// } else if($this->scenario == self::SCENARIO_USER) {
 				$this->assignment_roles = $this->formatFileType($this->assignment_roles, false, '#');
 				$this->profile_privacy = serialize($this->profile_privacy);
 				$this->profile_comments = serialize($this->profile_comments);

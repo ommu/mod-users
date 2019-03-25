@@ -90,7 +90,9 @@ class UserInvites extends \app\components\ActiveRecord
 		];
 	}
 
-	// get scenarios
+	/**
+	 * {@inheritdoc}
+	 */
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
