@@ -113,10 +113,10 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 			];
 			$this->templateColumns['level_search'] = [
 				'attribute' => 'level_search',
-				'filter' => UserLevel::getLevel(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->level->title->message : '-';
 				},
+				'filter' => UserLevel::getLevel(),
 			];
 			$this->templateColumns['email_search'] = [
 				'attribute' => 'email_search',

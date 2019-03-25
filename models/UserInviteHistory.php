@@ -144,10 +144,10 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			];
 			$this->templateColumns['level_search'] = [
 				'attribute' => 'level_search',
-				'filter' => UserLevel::getLevel(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->invite->inviter->level) ? $model->invite->inviter->level->title->message : '-';
 				},
+				'filter' => UserLevel::getLevel(),
 			];
 		}
 		$this->templateColumns['code'] = [

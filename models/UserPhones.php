@@ -147,10 +147,10 @@ class UserPhones extends \app\components\ActiveRecord
 			];
 			$this->templateColumns['level_search'] = [
 				'attribute' => 'level_search',
-				'filter' => UserLevel::getLevel(),
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user->level) ? $model->user->level->title->message : '-';
 				},
+				'filter' => UserLevel::getLevel(),
 			];
 		}
 		$this->templateColumns['phone_number'] = [
