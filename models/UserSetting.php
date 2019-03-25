@@ -43,7 +43,6 @@ class UserSetting extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Search Variable
 	public $modified_search;
 
 	/**
@@ -207,6 +206,7 @@ class UserSetting extends \app\components\ActiveRecord
 				'attribute' => 'modified_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}

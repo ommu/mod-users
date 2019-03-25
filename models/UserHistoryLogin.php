@@ -33,7 +33,6 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = ['lastlogin_from'];
 
-	// Search Variable
 	public $user_search;
 	public $level_search;
 	public $email_search;

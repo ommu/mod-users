@@ -37,7 +37,6 @@ class UserInviteHistory extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['code','invite_ip','expired_date'];
 
-	// Search Variable
 	public $email_search;
 	public $displayname_search;
 	public $inviter_search;
@@ -172,10 +171,10 @@ class UserInviteHistory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['expired_search'] = [
 			'attribute' => 'expired_search',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->view->expired);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];

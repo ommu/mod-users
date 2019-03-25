@@ -44,7 +44,6 @@ class UserVerify extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['code','verify_ip','modified_date','modified_search','deleted_date'];
 	public $email_i;
 
-	// Search Variable
 	public $user_search;
 	public $modified_search;
 	public $level_search;
@@ -215,6 +214,7 @@ class UserVerify extends \app\components\ActiveRecord
 				'attribute' => 'modified_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -227,10 +227,10 @@ class UserVerify extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['expired_search'] = [
 			'attribute' => 'expired_search',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->view->expired);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];

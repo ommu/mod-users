@@ -43,7 +43,6 @@ class UserPhones extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['creation_date','creation_search','modified_date','modified_search','updated_date'];
 
-	// Search Variable
 	public $user_search;
 	public $creation_search;
 	public $modified_search;
@@ -180,6 +179,7 @@ class UserPhones extends \app\components\ActiveRecord
 				'attribute' => 'creation_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->creation) ? $model->creation->displayname : '-';
+					// return $model->creationDisplayname;
 				},
 			];
 		}
@@ -195,6 +195,7 @@ class UserPhones extends \app\components\ActiveRecord
 				'attribute' => 'modified_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -207,11 +208,11 @@ class UserPhones extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['verified'] = [
 			'attribute' => 'verified',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['verified', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->verified, 'Verified,Unverified');
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];

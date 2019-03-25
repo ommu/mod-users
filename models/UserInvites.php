@@ -51,7 +51,6 @@ class UserInvites extends \app\components\ActiveRecord
 	public $email_i;
 	public $old_invites_i;
 
-	// Search Variable
 	public $inviter_search;
 	public $modified_search;
 	public $email_search;
@@ -259,6 +258,7 @@ class UserInvites extends \app\components\ActiveRecord
 				'attribute' => 'modified_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}

@@ -35,7 +35,6 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 
 	public $gridForbiddenColumn = ['updated_ip'];
 
-	// Search Variable
 	public $email_search;
 	public $level_search;
 	public $user_search;
@@ -146,19 +145,19 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['register_search'] = [
 			'attribute' => 'register_search',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->newsletter->view->register);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $model->status == 1 ? Yii::t('app', 'Subscribe') : Yii::t('app', 'Unsubscribe');
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];

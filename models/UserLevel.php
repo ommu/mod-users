@@ -67,7 +67,6 @@ class UserLevel extends \app\components\ActiveRecord
 	public $name_i;
 	public $desc_i;
 
-	// Search Variable
 	public $creation_search;
 	public $modified_search;
 
@@ -300,6 +299,7 @@ class UserLevel extends \app\components\ActiveRecord
 				'attribute' => 'creation_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->creation) ? $model->creation->displayname : '-';
+					// return $model->creationDisplayname;
 				},
 			];
 		}
@@ -315,6 +315,7 @@ class UserLevel extends \app\components\ActiveRecord
 				'attribute' => 'modified_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -326,154 +327,154 @@ class UserLevel extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['message_allow'] = [
 			'attribute' => 'message_allow',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->message_allow);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_block'] = [
 			'attribute' => 'profile_block',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_block);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_search'] = [
 			'attribute' => 'profile_search',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_search);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_style'] = [
 			'attribute' => 'profile_style',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_style);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_style_sample'] = [
 			'attribute' => 'profile_style_sample',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_style_sample);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_status'] = [
 			'attribute' => 'profile_status',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_status);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_invisible'] = [
 			'attribute' => 'profile_invisible',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_invisible);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_views'] = [
 			'attribute' => 'profile_views',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_views);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_change'] = [
 			'attribute' => 'profile_change',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_change);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['profile_delete'] = [
 			'attribute' => 'profile_delete',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->profile_delete);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['photo_allow'] = [
 			'attribute' => 'photo_allow',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->photo_allow);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['user_active'] = [
 			'attribute' => 'view.user_active',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				return Html::a($model->view->user_active, ['member/index', 'level'=>$model->primaryKey, 'status'=>'active']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_pending'] = [
 			'attribute' => 'view.user_pending',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				return Html::a($model->view->user_pending, ['member/index', 'level'=>$model->primaryKey, 'status'=>'pending']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_noverified'] = [
 			'attribute' => 'view.user_noverified',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				return Html::a($model->view->user_noverified, ['member/index', 'level'=>$model->primaryKey, 'status'=>'noverified']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_blocked'] = [
 			'attribute' => 'view.user_blocked',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				return Html::a($model->view->user_blocked, ['member/index', 'level'=>$model->primaryKey, 'status'=>'blocked']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_all'] = [
 			'attribute' => 'view.user_all',
-			'filter' => false,
 			'value' => function($model, $key, $index, $column) {
 				return Html::a($model->view->user_all, ['member/index', 'level'=>$model->primaryKey, 'status'=>'all']);
 			},
+			'filter' => false,
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['default'] = [
 			'attribute' => 'default',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['setting/level/default', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->default, 'Default,No', true);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['signup'] = [
 			'attribute' => 'signup',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['setting/level/signup', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->signup, 'Enable,Disable');
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];

@@ -32,7 +32,6 @@ class UserHistoryPassword extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	// Search Variable
 	public $user_search;
 	public $level_search;
 	public $email_search;

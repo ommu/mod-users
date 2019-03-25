@@ -50,7 +50,6 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip'];
 	public $email_i;
 
-	// Search Variable
 	public $user_search;
 	public $reference_search;
 	public $subscribe_search;
@@ -258,6 +257,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 				'attribute' => 'modified_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -276,20 +276,20 @@ class UserNewsletter extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['register_search'] = [
 			'attribute' => 'register_search',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->view->register);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['status', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->status, 'Subscribe,Unsubscribe');
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];

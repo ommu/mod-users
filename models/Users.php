@@ -90,7 +90,6 @@ class Users extends \app\components\ActiveRecord
 	public $verified_i;
 	public $reference_id_i;
 
-	// Search Variable
 	public $modified_search;
 
 	const SCENARIO_ADMIN_CREATE = 'adminCreate';
@@ -422,6 +421,7 @@ class Users extends \app\components\ActiveRecord
 				'attribute' => 'modified_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
+					// return $model->modifiedDisplayname;
 				},
 			];
 		}
@@ -459,44 +459,44 @@ class Users extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['deactivate'] = [
 			'attribute' => 'deactivate',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['deactivate', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->deactivate, 'Active,Deactivate');
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['search'] = [
 			'attribute' => 'search',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->search);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['invisible'] = [
 			'attribute' => 'invisible',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->invisible);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['privacy'] = [
 			'attribute' => 'privacy',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->privacy);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['comments'] = [
 			'attribute' => 'comments',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				return $this->filterYesNo($model->comments);
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 		];
 		$this->templateColumns['enabled'] = [
@@ -511,11 +511,11 @@ class Users extends \app\components\ActiveRecord
 		];
 		$this->templateColumns['verified'] = [
 			'attribute' => 'verified',
-			'filter' => $this->filterYesNo(),
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['verified', 'id'=>$model->primaryKey]);
 				return $this->quickAction($url, $model->verified, 'Verified,Unverified');
 			},
+			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
