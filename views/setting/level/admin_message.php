@@ -37,30 +37,30 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Message');
 <?php //echo $form->errorSummary($model);?>
 
 <?php $messageAllow = UserLevel::getMessageAllow();
-echo $form->field($model, 'message_allow', ['template' => '{label}{beginWrapper}{hint}{input}{error}{endWrapper}'])
+echo $form->field($model, 'message_allow', ['template' => '{label}{beginWrapper}{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-9 col-sm-9 col-xs-12 col-12']])
 	->radioList($messageAllow)
 	->label($model->getAttributeLabel('message_allow'))
 	->hint(Yii::t('app', 'If set to "nobody", none of the other settings on this page will apply. Otherwise, users will have access to their private message inbox and will be able to send each other messages.')); ?>
 
 <?php $messageLimit = UserLevel::getMessageLimit();
-$message_limit_inbox = $form->field($model, 'message_limit[inbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6 col-sm-offset-3', 'hint'=>'col-md-3 col-sm-5 col-xs-6 col-6'], 'options' => ['tag' => null]])
+$message_limit_inbox = $form->field($model, 'message_limit[inbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6 col-sm-offset-3', 'hint'=>'col-md-6 col-sm-5 col-xs-6 col-6 pt-5'], 'options' => ['tag' => null]])
 	->dropDownList($messageLimit, ['prompt' => ''])
 	->label($model->getAttributeLabel('message_limit[inbox]'))
 	->hint(Yii::t('app', 'conversations in inbox folder.')); ?>
 
-<?php $message_limit_outbox = $form->field($model, 'message_limit[outbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6 col-sm-offset-3', 'hint'=>'col-md-3 col-sm-5 col-xs-6 col-6'], 'options' => ['tag' => null]])
+<?php $message_limit_outbox = $form->field($model, 'message_limit[outbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6 col-sm-offset-3', 'hint'=>'col-md-6 col-sm-5 col-xs-6 col-6 pt-5'], 'options' => ['tag' => null]])
 	->dropDownList($messageLimit, ['prompt' => ''])
 	->label($model->getAttributeLabel('message_limit[outbox]'))
 	->hint(Yii::t('app', 'conversations in outbox folder.')); ?>
 
-<?php echo $form->field($model, 'message_limit', ['template' => '{label}{hint}'.$message_limit_inbox.$message_limit_outbox.'{error}', 'horizontalCssClasses' => ['hint'=>'col-md-6 col-sm-9 col-xs-12 col-12', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-12 col-sm-offset-3']])
+<?php echo $form->field($model, 'message_limit', ['template' => '{label}{hint}'.$message_limit_inbox.'<div class="clearfix mb-10"></div>'.$message_limit_outbox.'{error}', 'horizontalCssClasses' => ['hint'=>'col-md-9 col-sm-9 col-xs-12 col-12', 'error'=>'col-md-9 col-sm-9 col-xs-12 col-12 col-sm-offset-3']])
 	->dropDownList($messageLimit, ['prompt' => ''])
 	->label($model->getAttributeLabel('message_limit'))
 	->hint(Yii::t('app', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.')); ?>
 
 <div class="ln_solid"></div>
 <div class="form-group row">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-12 col-sm-offset-3">
+	<div class="col-md-9 col-sm-9 col-xs-12 col-12 col-sm-offset-3">
 		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
 	</div>
 </div>
