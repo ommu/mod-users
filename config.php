@@ -22,5 +22,10 @@ return [
 			'event'    => Users::EVENT_AFTER_CREATE_USERS,
 			'callback' => [Events::className(), 'onAfterCreateUsers']
 		],
+		[
+			'class'    => Users::className(),
+			'event'    => Users::EVENT_AFTER_DELETE_USERS,
+			'callback' => [Events::className(), 'onAfterDeleteUsers']
+		],
 	],
 ];

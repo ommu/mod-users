@@ -97,6 +97,7 @@ class Users extends \app\components\ActiveRecord
 	const SCENARIO_CHANGE_PASSWORD = 'changePassword';
 
 	const EVENT_AFTER_CREATE_USERS = 'afterCreateUsers';
+	const EVENT_AFTER_DELETE_USERS = 'afterDeleteUsers';
 
 	/**
 	 * @return string the associated database table name
@@ -892,5 +893,17 @@ class Users extends \app\components\ActiveRecord
 				$verified = 1;
 			}
 		}
+	}
+
+	/**
+	 * After delete attributes
+	 */
+	public function afterDelete()
+	{
+		parent::afterDelete();
+
+		// Trigger after create users
+		$event = new Event(['sender' => $this]);
+		Event::trigger(self::className(), self::EVENT_AFTER_DELETE_USERS, $event);
 	}
 }

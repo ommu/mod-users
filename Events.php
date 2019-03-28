@@ -30,6 +30,16 @@ class Events extends \yii\base\BaseObject
 	/**
 	 * {@inheritdoc}
 	 */
+	public static function onAfterDeleteUsers($event)
+	{
+		$user = $event->sender;
+
+		Yii::$app->authManager->revokeAll($user->user_id);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public static function setAssignmentRole($event)
 	{
 		$user = $event->sender;
