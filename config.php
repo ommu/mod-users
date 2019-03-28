@@ -10,7 +10,17 @@
  *
  */
 
+use ommu\users\Events;
+use ommu\users\models\Users;
+
 return [
 	'id' => 'users',
 	'class' => ommu\users\Module::className(),
+	'events' => [
+		[
+			'class'    => Users::className(),
+			'event'    => Users::EVENT_AFTER_CREATE_USERS,
+			'callback' => [Events::className(), 'onAfterCreateUsers']
+		],
+	],
 ];

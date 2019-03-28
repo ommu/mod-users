@@ -37,7 +37,7 @@ class Assignments extends \app\components\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return self::getTableName();
+		return Yii::$app->authManager->assignmentTable;
 	}
 	
 	/**
@@ -45,7 +45,7 @@ class Assignments extends \app\components\ActiveRecord
 	 */
 	public static function getDb()
 	{
-		return Yii::$app->get('sweeto');
+		return Yii::$app->authManager->db;
 	}
 
 	/**
@@ -132,17 +132,9 @@ class Assignments extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * @return string assignment table name
+	 * Returns all roles in the system.
+	 * @return Role[] all roles in the system. The array is indexed by the role names.
 	 */
-	public static function getTableName()
-	{
-		return Yii::$app->authManager->assignmentTable;
-	}
-
-    /**
-     * Returns all roles in the system.
-     * @return Role[] all roles in the system. The array is indexed by the role names.
-     */
 	public static function getRoles()
 	{
 		$roles = Yii::$app->authManager->getRoles();

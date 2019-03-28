@@ -53,11 +53,6 @@ $this->params['menu']['content'] = [
 			'attribute' => 'language_id',
 			'value' => isset($model->languageRltn) ? $model->languageRltn->name : '-',
 		],
-		[
-			'attribute' => 'photos',
-			'value' => Html::img(join('/', [Url::Base(), $model->photos]), ['alt' => $model->displayname]),
-			'format' => 'raw',
-		],
 		'email:email',
 		'displayname',
 		'password',
@@ -115,8 +110,8 @@ $this->params['menu']['content'] = [
 			'value' => $model->jwt_claims ? $model->jwt_claims : '-',
 		],
 		[
-			'attribute' => 'assignment_i',
-			'value' => is_array($model->assignment_i) && !empty($model->assignment_i) ? implode(', ', $model->assignment_i) : '-',
+			'attribute' => 'assignmentRoles',
+			'value' => is_array($model->assignmentRoles) && !empty($model->assignmentRoles) ? implode(', ', $model->assignmentRoles) : '-',
 		],
 	],
 ]) ?>

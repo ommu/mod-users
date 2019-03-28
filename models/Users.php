@@ -61,6 +61,7 @@ namespace ommu\users\models;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\base\Event;
 use app\models\CoreLanguages;
 use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;
@@ -78,12 +79,8 @@ class Users extends \app\components\ActiveRecord
 	public $confirmPassword;
 
 	public $language;
-	public $username;
-	public $first_name;
-	public $last_name;
-	public $photos;
 	public $isForm = false;
-	public $assignment_i;
+	public $assignmentRoles;
 	public $password_i;
 	public $password_send_i;
 	public $enabled_i;
@@ -98,6 +95,8 @@ class Users extends \app\components\ActiveRecord
 	const SCENARIO_REGISTER_WITH_INVITE_CODE = 'registerWithInviteCode';
 	const SCENARIO_RESET_PASSWORD = 'resetPassword';
 	const SCENARIO_CHANGE_PASSWORD = 'changePassword';
+
+	const EVENT_AFTER_CREATE_USERS = 'afterCreateUsers';
 
 	/**
 	 * @return string the associated database table name
@@ -187,7 +186,7 @@ class Users extends \app\components\ActiveRecord
 			'inviteCode' => Yii::t('app', 'Invite Code'),
 			'currentPassword' => Yii::t('app', 'Current Password'),
 			'confirmPassword' => Yii::t('app', 'Confirm Password'),
-			'assignment_i' => Yii::t('app', 'Assignments'),
+			'assignmentRoles' => Yii::t('app', 'Assignments'),
 			'modified_search' => Yii::t('app', 'Modified'),
 		];
 	}
@@ -345,13 +344,6 @@ class Users extends \app\components\ActiveRecord
 			'header' => Yii::t('app', 'No'),
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
-		];
-		$this->templateColumns['photos'] = [
-			'attribute' => 'photos',
-			'value' => function($model, $key, $index, $column) {
-				return Html::img(join('/', [Url::Base(), $model->photos]), ['alt' => $model->displayname]);
-			},
-			'format' => 'html',
 		];
 		if($controller == 'admin' && !Yii::$app->request->get('level')) {
 			$this->templateColumns['level_id'] = [
@@ -602,11 +594,10 @@ class Users extends \app\components\ActiveRecord
 		parent::afterFind();
 		
 		$this->language = isset($this->languageRltn) ? $this->languageRltn->code : '';
-		$this->photos = join('/', [self::getUploadPath(false), 'default.png']);
 		$this->enabled_i = $this->enabled;
 		$this->verified_i = $this->verified;
 		$this->password_i = $this->password;
-		$this->assignment_i = isset($this->assignments) ? \yii\helpers\ArrayHelper::map($this->assignments, 'item_name', 'item_name') : '';
+		$this->assignmentRoles = isset($this->assignments) ? \yii\helpers\ArrayHelper::map($this->assignments, 'item_name', 'item_name') : [];
 	}
 
 	/**
@@ -813,6 +804,10 @@ class Users extends \app\components\ActiveRecord
 					$newsletter->save(false, ['reference_id']);
 				}
 			}
+
+			// Trigger after create users
+			$event = new Event(['sender' => $this]);
+			Event::trigger(self::className(), self::EVENT_AFTER_CREATE_USERS, $event);
 
 			// Send account information
 			$template = 'account-info';
