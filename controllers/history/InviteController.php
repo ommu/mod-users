@@ -92,7 +92,7 @@ class InviteController extends Controller
 		$this->view->title = Yii::t('app', 'Detail {model-class}: {invite-id}', ['model-class' => 'Invite History', 'invite-id' => $model->invite->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('admin_view', [
+		return $this->oRender('admin_view', [
 			'model' => $model,
 		]);
 	}

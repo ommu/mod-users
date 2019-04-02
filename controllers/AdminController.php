@@ -27,11 +27,11 @@ namespace ommu\users\controllers;
 use Yii;
 use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
-// use ommu\users\models\Users;
+use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
 use ommu\users\controllers\MemberController;
 use ommu\users\models\UserLevel;
-use app\modules\user\models\Users;
+// use app\modules\user\models\Users;
 
 class AdminController extends MemberController
 {
@@ -163,7 +163,7 @@ class AdminController extends MemberController
 		$this->view->title = Yii::t('app', 'Detail {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
-		return $this->render('/member/admin_view', [
+		return $this->oRender('/member/admin_view', [
 			'model' => $model,
 		]);
 	}
