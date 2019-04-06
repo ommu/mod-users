@@ -1,3 +1,20 @@
+data_submenu:
+  invite:
+    label: Invites
+    url: ['o/invite']
+    select: controller
+  subscribe:
+    label: Subscribes
+    url: ['o/newsletter']
+    select: controller
+  forgot:
+    label: Forgot(s) Password
+    url: ['o/forgot']
+    select: controller
+  verify:
+    label: Verify(s) Email
+    url: ['o/verify']
+    select: controller
 userlevel_submenu:
   view:
     label: Info

@@ -41,7 +41,7 @@ class UserForgot extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['code','forgot_ip','modified_date','modified_search','deleted_date'];
+	public $gridForbiddenColumn = ['code','forgot_date','forgot_ip','expired_date','modified_date','modified_search','deleted_date','level_search'];
 	public $email_i;
 
 	public $user_search;

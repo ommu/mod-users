@@ -47,7 +47,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['modified_date','modified_search','updated_date','updated_ip'];
+	public $gridForbiddenColumn = ['creation_date','modified_date','modified_search','updated_date','updated_ip','user_search','','level_search'];
 	public $email_i;
 
 	public $user_search;
@@ -222,19 +222,19 @@ class UserNewsletter extends \app\components\ActiveRecord
 				'filter' => UserLevel::getLevel(),
 			];
 		}
-		if(!Yii::$app->request->get('subscribe')) {
-			$this->templateColumns['subscribe_search'] = [
-				'attribute' => 'subscribe_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->subscribe) ? $model->subscribe->displayname : '-';
-				},
-			];
-		}
 		if(!Yii::$app->request->get('reference')) {
 			$this->templateColumns['reference_search'] = [
 				'attribute' => 'reference_search',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->reference) ? $model->reference->displayname : '-';
+				},
+			];
+		}
+		if(!Yii::$app->request->get('subscribe')) {
+			$this->templateColumns['subscribe_search'] = [
+				'attribute' => 'subscribe_search',
+				'value' => function($model, $key, $index, $column) {
+					return isset($model->subscribe) ? $model->subscribe->displayname : '-';
 				},
 			];
 		}
