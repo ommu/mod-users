@@ -26,19 +26,10 @@ class m190320_120101_users_module_insert_menu extends \yii\db\Migration
 
 		if(Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert('ommu_core_menus', ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
-				['Datas', 'users', null, Menu::getParentId('Users#users'), '/#', null, null],
-			]);
-		}
-
-		if(Yii::$app->db->getTableSchema($tableName, true)) {
-			$this->batchInsert('ommu_core_menus', ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
 				['Administrator', 'users', null, Menu::getParentId('Users#users'), '/users/admin/index', null, null],
 				['Member', 'users', null, Menu::getParentId('Users#users'), '/users/member/index', null, null],
-				['Invites', 'users', null, Menu::getParentId('Datas#users'), '/users/o/invite/index', null, null],
-				['Subscribers', 'users', null, Menu::getParentId('Datas#users'), '/users/o/newsletter/index', null, null],
-				['Forgot Password', 'users', null, Menu::getParentId('Datas#users'), '/users/o/forgot/index', null, null],
-				['Verify Email', 'users', null, Menu::getParentId('Datas#users'), '/users/o/verify/index', null, null],
-				['User Settings', 'users', null, Menu::getParentId('Settings#rbac'), '/users/setting/admin/index', null, null],
+				['Datas', 'users', null, Menu::getParentId('Users#users'), '/users/o/invite/index', null, null],
+				['Settings', 'users', null, Menu::getParentId('Users#rbac'), '/users/setting/admin/index', null, null],
 			]);
 		}
 	}
