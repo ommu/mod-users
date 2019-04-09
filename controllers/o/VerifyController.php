@@ -28,8 +28,8 @@
 namespace ommu\users\controllers\o;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
+use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserVerify;
 use ommu\users\models\search\UserVerify as UserVerifySearch;

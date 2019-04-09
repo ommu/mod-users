@@ -25,8 +25,8 @@
 namespace ommu\users\controllers\history;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
+use yii\filters\VerbFilter;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserHistoryPassword;
 use ommu\users\models\search\UserHistoryPassword as UserHistoryPasswordSearch;

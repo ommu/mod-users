@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $user = Yii::$app->request->get('user');
 if($user) {
 	$this->params['menu']['content'] = [
-		['label' => Yii::t('app', 'Add Phone'), 'url' => Url::to(['create', 'user'=>$user]), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'plus-square'],
+		['label' => Yii::t('app', 'Add Phone'), 'url' => Url::to(['create', 'user'=>$user]), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'plus-square', 'htmlOptions' => ['class'=>'btn btn-success btn-sm']],
 	];
 }
 $this->params['menu']['option'] = [
