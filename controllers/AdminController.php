@@ -8,9 +8,12 @@
  * Reference start
  * TOC :
  *	Index
- *	Create
+ *	Create (with controller parent)
  *	Update
- *	View
+ *	View (with controller parent)
+ *	Delete (with controller parent)
+ *	Enabled (with controller parent)
+ *	Verified (with controller parent)
  *
  *	findModel
  *
@@ -26,35 +29,15 @@ namespace ommu\users\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
+use yii\helpers\Inflector;
+use ommu\users\controllers\MemberController;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
-use ommu\users\controllers\MemberController;
 use ommu\users\models\UserLevel;
-// use app\modules\user\models\Users;
 
 class AdminController extends MemberController
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function behaviors()
-	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-					'enabled' => ['POST'],
-					'verified' => ['POST'],
-				],
-			],
-		];
-	}
-
 	/**
 	 * Lists all Users models.
 	 * @return mixed
@@ -74,44 +57,13 @@ class AdminController extends MemberController
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Administrators');
+		$this->view->title = Yii::t('app', Inflector::pluralize($this->title));
 		$this->view->description = Yii::t('app', 'Your social network can have more than one administrator. This is useful if you want to have a staff of admins who maintain your social network. However, the first admin to be created (upon installation) is the "superadmin" and cannot be deleted. The superadmin can create and delete other admin accounts. All admin accounts on your system are listed below.');
 		$this->view->keywords = '';
-		return $this->render('/member/admin_index', [
+		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
 			'dataProvider' => $dataProvider,
 			'columns' => $columns,
-		]);
-	}
-
-	/**
-	 * Creates a new Users model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 * @return mixed
-	 */
-	public function actionCreate()
-	{
-		$model = new Users();
-		$model->scenario = Users::SCENARIO_ADMIN_CREATE;
-
-		if(Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User success created.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id'=>$model->user_id]);
-
-			} else {
-				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\app\components\ActiveForm::validate($model));
-			}
-		}
-
-		$this->view->title = Yii::t('app', 'Create User');
-		$this->view->description = '';
-		$this->view->keywords = '';
-		return $this->oRender('/member/admin_create', [
-			'model' => $model,
 		]);
 	}
 
@@ -133,7 +85,7 @@ class AdminController extends MemberController
 			$model->isForm = true;
 
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
 
@@ -143,27 +95,10 @@ class AdminController extends MemberController
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
+		$this->view->title = Yii::t('app', 'Update {title}: {displayname}', ['title'=>$this->title, 'displayname'=>$model->displayname]);
 		$this->view->description = Yii::t('app', 'Complete the form below to add/edit this admin account. Note that normal admins will not be able to delete or modify the superadmin account. If you want to change this admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');
 		$this->view->keywords = '';
-		return $this->oRender('/member/admin_update', [
-			'model' => $model,
-		]);
-	}
-
-	/**
-	 * Displays a single Users model.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionView($id)
-	{
-		$model = $this->findModel($id);
-
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
-		$this->view->description = '';
-		$this->view->keywords = '';
-		return $this->oRender('/member/admin_view', [
+		return $this->oRender('admin_update', [
 			'model' => $model,
 		]);
 	}
@@ -187,5 +122,14 @@ class AdminController extends MemberController
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+	}
+
+	/**
+	 * Title of Location.
+	 * @return string
+	 */
+	public function getTitle()
+	{
+		return Yii::t('app', 'Administrator');
 	}
 }

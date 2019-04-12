@@ -31,12 +31,12 @@
 namespace ommu\users\controllers;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use yii\helpers\Inflector;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
-// use ommu\users\models\Users;
+use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
-use app\modules\user\models\Users;
 
 class MemberController extends Controller
 {
@@ -79,7 +79,7 @@ class MemberController extends Controller
 		}
 		$columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Members');
+		$this->view->title = Yii::t('app', Inflector::pluralize($this->title));
 		$this->view->description = Yii::t('app', 'This page lists all of the users that exist on your social network. For more information about a specific user, click on the "edit" link in its row. Click the "login" link to login as a specific user. Use the filter fields to find specific users based on your criteria. To view all users on your system, leave all the filter fields blank.');
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -102,7 +102,7 @@ class MemberController extends Controller
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User success created.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', '{title} success created.', ['title'=>$this->title]));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
 
@@ -112,7 +112,7 @@ class MemberController extends Controller
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Create User');
+		$this->view->title = Yii::t('app', 'Create {title}', ['title'=>$this->title]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_create', [
@@ -138,7 +138,7 @@ class MemberController extends Controller
 			$model->isForm = true;
 
 			if($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
+				Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
 
@@ -148,7 +148,7 @@ class MemberController extends Controller
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
+		$this->view->title = Yii::t('app', 'Update {title}: {displayname}', ['title'=>$this->title, 'displayname'=>$model->displayname]);
 		$this->view->description = Yii::t('app', 'To edit this users\'s account, make changes to the form below. If you want to temporarily prevent this user from logging in, you can set the user account to "disabled" below.');
 		$this->view->keywords = '';
 		return $this->oRender('admin_update', [
@@ -165,7 +165,7 @@ class MemberController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {displayname}', ['model-class' => 'User', 'displayname' => $model->displayname]);
+		$this->view->title = Yii::t('app', 'Detail {title}: {displayname}', ['title'=>$this->title, 'displayname'=>$model->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -183,7 +183,7 @@ class MemberController extends Controller
 	{
 		$this->findModel($id)->delete();
 		
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User success deleted.'));
+		Yii::$app->session->setFlash('success', Yii::t('app', '{title} success deleted.', ['title'=>$this->title]));
 		return $this->redirect(['index']);
 	}
 
@@ -200,7 +200,7 @@ class MemberController extends Controller
 		$model->verified = $replace;
 		
 		if($model->save(false, ['verified','modified_date','modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
+			Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
 			return $this->redirect(['index']);
 		}
 	}
@@ -218,7 +218,7 @@ class MemberController extends Controller
 		$model->enabled = $replace;
 		
 		if($model->save(false, ['enabled','modified_date','modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User success updated.'));
+			Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
 			return $this->redirect(['index']);
 		}
 	}
@@ -236,5 +236,22 @@ class MemberController extends Controller
 			return $model;
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getViewPath()
+	{
+		return $this->module->getViewPath() . DIRECTORY_SEPARATOR . 'member';
+	}
+
+	/**
+	 * Title of Location.
+	 * @return string
+	 */
+	public function getTitle()
+	{
+		return Yii::t('app', 'Member');
 	}
 }

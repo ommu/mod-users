@@ -37,20 +37,27 @@ $controller = strtolower(Yii::$app->controller->id);
 $level = UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member');
 if(count($level) == 1) {
 	$model->level_id = key($level);
-	echo $form->field($model, 'level_id')->hiddenInput()->label(false);
+	echo $form->field($model, 'level_id', ['template' => '{input}', 'options'=>['tag' => null]])
+		->hiddenInput();
 } else {
 	echo $form->field($model, 'level_id')
 		->dropDownList($level, ['prompt'=>''])
 		->label($model->getAttributeLabel('level_id'));
 } ?>
 
-<?php echo $form->field($model, 'email')
-	->textInput(['type'=>'email'])
-	->label($model->getAttributeLabel('email')); ?>
-
 <?php echo $form->field($model, 'displayname')
 	->textInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('displayname')); ?>
+
+<?php if($setting->signup_username == 1) {
+	echo $form->field($model, 'username')
+		->textInput(['maxlength'=>true])
+		->label($model->getAttributeLabel('username'));
+} ?>
+
+<?php echo $form->field($model, 'email')
+	->textInput(['type'=>'email', 'maxlength'=>true])
+	->label($model->getAttributeLabel('email')); ?>
 
 <?php if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {
 if(!$model->isNewRecord && !$model->getErrors())

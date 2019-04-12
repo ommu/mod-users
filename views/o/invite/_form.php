@@ -39,7 +39,8 @@ use ommu\users\models\UserLevel;
 	$level = UserLevel::getLevel();
 	if(count($level) == 1) {
 		$model->level_id = key($level);
-		echo $form->field($model, 'level_id')->hiddenInput()->label(false);
+		echo $form->field($model, 'level_id', ['template' => '{input}', 'options'=>['tag' => null]])
+			->hiddenInput();
 	} else {
 		echo $form->field($model, 'level_id')
 			->dropDownList($level, ['prompt'=>''])

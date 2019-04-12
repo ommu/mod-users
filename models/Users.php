@@ -18,6 +18,7 @@
  * @property integer $level_id
  * @property integer $language_id
  * @property string $email
+ * @property string $username
  * @property string $displayname
  * @property string $password
  * @property string $salt
@@ -73,7 +74,7 @@ class Users extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['language_id','password','salt','deactivate','search','invisible','privacy','comments','creation_ip','modified_date','modified_search','lastlogin_ip','lastlogin_from','update_date','update_ip','auth_key','jwt_claims'];
+	public $gridForbiddenColumn = ['language_id', 'username', 'password', 'salt', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'creation_ip', 'modified_date', 'modified_search', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims'];
 	public $inviteCode;
 	public $currentPassword;
 	public $confirmPassword;
@@ -115,22 +116,22 @@ class Users extends \app\components\ActiveRecord
 		return [
 			[['level_id', 'email', 'displayname'], 'required'],
 			[['password'], 'required', 'on' => self::SCENARIO_ADMIN_CREATE],
-			[['password', 'confirmPassword'], 'required', 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			[['password'], 'required', 'on' => self::SCENARIO_REGISTER],
-			[['password', 'inviteCode'], 'required', 'on' => self::SCENARIO_REGISTER_WITH_INVITE_CODE],
+			[['password', 'confirmPassword'], 'required', 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			[['password', 'confirmPassword'], 'required', 'on' => self::SCENARIO_RESET_PASSWORD],
+			[['password', 'inviteCode'], 'required', 'on' => self::SCENARIO_REGISTER_WITH_INVITE_CODE],
 			[['currentPassword', 'password', 'confirmPassword'], 'required', 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			[['enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
-			[['email'], 'unique'],
+			[['email', 'username'], 'unique'],
 			[['password', 'confirmPassword'], 'safe'],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			['currentPassword', 'validatePassword', 'on' => self::SCENARIO_CHANGE_PASSWORD],
 			[['email', 'displayname', 'password'], 'string', 'max' => 64],
-			[['salt', 'lastlogin_from'], 'string', 'max' => 32],
+			[['username', 'salt', 'lastlogin_from'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
 			[['inviteCode'], 'string', 'max' => 16],
 			[['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => CoreLanguages::className(), 'targetAttribute' => ['language_id' => 'language_id']],
@@ -144,10 +145,10 @@ class Users extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_ADMIN_CREATE] = ['enabled', 'verified', 'level_id', 'email', 'displayname', 'password'];
-		$scenarios[self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD] = ['enabled', 'verified', 'level_id', 'email', 'displayname', 'password', 'confirmPassword'];
-		$scenarios[self::SCENARIO_REGISTER] = ['email', 'displayname', 'password'];
-		$scenarios[self::SCENARIO_REGISTER_WITH_INVITE_CODE] = ['email', 'displayname', 'password', 'inviteCode'];
+		$scenarios[self::SCENARIO_ADMIN_CREATE] = ['enabled', 'verified', 'level_id', 'email', 'username', 'displayname', 'password'];
+		$scenarios[self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD] = ['enabled', 'verified', 'level_id', 'email', 'username', 'displayname', 'password', 'confirmPassword'];
+		$scenarios[self::SCENARIO_REGISTER] = ['email', 'username', 'displayname', 'password'];
+		$scenarios[self::SCENARIO_REGISTER_WITH_INVITE_CODE] = ['email', 'username', 'displayname', 'password', 'inviteCode'];
 		$scenarios[self::SCENARIO_RESET_PASSWORD] = ['password', 'confirmPassword'];
 		$scenarios[self::SCENARIO_CHANGE_PASSWORD] = ['currentPassword', 'password', 'confirmPassword'];
 		return $scenarios;
@@ -165,6 +166,7 @@ class Users extends \app\components\ActiveRecord
 			'level_id' => Yii::t('app', 'Level'),
 			'language_id' => Yii::t('app', 'Language'),
 			'email' => Yii::t('app', 'Email'),
+			'username' => Yii::t('app', 'Username'),
 			'displayname' => Yii::t('app', 'Displayname'),
 			'password' => Yii::t('app', 'Password'),
 			'salt' => Yii::t('app', 'Salt'),
@@ -368,6 +370,13 @@ class Users extends \app\components\ActiveRecord
 			'attribute' => 'email',
 			'value' => function($model, $key, $index, $column) {
 				return Yii::$app->formatter->asEmail($model->email);
+			},
+			'format' => 'html',
+		];
+		$this->templateColumns['username'] = [
+			'attribute' => 'username',
+			'value' => function($model, $key, $index, $column) {
+				return $model->username;
 			},
 			'format' => 'html',
 		];
@@ -609,7 +618,7 @@ class Users extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 
 		$setting = CoreSettings::find()
-			->select(['signup_approve','signup_verifyemail','signup_random','signup_inviteonly','signup_checkemail'])
+			->select(['signup_username', 'signup_approve', 'signup_verifyemail', 'signup_random', 'signup_inviteonly', 'signup_checkemail'])
 			->where(['id' => 1])
 			->one();
 
@@ -709,7 +718,7 @@ class Users extends \app\components\ActiveRecord
 				 */
 				
 				// Admin modify member
-				if(in_array($controller, ['member','admin'])) {
+				if(in_array($controller, ['member', 'admin'])) {
 					$this->modified_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
 					if($this->modified_id == null)
 						$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
@@ -720,6 +729,11 @@ class Users extends \app\components\ActiveRecord
 						$this->update_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
 				}
+			}
+
+			if($setting->signup_username == 1) {
+				if($this->username == '')
+					$this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
 			}
 		}
 		return true;

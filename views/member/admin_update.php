@@ -24,12 +24,18 @@ $this->params['menu']['content'] = [
 	['label' => Yii::t('app', 'Detail'), 'url' => Url::to(['view', 'id'=>$model->user_id]), 'icon' => 'eye', 'htmlOptions' => ['class'=>'btn btn-info btn-sm']],
 	['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->user_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger btn-sm'], 'icon' => 'trash'],
 ];
+
+$setting = \app\models\CoreSettings::find()
+	->select(['signup_username'])
+	->where(['id' => 1])
+	->one();
 ?>
 
 <div class="users-update">
 
 <?php echo $this->render('_form', [
 	'model' => $model,
+	'setting' => $setting,
 ]); ?>
 
 </div>

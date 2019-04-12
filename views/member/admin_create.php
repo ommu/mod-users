@@ -15,16 +15,12 @@
  */
 
 use yii\helpers\Url;
-use app\models\CoreSettings;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Create');
 
-$this->params['menu']['content'] = [
-];
-
-$setting = CoreSettings::find()
-	->select(['signup_approve', 'signup_verifyemail', 'signup_random'])
+$setting = \app\models\CoreSettings::find()
+	->select(['signup_username', 'signup_approve', 'signup_verifyemail', 'signup_random'])
 	->where(['id' => 1])
 	->one();
 ?>
