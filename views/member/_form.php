@@ -19,6 +19,7 @@ use yii\helpers\Url;
 use app\components\ActiveForm;
 use ommu\users\models\Users;
 use ommu\users\models\UserLevel;
+use kartik\password\PasswordInput;
 ?>
 
 <div class="users-form">
@@ -63,7 +64,8 @@ if(count($level) == 1) {
 if(!$model->isNewRecord && !$model->getErrors())
 	$model->password = '';
 echo $form->field($model, 'password')
-	->passwordInput(['maxlength'=>true])
+	// ->passwordInput(['maxlength'=>true])
+	->widget(PasswordInput::classname(), ['pluginOptions' => ['showMeter'=>false]])
 	->label($model->getAttributeLabel('password'));
 } ?>
 

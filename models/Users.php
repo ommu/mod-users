@@ -67,6 +67,7 @@ use app\models\CoreLanguages;
 use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;
 use ommu\users\models\view\UserHistory as UserHistoryView;
+use kartik\password\StrengthValidator;
 
 class Users extends \app\components\ActiveRecord
 {
@@ -125,6 +126,8 @@ class Users extends \app\components\ActiveRecord
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
 			[['email', 'username'], 'unique'],
+			['username', 'match', 'pattern' => '/^[a-zA-Z0-9._-]+$/','message' => Yii::t('app','Username can only contain alphanumeric characters, underscores, dashes and dot')],
+			[['password'], StrengthValidator::className(), 'preset'=> StrengthValidator::FAIR],
 			[['password', 'confirmPassword'], 'safe'],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
