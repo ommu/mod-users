@@ -54,6 +54,7 @@ namespace ommu\users\models;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\Inflector;
 use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use ommu\users\models\view\UserLevel as UserLevelView;
@@ -825,7 +826,7 @@ class UserLevel extends \app\components\ActiveRecord
 		$controller = strtolower(Yii::$app->controller->id);
 		$action = strtolower(Yii::$app->controller->action->id);
 
-		$location = $this->urlTitle($module.' '.$controller);
+		$location = Inflector::slug($module.' '.$controller);
 
 		if(parent::beforeSave($insert)) {
 			if($insert || (!$insert && !$this->name)) {
@@ -835,7 +836,7 @@ class UserLevel extends \app\components\ActiveRecord
 				if($name->save())
 					$this->name = $name->id;
 
-				$this->slug = $this->urlTitle($this->name_i);
+				$this->slug = Inflector::slug($this->name_i);
 
 			} else {
 				$name = SourceMessage::findOne($this->name);

@@ -237,11 +237,11 @@ class UserForgot extends \app\components\ActiveRecord
 		if(!Yii::$app->request->get('trash')) {
 			$this->templateColumns['publish'] = [
 				'attribute' => 'publish',
-				'filter' => $this->filterYesNo(),
 				'value' => function($model, $key, $index, $column) {
 					$url = Url::to(['publish', 'id'=>$model->primaryKey]);
 					return $model->publish == 0 ? '-' : $this->quickAction($url, $model->publish);
 				},
+				'filter' => $this->filterYesNo(),
 				'contentOptions' => ['class'=>'center'],
 				'format' => 'raw',
 			];
