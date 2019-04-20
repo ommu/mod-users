@@ -19,7 +19,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\widgets\GridView;
 use yii\widgets\Pjax;
-use yii\helpers\ArrayHelper;
 use app\components\widgets\MenuContent;
 use app\components\widgets\MenuOption;
 use yii\widgets\DetailView;
@@ -72,11 +71,11 @@ array_push($columnData, [
 	],
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
-			$url = Url::to(ArrayHelper::merge(['setting/level/view', 'id'=>$model->primaryKey], Yii::$app->request->get()));
+			$url = Url::to(['setting/level/view', 'id'=>$model->primaryKey]);
 			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail User Level')]);
 		},
 		'update' => function ($url, $model, $key) {
-			$url = Url::to(ArrayHelper::merge(['setting/level/update', 'id'=>$model->primaryKey], Yii::$app->request->get()));
+			$url = Url::to(['setting/level/update', 'id'=>$model->primaryKey]);
 			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update User Level')]);
 		},
 		'delete' => function ($url, $model, $key) {
