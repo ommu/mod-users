@@ -27,7 +27,7 @@ use ommu\users\models\UserSetting;
 $this->params['breadcrumbs'][] = Yii::t('app', 'User Settings');
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'plus-square', 'htmlOptions' => ['class'=>'btn btn-success btn-sm']],
+	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'plus-square', 'htmlOptions' => ['class'=>'btn btn-success']],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
