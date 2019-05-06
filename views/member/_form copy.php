@@ -4,7 +4,7 @@
  * @var $this app\components\View
  * @var $this ommu\users\controllers\MemberController
  * @var $model ommu\users\models\Users
- * @var $form app\components\ActiveForm
+ * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
@@ -16,7 +16,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use app\components\ActiveForm;
+use yii\widgets\ActiveForm;
 use ommu\users\models\Users;
 use ommu\users\models\UserLevel;
 use app\models\CoreLanguages;

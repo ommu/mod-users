@@ -4,7 +4,7 @@
  * @var $this app\components\View
  * @var $this ommu\users\controllers\setting\LevelController
  * @var $model ommu\users\models\UserLevel
- * @var $form app\components\ActiveForm
+ * @var $form app\components\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114

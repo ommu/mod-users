@@ -4,7 +4,7 @@
  * @var $this app\components\View
  * @var $this ommu\users\controllers\o\NewsletterController
  * @var $model ommu\users\models\search\UserNewsletter
- * @var $form app\components\ActiveForm
+ * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@sudaryanto.id>
  * @contact (+62)856-299-4114
