@@ -17,7 +17,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use app\components\widgets\ActiveForm;
 use ommu\users\models\UserLevel;
 use ommu\users\models\Assignments;
 
