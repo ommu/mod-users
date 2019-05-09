@@ -57,7 +57,7 @@ $forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '{be
 	->dropDownList($forgotDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('forgot_diff_type')); ?>
 
-<?php echo $form->field($model, 'forgot_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$forgot_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-12 col-sm-offset-3']])
+<?php echo $form->field($model, 'forgot_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$forgot_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('forgot_difference')); ?>
 
@@ -66,7 +66,7 @@ $verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '{be
 	->dropDownList($verifyDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('verify_diff_type')); ?>
 
-<?php echo $form->field($model, 'verify_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$verify_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-12 col-sm-offset-3']])
+<?php echo $form->field($model, 'verify_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$verify_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('verify_difference')); ?>
 
@@ -75,7 +75,7 @@ $invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '{be
 	->dropDownList($inviteDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('invite_diff_type')); ?>
 
-<?php echo $form->field($model, 'invite_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$invite_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-12 col-sm-offset-3']])
+<?php echo $form->field($model, 'invite_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$invite_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('invite_difference')); ?>
 
@@ -85,11 +85,9 @@ echo $form->field($model, 'invite_order')
 	->label($model->getAttributeLabel('invite_order')); ?>
 
 <div class="ln_solid"></div>
-<div class="form-group row">
-	<div class="col-md-6 col-sm-9 col-xs-12 col-12 col-sm-offset-3">
-		<?php echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
-	</div>
-</div>
+
+<?php echo $form->field($model, 'submitButton')
+	->submitButton(); ?>
 
 <?php ActiveForm::end(); ?>
 
