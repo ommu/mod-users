@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\setting\AdminController
  * @var $model ommu\users\models\UserSetting
  *
  * AdminController implements the CRUD actions for UserSetting model.

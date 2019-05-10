@@ -1,7 +1,7 @@
 <?php
 /**
  * ForgotController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\o\ForgotController
  * @var $model ommu\users\models\UserForgot
  *
  * ForgotController implements the CRUD actions for UserForgot model.

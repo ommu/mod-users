@@ -1,7 +1,7 @@
 <?php
 /**
  * NewsletterController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\history\NewsletterController
  * @var $model ommu\users\models\UserNewsletterHistory
  *
  * NewsletterController implements the CRUD actions for UserNewsletterHistory model.

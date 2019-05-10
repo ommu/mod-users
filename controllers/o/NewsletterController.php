@@ -1,7 +1,7 @@
 <?php
 /**
  * NewsletterController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\o\NewsletterController
  * @var $model ommu\users\models\UserNewsletter
  *
  * NewsletterController implements the CRUD actions for UserNewsletter model.

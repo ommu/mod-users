@@ -1,7 +1,7 @@
 <?php
 /**
  * AdminController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\AdminController
  * @var $model ommu\users\models\Users
  *
  * AdminController implements the CRUD actions for Users model.

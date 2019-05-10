@@ -1,7 +1,7 @@
 <?php
 /**
  * PasswordController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\history\PasswordController
  * @var $model ommu\users\models\UserHistoryPassword
  *
  * PasswordController implements the CRUD actions for UserHistoryPassword model.

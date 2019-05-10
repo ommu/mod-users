@@ -1,7 +1,7 @@
 <?php
 /**
  * LevelController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\setting\LevelController
  * @var $model ommu\users\models\UserLevel
  *
  * LevelController implements the CRUD actions for UserLevel model.

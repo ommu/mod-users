@@ -1,7 +1,7 @@
 <?php
 /**
  * LoginController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\history\LoginController
  * @var $model ommu\users\models\UserHistoryLogin
  *
  * LoginController implements the CRUD actions for UserHistoryLogin model.

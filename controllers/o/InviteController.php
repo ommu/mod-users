@@ -1,7 +1,7 @@
 <?php
 /**
  * InviteController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\o\InviteController
  * @var $model ommu\users\models\UserInvites
  *
  * InviteController implements the CRUD actions for UserInvites model.

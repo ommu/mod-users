@@ -1,7 +1,7 @@
 <?php
 /**
  * EmailController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\history\EmailController
  * @var $model ommu\users\models\UserHistoryEmail
  *
  * EmailController implements the CRUD actions for UserHistoryEmail model.

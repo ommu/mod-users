@@ -1,7 +1,7 @@
 <?php
 /**
  * PhoneController
- * @var $this app\components\View
+ * @var $this ommu\users\controllers\o\PhoneController
  * @var $model ommu\users\models\UserPhones
  *
  * PhoneController implements the CRUD actions for UserPhones model.
