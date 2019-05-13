@@ -53,29 +53,29 @@ echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hi
 	->label($model->getAttributeLabel('meta_keyword')); ?>
 
 <?php $forgotDiffType = UserSetting::getForgotDiffType();
-$forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6 col-6'], 'options' => ['tag' => null]])
+$forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->dropDownList($forgotDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('forgot_diff_type')); ?>
 
-<?php echo $form->field($model, 'forgot_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$forgot_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
+<?php echo $form->field($model, 'forgot_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$forgot_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('forgot_difference')); ?>
 
 <?php $verifyDiffType = UserSetting::getForgotDiffType();
-$verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6 col-6'], 'options' => ['tag' => null]])
+$verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->dropDownList($verifyDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('verify_diff_type')); ?>
 
-<?php echo $form->field($model, 'verify_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$verify_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
+<?php echo $form->field($model, 'verify_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$verify_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('verify_difference')); ?>
 
 <?php $inviteDiffType = UserSetting::getForgotDiffType();
-$invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6 col-6'], 'options' => ['tag' => null]])
+$invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->dropDownList($inviteDiffType, ['prompt' => ''])
 	->label($model->getAttributeLabel('invite_diff_type')); ?>
 
-<?php echo $form->field($model, 'invite_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$invite_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
+<?php echo $form->field($model, 'invite_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$invite_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('invite_difference')); ?>
 
