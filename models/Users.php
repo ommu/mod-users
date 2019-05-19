@@ -348,7 +348,7 @@ class Users extends \app\components\ActiveRecord
 
 		$this->templateColumns['_no'] = [
 			'header' => Yii::t('app', 'No'),
-			'class' => 'yii\grid\SerialColumn',
+			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
 		if($controller == 'admin' && !Yii::$app->request->get('level')) {
