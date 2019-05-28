@@ -791,22 +791,26 @@ class UserLevel extends \app\components\ActiveRecord
 	public function beforeValidate()
 	{
 		if(parent::beforeValidate()) {
-			if($this->photo_size['width'] == '' && $this->photo_size['height'] == '')
-				$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size')]));
-			else {
-				if($this->photo_size['width'] == '')
-					$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[width]')]));
-				else if($this->photo_size['height'] == '')
-					$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[height]')]));
+			if($this->scenario == self::SCENARIO_USER) {
+				if($this->photo_size['width'] == '' && $this->photo_size['height'] == '')
+					$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size')]));
+				else {
+					if($this->photo_size['width'] == '')
+						$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[width]')]));
+					else if($this->photo_size['height'] == '')
+						$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[height]')]));
+				}
 			}
 
-			if($this->message_limit['inbox'] == '' && $this->message_limit['outbox'] == '')
-				$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit')]));
-			else {
-				if($this->message_limit['inbox'] == '')
-					$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[inbox]')]));
-				else if($this->message_limit['outbox'] == '')
-					$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[outbox]')]));
+			if($this->scenario == self::SCENARIO_MESSAGE) {
+				if($this->message_limit['inbox'] == '' && $this->message_limit['outbox'] == '')
+					$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit')]));
+				else {
+					if($this->message_limit['inbox'] == '')
+						$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[inbox]')]));
+					else if($this->message_limit['outbox'] == '')
+						$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[outbox]')]));
+				}
 			}
 
 			if($this->isNewRecord) {
