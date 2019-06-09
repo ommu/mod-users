@@ -24,12 +24,12 @@
  * @link https://github.com/ommu/mod-users
  *
  */
- 
+
 namespace ommu\users\controllers\o;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserForgot;
 use ommu\users\models\search\UserForgot as UserForgotSearch;
@@ -105,6 +105,9 @@ class ForgotController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
+
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success created.'));
 				return $this->redirect(['index']);

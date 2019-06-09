@@ -21,12 +21,12 @@
  * @link https://github.com/ommu/mod-users
  *
  */
- 
+
 namespace ommu\users\controllers\history;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserHistoryPassword;
 use ommu\users\models\search\UserHistoryPassword as UserHistoryPasswordSearch;
@@ -105,8 +105,9 @@ class PasswordController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->findModel($id)->delete();
-		
+		$model = $this->findModel($id);
+		$model->delete();
+
 		Yii::$app->session->setFlash('success', Yii::t('app', 'User history password success deleted.'));
 		return $this->redirect(['index']);
 	}

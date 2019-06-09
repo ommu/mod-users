@@ -24,12 +24,12 @@
  * @link https://github.com/ommu/mod-users
  *
  */
- 
+
 namespace ommu\users\controllers\o;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserInvites;
 use ommu\users\models\search\UserInvites as UserInvitesSearch;

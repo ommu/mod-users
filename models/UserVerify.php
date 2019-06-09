@@ -96,7 +96,7 @@ class UserVerify extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'code' => Yii::t('app', 'Code'),
 			'verify_date' => Yii::t('app', 'Verify Date'),
-			'verify_ip' => Yii::t('app', 'Verify Ip'),
+			'verify_ip' => Yii::t('app', 'Verify IP'),
 			'expired_date' => Yii::t('app', 'Expired Date'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),

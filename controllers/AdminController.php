@@ -24,7 +24,7 @@
  * @link https://github.com/ommu/mod-users
  *
  */
- 
+
 namespace ommu\users\controllers;
 
 use Yii;

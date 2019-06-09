@@ -71,7 +71,7 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'status' => Yii::t('app', 'Status'),
 			'newsletter_id' => Yii::t('app', 'Newsletter'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'updated_ip' => Yii::t('app', 'Updated Ip'),
+			'updated_ip' => Yii::t('app', 'Updated IP'),
 			'email_search' => Yii::t('app', 'Email'),
 			'level_search' => Yii::t('app', 'Level'),
 			'user_search' => Yii::t('app', 'User'),

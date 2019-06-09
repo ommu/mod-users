@@ -27,12 +27,12 @@
  * @link https://github.com/ommu/mod-users
  *
  */
- 
+
 namespace ommu\users\controllers\setting;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserLevel;
 use ommu\users\models\search\UserLevel as UserLevelSearch;
@@ -108,6 +108,9 @@ class LevelController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
+
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success created.'));
 				return $this->redirect(['update', 'id'=>$model->level_id]);
@@ -138,6 +141,8 @@ class LevelController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
@@ -178,8 +183,9 @@ class LevelController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->findModel($id)->delete();
-		
+		$model = $this->findModel($id);
+		$model->delete();
+
 		Yii::$app->session->setFlash('success', Yii::t('app', 'User level success deleted.'));
 		return $this->redirect(['index']);
 	}
@@ -233,6 +239,8 @@ class LevelController extends Controller
 		
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
@@ -261,6 +269,8 @@ class LevelController extends Controller
 		
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
 
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));

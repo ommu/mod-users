@@ -111,7 +111,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),
-			'updated_ip' => Yii::t('app', 'Updated Ip'),
+			'updated_ip' => Yii::t('app', 'Updated IP'),
 			'email_i' => Yii::t('app', 'Email'),
 			'user_search' => Yii::t('app', 'User'),
 			'reference_search' => Yii::t('app', 'Reference'),

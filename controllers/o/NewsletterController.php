@@ -23,12 +23,12 @@
  * @link https://github.com/ommu/mod-users
  *
  */
- 
+
 namespace ommu\users\controllers\o;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserNewsletter;
 use ommu\users\models\search\UserNewsletter as UserNewsletterSearch;
@@ -171,8 +171,9 @@ class NewsletterController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->findModel($id)->delete();
-		
+		$model = $this->findModel($id);
+		$model->delete();
+
 		Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter success deleted.'));
 		return $this->redirect(['index']);
 	}

@@ -115,7 +115,7 @@ class UserInvites extends \app\components\ActiveRecord
 			'invites' => Yii::t('app', 'Invites'),
 			'inviter_id' => Yii::t('app', 'Inviter'),
 			'invite_date' => Yii::t('app', 'Invite Date'),
-			'invite_ip' => Yii::t('app', 'Invite Ip'),
+			'invite_ip' => Yii::t('app', 'Invite IP'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
 			'updated_date' => Yii::t('app', 'Updated Date'),

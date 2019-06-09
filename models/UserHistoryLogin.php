@@ -67,7 +67,7 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 			'id' => Yii::t('app', 'ID'),
 			'user_id' => Yii::t('app', 'User'),
 			'lastlogin_date' => Yii::t('app', 'Lastlogin Date'),
-			'lastlogin_ip' => Yii::t('app', 'Lastlogin Ip'),
+			'lastlogin_ip' => Yii::t('app', 'Lastlogin IP'),
 			'lastlogin_from' => Yii::t('app', 'Lastlogin From'),
 			'user_search' => Yii::t('app', 'User'),
 			'level_search' => Yii::t('app', 'Level'),

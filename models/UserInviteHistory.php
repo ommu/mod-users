@@ -75,7 +75,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'invite_id' => Yii::t('app', 'Invite'),
 			'code' => Yii::t('app', 'Code'),
 			'invite_date' => Yii::t('app', 'Invite Date'),
-			'invite_ip' => Yii::t('app', 'Invite Ip'),
+			'invite_ip' => Yii::t('app', 'Invite IP'),
 			'expired_date' => Yii::t('app', 'Expired Date'),
 			'email_search' => Yii::t('app', 'Email'),
 			'displayname_search' => Yii::t('app', 'Displayname'),

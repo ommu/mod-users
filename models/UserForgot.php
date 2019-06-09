@@ -96,7 +96,7 @@ class UserForgot extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'code' => Yii::t('app', 'Code'),
 			'forgot_date' => Yii::t('app', 'Forgot Date'),
-			'forgot_ip' => Yii::t('app', 'Forgot Ip'),
+			'forgot_ip' => Yii::t('app', 'Forgot IP'),
 			'expired_date' => Yii::t('app', 'Expired Date'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),

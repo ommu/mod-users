@@ -24,7 +24,7 @@
  * @link https://github.com/ommu/mod-users
  *
  */
- 
+
 namespace ommu\users\controllers;
 
 use Yii;
@@ -98,6 +98,9 @@ class MemberController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
+
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', '{title} success created.', ['title'=>$this->title]));
 				return $this->redirect(['index']);
@@ -178,8 +181,9 @@ class MemberController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->findModel($id)->delete();
-		
+		$model = $this->findModel($id);
+		$model->delete();
+
 		Yii::$app->session->setFlash('success', Yii::t('app', '{title} success deleted.', ['title'=>$this->title]));
 		return $this->redirect(['index']);
 	}

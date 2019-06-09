@@ -28,8 +28,8 @@
 namespace ommu\users\controllers\o;
 
 use Yii;
-use app\components\Controller;
 use yii\filters\VerbFilter;
+use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use ommu\users\models\UserVerify;
 use ommu\users\models\search\UserVerify as UserVerifySearch;
@@ -105,6 +105,9 @@ class VerifyController extends Controller
 
 		if(Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
+			// $postData = Yii::$app->request->post();
+			// $model->load($postData);
+
 			if($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', 'User verify success created.'));
 				return $this->redirect(['index']);
