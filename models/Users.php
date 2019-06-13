@@ -341,10 +341,14 @@ class Users extends \app\components\ActiveRecord
 	/**
 	 * Set default columns to display
 	 */
-	public function init() 
+	public function init()
 	{
-		$controller = isset(Yii::$app->controller) ? strtolower(Yii::$app->controller->id) : '';
 		parent::init();
+
+		if(!(Yii::$app instanceof \app\components\Application))
+			return;
+
+		$controller = isset(Yii::$app->controller) ? strtolower(Yii::$app->controller->id) : '';
 
 		$this->templateColumns['_no'] = [
 			'header' => Yii::t('app', 'No'),
