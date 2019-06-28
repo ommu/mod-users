@@ -44,17 +44,17 @@ echo $form->field($model, 'message_allow', ['template' => '{label}{beginWrapper}
 
 <?php $messageLimit = UserLevel::getMessageLimit();
 $message_limit_inbox = $form->field($model, 'message_limit[inbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-sm-offset-3', 'hint'=>'col-md-6 col-sm-5 col-xs-6 pt-5'], 'options' => ['tag' => null]])
-	->dropDownList($messageLimit, ['prompt' => ''])
+	->dropDownList($messageLimit, ['prompt'=>''])
 	->label($model->getAttributeLabel('message_limit[inbox]'))
 	->hint(Yii::t('app', 'conversations in inbox folder.')); ?>
 
 <?php $message_limit_outbox = $form->field($model, 'message_limit[outbox]', ['template' => '{beginWrapper}{input}{endWrapper}{hint}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6 col-sm-offset-3', 'hint'=>'col-md-6 col-sm-5 col-xs-6 pt-5'], 'options' => ['tag' => null]])
-	->dropDownList($messageLimit, ['prompt' => ''])
+	->dropDownList($messageLimit, ['prompt'=>''])
 	->label($model->getAttributeLabel('message_limit[outbox]'))
 	->hint(Yii::t('app', 'conversations in outbox folder.')); ?>
 
 <?php echo $form->field($model, 'message_limit', ['template' => '{label}{hint}'.$message_limit_inbox.'<div class="clearfix mb-10"></div>'.$message_limit_outbox.'{error}', 'horizontalCssClasses' => ['hint'=>'col-sm-9 col-xs-12', 'error'=>'col-sm-9 col-xs-12 col-sm-offset-3']])
-	->dropDownList($messageLimit, ['prompt' => ''])
+	->dropDownList($messageLimit, ['prompt'=>''])
 	->label($model->getAttributeLabel('message_limit'))
 	->hint(Yii::t('app', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.')); ?>
 

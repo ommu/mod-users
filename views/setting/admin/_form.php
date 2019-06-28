@@ -54,7 +54,7 @@ echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hi
 
 <?php $forgotDiffType = UserSetting::getForgotDiffType();
 $forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
-	->dropDownList($forgotDiffType, ['prompt' => ''])
+	->dropDownList($forgotDiffType, ['prompt'=>''])
 	->label($model->getAttributeLabel('forgot_diff_type')); ?>
 
 <?php echo $form->field($model, 'forgot_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$forgot_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
@@ -63,7 +63,7 @@ $forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '{be
 
 <?php $verifyDiffType = UserSetting::getForgotDiffType();
 $verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
-	->dropDownList($verifyDiffType, ['prompt' => ''])
+	->dropDownList($verifyDiffType, ['prompt'=>''])
 	->label($model->getAttributeLabel('verify_diff_type')); ?>
 
 <?php echo $form->field($model, 'verify_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$verify_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
@@ -72,7 +72,7 @@ $verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '{be
 
 <?php $inviteDiffType = UserSetting::getForgotDiffType();
 $invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
-	->dropDownList($inviteDiffType, ['prompt' => ''])
+	->dropDownList($inviteDiffType, ['prompt'=>''])
 	->label($model->getAttributeLabel('invite_diff_type')); ?>
 
 <?php echo $form->field($model, 'invite_difference', ['template' => '{label}{beginWrapper}{input}{endWrapper}'.$invite_diff_type.'{error}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-4 col-xs-6', 'error'=>'col-md-6 col-sm-9 col-xs-12 col-sm-offset-3']])
@@ -81,7 +81,7 @@ $invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '{be
 
 <?php $inviteOrder = UserSetting::getInviteOrder();
 echo $form->field($model, 'invite_order')
-	->dropDownList($inviteOrder, ['prompt' => ''])
+	->dropDownList($inviteOrder, ['prompt'=>''])
 	->label($model->getAttributeLabel('invite_order')); ?>
 
 <div class="ln_solid"></div>

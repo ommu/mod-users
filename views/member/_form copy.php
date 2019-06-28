@@ -74,11 +74,11 @@ echo $form->field($model, 'language_id')
 	->label($model->getAttributeLabel('creation_ip')); ?>
 
 <?php echo $form->field($model, 'modified_date')
-	->textInput(['type' => 'date'])
+	->textInput(['type'=>'date'])
 	->label($model->getAttributeLabel('modified_date')); ?>
 
 <?php echo $form->field($model, 'lastlogin_date')
-	->textInput(['type' => 'date'])
+	->textInput(['type'=>'date'])
 	->label($model->getAttributeLabel('lastlogin_date')); ?>
 
 <?php echo $form->field($model, 'lastlogin_ip')
@@ -90,7 +90,7 @@ echo $form->field($model, 'language_id')
 	->label($model->getAttributeLabel('lastlogin_from')); ?>
 
 <?php echo $form->field($model, 'update_date')
-	->textInput(['type' => 'date'])
+	->textInput(['type'=>'date'])
 	->label($model->getAttributeLabel('update_date')); ?>
 
 <?php echo $form->field($model, 'update_ip')
