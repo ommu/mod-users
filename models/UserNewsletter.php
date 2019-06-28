@@ -128,7 +128,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public function getInvites()
 	{
 		return $this->hasMany(UserInvites::className(), ['newsletter_id' => 'newsletter_id'])
-			->andOnCondition([sprintf('%s.publish', UserInvites::tableName()) => 1]);
+			->alias('invites')
+			->andOnCondition([sprintf('%s.publish', 'invites') => 1]);
 	}
 
 	/**
