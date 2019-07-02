@@ -1,0 +1,65 @@
+<?php
+/**
+ * MemberSuggestAction
+ * 
+ * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @contact (+62)856-299-4114
+ * @copyright Copyright (c) 2019 OMMU (www.ommu.co)
+ * @created date 1 July 2019, 18:20 WIB
+ * @link https://github.com/ommu/mod-users
+ */
+
+namespace ommu\users\actions;
+
+use Yii;
+use ommu\users\models\Users;
+use yii\validators\EmailValidator;
+
+class MemberSuggestAction extends \yii\base\Action
+{
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function beforeRun()
+	{
+		if (parent::beforeRun()) {
+			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+			Yii::$app->response->charset = 'UTF-8';
+		}
+		return true;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function run()
+	{
+		$term = utf8_decode(urldecode(Yii::$app->request->get('term')));
+
+		if($term == null) return [];
+
+		$validator = new EmailValidator();
+		$model = Users::find()->suggest();
+		if($validator->validate($term) === true)
+			$model->andWhere(['like', 'email', $term]);
+		else {
+			$model->andWhere(['or',
+				['like', 'email', $term],
+				['like', 'displayname', $term]
+			]);
+		}
+		$model = $model->limit(15)->all();
+
+		$result = [];
+		foreach($model as $val) {
+			$result[$val->user_id] = [
+				'id' => $val->user_id, 
+				'email' => $val->email,
+				'photo' => $val->photos,
+			];
+			if($val->displayname)
+				$result[$val->user_id]['name'] = $val->displayname;
+		}
+		return array_values($result);
+	}
+}

@@ -58,6 +58,23 @@ class MemberController extends Controller
 	}
 
 	/**
+	 * {@inheritdoc}
+	 */
+	public function allowAction(): array {
+		return ['suggest'];
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function actions()
+	{
+		return [
+			'suggest' => 'ommu\users\actions\MemberSuggestAction',
+		];
+	}
+
+	/**
 	 * Lists all Users models.
 	 * @return mixed
 	 */

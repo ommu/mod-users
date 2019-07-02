@@ -26,6 +26,15 @@ class Users extends \yii\db\ActiveQuery
 
 	/**
 	 * {@inheritdoc}
+	 */
+	public function suggest() 
+	{
+		return $this->select(['user_id', 'email', 'displayname', 'photos'])
+			->andWhere(['enabled' => '1']);
+	}
+
+	/**
+	 * {@inheritdoc}
 	 * @return \ommu\users\models\Users[]|array
 	 */
 	public function all($db = null)
