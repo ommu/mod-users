@@ -71,7 +71,8 @@ class UserLevel extends UserLevelModel
 			'creation creation', 
 			'modified modified', 
 			'view view'
-		]);
+		])
+		->groupBy(['level_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

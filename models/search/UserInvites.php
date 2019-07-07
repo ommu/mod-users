@@ -70,7 +70,8 @@ class UserInvites extends UserInvitesModel
 			'inviter inviter', 
 			'modified modified',
 			'inviter.level.title level',
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

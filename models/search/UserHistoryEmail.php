@@ -68,7 +68,8 @@ class UserHistoryEmail extends UserHistoryEmailModel
 		$query->joinWith([
 			'user user',
 			'user.level.title level',
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

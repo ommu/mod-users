@@ -70,7 +70,8 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 			'newsletter.user user',
 			'newsletter.user.level.title level',
 			'newsletter.view view', 
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

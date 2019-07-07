@@ -68,7 +68,8 @@ class UserHistoryLogin extends UserHistoryLoginModel
 		$query->joinWith([
 			'user user',
 			'user.level.title level',
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

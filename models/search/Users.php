@@ -70,7 +70,8 @@ class Users extends UsersModel
 			'languageRltn languageRltn', 
 			'modified modified', 
 			// 'member member', 
-		]);
+		])
+		->groupBy(['user_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

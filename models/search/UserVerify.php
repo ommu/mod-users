@@ -70,7 +70,8 @@ class UserVerify extends UserVerifyModel
 			'modified modified',
 			'user.level.title level', 
 			'view view', 
-		]);
+		])
+		->groupBy(['verify_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

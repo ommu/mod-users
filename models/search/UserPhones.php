@@ -69,7 +69,8 @@ class UserPhones extends UserPhonesModel
 			'creation creation', 
 			'modified modified',
 			'user.level.title level',
-		]);
+		])
+		->groupBy(['phone_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

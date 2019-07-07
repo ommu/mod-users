@@ -70,7 +70,8 @@ class UserForgot extends UserForgotModel
 			'modified modified',
 			'user.level.title level', 
 			'view view', 
-		]);
+		])
+		->groupBy(['forgot_id']);
 
 		// add conditions that should always apply here
 		$dataParams = [

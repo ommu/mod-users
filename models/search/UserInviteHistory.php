@@ -71,7 +71,8 @@ class UserInviteHistory extends UserInviteHistoryModel
 			'invite.inviter inviter',
 			'invite.inviter.level.title level',
 			'view view',
-		]);
+		])
+		->groupBy(['id']);
 
 		// add conditions that should always apply here
 		$dataParams = [
