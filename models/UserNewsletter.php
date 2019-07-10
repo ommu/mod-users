@@ -409,11 +409,11 @@ class UserNewsletter extends \app\components\ActiveRecord
 				$unsubscribelink = Url::to(['newsletter/subscribe', 'nid'=>$this->newsletter_id, 'status'=>0], true);
 
 				$template = 'subscribe';
-				$emailSubject = $this->parseMailSubject($template);
+				$emailSubject = $this->parseMailSubject($template, 'user');
 				$emailBody = $this->parseMailBody($template, [
 					'displayname'=>$displayname, 
 					'unsubscribe-link'=>$unsubscribelink,
-				]);
+				], 'user');
 
 				Yii::$app->mailer->compose()
 					->setFrom($this->getMailFrom())

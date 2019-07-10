@@ -308,11 +308,11 @@ class UserForgot extends \app\components\ActiveRecord
 		if($insert) {
 			$template = 'forgot-password';
 			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
-			$emailSubject = $this->parseMailSubject($template);
+			$emailSubject = $this->parseMailSubject($template, 'user');
 			$emailBody = $this->parseMailBody($template, [
 				'displayname' => $displayname,
 				'forgot-link' => Url::to(['/user/password/reset', 'cd'=>$this->code], true),
-			]);
+			], 'user');
 
 			Yii::$app->mailer->compose()
 				->setFrom($this->getMailFrom())

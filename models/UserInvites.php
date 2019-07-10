@@ -493,13 +493,13 @@ class UserInvites extends \app\components\ActiveRecord
 			
 			// if($insert) {
 			// 	$template = $setting->signup_checkemail == 1 ? 'invite-code' : 'invite';
-			// 	$emailSubject = $this->parseMailSubject($template);
+			// 	$emailSubject = $this->parseMailSubject($template, 'user');
 			// 	$emailBody = $this->parseMailBody($template, [
 			// 		'displayname'=>$displayname, 
 			// 		'inviter'=>$inviter, 
 			// 		'singup-link'=>$singuplink, 
 			// 		'invite-code'=>$this->code,
-			// 	]);
+			// 	], 'user');
 
 			// 	Yii::$app->mailer->compose()
 			// 		->setFrom($this->getMailFrom())
@@ -511,14 +511,14 @@ class UserInvites extends \app\components\ActiveRecord
 			// } else {
 			// 	if($this->old_invites_i != $this->invites) {
 			// 		$template = $setting->signup_checkemail == 1 ? 'invite-2nd-code' : 'invite-2nd';
-			// 		$emailSubject = $this->parseMailSubject($template);
+			// 		$emailSubject = $this->parseMailSubject($template, 'user');
 			// 		$emailBody = $this->parseMailBody($template, [
 			// 			'displayname'=>$displayname, 
 			// 			'invites'=>$this->invites, 
 			// 			'inviter'=>$inviter, 
 			// 			'singup-link'=>$singuplink, 
 			// 			'invite-code'=>$this->code,
-			// 		]);
+			// 		], 'user');
 	
 			// 		Yii::$app->mailer->compose()
 			// 			->setFrom($this->getMailFrom())

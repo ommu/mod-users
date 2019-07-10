@@ -838,12 +838,12 @@ class Users extends \app\components\ActiveRecord
 			// Send account information
 			$template = 'account-info';
 			$displayname = $this->displayname ? $this->displayname : $this->email;
-			$emailSubject = $this->parseMailSubject($template);
+			$emailSubject = $this->parseMailSubject($template, 'user');
 			$emailBody = $this->parseMailBody($template, [
 				'displayname' => $displayname,
 				'email' => $this->email,
 				'forgot-link' => Url::to(['user/password/forgot'], true),
-			]);
+			], 'user');
 
 			Yii::$app->mailer->compose()
 				->setFrom($this->getMailFrom())
@@ -856,10 +856,10 @@ class Users extends \app\components\ActiveRecord
 			if($setting->signup_welcome == 1) {
 				$template = 'signup-welcome';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
-				$emailSubject = $this->parseMailSubject($template);
+				$emailSubject = $this->parseMailSubject($template, 'user');
 				$emailBody = $this->parseMailBody($template, [
 					'displayname' => $displayname,
-				]);
+				], 'user');
 	
 				Yii::$app->mailer->compose()
 					->setFrom($this->getMailFrom())
@@ -873,11 +873,11 @@ class Users extends \app\components\ActiveRecord
 			if($setting->signup_adminemail == 1) {
 				$template = 'signup-member-info';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
-				$emailSubject = $this->parseMailSubject($template);
+				$emailSubject = $this->parseMailSubject($template, 'user');
 				$emailBody = $this->parseMailBody($template, [
 					'displayname' => $displayname,
 					'email' => $this->email,
-				]);
+				], 'user');
 	
 				Yii::$app->mailer->compose()
 					->setFrom($this->getMailFrom())
@@ -899,11 +899,11 @@ class Users extends \app\components\ActiveRecord
 			if(in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD])) {
 				$template = 'account-change-password';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
-				$emailSubject = $this->parseMailSubject($template);
+				$emailSubject = $this->parseMailSubject($template, 'user');
 				$emailBody = $this->parseMailBody($template, [
 					'displayname' => $displayname,
 					'contact-link' => Url::to(['site/contact'], true),
-				]);
+				], 'user');
 	
 				Yii::$app->mailer->compose()
 					->setFrom($this->getMailFrom())
