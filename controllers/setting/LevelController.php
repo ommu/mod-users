@@ -45,7 +45,8 @@ class LevelController extends Controller
 	public function init()
 	{
 		parent::init();
-		$this->subMenu = $this->module->params['userlevel_submenu'];
+		if(Yii::$app->request->get('id'))
+			$this->subMenu = $this->module->params['userlevel_submenu'];
 	}
 
 	/**
