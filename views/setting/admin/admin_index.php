@@ -22,7 +22,6 @@ use yii\widgets\Pjax;
 use app\components\widgets\MenuContent;
 use app\components\widgets\MenuOption;
 use yii\widgets\DetailView;
-use ommu\users\models\UserSetting;
 
 $this->params['breadcrumbs'][] = Yii::t('app', 'User Settings');
 
@@ -129,7 +128,7 @@ echo GridView::widget([
 			'license',
 			[
 				'attribute' => 'permission',
-				'value' => UserSetting::getPermission($model->permission),
+				'value' => $model::getPermission($model->permission),
 			],
 			[
 				'attribute' => 'meta_description',
@@ -141,19 +140,19 @@ echo GridView::widget([
 			],
 			[
 				'attribute' => 'forgot_difference',
-				'value' => $model->forgot_difference.' '.UserSetting::getForgotDiffType($model->forgot_diff_type),
+				'value' => $model->forgot_difference.' '.$model::getForgotDiffType($model->forgot_diff_type),
 			],
 			[
 				'attribute' => 'verify_difference',
-				'value' => $model->verify_difference.' '.UserSetting::getForgotDiffType($model->verify_diff_type),
+				'value' => $model->verify_difference.' '.$model::getForgotDiffType($model->verify_diff_type),
 			],
 			[
 				'attribute' => 'invite_difference',
-				'value' => $model->invite_difference.' '.UserSetting::getForgotDiffType($model->invite_diff_type),
+				'value' => $model->invite_difference.' '.$model::getForgotDiffType($model->invite_diff_type),
 			],
 			[
 				'attribute' => 'invite_order',
-				'value' => UserSetting::getInviteOrder($model->invite_order),
+				'value' => $model::getInviteOrder($model->invite_order),
 			],
 			[
 				'attribute' => 'modified_date',

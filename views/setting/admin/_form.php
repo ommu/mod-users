@@ -17,7 +17,6 @@
 
 use yii\helpers\Html;
 use app\components\widgets\ActiveForm;
-use ommu\users\models\UserSetting;
 ?>
 
 <div class="user-setting-form">
@@ -43,7 +42,7 @@ echo $form->field($model, 'license')
 	->label($model->getAttributeLabel('license'))
 	->hint(Yii::t('app', 'Enter the your license key that is provided to you when you purchased this plugin. If you do not know your license key, please contact support team.').'<br/>'.Yii::t('app', 'Format: XXXX-XXXX-XXXX-XXXX')); ?>
 
-<?php $permission = UserSetting::getPermission();
+<?php $permission = $model::getPermission();
 echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hint}{input}{error}{endWrapper}'])
 	->radioList($permission)
 	->label($model->getAttributeLabel('permission'))
@@ -57,7 +56,7 @@ echo $form->field($model, 'permission', ['template' => '{label}{beginWrapper}{hi
 	->textarea(['rows'=>6, 'cols'=>50])
 	->label($model->getAttributeLabel('meta_keyword')); ?>
 
-<?php $forgotDiffType = UserSetting::getForgotDiffType();
+<?php $forgotDiffType = $model::getForgotDiffType();
 $forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->dropDownList($forgotDiffType, ['prompt'=>''])
 	->label($model->getAttributeLabel('forgot_diff_type')); ?>
@@ -66,7 +65,7 @@ $forgot_diff_type = $form->field($model, 'forgot_diff_type', ['template' => '{be
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('forgot_difference')); ?>
 
-<?php $verifyDiffType = UserSetting::getForgotDiffType();
+<?php $verifyDiffType = $model::getForgotDiffType();
 $verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->dropDownList($verifyDiffType, ['prompt'=>''])
 	->label($model->getAttributeLabel('verify_diff_type')); ?>
@@ -75,7 +74,7 @@ $verify_diff_type = $form->field($model, 'verify_diff_type', ['template' => '{be
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('verify_difference')); ?>
 
-<?php $inviteDiffType = UserSetting::getForgotDiffType();
+<?php $inviteDiffType = $model::getForgotDiffType();
 $invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '{beginWrapper}{input}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-md-3 col-sm-5 col-xs-6'], 'options' => ['tag' => null]])
 	->dropDownList($inviteDiffType, ['prompt'=>''])
 	->label($model->getAttributeLabel('invite_diff_type')); ?>
@@ -84,7 +83,7 @@ $invite_diff_type = $form->field($model, 'invite_diff_type', ['template' => '{be
 	->textInput(['type'=>'number', 'min'=>'1'])
 	->label($model->getAttributeLabel('invite_difference')); ?>
 
-<?php $inviteOrder = UserSetting::getInviteOrder();
+<?php $inviteOrder = $model::getInviteOrder();
 echo $form->field($model, 'invite_order')
 	->dropDownList($inviteOrder, ['prompt'=>''])
 	->label($model->getAttributeLabel('invite_order')); ?>
