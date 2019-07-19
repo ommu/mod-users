@@ -20,7 +20,7 @@ class m190320_120101_users_module_insert_menu extends \yii\db\Migration
 		$tableName = Yii::$app->db->tablePrefix . 'ommu_core_menus';
 		if(Yii::$app->db->getTableSchema($tableName, true)) {
 			$this->batchInsert('ommu_core_menus', ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
-				['Users', 'users', null, null, '/#', null, null],
+				['Users', 'users', 'fa-user-circle-o', null, '/#', null, null],
 			]);
 		}
 
