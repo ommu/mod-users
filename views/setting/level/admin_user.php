@@ -95,7 +95,7 @@ echo $form->field($model, 'photo_size', ['template' => '{beginWrapper}{hint}'.$p
 <?php echo $form->field($model, 'photo_exts')
 	->textInput()
 	->label($model->getAttributeLabel('photo_exts'))
-	->hint(Yii::t('app', 'What file types do you want to allow for user photos (gif, jpg, jpeg, or png)? Separate file types with commas, i.e. jpg, jpeg, gif, png')); ?>
+	->hint(Yii::t('app', 'What file types do you want to allow for user photos (jpg, gif, or png)? Separate file types with commas, i.e. jpg, jpeg, bmp, gif, png')); ?>
 
 <?php $profileStyle = UserLevel::getProfileStyle();
 echo $form->field($model, 'profile_style', ['template' => '{label}{beginWrapper}{hint}{input}{error}{endWrapper}'])
