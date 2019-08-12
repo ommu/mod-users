@@ -5,7 +5,7 @@
  * This is the ActiveQuery class for [[\ommu\users\models\UserNewsletterHistory]].
  * @see \ommu\users\models\UserNewsletterHistory
  * 
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 7 May 2018, 07:38 WIB

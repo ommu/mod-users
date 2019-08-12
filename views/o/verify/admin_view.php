@@ -5,7 +5,7 @@
  * @var $this ommu\users\controllers\o\VerifyController
  * @var $model ommu\users\models\UserVerify
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
  * @created date 17 October 2017, 15:00 WIB

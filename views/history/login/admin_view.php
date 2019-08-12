@@ -5,7 +5,7 @@
  * @var $this ommu\users\controllers\history\LoginController
  * @var $model ommu\users\models\UserHistoryLogin
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 5 May 2018, 02:17 WIB

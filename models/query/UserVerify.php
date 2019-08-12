@@ -5,7 +5,7 @@
  * This is the ActiveQuery class for [[\ommu\users\models\UserVerify]].
  * @see \ommu\users\models\UserVerify
  * 
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 2 May 2018, 16:27 WIB

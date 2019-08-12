@@ -6,7 +6,7 @@
  * @var $model ommu\users\models\UserPhones
  * @var $form app\components\widgets\ActiveForm
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
  * @created date 15 November 2018, 09:49 WIB
