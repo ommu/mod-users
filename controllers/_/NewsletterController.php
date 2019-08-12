@@ -163,7 +163,7 @@ class SubscribeController extends Controller
 	{
 		/**
 		 * example get link
-		 * http://localhost/_product/nirwasita_hijab/support/newsletter/unsubscribe/email/putra.sudaryanto@gmail.com/secret/uvijijxykmabhiijdehinofgtuuvbcGH
+		 * http://localhost/_product/nirwasita_hijab/support/newsletter/unsubscribe/email/putra@ommu.co/secret/uvijijxykmabhiijdehinofgtuuvbcGH
 		 * secret = salt[Users]
 		 * email = email[Users]
 		 */
