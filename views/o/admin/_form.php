@@ -5,7 +5,7 @@
  * @var $model Users
  * @var $form CActiveForm
  *
- * @author Putra Sudaryanto <putra@sudaryanto.id>
+ * @author Putra Sudaryanto <putra@ommu.co>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2012 Ommu Platform (www.ommu.co)
  * @modified date 15 September 2018, 20:52 WIB
@@ -19,7 +19,7 @@
 	'enableAjaxValidation'=>true,
 	'htmlOptions' => array(
 		'enctype' => 'multipart/form-data',
-		'on_post' => '',
+		// 'on_post' => '',
 	),
 	/*
 	'enableClientValidation'=>true,
