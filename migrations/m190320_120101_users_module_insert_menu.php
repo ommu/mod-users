@@ -28,7 +28,7 @@ class m190320_120101_users_module_insert_menu extends \yii\db\Migration
 			$this->batchInsert('ommu_core_menus', ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
 				['Administrator', 'users', null, Menu::getParentId('Users#users'), '/users/admin/index', null, null],
 				['Member', 'users', null, Menu::getParentId('Users#users'), '/users/member/index', null, null],
-				['Datas', 'users', null, Menu::getParentId('Users#users'), '/users/o/invite/index', null, null],
+				['Invite, Forgot & Subscribe', 'users', null, Menu::getParentId('Users#users'), '/users/o/invite/index', null, null],
 				['User Settings', 'users', null, Menu::getParentId('Settings#rbac'), '/users/setting/admin/index', null, null],
 				['Permission Manager', 'rbac', null, Menu::getParentId('Users#users'), '/rbac/assignment/index', null, null],
 			]);
