@@ -30,91 +30,139 @@ $this->params['menu']['content'] = [
 
 <div class="users-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+	[
+		'attribute' => 'user_id',
+		'value' => $model->user_id,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'enabled',
+		'value' => Users::getEnabled($model->enabled),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'verified',
+		'value' => $this->quickAction(Url::to(['verified', 'id'=>$model->primaryKey]), $model->verified, 'Verified,Unverified'),
+		'format' => 'raw',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'level_id',
+		'value' => isset($model->level) ? $model->level->title->message : '-',
+	],
+	[
+		'attribute' => 'language_id',
+		'value' => isset($model->languageRltn) ? $model->languageRltn->name : '-',
+		'visible' => !$small,
+	],
+	'email:email',
+	'displayname',
+	'username',
+	[
+		'attribute' => 'password',
+		'value' => $model->password,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'salt',
+		'value' => $model->salt,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'deactivate',
+		'value' => $this->filterYesNo($model->deactivate),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'search',
+		'value' => $this->filterYesNo($model->search),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'invisible',
+		'value' => $this->filterYesNo($model->invisible),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'privacy',
+		'value' => $this->filterYesNo($model->privacy),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'comments',
+		'value' => $this->filterYesNo($model->comments),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'creation_date',
+		'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'creation_ip',
+		'value' => $model->creation_ip,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'modified_date',
+		'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'modified_search',
+		'value' => isset($model->modified) ? $model->modified->displayname : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'lastlogin_date',
+		'value' => Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'lastlogin_ip',
+		'value' => $model->lastlogin_ip,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'lastlogin_from',
+		'value' => $model->lastlogin_from,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'update_date',
+		'value' => Yii::$app->formatter->asDatetime($model->update_date, 'medium'),
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'update_ip',
+		'value' => $model->update_ip,
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'auth_key',
+		'value' => $model->auth_key ? $model->auth_key : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'jwt_claims',
+		'value' => $model->jwt_claims ? $model->jwt_claims : '-',
+		'visible' => !$small,
+	],
+	[
+		'attribute' => 'assignmentRoles',
+		'value' => is_array($model->assignmentRoles) && !empty($model->assignmentRoles) ? implode(', ', $model->assignmentRoles) : '-',
+		'visible' => !$small,
+	],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class'=>'table table-striped detail-view',
 	],
-	'attributes' => [
-		'user_id',
-		[
-			'attribute' => 'enabled',
-			'value' => Users::getEnabled($model->enabled),
-		],
-		[
-			'attribute' => 'verified',
-			'value' => $this->quickAction(Url::to(['verified', 'id'=>$model->primaryKey]), $model->verified, 'Verified,Unverified'),
-			'format' => 'raw',
-		],
-		[
-			'attribute' => 'level_id',
-			'value' => isset($model->level) ? $model->level->title->message : '-',
-		],
-		[
-			'attribute' => 'language_id',
-			'value' => isset($model->languageRltn) ? $model->languageRltn->name : '-',
-		],
-		'email:email',
-		'displayname',
-		'password',
-		'salt',
-		[
-			'attribute' => 'deactivate',
-			'value' => $this->filterYesNo($model->deactivate),
-		],
-		[
-			'attribute' => 'search',
-			'value' => $this->filterYesNo($model->search),
-		],
-		[
-			'attribute' => 'invisible',
-			'value' => $this->filterYesNo($model->invisible),
-		],
-		[
-			'attribute' => 'privacy',
-			'value' => $this->filterYesNo($model->privacy),
-		],
-		[
-			'attribute' => 'comments',
-			'value' => $this->filterYesNo($model->comments),
-		],
-		[
-			'attribute' => 'creation_date',
-			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
-		],
-		'creation_ip',
-		[
-			'attribute' => 'modified_date',
-			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-		],
-		[
-			'attribute' => 'modified_search',
-			'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		],
-		[
-			'attribute' => 'lastlogin_date',
-			'value' => Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium'),
-		],
-		'lastlogin_ip',
-		'lastlogin_from',
-		[
-			'attribute' => 'update_date',
-			'value' => Yii::$app->formatter->asDatetime($model->update_date, 'medium'),
-		],
-		'update_ip',
-		[
-			'attribute' => 'auth_key',
-			'value' => $model->auth_key ? $model->auth_key : '-',
-		],
-		[
-			'attribute' => 'jwt_claims',
-			'value' => $model->jwt_claims ? $model->jwt_claims : '-',
-		],
-		[
-			'attribute' => 'assignmentRoles',
-			'value' => is_array($model->assignmentRoles) && !empty($model->assignmentRoles) ? implode(', ', $model->assignmentRoles) : '-',
-		],
-	],
-]) ?>
+	'attributes' => $attributes,
+]); ?>
 
 </div>
