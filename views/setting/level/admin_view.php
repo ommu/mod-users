@@ -122,6 +122,7 @@ $this->params['breadcrumbs'][] = $model->title->message;
 		[
 			'attribute' => 'creation_date',
 			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'creation_search',
@@ -130,6 +131,7 @@ $this->params['breadcrumbs'][] = $model->title->message;
 		[
 			'attribute' => 'modified_date',
 			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+			'visible' => !$small,
 		],
 		[
 			'attribute' => 'modified_search',
