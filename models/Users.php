@@ -355,7 +355,7 @@ class Users extends \app\components\ActiveRecord
 		$controller = isset(Yii::$app->controller) ? strtolower(Yii::$app->controller->id) : '';
 
 		$this->templateColumns['_no'] = [
-			'header' => Yii::t('app', 'No'),
+			'header' => '#',
 			'class'  => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
