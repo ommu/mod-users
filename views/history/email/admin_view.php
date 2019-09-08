@@ -40,7 +40,7 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->user) ? $model->user->level->title->message : '-',
 		],
 		[
-			'attribute' => 'user_search',
+			'attribute' => 'userDisplayname',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		'email:email',
@@ -49,6 +49,6 @@ $this->params['menu']['content'] = [
 			'value' => Yii::$app->formatter->asDatetime($model->update_date, 'medium'),
 		],
 	],
-]) ?>
+]); ?>
 
 </div>

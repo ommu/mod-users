@@ -28,7 +28,7 @@ class UserPhones extends UserPhonesModel
 	{
 		return [
 			[['phone_id', 'publish', 'verified', 'user_id', 'creation_id', 'modified_id'], 'integer'],
-			[['phone_number', 'verified_date', 'creation_date', 'modified_date', 'updated_date', 'user_search', 'creation_search', 'modified_search', 'level_search'], 'safe'],
+			[['phone_number', 'verified_date', 'creation_date', 'modified_date', 'updated_date', 'userDisplayname', 'creationDisplayname', 'modifiedDisplayname', 'level_search'], 'safe'],
 		];
 	}
 
@@ -82,15 +82,15 @@ class UserPhones extends UserPhonesModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['user_search'] = [
+		$attributes['userDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['creation_search'] = [
+		$attributes['creationDisplayname'] = [
 			'asc' => ['creation.displayname' => SORT_ASC],
 			'desc' => ['creation.displayname' => SORT_DESC],
 		];
-		$attributes['modified_search'] = [
+		$attributes['modifiedDisplayname'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
@@ -135,9 +135,9 @@ class UserPhones extends UserPhonesModel
 		}
 
 		$query->andFilterWhere(['like', 't.phone_number', $this->phone_number])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
-			->andFilterWhere(['like', 'creation.displayname', $this->creation_search])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+			->andFilterWhere(['like', 'user.displayname', $this->userDisplayname])
+			->andFilterWhere(['like', 'creation.displayname', $this->creationDisplayname])
+			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 
 		return $dataProvider;
 	}

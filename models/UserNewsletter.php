@@ -47,13 +47,13 @@ class UserNewsletter extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['creation_date','modified_date','modified_search','updated_date','updated_ip','user_search','','level_search'];
+	public $gridForbiddenColumn = ['creation_date','modified_date','modifiedDisplayname','updated_date','updated_ip','userDisplayname','','level_search'];
 	public $email_i;
 
-	public $user_search;
+	public $userDisplayname;
 	public $reference_search;
 	public $subscribe_search;
-	public $modified_search;
+	public $modifiedDisplayname;
 	public $level_search;
 	public $register_search;
 
@@ -113,10 +113,10 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'updated_ip' => Yii::t('app', 'Updated IP'),
 			'email_i' => Yii::t('app', 'Email'),
-			'user_search' => Yii::t('app', 'User'),
+			'userDisplayname' => Yii::t('app', 'User'),
 			'reference_search' => Yii::t('app', 'Reference'),
 			'subscribe_search' => Yii::t('app', 'Subscriber'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 			'level_search' => Yii::t('app', 'Level'),
 			'register_search' => Yii::t('app', 'Registered'),
 		];
@@ -212,8 +212,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'format' => 'html',
 		];
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['userDisplayname'] = [
+				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
@@ -257,8 +257,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 					// return $model->modifiedDisplayname;

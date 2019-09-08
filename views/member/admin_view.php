@@ -58,8 +58,14 @@ $attributes = [
 		'visible' => !$small,
 	],
 	'email:email',
-	'displayname',
-	'username',
+	[
+		'attribute' => 'displayname',
+		'value' => $model->displayname ? $model->displayname : '-',
+	],
+	[
+		'attribute' => 'username',
+		'value' => $model->username ? $model->username : '-',
+	],
 	[
 		'attribute' => 'password',
 		'value' => $model->password,
@@ -111,7 +117,7 @@ $attributes = [
 		'visible' => !$small,
 	],
 	[
-		'attribute' => 'modified_search',
+		'attribute' => 'modifiedDisplayname',
 		'value' => isset($model->modified) ? $model->modified->displayname : '-',
 		'visible' => !$small,
 	],

@@ -41,11 +41,11 @@ class UserForgot extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['code','forgot_date','forgot_ip','expired_date','modified_date','modified_search','deleted_date','level_search'];
+	public $gridForbiddenColumn = ['code','forgot_date','forgot_ip','expired_date','modified_date','modifiedDisplayname','deleted_date','level_search'];
 	public $email_i;
 
-	public $user_search;
-	public $modified_search;
+	public $userDisplayname;
+	public $modifiedDisplayname;
 	public $level_search;
 	public $expired_search;
 
@@ -102,8 +102,8 @@ class UserForgot extends \app\components\ActiveRecord
 			'modified_id' => Yii::t('app', 'Modified'),
 			'deleted_date' => Yii::t('app', 'Deleted Date'),
 			'email_i' => Yii::t('app', 'Email'),
-			'user_search' => Yii::t('app', 'User'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'userDisplayname' => Yii::t('app', 'User'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 			'level_search' => Yii::t('app', 'Level'),
 			'expired_search' => Yii::t('app', 'Expired'),
 		];
@@ -158,8 +158,8 @@ class UserForgot extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['userDisplayname'] = [
+				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},
@@ -213,8 +213,8 @@ class UserForgot extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 					// return $model->modifiedDisplayname;

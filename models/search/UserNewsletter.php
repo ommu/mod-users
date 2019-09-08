@@ -29,7 +29,7 @@ class UserNewsletter extends UserNewsletterModel
 	{
 		return [
 			[['newsletter_id', 'status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id'], 'integer'],
-			[['email', 'creation_date', 'modified_date', 'updated_date', 'updated_ip', 'user_search', 'reference_search', 'subscribe_search', 'modified_search', 'level_search', 'register_search'], 'safe'],
+			[['email', 'creation_date', 'modified_date', 'updated_date', 'updated_ip', 'userDisplayname', 'reference_search', 'subscribe_search', 'modifiedDisplayname', 'level_search', 'register_search'], 'safe'],
 		];
 	}
 
@@ -85,7 +85,7 @@ class UserNewsletter extends UserNewsletterModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['user_search'] = [
+		$attributes['userDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -97,7 +97,7 @@ class UserNewsletter extends UserNewsletterModel
 			'asc' => ['subscribe.displayname' => SORT_ASC],
 			'desc' => ['subscribe.displayname' => SORT_DESC],
 		];
-		$attributes['modified_search'] = [
+		$attributes['modifiedDisplayname'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
@@ -139,10 +139,10 @@ class UserNewsletter extends UserNewsletterModel
 
 		$query->andFilterWhere(['like', 't.email', $this->email])
 			->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search])
+			->andFilterWhere(['like', 'user.displayname', $this->userDisplayname])
 			->andFilterWhere(['like', 'reference.displayname', $this->reference_search])
 			->andFilterWhere(['like', 'subscribe.displayname', $this->subscribe_search])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 
 		return $dataProvider;
 	}

@@ -64,12 +64,12 @@ class UserLevel extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['desc_i','assignment_roles','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','creation_date','creation_search','modified_date','modified_search','slug'];
+	public $gridForbiddenColumn = ['desc_i','assignment_roles','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','creation_date','creationDisplayname','modified_date','modifiedDisplayname','slug'];
 	public $name_i;
 	public $desc_i;
 
-	public $creation_search;
-	public $modified_search;
+	public $creationDisplayname;
+	public $modifiedDisplayname;
 
 	const SCENARIO_USER = 'user';
 	const SCENARIO_MESSAGE = 'message';
@@ -160,8 +160,8 @@ class UserLevel extends \app\components\ActiveRecord
 			'slug' => Yii::t('app', 'Slug'),
 			'name_i' => Yii::t('app', 'Level'),
 			'desc_i' => Yii::t('app', 'Description'),
-			'creation_search' => Yii::t('app', 'Creation'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'creationDisplayname' => Yii::t('app', 'Creation'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 			'photo_size[i]' => Yii::t('app', 'Photo Size'),
 			'photo_size[width]' => Yii::t('app', 'Photo Width'),
 			'photo_size[height]' => Yii::t('app', 'Photo Height'),
@@ -299,8 +299,8 @@ class UserLevel extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'creation_date'),
 		];
 		if(!Yii::$app->request->get('creation')) {
-			$this->templateColumns['creation_search'] = [
-				'attribute' => 'creation_search',
+			$this->templateColumns['creationDisplayname'] = [
+				'attribute' => 'creationDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->creation) ? $model->creation->displayname : '-';
 					// return $model->creationDisplayname;
@@ -315,8 +315,8 @@ class UserLevel extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 					// return $model->modifiedDisplayname;

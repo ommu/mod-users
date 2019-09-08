@@ -75,6 +75,6 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->view) ? $model->view->verify_hour_left : '-',
 		],
 	],
-]) ?>
+]); ?>
 
 </div>

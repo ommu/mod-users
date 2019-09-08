@@ -47,12 +47,12 @@ class UserInvites extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['level_id','code','invite_ip','modified_date','modified_search','updated_date','level_search'];
+	public $gridForbiddenColumn = ['level_id','code','invite_ip','modified_date','modifiedDisplayname','updated_date','level_search'];
 	public $email_i;
 	public $old_invites_i;
 
 	public $inviter_search;
-	public $modified_search;
+	public $modifiedDisplayname;
 	public $email_search;
 	public $level_search;
 
@@ -121,7 +121,7 @@ class UserInvites extends \app\components\ActiveRecord
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'email_i' => Yii::t('app', 'Email'),
 			'inviter_search' => Yii::t('app', 'Inviter'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 			'email_search' => Yii::t('app', 'Email'),
 			'level_search' => Yii::t('app', 'Level'),
 		];
@@ -257,8 +257,8 @@ class UserInvites extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 					// return $model->modifiedDisplayname;

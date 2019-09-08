@@ -49,7 +49,7 @@ $this->params['menu']['content'] = [
 			'value' => $this->filterYesNo($model->newsletter->view->register),
 		],
 		[
-			'attribute' => 'user_search',
+			'attribute' => 'userDisplayname',
 			'value' => isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-',
 		],
 		[
@@ -63,6 +63,6 @@ $this->params['menu']['content'] = [
 		],
 		'updated_ip',
 	],
-]) ?>
+]); ?>
 
 </div>

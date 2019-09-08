@@ -40,7 +40,7 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->user) ? $model->user->level->title->message : '-',
 		],
 		[
-			'attribute' => 'user_search',
+			'attribute' => 'userDisplayname',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
@@ -55,6 +55,6 @@ $this->params['menu']['content'] = [
 		'lastlogin_ip',
 		'lastlogin_from',
 	],
-]) ?>
+]); ?>
 
 </div>

@@ -37,7 +37,7 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 
 	public $email_search;
 	public $level_search;
-	public $user_search;
+	public $userDisplayname;
 	public $register_search;
 
 	/**
@@ -74,7 +74,7 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'updated_ip' => Yii::t('app', 'Updated IP'),
 			'email_search' => Yii::t('app', 'Email'),
 			'level_search' => Yii::t('app', 'Level'),
-			'user_search' => Yii::t('app', 'User'),
+			'userDisplayname' => Yii::t('app', 'User'),
 			'register_search' => Yii::t('app', 'Registered'),
 		];
 	}
@@ -119,8 +119,8 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 				},
 				'format' => 'html',
 			];
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['userDisplayname'] = [
+				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-';
 				},

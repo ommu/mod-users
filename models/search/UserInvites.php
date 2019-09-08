@@ -29,7 +29,7 @@ class UserInvites extends UserInvitesModel
 	{
 		return [
 			[['id', 'publish', 'newsletter_id', 'invites', 'inviter_id', 'modified_id'], 'integer'],
-			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'inviter_search', 'modified_search', 'email_search', 'level_search'], 'safe'],
+			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'inviter_search', 'modifiedDisplayname', 'email_search', 'level_search'], 'safe'],
 		];
 	}
 
@@ -87,7 +87,7 @@ class UserInvites extends UserInvitesModel
 			'asc' => ['inviter.displayname' => SORT_ASC],
 			'desc' => ['inviter.displayname' => SORT_DESC],
 		];
-		$attributes['modified_search'] = [
+		$attributes['modifiedDisplayname'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
@@ -140,7 +140,7 @@ class UserInvites extends UserInvitesModel
 			->andFilterWhere(['like', 't.code', $this->code])
 			->andFilterWhere(['like', 't.invite_ip', $this->invite_ip])
 			->andFilterWhere(['like', 'inviter.displayname', $this->inviter_search])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search])
+			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname])
 			->andFilterWhere(['like', 'newsletter.email', $this->email_search]);
 
 		return $dataProvider;

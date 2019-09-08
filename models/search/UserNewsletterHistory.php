@@ -29,7 +29,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	{
 		return [
 			[['id', 'status', 'newsletter_id'], 'integer'],
-			[['updated_date', 'updated_ip', 'email_search', 'level_search', 'user_search', 'register_search'], 'safe'],
+			[['updated_date', 'updated_ip', 'email_search', 'level_search', 'userDisplayname', 'register_search'], 'safe'],
 		];
 	}
 
@@ -91,7 +91,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
-		$attributes['user_search'] = [
+		$attributes['userDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -126,7 +126,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 
 		$query->andFilterWhere(['like', 't.updated_ip', $this->updated_ip])
 			->andFilterWhere(['like', 'newsletter.email', $this->email_search])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
+			->andFilterWhere(['like', 'user.displayname', $this->userDisplayname]);
 
 		return $dataProvider;
 	}

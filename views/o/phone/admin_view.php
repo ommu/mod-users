@@ -14,6 +14,7 @@
  *
  */
 
+use yii\helpers\Html; 
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 
@@ -47,7 +48,7 @@ $this->params['menu']['content'] = [
 			'format' => 'raw',
 		],
 		[
-			'attribute' => 'user_search',
+			'attribute' => 'userDisplayname',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
@@ -65,7 +66,7 @@ $this->params['menu']['content'] = [
 			'visible' => !$small,
 		],
 		[
-			'attribute' => 'creation_search',
+			'attribute' => 'creationDisplayname',
 			'value' => isset($model->creation) ? $model->creation->displayname : '-',
 		],
 		[
@@ -74,7 +75,7 @@ $this->params['menu']['content'] = [
 			'visible' => !$small,
 		],
 		[
-			'attribute' => 'modified_search',
+			'attribute' => 'modifiedDisplayname',
 			'value' => isset($model->modified) ? $model->modified->displayname : '-',
 		],
 		[
@@ -83,6 +84,6 @@ $this->params['menu']['content'] = [
 			'visible' => !$small,
 		],
 	],
-]) ?>
+]); ?>
 
 </div>

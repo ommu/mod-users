@@ -67,7 +67,7 @@ $this->params['menu']['content'] = [
 			'visible' => !$small,
 		],
 		[
-			'attribute' => 'modified_search',
+			'attribute' => 'modifiedDisplayname',
 			'value' => isset($model->modified) ? $model->modified->displayname : '-',
 		],
 		[
@@ -76,6 +76,6 @@ $this->params['menu']['content'] = [
 			'visible' => !$small,
 		],
 	],
-]) ?>
+]); ?>
 
 </div>

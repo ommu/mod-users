@@ -32,7 +32,7 @@ use ommu\users\models\UserLevel;
 
 		<?php echo $form->field($model, 'email_search');?>
 
-		<?php echo $form->field($model, 'user_search');?>
+		<?php echo $form->field($model, 'userDisplayname');?>
 
 		<?php $level = UserLevel::getLevel();
 		echo $form->field($model, 'level_search')

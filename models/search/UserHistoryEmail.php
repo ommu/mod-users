@@ -29,7 +29,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 	{
 		return [
 			[['id', 'user_id'], 'integer'],
-			[['email', 'update_date', 'user_search', 'level_search'], 'safe'],
+			[['email', 'update_date', 'userDisplayname', 'level_search'], 'safe'],
 		];
 	}
 
@@ -81,7 +81,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
-		$attributes['user_search'] = [
+		$attributes['userDisplayname'] = [
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
@@ -113,7 +113,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 		]);
 
 		$query->andFilterWhere(['like', 't.email', $this->email])
-			->andFilterWhere(['like', 'user.displayname', $this->user_search]);
+			->andFilterWhere(['like', 'user.displayname', $this->userDisplayname]);
 
 		return $dataProvider;
 	}

@@ -32,7 +32,7 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 {
 	public $gridForbiddenColumn = [];
 
-	public $user_search;
+	public $userDisplayname;
 	public $level_search;
 
 	/**
@@ -66,7 +66,7 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 			'user_id' => Yii::t('app', 'User'),
 			'email' => Yii::t('app', 'Email'),
 			'update_date' => Yii::t('app', 'Update Date'),
-			'user_search' => Yii::t('app', 'User'),
+			'userDisplayname' => Yii::t('app', 'User'),
 			'level_search' => Yii::t('app', 'Level'),
 		];
 	}
@@ -104,8 +104,8 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 		];
 		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['user_search'] = [
-				'attribute' => 'user_search',
+			$this->templateColumns['userDisplayname'] = [
+				'attribute' => 'userDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->user) ? $model->user->displayname : '-';
 				},

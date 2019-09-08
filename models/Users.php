@@ -75,7 +75,7 @@ class Users extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['language_id', 'password', 'salt', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'creation_ip', 'modified_date', 'modified_search', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims'];
+	public $gridForbiddenColumn = ['language_id', 'password', 'salt', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'creation_ip', 'modified_date', 'modifiedDisplayname', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims'];
 	public $inviteCode;
 	public $currentPassword;
 	public $confirmPassword;
@@ -89,7 +89,7 @@ class Users extends \app\components\ActiveRecord
 	public $verified_i;
 	public $reference_id_i;
 
-	public $modified_search;
+	public $modifiedDisplayname;
 
 	const SCENARIO_ADMIN_CREATE = 'adminCreate';
 	const SCENARIO_ADMIN_UPDATE_WITH_PASSWORD = 'adminUpdateWithPassword';
@@ -193,7 +193,7 @@ class Users extends \app\components\ActiveRecord
 			'currentPassword' => Yii::t('app', 'Current Password'),
 			'confirmPassword' => Yii::t('app', 'Confirm Password'),
 			'assignmentRoles' => Yii::t('app', 'Assignments'),
-			'modified_search' => Yii::t('app', 'Modified'),
+			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 		];
 	}
 
@@ -430,8 +430,8 @@ class Users extends \app\components\ActiveRecord
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
 		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modified_search'] = [
-				'attribute' => 'modified_search',
+			$this->templateColumns['modifiedDisplayname'] = [
+				'attribute' => 'modifiedDisplayname',
 				'value' => function($model, $key, $index, $column) {
 					return isset($model->modified) ? $model->modified->displayname : '-';
 					// return $model->modifiedDisplayname;

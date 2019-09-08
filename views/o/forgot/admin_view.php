@@ -41,7 +41,7 @@ $this->params['menu']['content'] = [
 			'format' => 'raw',
 		],
 		[
-			'attribute' => 'user_search',
+			'attribute' => 'userDisplayname',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
@@ -64,7 +64,7 @@ $this->params['menu']['content'] = [
 			'visible' => !$small,
 		],
 		[
-			'attribute' => 'modified_search',
+			'attribute' => 'modifiedDisplayname',
 			'value' => isset($model->modified) ? $model->modified->displayname : '-',
 		],
 		[
@@ -76,6 +76,6 @@ $this->params['menu']['content'] = [
 			'value' => $this->filterYesNo($model->view->expired),
 		],
 	],
-]) ?>
+]); ?>
 
 </div>

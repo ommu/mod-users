@@ -29,7 +29,7 @@ class Users extends UsersModel
 	{
 		return [
 			[['user_id', 'enabled', 'verified', 'level_id', 'language_id', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'modified_id'], 'integer'],
-			[['email', 'username', 'displayname', 'password', 'salt', 'creation_date', 'creation_ip', 'modified_date', 'lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims', 'modified_search'], 'safe'],
+			[['email', 'username', 'displayname', 'password', 'salt', 'creation_date', 'creation_ip', 'modified_date', 'lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims', 'modifiedDisplayname'], 'safe'],
 		];
 	}
 
@@ -91,7 +91,7 @@ class Users extends UsersModel
 			'asc' => ['languageRltn.name' => SORT_ASC],
 			'desc' => ['languageRltn.name' => SORT_DESC],
 		];
-		$attributes['modified_search'] = [
+		$attributes['modifiedDisplayname'] = [
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
@@ -149,7 +149,7 @@ class Users extends UsersModel
 			->andFilterWhere(['like', 't.update_ip', $this->update_ip])
 			->andFilterWhere(['like', 't.auth_key', $this->auth_key])
 			->andFilterWhere(['like', 't.jwt_claims', $this->jwt_claims])
-			->andFilterWhere(['like', 'modified.displayname', $this->modified_search]);
+			->andFilterWhere(['like', 'modified.displayname', $this->modifiedDisplayname]);
 
 		return $dataProvider;
 	}

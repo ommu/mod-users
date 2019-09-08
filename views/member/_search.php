@@ -55,7 +55,7 @@ use app\models\CoreLanguages;
 		<?php echo $form->field($model, 'modified_date')
 			->input('date');?>
 
-		<?php echo $form->field($model, 'modified_search');?>
+		<?php echo $form->field($model, 'modifiedDisplayname');?>
 
 		<?php echo $form->field($model, 'lastlogin_date')
 			->input('date');?>
