@@ -39,13 +39,15 @@ class MemberSuggestAction extends \yii\base\Action
 		if($term == null) return [];
 
 		$validator = new EmailValidator();
-		$model = Users::find()->suggest();
+		$model = Users::find()
+			->alias('t')
+			->suggest();
 		if($validator->validate($term) === true)
-			$model->andWhere(['like', 'email', $term]);
+			$model->andWhere(['like', 't.email', $term]);
 		else {
 			$model->andWhere(['or',
-				['like', 'email', $term],
-				['like', 'displayname', $term]
+				['like', 't.email', $term],
+				['like', 't.displayname', $term]
 			]);
 		}
 		$model = $model->limit(15)->all();
