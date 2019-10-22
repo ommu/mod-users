@@ -352,6 +352,9 @@ class Users extends \app\components\ActiveRecord
 		if(!(Yii::$app instanceof \app\components\Application))
 			return;
 
+		if(!$this->hasMethod('search'))
+			return;
+
 		$controller = isset(Yii::$app->controller) ? strtolower(Yii::$app->controller->id) : '';
 
 		$this->templateColumns['_no'] = [
