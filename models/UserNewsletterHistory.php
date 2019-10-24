@@ -114,28 +114,29 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('newsletter')) {
-			$this->templateColumns['email_search'] = [
-				'attribute' => 'email_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-';
-				},
-				'format' => 'html',
-			];
-			$this->templateColumns['userDisplayname'] = [
-				'attribute' => 'userDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-';
-				},
-			];
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-';
-				},
-				'filter' => UserLevel::getLevel(),
-			];
-		}
+		$this->templateColumns['email_search'] = [
+			'attribute' => 'email_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-';
+			},
+			'format' => 'html',
+			'visible' => !Yii::$app->request->get('newsletter') ? true : false,
+		];
+		$this->templateColumns['userDisplayname'] = [
+			'attribute' => 'userDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('newsletter') ? true : false,
+		];
+		$this->templateColumns['level_search'] = [
+			'attribute' => 'level_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-';
+			},
+			'filter' => UserLevel::getLevel(),
+			'visible' => !Yii::$app->request->get('newsletter') ? true : false,
+		];
 		$this->templateColumns['updated_date'] = [
 			'attribute' => 'updated_date',
 			'value' => function($model, $key, $index, $column) {

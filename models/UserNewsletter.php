@@ -214,37 +214,35 @@ class UserNewsletter extends \app\components\ActiveRecord
 			},
 			'format' => 'html',
 		];
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['userDisplayname'] = [
-				'attribute' => 'userDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-				},
-			];
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user->level) ? $model->user->level->title->message : '-';
-				},
-				'filter' => UserLevel::getLevel(),
-			];
-		}
-		if(!Yii::$app->request->get('reference')) {
-			$this->templateColumns['reference_search'] = [
-				'attribute' => 'reference_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->reference) ? $model->reference->displayname : '-';
-				},
-			];
-		}
-		if(!Yii::$app->request->get('subscribe')) {
-			$this->templateColumns['subscribe_search'] = [
-				'attribute' => 'subscribe_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->subscribe) ? $model->subscribe->displayname : '-';
-				},
-			];
-		}
+		$this->templateColumns['userDisplayname'] = [
+			'attribute' => 'userDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
+		$this->templateColumns['level_search'] = [
+			'attribute' => 'level_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user->level) ? $model->user->level->title->message : '-';
+			},
+			'filter' => UserLevel::getLevel(),
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
+		$this->templateColumns['reference_search'] = [
+			'attribute' => 'reference_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->reference) ? $model->reference->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('reference') ? true : false,
+		];
+		$this->templateColumns['subscribe_search'] = [
+			'attribute' => 'subscribe_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->subscribe) ? $model->subscribe->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('subscribe') ? true : false,
+		];
 		$this->templateColumns['creation_date'] = [
 			'attribute' => 'creation_date',
 			'value' => function($model, $key, $index, $column) {
@@ -259,15 +257,14 @@ class UserNewsletter extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
-		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modifiedDisplayname'] = [
-				'attribute' => 'modifiedDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->modified) ? $model->modified->displayname : '-';
-					// return $model->modifiedDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['modifiedDisplayname'] = [
+			'attribute' => 'modifiedDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->modified) ? $model->modified->displayname : '-';
+				// return $model->modifiedDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('modified') ? true : false,
+		];
 		$this->templateColumns['updated_date'] = [
 			'attribute' => 'updated_date',
 			'value' => function($model, $key, $index, $column) {

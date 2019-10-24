@@ -106,21 +106,21 @@ class UserHistoryEmail extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['userDisplayname'] = [
-				'attribute' => 'userDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-				},
-			];
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->level->title->message : '-';
-				},
-				'filter' => UserLevel::getLevel(),
-			];
-		}
+		$this->templateColumns['userDisplayname'] = [
+			'attribute' => 'userDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
+		$this->templateColumns['level_search'] = [
+			'attribute' => 'level_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->level->title->message : '-';
+			},
+			'filter' => UserLevel::getLevel(),
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
 		$this->templateColumns['email'] = [
 			'attribute' => 'email',
 			'value' => function($model, $key, $index, $column) {

@@ -128,34 +128,36 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('invite')) {
-			$this->templateColumns['email_search'] = [
-				'attribute' => 'email_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite->newsletter) ? Yii::$app->formatter->asEmail($model->invite->newsletter->email) : '-';
-				},
-				'format' => 'html',
-			];
-			$this->templateColumns['displayname_search'] = [
-				'attribute' => 'displayname_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite) ? $model->invite->displayname : '-';
-				},
-			];
-			$this->templateColumns['inviter_search'] = [
-				'attribute' => 'inviter_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite->inviter) ? $model->invite->inviter->displayname : '-';
-				},
-			];
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->invite->inviter->level) ? $model->invite->inviter->level->title->message : '-';
-				},
-				'filter' => UserLevel::getLevel(),
-			];
-		}
+		$this->templateColumns['email_search'] = [
+			'attribute' => 'email_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->invite->newsletter) ? Yii::$app->formatter->asEmail($model->invite->newsletter->email) : '-';
+			},
+			'format' => 'html',
+			'visible' => !Yii::$app->request->get('invite') ? true : false,
+		];
+		$this->templateColumns['displayname_search'] = [
+			'attribute' => 'displayname_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->invite) ? $model->invite->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('invite') ? true : false,
+		];
+		$this->templateColumns['inviter_search'] = [
+			'attribute' => 'inviter_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->invite->inviter) ? $model->invite->inviter->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('invite') ? true : false,
+		];
+		$this->templateColumns['level_search'] = [
+			'attribute' => 'level_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->invite->inviter->level) ? $model->invite->inviter->level->title->message : '-';
+			},
+			'filter' => UserLevel::getLevel(),
+			'visible' => !Yii::$app->request->get('invite') ? true : false,
+		];
 		$this->templateColumns['code'] = [
 			'attribute' => 'code',
 			'value' => function($model, $key, $index, $column) {

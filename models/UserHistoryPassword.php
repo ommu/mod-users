@@ -108,28 +108,29 @@ class UserHistoryPassword extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['userDisplayname'] = [
-				'attribute' => 'userDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-				},
-			];
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->level->title->message : '-';
-				},
-				'filter' => UserLevel::getLevel(),
-			];
-			$this->templateColumns['email_search'] = [
-				'attribute' => 'email_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-';
-				},
-				'format' => 'html',
-			];
-		}
+		$this->templateColumns['userDisplayname'] = [
+			'attribute' => 'userDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
+		$this->templateColumns['level_search'] = [
+			'attribute' => 'level_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->level->title->message : '-';
+			},
+			'filter' => UserLevel::getLevel(),
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
+		$this->templateColumns['email_search'] = [
+			'attribute' => 'email_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-';
+			},
+			'format' => 'html',
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
 		$this->templateColumns['password'] = [
 			'attribute' => 'password',
 			'value' => function($model, $key, $index, $column) {

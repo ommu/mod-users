@@ -160,28 +160,29 @@ class UserForgot extends \app\components\ActiveRecord
 			'class' => 'yii\grid\SerialColumn',
 			'contentOptions' => ['class'=>'center'],
 		];
-		if(!Yii::$app->request->get('user')) {
-			$this->templateColumns['userDisplayname'] = [
-				'attribute' => 'userDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? $model->user->displayname : '-';
-				},
-			];
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user->level) ? $model->user->level->title->message : '-';
-				},
-				'filter' => UserLevel::getLevel(),
-			];
-			$this->templateColumns['email_i'] = [
-				'attribute' => 'email_i',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-';
-				},
-				'format' => 'html',
-			];
-		}
+		$this->templateColumns['userDisplayname'] = [
+			'attribute' => 'userDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? $model->user->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
+		$this->templateColumns['level_search'] = [
+			'attribute' => 'level_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user->level) ? $model->user->level->title->message : '-';
+			},
+			'filter' => UserLevel::getLevel(),
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
+		$this->templateColumns['email_i'] = [
+			'attribute' => 'email_i',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-';
+			},
+			'format' => 'html',
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
 		$this->templateColumns['code'] = [
 			'attribute' => 'code',
 			'value' => function($model, $key, $index, $column) {
@@ -215,15 +216,14 @@ class UserForgot extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
-		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modifiedDisplayname'] = [
-				'attribute' => 'modifiedDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->modified) ? $model->modified->displayname : '-';
-					// return $model->modifiedDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['modifiedDisplayname'] = [
+			'attribute' => 'modifiedDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->modified) ? $model->modified->displayname : '-';
+				// return $model->modifiedDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('modified') ? true : false,
+		];
 		$this->templateColumns['deleted_date'] = [
 			'attribute' => 'deleted_date',
 			'value' => function($model, $key, $index, $column) {
@@ -240,18 +240,17 @@ class UserForgot extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'raw',
 		];
-		if(!Yii::$app->request->get('trash')) {
-			$this->templateColumns['publish'] = [
-				'attribute' => 'publish',
-				'value' => function($model, $key, $index, $column) {
-					$url = Url::to(['publish', 'id'=>$model->primaryKey]);
-					return $model->publish == 0 ? '-' : $this->quickAction($url, $model->publish);
-				},
-				'filter' => $this->filterYesNo(),
-				'contentOptions' => ['class'=>'center'],
-				'format' => 'raw',
-			];
-		}
+		$this->templateColumns['publish'] = [
+			'attribute' => 'publish',
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['publish', 'id'=>$model->primaryKey]);
+				return $model->publish == 0 ? '-' : $this->quickAction($url, $model->publish);
+			},
+			'filter' => $this->filterYesNo(),
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+			'visible' => !Yii::$app->request->get('trash') ? true : false,
+		];
 	}
 
 	/**

@@ -371,15 +371,14 @@ class Users extends \app\components\ActiveRecord
 				'filter' => UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member'),
 			];
 		}
-		if(!Yii::$app->request->get('language')) {
-			$this->templateColumns['language_id'] = [
-				'attribute' => 'language_id',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->languageRltn) ? $model->languageRltn->name : '-';
-				},
-				'filter' => CoreLanguages::getLanguage(),
-			];
-		}
+		$this->templateColumns['language_id'] = [
+			'attribute' => 'language_id',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->languageRltn) ? $model->languageRltn->name : '-';
+			},
+			'filter' => CoreLanguages::getLanguage(),
+			'visible' => !Yii::$app->request->get('language') ? true : false,
+		];
 		$this->templateColumns['email'] = [
 			'attribute' => 'email',
 			'value' => function($model, $key, $index, $column) {
@@ -432,15 +431,14 @@ class Users extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
-		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modifiedDisplayname'] = [
-				'attribute' => 'modifiedDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->modified) ? $model->modified->displayname : '-';
-					// return $model->modifiedDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['modifiedDisplayname'] = [
+			'attribute' => 'modifiedDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->modified) ? $model->modified->displayname : '-';
+				// return $model->modifiedDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('modified') ? true : false,
+		];
 		$this->templateColumns['lastlogin_date'] = [
 			'attribute' => 'lastlogin_date',
 			'value' => function($model, $key, $index, $column) {

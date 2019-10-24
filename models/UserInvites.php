@@ -200,39 +200,37 @@ class UserInvites extends \app\components\ActiveRecord
 				return $model->displayname ? $model->displayname : '-';
 			},
 		];
-		if(!Yii::$app->request->get('newsletter')) {
-			$this->templateColumns['email_search'] = [
-				'attribute' => 'email_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-';
-				},
-				'format' => 'html',
-			];
-		}
-		if(!Yii::$app->request->get('level')) {
-			$this->templateColumns['level_id'] = [
-				'attribute' => 'level_id',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->level) ? $model->level->name_i : '-';
-				},
-				'filter' => UserLevel::getLevel(),
-			];
-		}
-		if(!Yii::$app->request->get('inviter')) {
-			$this->templateColumns['inviter_search'] = [
-				'attribute' => 'inviter_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->inviter) ? $model->inviter->displayname : '-';
-				},
-			];
-			$this->templateColumns['level_search'] = [
-				'attribute' => 'level_search',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->inviter->level) ? $model->inviter->level->title->message : '-';
-				},
-				'filter' => UserLevel::getLevel(),
-			];
-		}
+		$this->templateColumns['email_search'] = [
+			'attribute' => 'email_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-';
+			},
+			'format' => 'html',
+			'visible' => !Yii::$app->request->get('newsletter') ? true : false,
+		];
+		$this->templateColumns['level_id'] = [
+			'attribute' => 'level_id',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->level) ? $model->level->name_i : '-';
+			},
+			'filter' => UserLevel::getLevel(),
+			'visible' => !Yii::$app->request->get('level') ? true : false,
+		];
+		$this->templateColumns['inviter_search'] = [
+			'attribute' => 'inviter_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->inviter) ? $model->inviter->displayname : '-';
+			},
+			'visible' => !Yii::$app->request->get('inviter') ? true : false,
+		];
+		$this->templateColumns['level_search'] = [
+			'attribute' => 'level_search',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->inviter->level) ? $model->inviter->level->title->message : '-';
+			},
+			'filter' => UserLevel::getLevel(),
+			'visible' => !Yii::$app->request->get('inviter') ? true : false,
+		];
 		$this->templateColumns['code'] = [
 			'attribute' => 'code',
 			'value' => function($model, $key, $index, $column) {
@@ -259,15 +257,14 @@ class UserInvites extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'modified_date'),
 		];
-		if(!Yii::$app->request->get('modified')) {
-			$this->templateColumns['modifiedDisplayname'] = [
-				'attribute' => 'modifiedDisplayname',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->modified) ? $model->modified->displayname : '-';
-					// return $model->modifiedDisplayname;
-				},
-			];
-		}
+		$this->templateColumns['modifiedDisplayname'] = [
+			'attribute' => 'modifiedDisplayname',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->modified) ? $model->modified->displayname : '-';
+				// return $model->modifiedDisplayname;
+			},
+			'visible' => !Yii::$app->request->get('modified') ? true : false,
+		];
 		$this->templateColumns['updated_date'] = [
 			'attribute' => 'updated_date',
 			'value' => function($model, $key, $index, $column) {
@@ -283,18 +280,17 @@ class UserInvites extends \app\components\ActiveRecord
 			'contentOptions' => ['class'=>'center'],
 			'format' => 'html',
 		];
-		if(!Yii::$app->request->get('trash')) {
-			$this->templateColumns['publish'] = [
-				'attribute' => 'publish',
-				'value' => function($model, $key, $index, $column) {
-					$url = Url::to(['publish', 'id'=>$model->primaryKey]);
-					return $this->quickAction($url, $model->publish);
-				},
-				'filter' => $this->filterYesNo(),
-				'contentOptions' => ['class'=>'center'],
-				'format' => 'raw',
-			];
-		}
+		$this->templateColumns['publish'] = [
+			'attribute' => 'publish',
+			'value' => function($model, $key, $index, $column) {
+				$url = Url::to(['publish', 'id'=>$model->primaryKey]);
+				return $this->quickAction($url, $model->publish);
+			},
+			'filter' => $this->filterYesNo(),
+			'contentOptions' => ['class'=>'center'],
+			'format' => 'raw',
+			'visible' => !Yii::$app->request->get('trash') ? true : false,
+		];
 	}
 
 	/**
