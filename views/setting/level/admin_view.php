@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $model->title->message;
 		],
 		[
 			'attribute' => 'assignment_roles',
-			'value' => $this->formatFileType($model->assignment_roles, false, '<br/>'),
+			'value' => $model::parseAssignment($model->assignment_roles),
 			'format' => 'html',
 		],
 		[
