@@ -24,6 +24,11 @@ return [
 		],
 		[
 			'class'    => Users::className(),
+			'event'    => Users::EVENT_AFTER_UPDATE_USERS,
+			'callback' => [Events::className(), 'onAfterUpdateUsers']
+		],
+		[
+			'class'    => Users::className(),
 			'event'    => Users::EVENT_AFTER_DELETE_USERS,
 			'callback' => [Events::className(), 'onAfterDeleteUsers']
 		],

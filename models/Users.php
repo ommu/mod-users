@@ -99,6 +99,7 @@ class Users extends \app\components\ActiveRecord
 	const SCENARIO_CHANGE_PASSWORD = 'changePassword';
 
 	const EVENT_AFTER_CREATE_USERS = 'afterCreateUsers';
+	const EVENT_AFTER_UPDATE_USERS = 'afterUpdateUsers';
 	const EVENT_AFTER_DELETE_USERS = 'afterDeleteUsers';
 
 	/**
@@ -896,6 +897,12 @@ class Users extends \app\components\ActiveRecord
 				$verify = new UserVerify;
 				$verify->user_id = $this->user_id;
 				$verify->save();
+			}
+
+			// Trigger after update assignment
+			if(array_key_exists('level_id', $changedAttributes) && $changedAttributes['level_id'] != $this->level_id) {
+				$event = new Event(['sender' => $this]);
+				Event::trigger(self::className(), self::EVENT_AFTER_UPDATE_USERS, $event);
 			}
 
 			// Send new account information

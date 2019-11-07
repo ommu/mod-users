@@ -30,6 +30,39 @@ class Events extends \yii\base\BaseObject
 	/**
 	 * {@inheritdoc}
 	 */
+	public static function onAfterUpdateUsers($event)
+	{
+		$user = $event->sender;
+		$manager = Yii::$app->authManager;
+
+		$oldAssignmentRoles = $user->assignmentRoles;
+
+		// update new assignment
+		$levelRoles = $user->level->assignment_roles;
+		if(!empty($levelRoles)) {
+			foreach ($levelRoles as $val) {
+				if($manager->getAssignment($val, $user->user_id) != null) {
+					unset($oldAssignmentRoles[$val]);
+					continue;
+				}
+
+				$item = $manager->getRole($val);
+				$manager->assign($item, $user->user_id);
+			}
+		}
+
+		// drop difference assignment
+		if(!empty($oldAssignmentRoles)) {
+			foreach ($oldAssignmentRoles as $val) {
+				$item = $manager->getRole($val);
+				$manager->revoke($item, $user->user_id);
+			}
+		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public static function onAfterDeleteUsers($event)
 	{
 		$user = $event->sender;
@@ -44,6 +77,7 @@ class Events extends \yii\base\BaseObject
 	{
 		$user = $event->sender;
 
+		// insert new assignment
 		$levelRoles = $user->level->assignment_roles;
 		if(!empty($levelRoles)) {
 			$manager = Yii::$app->authManager;
