@@ -53,8 +53,6 @@ use yii\widgets\ActiveForm;
 
 		<?php echo $form->field($model, 'modifiedDisplayname');?>
 
-		<?php echo $form->field($model, 'slug');?>
-
 		<?php echo $form->field($model, 'default')
 			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
 

@@ -38,7 +38,6 @@
  * @property integer $creation_id
  * @property string $modified_date
  * @property integer $modified_id
- * @property string $slug
  *
  * The followings are the available model relations:
  * @property Users[] $users
@@ -55,16 +54,16 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\Inflector;
-use yii\behaviors\SluggableBehavior;
 use app\models\SourceMessage;
 use ommu\users\models\view\UserLevel as UserLevelView;
+use yii\helpers\Json;
 
 class UserLevel extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['desc_i','assignment_roles','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','creation_date','creationDisplayname','modified_date','modifiedDisplayname','slug'];
+	public $gridForbiddenColumn = ['desc_i','assignment_roles','message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','creation_date','creationDisplayname','modified_date','modifiedDisplayname'];
 	public $name_i;
 	public $desc_i;
 
@@ -83,20 +82,6 @@ class UserLevel extends \app\components\ActiveRecord
 	}
 
 	/**
-	 * behaviors model class.
-	 */
-	public function behaviors() {
-		return [
-			[
-				'class' => SluggableBehavior::className(),
-				'attribute' => 'title.message',
-				'immutable' => true,
-				'ensureUnique' => true,
-			],
-		];
-	}
-
-	/**
 	 * @return array validation rules for model attributes.
 	 */
 	public function rules()
@@ -108,9 +93,8 @@ class UserLevel extends \app\components\ActiveRecord
 			[['name', 'desc', 'default', 'signup', 'message_allow', 'profile_block', 'profile_search', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'creation_id', 'modified_id'], 'integer'],
 			[['photo_exts', 'name_i', 'desc_i'], 'string'],
 			//[['message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], 'serialize'],
-			[['slug', 'name_i'], 'string', 'max' => 64],
+			[['name_i'], 'string', 'max' => 64],
 			[['desc_i'], 'string', 'max' => 128],
-			[['slug'], 'string', 'max' => 32],
 		];
 	}
 
@@ -157,7 +141,6 @@ class UserLevel extends \app\components\ActiveRecord
 			'creation_id' => Yii::t('app', 'Creation'),
 			'modified_date' => Yii::t('app', 'Modified Date'),
 			'modified_id' => Yii::t('app', 'Modified'),
-			'slug' => Yii::t('app', 'Slug'),
 			'name_i' => Yii::t('app', 'Level'),
 			'desc_i' => Yii::t('app', 'Description'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
@@ -323,12 +306,6 @@ class UserLevel extends \app\components\ActiveRecord
 				// return $model->modifiedDisplayname;
 			},
 			'visible' => !Yii::$app->request->get('modified') ? true : false,
-		];
-		$this->templateColumns['slug'] = [
-			'attribute' => 'slug',
-			'value' => function($model, $key, $index, $column) {
-				return $model->slug;
-			},
 		];
 		$this->templateColumns['message_allow'] = [
 			'attribute' => 'message_allow',
@@ -848,8 +825,6 @@ class UserLevel extends \app\components\ActiveRecord
 				$name->message = $this->name_i;
 				if($name->save())
 					$this->name = $name->id;
-
-				$this->slug = Inflector::slug($this->name_i);
 
 			} else {
 				$name = SourceMessage::findOne($this->name);

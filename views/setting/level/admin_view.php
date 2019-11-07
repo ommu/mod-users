@@ -137,7 +137,6 @@ $this->params['breadcrumbs'][] = $model->title->message;
 			'attribute' => 'modifiedDisplayname',
 			'value' => isset($model->modified) ? $model->modified->displayname : '-',
 		],
-		'slug',
 	],
 ]); ?>
 
