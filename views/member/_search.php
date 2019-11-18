@@ -78,22 +78,22 @@ use app\models\CoreLanguages;
 			->dropDownList($enabled, ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'verified')
-			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'deactivate')
-			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'search')
-			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'invisible')
-			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'privacy')
-			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'comments')
-			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>

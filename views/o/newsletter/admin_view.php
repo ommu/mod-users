@@ -38,7 +38,7 @@ $this->params['menu']['content'] = [
 		'email:email',
 		[
 			'attribute' => 'status',
-			'value' => $this->quickAction(Url::to(['status', 'id'=>$model->primaryKey]), $model->status, 'Subscribe,Unsubscribe'),
+			'value' => $model->quickAction(Url::to(['status', 'id'=>$model->primaryKey]), $model->status, 'Subscribe,Unsubscribe'),
 			'format' => 'raw',
 		],
 		[

@@ -44,7 +44,7 @@ $attributes = [
 	],
 	[
 		'attribute' => 'verified',
-		'value' => $this->quickAction(Url::to(['verified', 'id'=>$model->primaryKey]), $model->verified, 'Verified,Unverified'),
+		'value' => $model->quickAction(Url::to(['verified', 'id'=>$model->primaryKey]), $model->verified, 'Verified,Unverified'),
 		'format' => 'raw',
 		'visible' => !$small,
 	],
