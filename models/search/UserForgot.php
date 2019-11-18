@@ -29,7 +29,7 @@ class UserForgot extends UserForgotModel
 	{
 		return [
 			[['forgot_id', 'publish', 'user_id', 'modified_id'], 'integer'],
-			[['code', 'forgot_date', 'forgot_ip', 'expired_date', 'modified_date', 'deleted_date', 'email_i', 'userDisplayname', 'modifiedDisplayname', 'level_search', 'expired_search'], 'safe'],
+			[['code', 'forgot_date', 'forgot_ip', 'expired_date', 'modified_date', 'deleted_date', 'email_i', 'userDisplayname', 'modifiedDisplayname', 'userLevel', 'expired'], 'safe'],
 		];
 	}
 
@@ -69,7 +69,6 @@ class UserForgot extends UserForgotModel
 			'user user', 
 			'modified modified',
 			'user.level.title level', 
-			'view view', 
 		])
 		->groupBy(['forgot_id']);
 
@@ -95,13 +94,9 @@ class UserForgot extends UserForgotModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
-		];
-		$attributes['expired_search'] = [
-			'asc' => ['view.expired' => SORT_ASC],
-			'desc' => ['view.expired' => SORT_DESC],
 		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
@@ -125,8 +120,7 @@ class UserForgot extends UserForgotModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.deleted_date as date)' => $this->deleted_date,
-			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
-			'view.expired' => $this->expired_search,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 		]);
 
 		if(isset($params['trash']))
@@ -136,6 +130,21 @@ class UserForgot extends UserForgotModel
 				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
 			else
 				$query->andFilterWhere(['t.publish' => $this->publish]);
+		}
+
+		if(isset($params['expired']) && $params['expired'] != '') {
+			if($this->expired == 1) {
+				$query->andWhere(['or', 
+					['<>', 't.publish', '1'],
+					['and', 
+						['t.publish' => 1], 
+						['<=', 't.expired_date', Yii::$app->formatter->asTime('now', 'php:Y-m-d H:i:s')],
+					],
+				]);
+			} else if($this->expired == 0) {
+				$query->andWhere(['t.publish' => 1])
+					->andWhere(['>=', 't.expired_date', Yii::$app->formatter->asTime('now', 'php:Y-m-d H:i:s')]);
+			}
 		}
 
 		$query->andFilterWhere(['like', 't.code', $this->code])

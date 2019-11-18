@@ -37,15 +37,24 @@ $this->params['menu']['content'] = [
 		'forgot_id',
 		[
 			'attribute' => 'publish',
-			'value' => $model->publish == 0 ? '-' : $this->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish),
+			'value' => $this->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish),
 			'format' => 'raw',
+		],
+		[
+			'attribute' => 'expired',
+			'value' => $this->filterYesNo($model->expired),
 		],
 		[
 			'attribute' => 'userDisplayname',
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
-			'attribute' => 'level_search',
+			'attribute' => 'email_i',
+			'value' => isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-',
+			'format' => 'html',
+		],
+		[
+			'attribute' => 'userLevel',
 			'value' => isset($model->user->level) ? $model->user->level->title->message : '-',
 		],
 		'code',
@@ -70,10 +79,6 @@ $this->params['menu']['content'] = [
 		[
 			'attribute' => 'deleted_date',
 			'value' => Yii::$app->formatter->asDatetime($model->deleted_date, 'medium'),
-		],
-		[
-			'attribute' => 'view.expired',
-			'value' => $this->filterYesNo($model->view->expired),
 		],
 	],
 ]); ?>
