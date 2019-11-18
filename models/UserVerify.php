@@ -34,20 +34,20 @@ namespace ommu\users\models;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use ommu\users\models\view\UserVerify as UserVerifyView;
+use app\components\helpers\TimeHelper;
 
 class UserVerify extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['code','verify_date','verify_ip','expired_date','modified_date','modifiedDisplayname','deleted_date','level_search'];
+	public $gridForbiddenColumn = ['code','verify_date','verify_ip','expired_date','modified_date','modifiedDisplayname','deleted_date'];
 	public $email_i;
 
 	public $userDisplayname;
 	public $modifiedDisplayname;
-	public $level_search;
-	public $expired_search;
+	public $userLevel;
+	public $expired;
 
 	const SCENARIO_WITH_FORM = 'withForm';
 
@@ -104,8 +104,8 @@ class UserVerify extends \app\components\ActiveRecord
 			'email_i' => Yii::t('app', 'Email'),
 			'userDisplayname' => Yii::t('app', 'User'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
-			'level_search' => Yii::t('app', 'Level'),
-			'expired_search' => Yii::t('app', 'Expired'),
+			'userLevel' => Yii::t('app', 'Level'),
+			'expired' => Yii::t('app', 'Expired'),
 		];
 	}
 
@@ -123,14 +123,6 @@ class UserVerify extends \app\components\ActiveRecord
 	public function getModified()
 	{
 		return $this->hasOne(Users::className(), ['user_id' => 'modified_id']);
-	}
-
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getView()
-	{
-		return $this->hasOne(UserVerifyView::className(), ['verify_id' => 'verify_id']);
 	}
 
 	/**
@@ -167,8 +159,8 @@ class UserVerify extends \app\components\ActiveRecord
 			},
 			'visible' => !Yii::$app->request->get('user') ? true : false,
 		];
-		$this->templateColumns['level_search'] = [
-			'attribute' => 'level_search',
+		$this->templateColumns['userLevel'] = [
+			'attribute' => 'userLevel',
 			'value' => function($model, $key, $index, $column) {
 				return isset($model->user->level) ? $model->user->level->title->message : '-';
 			},
@@ -231,10 +223,10 @@ class UserVerify extends \app\components\ActiveRecord
 			},
 			'filter' => $this->filterDatepicker($this, 'deleted_date'),
 		];
-		$this->templateColumns['expired_search'] = [
-			'attribute' => 'expired_search',
+		$this->templateColumns['expired'] = [
+			'attribute' => 'expired',
 			'value' => function($model, $key, $index, $column) {
-				return $this->filterYesNo($model->view->expired);
+				return $this->filterYesNo($model->expired);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
@@ -244,7 +236,7 @@ class UserVerify extends \app\components\ActiveRecord
 			'attribute' => 'publish',
 			'value' => function($model, $key, $index, $column) {
 				$url = Url::to(['publish', 'id'=>$model->primaryKey]);
-				return $model->publish == 0 ? '-' : $this->quickAction($url, $model->publish);
+				return $this->quickAction($url, $model->publish);
 			},
 			'filter' => $this->filterYesNo(),
 			'contentOptions' => ['class'=>'center'],
@@ -271,6 +263,30 @@ class UserVerify extends \app\components\ActiveRecord
 			$model = self::findOne($id);
 			return $model;
 		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getExpiredStatus()
+	{
+		if($this->publish != 1)
+			return true;
+
+		if($this->publish == 1 && $this->expired_date <= TimeHelper::getTime())
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * after find attributes
+	 */
+	public function afterFind()
+	{
+		parent::afterFind();
+		
+		$this->expired = $this->getExpiredStatus() ? 1 : 0;
 	}
 
 	/**

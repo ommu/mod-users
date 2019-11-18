@@ -33,7 +33,7 @@ use ommu\users\models\UserLevel;
 		<?php echo $form->field($model, 'userDisplayname');?>
 
 		<?php $level = UserLevel::getLevel();
-		echo $form->field($model, 'level_search')
+		echo $form->field($model, 'userLevel')
 			->dropDownList($level, ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'code');?>
@@ -54,7 +54,7 @@ use ommu\users\models\UserLevel;
 		<?php echo $form->field($model, 'deleted_date')
 			->input('date');?>
 
-		<?php echo $form->field($model, 'expired_search')
+		<?php echo $form->field($model, 'expired')
 			->dropDownList($this->filterYesNo(), ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'publish')

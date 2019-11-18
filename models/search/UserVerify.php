@@ -29,7 +29,7 @@ class UserVerify extends UserVerifyModel
 	{
 		return [
 			[['verify_id', 'publish', 'user_id', 'modified_id'], 'integer'],
-			[['code', 'verify_date', 'verify_ip', 'expired_date', 'modified_date', 'deleted_date', 'email_i', 'userDisplayname', 'modifiedDisplayname', 'level_search', 'expired_search'], 'safe'],
+			[['code', 'verify_date', 'verify_ip', 'expired_date', 'modified_date', 'deleted_date', 'email_i', 'userDisplayname', 'modifiedDisplayname', 'userLevel', 'expired'], 'safe'],
 		];
 	}
 
@@ -95,11 +95,11 @@ class UserVerify extends UserVerifyModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
-		$attributes['expired_search'] = [
+		$attributes['expired'] = [
 			'asc' => ['view.expired' => SORT_ASC],
 			'desc' => ['view.expired' => SORT_DESC],
 		];
@@ -125,8 +125,8 @@ class UserVerify extends UserVerifyModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.deleted_date as date)' => $this->deleted_date,
-			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
-			'view.expired' => $this->expired_search,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
+			'view.expired' => $this->expired,
 		]);
 
 		if(isset($params['trash']))
