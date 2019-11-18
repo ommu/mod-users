@@ -137,7 +137,7 @@ class ForgotController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'Forgot', 'user-id' => $model->user->displayname]);
+		$this->view->title = Yii::t('app', 'Detail Forgot: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [

@@ -137,7 +137,7 @@ class VerifyController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'Verify', 'user-id' => $model->user->displayname]);
+		$this->view->title = Yii::t('app', 'Detail Verify: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [

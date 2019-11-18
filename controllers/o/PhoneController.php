@@ -150,7 +150,7 @@ class PhoneController extends Controller
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {model-class}: {user-id}', ['model-class' => 'Phone', 'user-id' => $model->user->displayname]);
+		$this->view->title = Yii::t('app', 'Update Phone: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_update', [
@@ -167,7 +167,7 @@ class PhoneController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'Phone', 'user-id' => $model->user->displayname]);
+		$this->view->title = Yii::t('app', 'Detail Phone: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [

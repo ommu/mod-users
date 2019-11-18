@@ -89,7 +89,7 @@ class EmailController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'History Email', 'user-id' => $model->user->displayname]);
+		$this->view->title = Yii::t('app', 'Detail History Email: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [

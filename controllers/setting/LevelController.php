@@ -157,7 +157,7 @@ class LevelController extends Controller
 			}
 		}
 
-		$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Update User Level: {name}', ['name' => $model->title->message]);
 		$this->view->description = Yii::t('app', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
 		$this->view->keywords = '';
 		return $this->render('admin_update', [
@@ -174,7 +174,7 @@ class LevelController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {name}', ['model-class' => 'User Level', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Detail User Level: {name}', ['name' => $model->title->message]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -256,7 +256,7 @@ class LevelController extends Controller
 			}
 		}
 	
-		$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Update User Level: {name}', ['name' => $model->title->message]);
 		$this->view->description = Yii::t('app', 'This page contains various settings that affect your users\' accounts.');
 		$this->view->keywords = '';
 		return $this->render('admin_user', [
@@ -287,7 +287,7 @@ class LevelController extends Controller
 			}
 		}
 	
-		$this->view->title = Yii::t('app', 'Update {modelClass}: {name}', ['modelClass' => 'User Level', 'name' => $model->title->message]);
+		$this->view->title = Yii::t('app', 'Update User Level: {name}', ['name' => $model->title->message]);
 		$this->view->description = Yii::t('app', 'Facilitating user interactivity is the key to developing a successful social network. Allowing private messages between users is an excellent way to increase interactivity. From this page, you can enable the private messaging feature and configure its settings.');
 		$this->view->keywords = '';
 		return $this->render('admin_message', [

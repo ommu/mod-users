@@ -89,7 +89,7 @@ class LoginController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {model-class}: {user-id}', ['model-class' => 'History Login', 'user-id' => $model->user->displayname]);
+		$this->view->title = Yii::t('app', 'Detail History Login: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
