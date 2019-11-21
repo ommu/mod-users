@@ -127,9 +127,9 @@ class Users extends \app\components\ActiveRecord
 			[['auth_key', 'jwt_claims'], 'string'],
 			[['email'], 'email'],
 			[['email', 'username'], 'unique'],
-			['username', 'match', 'pattern' => '/^[a-zA-Z0-9._-]+$/','message' => Yii::t('app','Username can only contain alphanumeric characters, underscores, dashes and dot')],
-			[['password'], StrengthValidator::className(), 'preset'=> StrengthValidator::FAIR],
 			[['password', 'confirmPassword'], 'safe'],
+			['username', 'match', 'pattern' => '/^[a-zA-Z0-9.]+$/','message' => Yii::t('app','Username can only contain alphanumeric characters and dot')],
+			[['password'], StrengthValidator::className(), 'preset'=> StrengthValidator::FAIR],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_CHANGE_PASSWORD],
@@ -149,10 +149,10 @@ class Users extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_ADMIN_CREATE] = ['enabled', 'verified', 'level_id', 'email', 'username', 'displayname', 'password'];
+		$scenarios[self::SCENARIO_ADMIN_CREATE] = ['enabled', 'verified', 'level_id', 'email', 'username', 'displayname', 'password', 'confirmPassword'];
 		$scenarios[self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD] = ['enabled', 'verified', 'level_id', 'email', 'username', 'displayname', 'password', 'confirmPassword'];
-		$scenarios[self::SCENARIO_REGISTER] = ['email', 'username', 'displayname', 'password'];
-		$scenarios[self::SCENARIO_REGISTER_WITH_INVITE_CODE] = ['email', 'username', 'displayname', 'password', 'inviteCode'];
+		$scenarios[self::SCENARIO_REGISTER] = ['email', 'username', 'displayname', 'password', 'confirmPassword'];
+		$scenarios[self::SCENARIO_REGISTER_WITH_INVITE_CODE] = ['email', 'username', 'displayname', 'password', 'confirmPassword', 'inviteCode'];
 		$scenarios[self::SCENARIO_RESET_PASSWORD] = ['password', 'confirmPassword'];
 		$scenarios[self::SCENARIO_CHANGE_PASSWORD] = ['currentPassword', 'password', 'confirmPassword'];
 		return $scenarios;
@@ -686,7 +686,7 @@ class Users extends \app\components\ActiveRecord
 						if($this->email != '') {
 							if($invite != null) {
 								if($invite->newsletter->user_id != null)
-									$this->addError('email', Yii::t('app', '{email} sudah terdaftar sebagai user, silahkan login.', ['email'=>$this->email]));
+									$this->addError('email', Yii::t('app', '{email} sudah terdaftar, silahkan login.', ['email'=>$this->email]));
 
 								else {
 									if($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user')
@@ -731,6 +731,8 @@ class Users extends \app\components\ActiveRecord
 				 * Admin modify users
 				 * User modify
 				 */
+
+				$passwordFunction = in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD]) ? true : false;
 				
 				// Admin modify member
 				if(in_array($controller, ['member', 'admin'])) {
@@ -740,13 +742,13 @@ class Users extends \app\components\ActiveRecord
 
 				} else {
 					// User modify
-					if(!in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD]))
+					if(!$passwordFunction)
 						$this->update_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
 				}
 			}
 
-			if($setting->signup_username == 1) {
+			if(!$passwordFunction && $setting->signup_username == 1) {
 				if($this->username == '')
 					$this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
 			}
