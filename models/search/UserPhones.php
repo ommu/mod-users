@@ -28,7 +28,7 @@ class UserPhones extends UserPhonesModel
 	{
 		return [
 			[['phone_id', 'publish', 'verified', 'user_id', 'creation_id', 'modified_id'], 'integer'],
-			[['phone_number', 'verified_date', 'creation_date', 'modified_date', 'updated_date', 'userDisplayname', 'creationDisplayname', 'modifiedDisplayname', 'level_search'], 'safe'],
+			[['phone_number', 'verified_date', 'creation_date', 'modified_date', 'updated_date', 'userDisplayname', 'creationDisplayname', 'modifiedDisplayname', 'userLevel'], 'safe'],
 		];
 	}
 
@@ -94,7 +94,7 @@ class UserPhones extends UserPhonesModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
@@ -122,7 +122,7 @@ class UserPhones extends UserPhonesModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
-			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 		]);
 
 		if(isset($params['trash']))

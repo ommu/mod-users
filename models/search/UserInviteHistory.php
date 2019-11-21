@@ -29,7 +29,7 @@ class UserInviteHistory extends UserInviteHistoryModel
 	{
 		return [
 			[['id', 'invite_id'], 'integer'],
-			[['code', 'invite_date', 'invite_ip', 'expired_date', 'email_search', 'displayname_search', 'inviter_search', 'level_search', 'expired_search'], 'safe'],
+			[['code', 'invite_date', 'invite_ip', 'expired_date', 'email_search', 'displayname_search', 'inviter_search', 'userLevel', 'expired_search'], 'safe'],
 		];
 	}
 
@@ -96,7 +96,7 @@ class UserInviteHistory extends UserInviteHistoryModel
 			'asc' => ['inviter.displayname' => SORT_ASC],
 			'desc' => ['inviter.displayname' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
@@ -125,7 +125,7 @@ class UserInviteHistory extends UserInviteHistoryModel
 			't.invite_id' => isset($params['invite']) ? $params['invite'] : $this->invite_id,
 			'cast(t.invite_date as date)' => $this->invite_date,
 			'cast(t.expired_date as date)' => $this->expired_date,
-			'inviter.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'inviter.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 			'view.expired' => $this->expired_search,
 		]);
 

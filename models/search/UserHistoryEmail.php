@@ -29,7 +29,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 	{
 		return [
 			[['id', 'user_id'], 'integer'],
-			[['email', 'update_date', 'userDisplayname', 'level_search'], 'safe'],
+			[['email', 'update_date', 'userDisplayname', 'userLevel'], 'safe'],
 		];
 	}
 
@@ -85,7 +85,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
@@ -109,7 +109,7 @@ class UserHistoryEmail extends UserHistoryEmailModel
 			't.id' => $this->id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.update_date as date)' => $this->update_date,
-			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 		]);
 
 		$query->andFilterWhere(['like', 't.email', $this->email])

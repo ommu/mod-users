@@ -46,7 +46,7 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->user) ? $model->user->displayname : '-',
 		],
 		[
-			'attribute' => 'level_search',
+			'attribute' => 'userLevel',
 			'value' => isset($model->user->level) ? $model->user->level->title->message : '-',
 		],
 		[

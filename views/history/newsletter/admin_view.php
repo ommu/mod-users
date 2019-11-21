@@ -53,7 +53,7 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-',
 		],
 		[
-			'attribute' => 'level_search',
+			'attribute' => 'userLevel',
 			'value' => isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-',
 		],
 		[

@@ -29,7 +29,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 	{
 		return [
 			[['id', 'status', 'newsletter_id'], 'integer'],
-			[['updated_date', 'updated_ip', 'email_search', 'level_search', 'userDisplayname', 'register_search'], 'safe'],
+			[['updated_date', 'updated_ip', 'email_search', 'userLevel', 'userDisplayname', 'register_search'], 'safe'],
 		];
 	}
 
@@ -87,7 +87,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 			'asc' => ['newsletter.email' => SORT_ASC],
 			'desc' => ['newsletter.email' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
@@ -120,7 +120,7 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
 			't.status' => $this->status,
 			't.newsletter_id' => isset($params['newsletter']) ? $params['newsletter'] : $this->newsletter_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
-			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 			'view.register' => $this->register_search,
 		]);
 

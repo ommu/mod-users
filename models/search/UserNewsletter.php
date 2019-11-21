@@ -29,7 +29,7 @@ class UserNewsletter extends UserNewsletterModel
 	{
 		return [
 			[['newsletter_id', 'status', 'user_id', 'reference_id', 'subscribe_id', 'modified_id'], 'integer'],
-			[['email', 'creation_date', 'modified_date', 'updated_date', 'updated_ip', 'userDisplayname', 'reference_search', 'subscribe_search', 'modifiedDisplayname', 'level_search', 'register_search'], 'safe'],
+			[['email', 'creation_date', 'modified_date', 'updated_date', 'updated_ip', 'userDisplayname', 'reference_search', 'subscribe_search', 'modifiedDisplayname', 'userLevel', 'register_search'], 'safe'],
 		];
 	}
 
@@ -101,7 +101,7 @@ class UserNewsletter extends UserNewsletterModel
 			'asc' => ['modified.displayname' => SORT_ASC],
 			'desc' => ['modified.displayname' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
@@ -133,7 +133,7 @@ class UserNewsletter extends UserNewsletterModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
-			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 			'view.register' => $this->register_search,
 		]);
 

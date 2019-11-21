@@ -29,7 +29,7 @@ class UserInvites extends UserInvitesModel
 	{
 		return [
 			[['id', 'publish', 'newsletter_id', 'invites', 'inviter_id', 'modified_id'], 'integer'],
-			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'inviter_search', 'modifiedDisplayname', 'email_search', 'level_search'], 'safe'],
+			[['displayname', 'code', 'invite_date', 'invite_ip', 'modified_date', 'updated_date', 'inviter_search', 'modifiedDisplayname', 'email_search', 'userLevel'], 'safe'],
 		];
 	}
 
@@ -95,7 +95,7 @@ class UserInvites extends UserInvitesModel
 			'asc' => ['newsletter.email' => SORT_ASC],
 			'desc' => ['newsletter.email' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
@@ -124,7 +124,7 @@ class UserInvites extends UserInvitesModel
 			'cast(t.modified_date as date)' => $this->modified_date,
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.updated_date as date)' => $this->updated_date,
-			'inviter.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'inviter.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 		]);
 
 		if(isset($params['trash']))

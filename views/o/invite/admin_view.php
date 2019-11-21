@@ -53,7 +53,7 @@ $this->params['menu']['content'] = [
 			'value' => isset($model->inviter) ? $model->inviter->displayname : '-',
 		],
 		[
-			'attribute' => 'level_search',
+			'attribute' => 'userLevel',
 			'value' => isset($model->inviter->level) ? $model->inviter->level->title->message : '-',
 		],
 		[

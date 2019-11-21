@@ -34,7 +34,7 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['lastlogin_from'];
 
 	public $userDisplayname;
-	public $level_search;
+	public $userLevel;
 	public $email_search;
 
 	/**
@@ -70,7 +70,7 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 			'lastlogin_ip' => Yii::t('app', 'Lastlogin IP'),
 			'lastlogin_from' => Yii::t('app', 'Lastlogin From'),
 			'userDisplayname' => Yii::t('app', 'User'),
-			'level_search' => Yii::t('app', 'Level'),
+			'userLevel' => Yii::t('app', 'Level'),
 			'email_search' => Yii::t('app', 'Email'),
 		];
 	}
@@ -117,8 +117,8 @@ class UserHistoryLogin extends \app\components\ActiveRecord
 			},
 			'visible' => !Yii::$app->request->get('user') ? true : false,
 		];
-		$this->templateColumns['level_search'] = [
-			'attribute' => 'level_search',
+		$this->templateColumns['userLevel'] = [
+			'attribute' => 'userLevel',
 			'value' => function($model, $key, $index, $column) {
 				return isset($model->user) ? $model->user->level->title->message : '-';
 			},

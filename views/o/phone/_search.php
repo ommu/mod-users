@@ -32,7 +32,7 @@ use ommu\users\models\UserLevel;
 		<?php echo $form->field($model, 'userDisplayname');?>
 
 		<?php $level = UserLevel::getLevel();
-		echo $form->field($model, 'level_search')
+		echo $form->field($model, 'userLevel')
 			->dropDownList($level, ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'phone_number');?>

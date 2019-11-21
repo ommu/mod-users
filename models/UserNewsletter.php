@@ -47,14 +47,14 @@ class UserNewsletter extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['creation_date','modified_date','modifiedDisplayname','updated_date','updated_ip','userDisplayname','','level_search'];
+	public $gridForbiddenColumn = ['creation_date','modified_date','modifiedDisplayname','updated_date','updated_ip','userDisplayname','','userLevel'];
 	public $email_i;
 
 	public $userDisplayname;
 	public $reference_search;
 	public $subscribe_search;
 	public $modifiedDisplayname;
-	public $level_search;
+	public $userLevel;
 	public $register_search;
 
 	const SCENARIO_SINGLE_EMAIL = 'singleEmail';
@@ -117,7 +117,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 			'reference_search' => Yii::t('app', 'Reference'),
 			'subscribe_search' => Yii::t('app', 'Subscriber'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
-			'level_search' => Yii::t('app', 'Level'),
+			'userLevel' => Yii::t('app', 'Level'),
 			'register_search' => Yii::t('app', 'Registered'),
 		];
 	}
@@ -221,8 +221,8 @@ class UserNewsletter extends \app\components\ActiveRecord
 			},
 			'visible' => !Yii::$app->request->get('user') ? true : false,
 		];
-		$this->templateColumns['level_search'] = [
-			'attribute' => 'level_search',
+		$this->templateColumns['userLevel'] = [
+			'attribute' => 'userLevel',
 			'value' => function($model, $key, $index, $column) {
 				return isset($model->user->level) ? $model->user->level->title->message : '-';
 			},

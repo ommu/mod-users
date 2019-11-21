@@ -29,7 +29,7 @@ class UserHistoryLogin extends UserHistoryLoginModel
 	{
 		return [
 			[['id', 'user_id'], 'integer'],
-			[['lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'userDisplayname', 'level_search', 'email_search'], 'safe'],
+			[['lastlogin_date', 'lastlogin_ip', 'lastlogin_from', 'userDisplayname', 'userLevel', 'email_search'], 'safe'],
 		];
 	}
 
@@ -85,7 +85,7 @@ class UserHistoryLogin extends UserHistoryLoginModel
 			'asc' => ['user.displayname' => SORT_ASC],
 			'desc' => ['user.displayname' => SORT_DESC],
 		];
-		$attributes['level_search'] = [
+		$attributes['userLevel'] = [
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
@@ -113,7 +113,7 @@ class UserHistoryLogin extends UserHistoryLoginModel
 			't.id' => $this->id,
 			't.user_id' => isset($params['user']) ? $params['user'] : $this->user_id,
 			'cast(t.lastlogin_date as date)' => $this->lastlogin_date,
-			'user.level_id' => isset($params['level']) ? $params['level'] : $this->level_search,
+			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 		]);
 
 		$query->andFilterWhere(['like', 't.lastlogin_ip', $this->lastlogin_ip])

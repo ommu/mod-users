@@ -46,7 +46,7 @@ class UserPhones extends \app\components\ActiveRecord
 	public $userDisplayname;
 	public $creationDisplayname;
 	public $modifiedDisplayname;
-	public $level_search;
+	public $userLevel;
 
 	/**
 	 * @return string the associated database table name
@@ -89,7 +89,7 @@ class UserPhones extends \app\components\ActiveRecord
 			'userDisplayname' => Yii::t('app', 'User'),
 			'creationDisplayname' => Yii::t('app', 'Creation'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
-			'level_search' => Yii::t('app', 'Level'),
+			'userLevel' => Yii::t('app', 'Level'),
 		];
 	}
 
@@ -151,8 +151,8 @@ class UserPhones extends \app\components\ActiveRecord
 			},
 			'visible' => !Yii::$app->request->get('user') ? true : false,
 		];
-		$this->templateColumns['level_search'] = [
-			'attribute' => 'level_search',
+		$this->templateColumns['userLevel'] = [
+			'attribute' => 'userLevel',
 			'value' => function($model, $key, $index, $column) {
 				return isset($model->user->level) ? $model->user->level->title->message : '-';
 			},

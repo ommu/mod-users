@@ -36,7 +36,7 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 	public $gridForbiddenColumn = ['updated_ip'];
 
 	public $email_search;
-	public $level_search;
+	public $userLevel;
 	public $userDisplayname;
 	public $register_search;
 
@@ -73,7 +73,7 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			'updated_date' => Yii::t('app', 'Updated Date'),
 			'updated_ip' => Yii::t('app', 'Updated IP'),
 			'email_search' => Yii::t('app', 'Email'),
-			'level_search' => Yii::t('app', 'Level'),
+			'userLevel' => Yii::t('app', 'Level'),
 			'userDisplayname' => Yii::t('app', 'User'),
 			'register_search' => Yii::t('app', 'Registered'),
 		];
@@ -129,8 +129,8 @@ class UserNewsletterHistory extends \app\components\ActiveRecord
 			},
 			'visible' => !Yii::$app->request->get('newsletter') ? true : false,
 		];
-		$this->templateColumns['level_search'] = [
-			'attribute' => 'level_search',
+		$this->templateColumns['userLevel'] = [
+			'attribute' => 'userLevel',
 			'value' => function($model, $key, $index, $column) {
 				return isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-';
 			},

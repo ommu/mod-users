@@ -69,7 +69,6 @@ class UserVerify extends UserVerifyModel
 			'user user', 
 			'modified modified',
 			'user.level.title level', 
-			'view view', 
 		])
 		->groupBy(['verify_id']);
 
@@ -99,10 +98,6 @@ class UserVerify extends UserVerifyModel
 			'asc' => ['level.message' => SORT_ASC],
 			'desc' => ['level.message' => SORT_DESC],
 		];
-		$attributes['expired'] = [
-			'asc' => ['view.expired' => SORT_ASC],
-			'desc' => ['view.expired' => SORT_DESC],
-		];
 		$dataProvider->setSort([
 			'attributes' => $attributes,
 			'defaultOrder' => ['verify_id' => SORT_DESC],
@@ -126,7 +121,6 @@ class UserVerify extends UserVerifyModel
 			't.modified_id' => isset($params['modified']) ? $params['modified'] : $this->modified_id,
 			'cast(t.deleted_date as date)' => $this->deleted_date,
 			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
-			'view.expired' => $this->expired,
 		]);
 
 		if(isset($params['trash']))
@@ -136,6 +130,21 @@ class UserVerify extends UserVerifyModel
 				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
 			else
 				$query->andFilterWhere(['t.publish' => $this->publish]);
+		}
+
+		if(isset($params['expired']) && $params['expired'] != '') {
+			if($this->expired == 1) {
+				$query->andWhere(['or', 
+					['<>', 't.publish', '1'],
+					['and', 
+						['t.publish' => 1], 
+						['<=', 't.expired_date', Yii::$app->formatter->asTime('now', 'php:Y-m-d H:i:s')],
+					],
+				]);
+			} else if($this->expired == 0) {
+				$query->andWhere(['t.publish' => 1])
+					->andWhere(['>=', 't.expired_date', Yii::$app->formatter->asTime('now', 'php:Y-m-d H:i:s')]);
+			}
 		}
 
 		$query->andFilterWhere(['like', 't.code', $this->code])

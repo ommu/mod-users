@@ -47,14 +47,14 @@ class UserInvites extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['level_id','code','invite_ip','modified_date','modifiedDisplayname','updated_date','level_search'];
+	public $gridForbiddenColumn = ['level_id','code','invite_ip','modified_date','modifiedDisplayname','updated_date','userLevel'];
 	public $email_i;
 	public $old_invites_i;
 
 	public $inviter_search;
 	public $modifiedDisplayname;
 	public $email_search;
-	public $level_search;
+	public $userLevel;
 
 	const SCENARIO_FORM = 'createForm';
 	const SCENARIO_SINGLE_EMAIL = 'singleEmail';
@@ -123,7 +123,7 @@ class UserInvites extends \app\components\ActiveRecord
 			'inviter_search' => Yii::t('app', 'Inviter'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 			'email_search' => Yii::t('app', 'Email'),
-			'level_search' => Yii::t('app', 'Level'),
+			'userLevel' => Yii::t('app', 'Level'),
 		];
 	}
 
@@ -223,8 +223,8 @@ class UserInvites extends \app\components\ActiveRecord
 			},
 			'visible' => !Yii::$app->request->get('inviter') ? true : false,
 		];
-		$this->templateColumns['level_search'] = [
-			'attribute' => 'level_search',
+		$this->templateColumns['userLevel'] = [
+			'attribute' => 'userLevel',
 			'value' => function($model, $key, $index, $column) {
 				return isset($model->inviter->level) ? $model->inviter->level->title->message : '-';
 			},

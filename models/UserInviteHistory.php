@@ -40,7 +40,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 	public $email_search;
 	public $displayname_search;
 	public $inviter_search;
-	public $level_search;
+	public $userLevel;
 	public $expired_search;
 
 	/**
@@ -80,7 +80,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			'email_search' => Yii::t('app', 'Email'),
 			'displayname_search' => Yii::t('app', 'Displayname'),
 			'inviter_search' => Yii::t('app', 'Inviter'),
-			'level_search' => Yii::t('app', 'Level'),
+			'userLevel' => Yii::t('app', 'Level'),
 			'expired_search' => Yii::t('app', 'Expired'),
 		];
 	}
@@ -150,8 +150,8 @@ class UserInviteHistory extends \app\components\ActiveRecord
 			},
 			'visible' => !Yii::$app->request->get('invite') ? true : false,
 		];
-		$this->templateColumns['level_search'] = [
-			'attribute' => 'level_search',
+		$this->templateColumns['userLevel'] = [
+			'attribute' => 'userLevel',
 			'value' => function($model, $key, $index, $column) {
 				return isset($model->invite->inviter->level) ? $model->invite->inviter->level->title->message : '-';
 			},

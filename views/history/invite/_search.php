@@ -37,7 +37,7 @@ use ommu\users\models\UserLevel;
 		<?php echo $form->field($model, 'inviter_search');?>
 
 		<?php $level = UserLevel::getLevel();
-		echo $form->field($model, 'level_search')
+		echo $form->field($model, 'userLevel')
 			->dropDownList($level, ['prompt'=>'']);?>
 
 		<?php echo $form->field($model, 'code');?>
