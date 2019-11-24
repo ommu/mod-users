@@ -630,14 +630,16 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		$controller = strtolower(Yii::$app->controller->id);
+		if(parent::beforeValidate())
+		{
+			$controller = strtolower(Yii::$app->controller->id);	
+			$isSocialMedia = Yii::$app->isSocialMedia();
+			$passwordFunction = in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD]) ? true : false;
+			$setting = CoreSettings::find()
+				->select(['signup_username', 'signup_approve', 'signup_verifyemail', 'signup_random', 'signup_inviteonly', 'signup_checkemail'])
+				->where(['id' => 1])
+				->one();
 
-		$setting = CoreSettings::find()
-			->select(['signup_username', 'signup_approve', 'signup_verifyemail', 'signup_random', 'signup_inviteonly', 'signup_checkemail'])
-			->where(['id' => 1])
-			->one();
-
-		if(parent::beforeValidate()) {
 			if($this->isNewRecord) {
 				/**
 				 * Created Users
@@ -682,7 +684,7 @@ class Users extends \app\components\ActiveRecord
 					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
 
 					// Signup by Invite (Admin or User)
-					if(Yii::$app->isSocialMedia() && $setting->signup_inviteonly != 0) {
+					if($isSocialMedia && $setting->signup_inviteonly != 0) {
 						if($this->email != '') {
 							if($invite != null) {
 								if($invite->newsletter->user_id != null)
@@ -731,8 +733,6 @@ class Users extends \app\components\ActiveRecord
 				 * Admin modify users
 				 * User modify
 				 */
-
-				$passwordFunction = in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD]) ? true : false;
 				
 				// Admin modify member
 				if(in_array($controller, ['member', 'admin'])) {
@@ -748,7 +748,7 @@ class Users extends \app\components\ActiveRecord
 				}
 			}
 
-			if(!$passwordFunction && $setting->signup_username == 1) {
+			if(Yii::$app->id != 'back3nd' && !$passwordFunction && $setting->signup_username == 1) {
 				if($this->username == '')
 					$this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
 			}
@@ -795,6 +795,7 @@ class Users extends \app\components\ActiveRecord
 	{
 		parent::afterSave($insert, $changedAttributes);
 
+		$isSocialMedia = Yii::$app->isSocialMedia();
 		$setting = CoreSettings::find()
 			->select(['signup_welcome', 'signup_adminemail'])
 			->where(['id' => 1])
@@ -826,7 +827,7 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Update referensi newsletter
-			if(Yii::$app->isSocialMedia() && $this->reference_id_i != null) {
+			if($isSocialMedia && $this->reference_id_i != null) {
 				$newsletter = UserNewsletter::find()
 					->select(['newsletter_id', 'user_id', 'reference_id'])
 					->where(['email' => $this->email])
