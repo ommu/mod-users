@@ -15,7 +15,6 @@
 namespace ommu\users;
 
 use Yii;
-use ommu\users\models\Users;
 
 class Events extends \yii\base\BaseObject
 {

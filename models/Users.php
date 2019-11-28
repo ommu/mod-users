@@ -67,13 +67,13 @@ use app\models\CoreLanguages;
 use app\models\CoreSettings;
 use ommu\users\models\view\Users as UsersView;
 use ommu\users\models\view\UserHistory as UserHistoryView;
-use kartik\password\StrengthValidator;
 
 class Users extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
+	use \ommu\users\traits\AssignmentTrait;
 
 	public $gridForbiddenColumn = ['language_id', 'password', 'salt', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'creation_ip', 'modified_date', 'modifiedDisplayname', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims'];
 	public $inviteCode;
@@ -129,7 +129,6 @@ class Users extends \app\components\ActiveRecord
 			[['email', 'username'], 'unique'],
 			[['password', 'confirmPassword'], 'safe'],
 			['username', 'match', 'pattern' => '/^[a-zA-Z0-9.]+$/','message' => Yii::t('app','Username can only contain alphanumeric characters and dot')],
-			[['password'], StrengthValidator::className(), 'preset'=> StrengthValidator::FAIR],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_CHANGE_PASSWORD],
@@ -138,6 +137,7 @@ class Users extends \app\components\ActiveRecord
 			[['username', 'salt', 'lastlogin_from'], 'string', 'max' => 32],
 			[['creation_ip', 'lastlogin_ip', 'update_ip'], 'string', 'max' => 20],
 			[['inviteCode'], 'string', 'max' => 16],
+			[['password'], 'string', 'min' => 8],
 			[['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => CoreLanguages::className(), 'targetAttribute' => ['language_id' => 'language_id']],
 			[['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserLevel::className(), 'targetAttribute' => ['level_id' => 'level_id']],
 		];
@@ -839,8 +839,9 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Trigger after create users
-			$event = new Event(['sender' => $this]);
-			Event::trigger(self::className(), self::EVENT_AFTER_CREATE_USERS, $event);
+			// $event = new Event(['sender' => $this]);
+			// Event::trigger(self::className(), self::EVENT_AFTER_CREATE_USERS, $event);
+			$this->setAssignmentRole($this);
 
 			// Send account information
 			$template = 'account-info';
@@ -904,8 +905,9 @@ class Users extends \app\components\ActiveRecord
 
 			// Trigger after update assignment
 			if(array_key_exists('level_id', $changedAttributes) && $changedAttributes['level_id'] != $this->level_id) {
-				$event = new Event(['sender' => $this]);
-				Event::trigger(self::className(), self::EVENT_AFTER_UPDATE_USERS, $event);
+				// $event = new Event(['sender' => $this]);
+				// Event::trigger(self::className(), self::EVENT_AFTER_UPDATE_USERS, $event);
+				$this->changeAssignmentRoleWithLevel($this);
 			}
 
 			// Send new account information
@@ -941,7 +943,8 @@ class Users extends \app\components\ActiveRecord
 		parent::afterDelete();
 
 		// Trigger after create users
-		$event = new Event(['sender' => $this]);
-		Event::trigger(self::className(), self::EVENT_AFTER_DELETE_USERS, $event);
+		// $event = new Event(['sender' => $this]);
+		// Event::trigger(self::className(), self::EVENT_AFTER_DELETE_USERS, $event);
+		$this->revokeAssignmentRole($this);
 	}
 }
