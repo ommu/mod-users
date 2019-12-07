@@ -47,7 +47,7 @@ use app\components\widgets\ActiveForm;
 	->checkbox()
 	->label($model->getAttributeLabel('default')); ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>

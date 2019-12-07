@@ -93,7 +93,7 @@ echo $form->field($model, 'verified')
 	->label($model->getAttributeLabel('verified'));
 } ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>

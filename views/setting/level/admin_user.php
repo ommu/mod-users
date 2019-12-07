@@ -139,7 +139,7 @@ echo $form->field($model, 'profile_delete', ['template' => '{label}{beginWrapper
 	->label($model->getAttributeLabel('profile_delete'))
 	->hint(Yii::t('app', 'Enable this feature if you would like to allow your users to delete their account manually.')); ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>

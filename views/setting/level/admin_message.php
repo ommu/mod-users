@@ -63,7 +63,7 @@ $message_limit_inbox = $form->field($model, 'message_limit[inbox]', ['template' 
 	->label($model->getAttributeLabel('message_limit'))
 	->hint(Yii::t('app', 'How many total conversations will users be allowed to store in their inbox and outbox? If a user\'s inbox or outbox is full and a new conversation is started, the oldest conversation will be automatically deleted.')); ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>

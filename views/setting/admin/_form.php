@@ -88,7 +88,7 @@ echo $form->field($model, 'invite_order')
 	->dropDownList($inviteOrder, ['prompt'=>''])
 	->label($model->getAttributeLabel('invite_order')); ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>

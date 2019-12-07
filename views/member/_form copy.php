@@ -131,7 +131,7 @@ echo $form->field($model, 'enabled')
 	->checkbox()
 	->label($model->getAttributeLabel('comments')); ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>

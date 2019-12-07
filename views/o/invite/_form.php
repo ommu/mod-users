@@ -53,7 +53,7 @@ use ommu\users\models\UserLevel;
 	}
 } ?>
 
-<div class="ln_solid"></div>
+<hr/>
 
 <?php echo $form->field($model, 'submitButton')
 	->submitButton(); ?>
