@@ -31,9 +31,9 @@
 namespace ommu\users\controllers\setting;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
+use yii\filters\VerbFilter;
 use ommu\users\models\UserLevel;
 use ommu\users\models\search\UserLevel as UserLevelSearch;
 

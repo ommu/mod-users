@@ -28,9 +28,9 @@
 namespace ommu\users\controllers\o;
 
 use Yii;
-use yii\filters\VerbFilter;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
+use yii\filters\VerbFilter;
 use ommu\users\models\UserInvites;
 use ommu\users\models\search\UserInvites as UserInvitesSearch;
 

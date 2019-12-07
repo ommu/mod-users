@@ -28,13 +28,11 @@
 namespace ommu\users\controllers;
 
 use Yii;
-use yii\filters\VerbFilter;
-use yii\helpers\Inflector;
 use ommu\users\controllers\MemberController;
-use mdm\admin\components\AccessControl;
 use ommu\users\models\Users;
 use ommu\users\models\search\Users as UsersSearch;
 use ommu\users\models\UserLevel;
+use yii\helpers\Inflector;
 
 class AdminController extends MemberController
 {
