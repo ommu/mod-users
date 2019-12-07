@@ -56,19 +56,19 @@ echo $form->field($model, 'assignment_roles')
 	->hint(Yii::t('app', '')); ?>
 
 <?php $profileSearch = UserLevel::getProfileSearch();
-echo $form->field($model, 'profile_search', ['template' => '{label}{beginWrapper}<div class="h5">'.$model->getAttributeLabel('profile_search').'</div>{hint}{input}{error}{endWrapper}'])
+echo $form->field($model, 'profile_search', ['template' => '{label}{beginWrapper}<div class="h6 mt-3 mb-3">'.$model->getAttributeLabel('profile_search').'</div>{hint}{input}{error}{endWrapper}'])
 	->radioList($profileSearch)
 	->label(Yii::t('app', 'Privacy Options'))
 	->hint(Yii::t('app', 'If you enable this feature, users will be able to exclude themselves from search results and the lists of users on the homepage (such as Recent Signups). Otherwise, all users will be included in search results.')); ?>
 
 <?php $profilePrivacy = UserLevel::getProfilePrivacy();
-echo $form->field($model, 'profile_privacy', ['template' => '{beginWrapper}<div class="h5">'.$model->getAttributeLabel('profile_privacy').'</div>{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-sm-9 col-xs-12 col-sm-offset-3']])
+echo $form->field($model, 'profile_privacy', ['template' => '{beginWrapper}<div class="h6 mt-3 mb-3">'.$model->getAttributeLabel('profile_privacy').'</div>{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-sm-9 col-xs-12 col-sm-offset-3']])
 	->checkboxList($profilePrivacy)
 	->label($model->getAttributeLabel('profile_privacy'))
 	->hint(Yii::t('app', 'Your users can choose from any of the options checked below when they decide who can see their profile. If you do not check any options, everyone will be allowed to view profiles.')); ?>
 
 <?php $profileComments = UserLevel::getProfilePrivacy();
-echo $form->field($model, 'profile_comments', ['template' => '{beginWrapper}<div class="h5">'.$model->getAttributeLabel('profile_comments').'</div>{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-sm-9 col-xs-12 col-sm-offset-3']])
+echo $form->field($model, 'profile_comments', ['template' => '{beginWrapper}<div class="h6 mt-3 mb-3">'.$model->getAttributeLabel('profile_comments').'</div>{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-sm-9 col-xs-12 col-sm-offset-3']])
 	->checkboxList($profileComments)
 	->label($model->getAttributeLabel('profile_comments'))
 	->hint(Yii::t('app', 'Your users can choose from any of the options checked below when they decide who can post comments on their profile. If you do not check any options, everyone will be allowed to post comments on profiles.')); ?>
