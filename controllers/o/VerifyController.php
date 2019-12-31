@@ -172,7 +172,7 @@ class VerifyController extends Controller
 	{
 		$model = $this->findModel($id);
 		if($model->publish == 0)
-			throw new \yii\web\NotAcceptableHttpException(Yii::t('app', 'The requested page does not exist.'));
+			throw new \yii\web\ForbiddenHttpException(Yii::t('app', 'The requested page does not exist.'));
 
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
