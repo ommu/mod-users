@@ -126,7 +126,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['email_search'] = [
 			'attribute' => 'email_search',
@@ -183,7 +183,7 @@ class UserInviteHistory extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->view->expired);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['expired_date'] = [

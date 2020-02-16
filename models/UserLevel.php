@@ -228,7 +228,7 @@ class UserLevel extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
@@ -315,7 +315,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->message_allow);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_block'] = [
 			'attribute' => 'profile_block',
@@ -323,7 +323,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_block);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_search'] = [
 			'attribute' => 'profile_search',
@@ -331,7 +331,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_search);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_style'] = [
 			'attribute' => 'profile_style',
@@ -339,7 +339,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_style);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_style_sample'] = [
 			'attribute' => 'profile_style_sample',
@@ -347,7 +347,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_style_sample);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_status'] = [
 			'attribute' => 'profile_status',
@@ -355,7 +355,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_status);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_invisible'] = [
 			'attribute' => 'profile_invisible',
@@ -363,7 +363,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_invisible);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_views'] = [
 			'attribute' => 'profile_views',
@@ -371,7 +371,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_views);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_change'] = [
 			'attribute' => 'profile_change',
@@ -379,7 +379,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_change);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['profile_delete'] = [
 			'attribute' => 'profile_delete',
@@ -387,7 +387,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_delete);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['photo_allow'] = [
 			'attribute' => 'photo_allow',
@@ -395,7 +395,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->photo_allow);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['user_active'] = [
 			'attribute' => 'view.user_active',
@@ -403,7 +403,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return Html::a($model->view->user_active, ['member/index', 'level'=>$model->primaryKey, 'status'=>'active']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_pending'] = [
@@ -412,7 +412,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return Html::a($model->view->user_pending, ['member/index', 'level'=>$model->primaryKey, 'status'=>'pending']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_noverified'] = [
@@ -421,7 +421,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return Html::a($model->view->user_noverified, ['member/index', 'level'=>$model->primaryKey, 'status'=>'noverified']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_blocked'] = [
@@ -430,7 +430,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return Html::a($model->view->user_blocked, ['member/index', 'level'=>$model->primaryKey, 'status'=>'blocked']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_all'] = [
@@ -439,7 +439,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return Html::a($model->view->user_all, ['member/index', 'level'=>$model->primaryKey, 'status'=>'all']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['default'] = [
@@ -449,7 +449,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->quickAction($url, $model->default, 'Default,No', true);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['signup'] = [
@@ -459,7 +459,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->quickAction($url, $model->signup, 'Enable,Disable');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 	}

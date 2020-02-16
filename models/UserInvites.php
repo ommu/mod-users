@@ -192,7 +192,7 @@ class UserInvites extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['displayname'] = [
 			'attribute' => 'displayname',
@@ -277,7 +277,7 @@ class UserInvites extends \app\components\ActiveRecord
 			'value' => function($model, $key, $index, $column) {
 				return Html::a($model->invites, ['history/invite/index', 'invite'=>$model->primaryKey]);
 			},
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['publish'] = [
@@ -287,7 +287,7 @@ class UserInvites extends \app\components\ActiveRecord
 				return $this->quickAction($url, $model->publish);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 			'visible' => !Yii::$app->request->get('trash') ? true : false,
 		];

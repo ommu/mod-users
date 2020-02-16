@@ -361,7 +361,7 @@ class Users extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class'  => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		if($controller == 'admin' && !Yii::$app->request->get('level')) {
 			$this->templateColumns['level_id'] = [
@@ -479,7 +479,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->quickAction($url, $model->deactivate, 'Active,Deactivate');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['search'] = [
@@ -488,7 +488,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->search);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['invisible'] = [
 			'attribute' => 'invisible',
@@ -496,7 +496,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->invisible);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['privacy'] = [
 			'attribute' => 'privacy',
@@ -504,7 +504,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->privacy);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['comments'] = [
 			'attribute' => 'comments',
@@ -512,7 +512,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->comments);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['enabled'] = [
 			'attribute' => 'enabled',
@@ -521,7 +521,7 @@ class Users extends \app\components\ActiveRecord
 				$url = Url::to(['enabled', 'id'=>$model->primaryKey]);
 				return $model->enabled == 2 ? Yii::t('app', 'Block') : $this->quickAction($url, $model->enabled, 'Enable,Disable');
 			},
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['verified'] = [
@@ -531,7 +531,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->quickAction($url, $model->verified, 'Verified,Unverified');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 	}

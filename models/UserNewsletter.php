@@ -205,7 +205,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'yii\grid\SerialColumn',
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 		];
 		$this->templateColumns['email'] = [
 			'attribute' => 'email',
@@ -284,7 +284,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->view->register);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['status'] = [
@@ -294,7 +294,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 				return $this->quickAction($url, $model->status, 'Subscribe,Unsubscribe');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'center'],
+			'contentOptions' => ['class'=>'text-center'],
 			'format' => 'raw',
 		];
 	}
