@@ -19,9 +19,9 @@
  *
  *	findModel
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 8 October 2017, 07:46 WIB
  * @modified date 9 November 2018, 10:32 WIB
  * @link https://github.com/ommu/mod-users

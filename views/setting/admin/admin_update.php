@@ -6,9 +6,9 @@
  * @var $model ommu\users\models\UserSetting
  * @var $form app\components\widgets\ActiveForm
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 9 October 2017, 11:22 WIB
  * @modified date 9 November 2018, 07:13 WIB
  * @link https://github.com/ommu/mod-users

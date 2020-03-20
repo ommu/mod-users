@@ -5,9 +5,9 @@
  * @var $this ommu\users\controllers\history\NewsletterController
  * @var $model ommu\users\models\UserNewsletterHistory
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2018 OMMU (www.ommu.id)
  * @created date 7 May 2018, 09:00 WIB
  * @modified date 13 November 2018, 23:44 WIB
  * @link https://github.com/ommu/mod-users

@@ -5,9 +5,9 @@
  * @var $this ommu\users\controllers\history\PasswordController
  * @var $model ommu\users\models\UserHistoryPassword
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2018 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2018 OMMU (www.ommu.id)
  * @created date 5 May 2018, 02:18 WIB
  * @modified date 13 November 2018, 01:17 WIB
  * @link https://github.com/ommu/mod-users

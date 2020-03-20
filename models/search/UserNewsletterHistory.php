@@ -4,9 +4,9 @@
  *
  * UserNewsletterHistory represents the model behind the search form about `ommu\users\models\UserNewsletterHistory`.
  *
- * @author Putra Sudaryanto <putra@ommu.co>
+ * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
- * @copyright Copyright (c) 2017 OMMU (www.ommu.co)
+ * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
  * @created date 23 October 2017, 08:29 WIB
  * @modified date 13 November 2018, 23:44 WIB
  * @link https://github.com/ommu/mod-users

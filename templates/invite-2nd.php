@@ -4,4 +4,4 @@ Ini adalah undangan ke-{invites} oleh teman anda {inviter} kepada Anda untuk ber
 klik link berikut untuk mendaftar {singup-link}
 <br/><br/>
 Regards,<br/>
-Ommu Platform
+OMMU
