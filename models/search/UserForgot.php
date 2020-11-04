@@ -61,10 +61,11 @@ class UserForgot extends UserForgotModel
 	 */
 	public function search($params, $column=null)
 	{
-		if(!($column && is_array($column)))
-			$query = UserForgotModel::find()->alias('t');
-		else
-			$query = UserForgotModel::find()->alias('t')->select($column);
+        if (!($column && is_array($column))) {
+            $query = UserForgotModel::find()->alias('t');
+        } else {
+            $query = UserForgotModel::find()->alias('t')->select($column);
+        }
 		$query->joinWith([
 			'user user', 
 			'modified modified',
@@ -77,8 +78,9 @@ class UserForgot extends UserForgotModel
 			'query' => $query,
 		];
 		// disable pagination agar data pada api tampil semua
-		if(isset($params['pagination']) && $params['pagination'] == 0)
-			$dataParams['pagination'] = false;
+        if (isset($params['pagination']) && $params['pagination'] == 0) {
+            $dataParams['pagination'] = false;
+        }
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
@@ -105,7 +107,7 @@ class UserForgot extends UserForgotModel
 
 		$this->load($params);
 
-		if(!$this->validate()) {
+        if (!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -123,17 +125,18 @@ class UserForgot extends UserForgotModel
 			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 		]);
 
-		if(isset($params['trash']))
-			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
-		else {
-			if(!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == ''))
-				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
-			else
-				$query->andFilterWhere(['t.publish' => $this->publish]);
+        if (isset($params['trash'])) {
+            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+        } else {
+            if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+                $query->andFilterWhere(['IN', 't.publish', [0,1]]);
+            } else {
+                $query->andFilterWhere(['t.publish' => $this->publish]);
+            }
 		}
 
-		if(isset($params['expired']) && $params['expired'] != '') {
-			if($this->expired == 1) {
+        if (isset($params['expired']) && $params['expired'] != '') {
+            if ($this->expired == 1) {
 				$query->andWhere(['or', 
 					['<>', 't.publish', '1'],
 					['and', 
@@ -141,7 +144,7 @@ class UserForgot extends UserForgotModel
 						['<=', 't.expired_date', Yii::$app->formatter->asTime('now', 'php:Y-m-d H:i:s')],
 					],
 				]);
-			} else if($this->expired == 0) {
+			} else if ($this->expired == 0) {
 				$query->andWhere(['t.publish' => 1])
 					->andWhere(['>=', 't.expired_date', Yii::$app->formatter->asTime('now', 'php:Y-m-d H:i:s')]);
 			}

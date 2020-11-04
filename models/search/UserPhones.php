@@ -60,10 +60,11 @@ class UserPhones extends UserPhonesModel
 	 */
 	public function search($params, $column=null)
 	{
-		if(!($column && is_array($column)))
-			$query = UserPhonesModel::find()->alias('t');
-		else
-			$query = UserPhonesModel::find()->alias('t')->select($column);
+        if (!($column && is_array($column))) {
+            $query = UserPhonesModel::find()->alias('t');
+        } else {
+            $query = UserPhonesModel::find()->alias('t')->select($column);
+        }
 		$query->joinWith([
 			'user user', 
 			'creation creation', 
@@ -77,8 +78,9 @@ class UserPhones extends UserPhonesModel
 			'query' => $query,
 		];
 		// disable pagination agar data pada api tampil semua
-		if(isset($params['pagination']) && $params['pagination'] == 0)
-			$dataParams['pagination'] = false;
+        if (isset($params['pagination']) && $params['pagination'] == 0) {
+            $dataParams['pagination'] = false;
+        }
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
@@ -105,7 +107,7 @@ class UserPhones extends UserPhonesModel
 
 		$this->load($params);
 
-		if(!$this->validate()) {
+        if (!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -125,13 +127,14 @@ class UserPhones extends UserPhonesModel
 			'user.level_id' => isset($params['level']) ? $params['level'] : $this->userLevel,
 		]);
 
-		if(isset($params['trash']))
-			$query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
-		else {
-			if(!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == ''))
-				$query->andFilterWhere(['IN', 't.publish', [0,1]]);
-			else
-				$query->andFilterWhere(['t.publish' => $this->publish]);
+        if (isset($params['trash'])) {
+            $query->andFilterWhere(['NOT IN', 't.publish', [0,1]]);
+        } else {
+            if (!isset($params['publish']) || (isset($params['publish']) && $params['publish'] == '')) {
+                $query->andFilterWhere(['IN', 't.publish', [0,1]]);
+            } else {
+                $query->andFilterWhere(['t.publish' => $this->publish]);
+            }
 		}
 
 		$query->andFilterWhere(['like', 't.phone_number', $this->phone_number])

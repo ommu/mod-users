@@ -27,7 +27,7 @@ class Users extends \yii\db\ActiveQuery
 	/**
 	 * {@inheritdoc}
 	 */
-	public function suggest() 
+	public function suggest()
 	{
 		return $this->select(['user_id', 'email', 'displayname', 'photos'])
 			->andWhere(['enabled' => '1']);

@@ -61,10 +61,11 @@ class Users extends UsersModel
 	 */
 	public function search($params, $column=null)
 	{
-		if(!($column && is_array($column)))
-			$query = UsersModel::find()->alias('t');
-		else
-			$query = UsersModel::find()->alias('t')->select($column);
+        if (!($column && is_array($column))) {
+            $query = UsersModel::find()->alias('t');
+        } else {
+            $query = UsersModel::find()->alias('t')->select($column);
+        }
 		$query->joinWith([
 			'level.title level', 
 			'languageRltn languageRltn', 
@@ -78,8 +79,9 @@ class Users extends UsersModel
 			'query' => $query,
 		];
 		// disable pagination agar data pada api tampil semua
-		if(isset($params['pagination']) && $params['pagination'] == 0)
-			$dataParams['pagination'] = false;
+        if (isset($params['pagination']) && $params['pagination'] == 0) {
+            $dataParams['pagination'] = false;
+        }
 		$dataProvider = new ActiveDataProvider($dataParams);
 
 		$attributes = array_keys($this->getTableSchema()->columns);
@@ -102,7 +104,7 @@ class Users extends UsersModel
 
 		$this->load($params);
 
-		if(!$this->validate()) {
+        if (!$this->validate()) {
 			// uncomment the following line if you do not want to return any records when validation fails
 			// $query->where('0=1');
 			return $dataProvider;
@@ -126,16 +128,17 @@ class Users extends UsersModel
 			'cast(t.update_date as date)' => $this->update_date,
 		]);
 
-		if(isset($params['level']))
-			$query->andFilterWhere(['t.level_id' => $params['level']]);
-		else {
+        if (isset($params['level'])) {
+            $query->andFilterWhere(['t.level_id' => $params['level']]);
+        } else {
 			$controller = strtolower(Yii::$app->controller->id);
-			if(in_array($controller, ['admin','member'])) {
+            if (in_array($controller, ['admin', 'member'])) {
 				$level = UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member');
 				$query->andFilterWhere(['in', 't.level_id', array_flip($level)])
 					->andFilterWhere(['t.level_id' => $this->level_id]);
-			} else
-				$query->andFilterWhere(['t.level_id' => $this->level_id]);
+			} else {
+                $query->andFilterWhere(['t.level_id' => $this->level_id]);
+            }
 		}
 
 		$query->andFilterWhere(['like', 't.email', $this->email])

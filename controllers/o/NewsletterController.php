@@ -71,18 +71,19 @@ class NewsletterController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new UserNewsletterSearch();
-		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new UserNewsletterSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		$gridColumn = Yii::$app->request->get('GridColumn', null);
-		$cols = [];
-		if($gridColumn != null && count($gridColumn) > 0) {
-			foreach($gridColumn as $key => $val) {
-				if($gridColumn[$key] == 1)
-					$cols[] = $key;
-			}
-		}
-		$columns = $searchModel->getGridColumn($cols);
+        $gridColumn = Yii::$app->request->get('GridColumn', null);
+        $cols = [];
+        if ($gridColumn != null && count($gridColumn) > 0) {
+            foreach ($gridColumn as $key => $val) {
+                if ($gridColumn[$key] == 1) {
+                    $cols[] = $key;
+                }
+            }
+        }
+        $columns = $searchModel->getGridColumn($cols);
 
 		$this->view->title = Yii::t('app', 'Newsletters');
 		$this->view->description = '';
@@ -103,38 +104,41 @@ class NewsletterController extends Controller
 	{
 		$model = new UserNewsletter();
 
-		if(Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 
 			$email_i = $this->formatFileType($model->email_i);
-			if(count($email_i) == 1)
+            if (count($email_i) == 1) {
 				$model->scenario = UserNewsletter::SCENARIO_SINGLE_EMAIL;
+            }
 
 			$result = [];
-			if($model->validate()) {
-				if(count($email_i) > 1) {
+            if ($model->validate()) {
+                if (count($email_i) > 1) {
 					foreach ($email_i as $email) {
 						$condition = UserNewsletter::insertNewsletter($email);
-						if($condition == 0)
+                        if ($condition == 0) {
 							$result[] = Yii::t('app', '{email} (skip)', array('email'=>$email));
-						else if($condition == 1)
+                        } else if ($condition == 1) {
 							$result[] = Yii::t('app', '{email} (success)', array('email'=>$email));
-						else if($condition == 2)
+                        } else if ($condition == 2) {
 							$result[] = Yii::t('app', '{email} (error)', array('email'=>$email));
+                        }
 					}
 					Yii::$app->session->setFlash('success', Yii::t('app', 'Newsletter success created.<br/>{result}', ['result'=>$this->formatFileType($result, false, '<br/>')]));
 					return $this->redirect(['index']);
 
 				} else {
-					if($model->save()) {
+                    if ($model->save()) {
 						Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter {email} success created.', ['email'=>$model->email]));
 						return $this->redirect(['index']);
 					}
 				}
 
-			} else {
-				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+            } else {
+                if (Yii::$app->request->isAjax) {
+                    return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+                }
 			}
 		}
 
@@ -190,7 +194,7 @@ class NewsletterController extends Controller
 		$replace = $model->status == 1 ? 0 : 1;
 		$model->status = $replace;
 		
-		if($model->save(false, ['status','modified_id'])) {
+        if ($model->save(false, ['status', 'modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter success updated.'));
 			return $this->redirect(['index']);
 		}
@@ -205,8 +209,9 @@ class NewsletterController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserNewsletter::findOne($id)) !== null)
-			return $model;
+        if (($model = UserNewsletter::findOne($id)) !== null) {
+            return $model;
+        }
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}

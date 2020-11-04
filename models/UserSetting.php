@@ -62,7 +62,7 @@ class UserSetting extends \app\components\ActiveRecord
 			[['license', 'permission', 'meta_description', 'meta_keyword', 'forgot_difference', 'verify_difference', 'invite_difference', 'invite_order'], 'required'],
 			[['permission', 'forgot_difference', 'verify_difference', 'invite_difference', 'modified_id'], 'integer'],
 			[['meta_description', 'meta_keyword', 'forgot_diff_type', 'verify_diff_type', 'invite_diff_type', 'invite_order'], 'string'],
-			[['forgot_diff_type','verify_diff_type', 'invite_diff_type'], 'safe'],
+			[['forgot_diff_type', 'verify_diff_type', 'invite_diff_type'], 'safe'],
 			[['license'], 'string', 'max' => 32],
 		];
 	}
@@ -123,11 +123,13 @@ class UserSetting extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -222,14 +224,15 @@ class UserSetting extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['id' => 1])->one();
-			return is_array($column) ? $model : $model->$column;
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['id' => 1])->one();
+            return is_array($column) ? $model : $model->$column;
 			
 		} else {
 			$model = self::findOne(1);
@@ -244,18 +247,20 @@ class UserSetting extends \app\components\ActiveRecord
 	{
 		$moduleName = "module name";
 		$module = strtolower(Yii::$app->controller->module->id);
-		if(($module = Yii::$app->moduleManager->getModule($module)) != null);
-			$moduleName = strtolower($module->getName());
+        if (($module = Yii::$app->moduleManager->getModule($module)) != null) {
+            $moduleName = strtolower($module->getName());
+        }
 
 		$items = array(
 			1 => Yii::t('app', 'Yes, the public can view {module} unless they are made private.', ['module'=>$moduleName]),
 			0 => Yii::t('app', 'No, the public cannot view {module}.', ['module'=>$moduleName]),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -268,10 +273,11 @@ class UserSetting extends \app\components\ActiveRecord
 			'1' => Yii::t('app', 'Hour'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -284,10 +290,11 @@ class UserSetting extends \app\components\ActiveRecord
 			'desc' => Yii::t('app', 'Descending'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -295,25 +302,29 @@ class UserSetting extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if($this->forgot_difference != '') {
-				if($this->forgot_diff_type == '')
-					$this->addError('forgot_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('forgot_diff_type')]));
+        if (parent::beforeValidate()) {
+            if ($this->forgot_difference != '') {
+                if ($this->forgot_diff_type == '') {
+                    $this->addError('forgot_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('forgot_diff_type')]));
+                }
 			}
-			if($this->verify_difference != '') {
-				if($this->verify_diff_type == '')
-					$this->addError('verify_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('verify_diff_type')]));
+            if ($this->verify_difference != '') {
+                if ($this->verify_diff_type == '') {
+                    $this->addError('verify_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('verify_diff_type')]));
+                }
 			}
-			if($this->invite_difference != '') {
-				if($this->invite_diff_type == '')
-					$this->addError('invite_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('invite_diff_type')]));
+            if ($this->invite_difference != '') {
+                if ($this->invite_diff_type == '') {
+                    $this->addError('invite_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('invite_diff_type')]));
+                }
 			}
 			
-			if(!$this->isNewRecord) {
-				if($this->modified_id == null)
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
-		}
-		return true;
+            if (!$this->isNewRecord) {
+                if ($this->modified_id == null) {
+                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
+        }
+        return true;
 	}
 }

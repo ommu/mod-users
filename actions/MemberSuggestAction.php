@@ -22,11 +22,11 @@ class MemberSuggestAction extends \yii\base\Action
 	 */
 	protected function beforeRun()
 	{
-		if (parent::beforeRun()) {
+        if (parent::beforeRun()) {
 			Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 			Yii::$app->response->charset = 'UTF-8';
-		}
-		return true;
+        }
+        return true;
 	}
 
 	/**
@@ -36,15 +36,15 @@ class MemberSuggestAction extends \yii\base\Action
 	{
 		$term = utf8_decode(urldecode(Yii::$app->request->get('term')));
 
-		if($term == null) return [];
+        if ($term == null) return [];
 
 		$validator = new EmailValidator();
 		$model = Users::find()
-			->alias('t')
+            ->alias('t')
 			->suggest();
-		if($validator->validate($term) === true)
+        if ($validator->validate($term) === true) {
 			$model->andWhere(['like', 't.email', $term]);
-		else {
+        } else {
 			$model->andWhere(['or',
 				['like', 't.email', $term],
 				['like', 't.displayname', $term]
@@ -53,14 +53,15 @@ class MemberSuggestAction extends \yii\base\Action
 		$model = $model->limit(15)->all();
 
 		$result = [];
-		foreach($model as $val) {
+        foreach ($model as $val) {
 			$result[$val->user_id] = [
 				'id' => $val->user_id, 
 				'email' => $val->email,
 				'photo' => $val->photos,
 			];
-			if($val->displayname)
+            if ($val->displayname) {
 				$result[$val->user_id]['name'] = $val->displayname;
+            }
 		}
 		return array_values($result);
 	}

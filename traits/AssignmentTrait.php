@@ -26,10 +26,10 @@ trait AssignmentTrait
 	{
 		// insert new assignment
 		$levelRoles = $user->level->assignment_roles;
-		if(!empty($levelRoles)) {
+        if (!empty($levelRoles)) {
 			$manager = Yii::$app->authManager;
 			foreach ($levelRoles as $val) {
-				if($manager->getAssignment($val, $user->user_id) == null) {
+                if ($manager->getAssignment($val, $user->user_id) == null) {
 					$item = $manager->getRole($val);
 					$manager->assign($item, $user->user_id);
 				}
@@ -56,9 +56,9 @@ trait AssignmentTrait
 
 		// update new assignment
 		$levelRoles = $user->level->assignment_roles;
-		if(!empty($levelRoles)) {
+        if (!empty($levelRoles)) {
 			foreach ($levelRoles as $val) {
-				if($manager->getAssignment($val, $user->user_id) != null) {
+                if ($manager->getAssignment($val, $user->user_id) != null) {
 					unset($oldAssignmentRoles[$val]);
 					continue;
 				}
@@ -69,7 +69,7 @@ trait AssignmentTrait
 		}
 
 		// drop difference assignment
-		if(!empty($oldAssignmentRoles)) {
+        if (!empty($oldAssignmentRoles)) {
 			foreach ($oldAssignmentRoles as $val) {
 				$item = $manager->getRole($val);
 				$manager->revoke($item, $user->user_id);

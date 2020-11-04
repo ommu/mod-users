@@ -47,7 +47,7 @@ class UserInvites extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['level_id','code','invite_ip','modified_date','modifiedDisplayname','updated_date','userLevel'];
+	public $gridForbiddenColumn = ['level_id', 'code', 'invite_ip', 'modified_date', 'modifiedDisplayname', 'updated_date', 'userLevel'];
 	public $email_i;
 	public $old_invites_i;
 
@@ -183,11 +183,13 @@ class UserInvites extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -298,19 +300,20 @@ class UserInvites extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($id, $column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['id' => $id])->one();
-			return is_array($column) ? $model : $model->$column;
-			
-		} else {
-			$model = self::findOne($id);
-			return $model;
-		}
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['id' => $id])->one();
+            return is_array($column) ? $model : $model->$column;
+
+        } else {
+            $model = self::findOne($id);
+            return $model;
+        }
 	}
 
 	/**
@@ -324,8 +327,9 @@ class UserInvites extends \app\components\ActiveRecord
 	public static function insertInvite($email, $displayname=null, $inviter_id=null)
 	{
 		$email = strtolower($email);
-		if($inviter_id === null)
-			$inviter_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+        if ($inviter_id === null) {
+            $inviter_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+        }
 
 		$invite = self::find()->alias('t')
 			->leftJoin(sprintf('%s newsletter', UserNewsletter::tableName()), 't.newsletter_id=newsletter.newsletter_id')
@@ -337,27 +341,30 @@ class UserInvites extends \app\components\ActiveRecord
 			->one();
 
 		$condition = 0;
-		if($invite == null) {
+        if ($invite == null) {
 			$invite = new UserInvites();
 			$invite->scenario = self::SCENARIO_SINGLE_EMAIL;
 			$invite->email_i = $email;
-			if($displayname !== null && $email != $displayname)
-				$invite->displayname = $displayname;
+            if ($displayname !== null && $email != $displayname) {
+                $invite->displayname = $displayname;
+            }
 			$invite->inviter_id = $inviter_id;
-			if($invite->save())
-				$condition = 1;
-			else
-				$condition = 2;
+            if ($invite->save()) {
+                $condition = 1;
+            } else {
+                $condition = 2;
+            }
 
 		} else {
-			if($invite->newsletter->user_id == null) {
-				if($displayname !== null && $email != $displayname)
+            if ($invite->newsletter->user_id == null) {
+                if ($displayname !== null && $email != $displayname)
 					$invite->displayname = $displayname;
 				$invite->invites = $invite->invites+1;
-				if($invite->save())
-					$condition = 1;
-				else
-					$condition = 2;
+                if ($invite->save()) {
+                    $condition = 1;
+                } else {
+                    $condition = 2;
+                }
 			}
 		}
 
@@ -401,7 +408,7 @@ class UserInvites extends \app\components\ActiveRecord
 	/**
 	 * after find attributes
 	 */
-	public function afterFind() 
+	public function afterFind()
 	{
 		parent::afterFind();
 
@@ -413,37 +420,42 @@ class UserInvites extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
+        if (parent::beforeValidate()) {
+            if ($this->isNewRecord) {
 				$this->email_i = strtolower($this->email_i);
-				if($this->email_i != '') {
+                if ($this->email_i != '') {
 					$email_i = $this->formatFileType($this->email_i);
-					if(count($email_i) == 1) {
+                    if (count($email_i) == 1) {
 						$newsletter = UserNewsletter::find()
 							->select(['newsletter_id', 'user_id'])
 							->where(['email' => $this->email_i])
 							->one();
-						if($newsletter != null && $newsletter->user_id != null)
-							$this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar sebagai member.', ['email'=>$this->email_i]));
+                        if ($newsletter != null && $newsletter->user_id != null) {
+                            $this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar sebagai member.', ['email'=>$this->email_i]));
+                        }
 					}
 				}
-				if($this->inviter_id == null)
-					$this->inviter_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                if ($this->inviter_id == null) {
+                    $this->inviter_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
 
-				if(Yii::$app->isSocialMedia())
-					$this->level_id = UserLevel::getDefault();
+                if (Yii::$app->isSocialMedia()) {
+                    $this->level_id = UserLevel::getDefault();
+                }
 
-			} else {
-				if($this->modified_id == null)
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
+            } else {
+                if ($this->modified_id == null) {
+                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
 
-			if($this->isNewRecord || (!$this->isNewRecord && $this->old_invites_i != $this->invites))
-				$this->code = Yii::$app->security->generateRandomString(16);
+            if ($this->isNewRecord || (!$this->isNewRecord && $this->old_invites_i != $this->invites)) {
+                $this->code = Yii::$app->security->generateRandomString(16);
+            }
 
 			$this->invite_ip = $_SERVER['REMOTE_ADDR'];
-		}
-		return true;
+        }
+        return true;
 	}
 
 	/**
@@ -451,48 +463,49 @@ class UserInvites extends \app\components\ActiveRecord
 	 */
 	public function beforeSave($insert)
 	{
-		if(parent::beforeSave($insert)) {
+        if (parent::beforeSave($insert)) {
 			$this->email_i = strtolower($this->email_i);
 			
-			if($insert) {
+            if ($insert) {
 				$newsletter = UserNewsletter::find()
 					->select(['newsletter_id'])
 					->where(['email' => $this->email_i])
 					->one();
 
-				if($newsletter != null)
-					$this->newsletter_id = $newsletter->newsletter_id;
-				else {
+                if ($newsletter != null) {
+                    $this->newsletter_id = $newsletter->newsletter_id;
+                } else {
 					$newsletter = new UserNewsletter();
 					$newsletter->status = 0;
 					$newsletter->email_i = $this->email_i;
-					if($newsletter->save())
-						$this->newsletter_id = $newsletter->newsletter_id;
+                    if ($newsletter->save()) {
+                        $this->newsletter_id = $newsletter->newsletter_id;
+                    }
 				}
 
-			}
-		}
-		return true;
+            }
+        }
+        return true;
 	}
 
 	/**
 	 * After save attributes
 	 */
-	public function afterSave($insert, $changedAttributes) 
+	public function afterSave($insert, $changedAttributes)
 	{
-		parent::afterSave($insert, $changedAttributes);
+        parent::afterSave($insert, $changedAttributes);
 
 		$setting = CoreSettings::find()
 			->select(['signup_checkemail'])
 			->where(['id' => 1])
 			->one();
 		
-		if($this->newsletter->user_id == null) {
+        if ($this->newsletter->user_id == null) {
 			$displayname = $this->displayname ? $this->displayname : $this->newsletter->email;
 			$inviter = $this->inviter->displayname ? $this->inviter->displayname : $this->inviter->email;
 			$singuplink = $setting->signup_checkemail == 1 ? Url::to(['signup/index', 'code'=>$this->code], true) : Url::to(['signup/index'], true);
 			
-			// if($insert) {
+			// if ($insert) {
 			// 	$template = $setting->signup_checkemail == 1 ? 'invite-code' : 'invite';
 			// 	$emailSubject = $this->parseMailSubject($template, 'user');
 			// 	$emailBody = $this->parseMailBody($template, [
@@ -510,7 +523,7 @@ class UserInvites extends \app\components\ActiveRecord
 			// 		->send();
 
 			// } else {
-			// 	if($this->old_invites_i != $this->invites) {
+			//     if ($this->old_invites_i != $this->invites) {
 			// 		$template = $setting->signup_checkemail == 1 ? 'invite-2nd-code' : 'invite-2nd';
 			// 		$emailSubject = $this->parseMailSubject($template, 'user');
 			// 		$emailBody = $this->parseMailBody($template, [

@@ -63,7 +63,7 @@ class UserLevel extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
 
-	public $gridForbiddenColumn = ['desc_i', 'assignment_roles', 'message_allow','message_limit','profile_block','profile_search','profile_privacy','profile_comments','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete','photo_allow','photo_size','photo_exts','creation_date','creationDisplayname','modified_date','modifiedDisplayname'];
+	public $gridForbiddenColumn = ['desc_i', 'assignment_roles', 'message_allow', 'message_limit', 'profile_block', 'profile_search', 'profile_privacy', 'profile_comments', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete', 'photo_allow', 'photo_size', 'photo_exts', 'creation_date', 'creationDisplayname', 'modified_date', 'modifiedDisplayname'];
 	public $name_i;
 	public $desc_i;
 
@@ -105,8 +105,8 @@ class UserLevel extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_USER] = ['assignment_roles','profile_block','profile_search','profile_privacy','profile_comments','photo_allow','photo_size','photo_exts','profile_style','profile_style_sample','profile_status','profile_invisible','profile_views','profile_change','profile_delete'];
-		$scenarios[self::SCENARIO_MESSAGE] = ['message_allow','message_limit'];
+		$scenarios[self::SCENARIO_USER] = ['assignment_roles', 'profile_block', 'profile_search', 'profile_privacy', 'profile_comments', 'photo_allow', 'photo_size', 'photo_exts', 'profile_style', 'profile_style_sample', 'profile_status', 'profile_invisible', 'profile_views', 'profile_change', 'profile_delete'];
+		$scenarios[self::SCENARIO_MESSAGE] = ['message_allow', 'message_limit'];
 		return $scenarios;
 	}
 
@@ -219,11 +219,13 @@ class UserLevel extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -469,37 +471,41 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($id, $column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['level_id' => $id])->one();
-			return is_array($column) ? $model : $model->$column;
-			
-		} else {
-			$model = self::findOne($id);
-			return $model;
-		}
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['level_id' => $id])->one();
+            return is_array($column) ? $model : $model->$column;
+
+        } else {
+            $model = self::findOne($id);
+            return $model;
+        }
 	}
 
 	/**
 	 * function getLevel
 	 */
-	public static function getLevel($type=null, $array=true) 
+	public static function getLevel($type=null, $array=true)
 	{
 		$model = self::find()->alias('t');
 		$model->leftJoin(sprintf('%s title', SourceMessage::tableName()), 't.name=title.id');
-		if($type == 'member')
-			$model->andWhere(['not in', 't.level_id', [1,2]]);
-		if($type == 'admin')
-			$model->andWhere(['in','t.level_id', [1,2]]);
+        if ($type == 'member') {
+            $model->andWhere(['not in', 't.level_id', [1,2]]);
+        }
+        if ($type == 'admin') {
+            $model->andWhere(['in', 't.level_id', [1,2]]);
+        }
 
 		$model = $model->orderBy('title.message ASC')->all();
 
-		if($array == true)
-			return \yii\helpers\ArrayHelper::map($model, 'level_id', 'name_i');
+        if ($array == true) {
+            return \yii\helpers\ArrayHelper::map($model, 'level_id', 'name_i');
+        }
 
 		return $model;
 	}
@@ -515,10 +521,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'Nobody - users cannot send private messages.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -538,10 +545,11 @@ class UserLevel extends \app\components\ActiveRecord
 			500 => 500,
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -554,10 +562,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, users cannot block other users.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -570,10 +579,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, force all users to be included in search results.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -603,10 +613,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, users cannot add custom CSS styles to their profiles.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -619,10 +630,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, users can not choose from the provided sample CSS.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -635,10 +647,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, users cannot have a "status" message.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -651,10 +664,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, do not allow users to go invisible.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -667,10 +681,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, do not allow users to see who has viewed their profile.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -683,10 +698,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, do not allow users to change their username.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -699,10 +715,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, do not allow users to delete their account.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -715,10 +732,11 @@ class UserLevel extends \app\components\ActiveRecord
 			0 => Yii::t('app', 'No, users can not upload a photo.'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -726,11 +744,13 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public static function parseAssignment($assignmentRoles, $sep='li')
 	{
-		if(!is_array($assignmentRoles) || (is_array($assignmentRoles) && empty($assignmentRoles)))
-			return '-';
+        if (!is_array($assignmentRoles) || (is_array($assignmentRoles) && empty($assignmentRoles))) {
+            return '-';
+        }
 
-		if($sep == 'li')
-			return Html::ul($assignmentRoles, ['encode'=>false, 'class'=>'list-boxed']);
+        if ($sep == 'li') {
+            return Html::ul($assignmentRoles, ['encode'=>false, 'class'=>'list-boxed']);
+        }
 
 		return implode(', ', $assignmentRoles);
 	}
@@ -740,8 +760,9 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public static function getSize($sizes)
 	{
-		if(empty($sizes))
-			return '-';
+        if (empty($sizes)) {
+            return '-';
+        }
 
 		$width = $sizes['width'] ? $sizes['width'] : '~';
 		$height = $sizes['height'] ? $sizes['height'] : '~';
@@ -752,7 +773,7 @@ class UserLevel extends \app\components\ActiveRecord
 	/**
 	 * function getDefault
 	 */
-	public static function getDefault() 
+	public static function getDefault()
 	{
 		$model = self::find()
 			->select(['level_id'])
@@ -773,10 +794,11 @@ class UserLevel extends \app\components\ActiveRecord
 		$this->desc_i = isset($this->description) ? $this->description->message : '';
 
 		$assignment_roles = Json::decode($this->assignment_roles);
-		if(!empty($assignment_roles))
-			$this->assignment_roles = $assignment_roles;
-		else 
-			$this->assignment_roles = [];
+        if (!empty($assignment_roles)) {
+            $this->assignment_roles = $assignment_roles;
+        } else {
+            $this->assignment_roles = [];
+        }
 
 		$this->message_limit = unserialize($this->message_limit);
 		$this->profile_privacy = unserialize($this->profile_privacy);
@@ -784,8 +806,9 @@ class UserLevel extends \app\components\ActiveRecord
 		$this->photo_size = unserialize($this->photo_size);
 
 		$photo_exts = unserialize($this->photo_exts);
-		if(!empty($photo_exts))
-			$this->photo_exts = $this->formatFileType($photo_exts, false);
+        if (!empty($photo_exts)) {
+            $this->photo_exts = $this->formatFileType($photo_exts, false);
+        }
 	}
 
 	/**
@@ -793,38 +816,42 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if($this->scenario == self::SCENARIO_USER) {
-				if($this->photo_size['width'] == '' && $this->photo_size['height'] == '')
-					$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size')]));
-				else {
-					if($this->photo_size['width'] == '')
-						$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[width]')]));
-					else if($this->photo_size['height'] == '')
-						$this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[height]')]));
+        if (parent::beforeValidate()) {
+            if ($this->scenario == self::SCENARIO_USER) {
+                if ($this->photo_size['width'] == '' && $this->photo_size['height'] == '') {
+                    $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size')]));
+                } else {
+                    if ($this->photo_size['width'] == '') {
+                        $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[width]')]));
+                    } else if ($this->photo_size['height'] == '') {
+                        $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[height]')]));
+                    }
 				}
 			}
 
-			if($this->scenario == self::SCENARIO_MESSAGE) {
-				if($this->message_limit['inbox'] == '' && $this->message_limit['outbox'] == '')
-					$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit')]));
-				else {
-					if($this->message_limit['inbox'] == '')
-						$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[inbox]')]));
-					else if($this->message_limit['outbox'] == '')
-						$this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[outbox]')]));
+            if ($this->scenario == self::SCENARIO_MESSAGE) {
+                if ($this->message_limit['inbox'] == '' && $this->message_limit['outbox'] == '') {
+                    $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit')]));
+                } else {
+                    if ($this->message_limit['inbox'] == '') {
+                        $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[inbox]')]));
+                    } else if ($this->message_limit['outbox'] == '') {
+                        $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[outbox]')]));
+                    }
 				}
 			}
 
-			if($this->isNewRecord) {
-				if($this->creation_id == null)
-					$this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			} else {
-				if($this->modified_id == null)
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
-		}
-		return true;
+            if ($this->isNewRecord) {
+                if ($this->creation_id == null) {
+                    $this->creation_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            } else {
+                if ($this->modified_id == null) {
+                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
+        }
+        return true;
 	}
 
 	/**
@@ -832,54 +859,57 @@ class UserLevel extends \app\components\ActiveRecord
 	 */
 	public function beforeSave($insert)
 	{
-		$module = strtolower(Yii::$app->controller->module->id);
-		$controller = strtolower(Yii::$app->controller->id);
-		$action = strtolower(Yii::$app->controller->action->id);
+        $module = strtolower(Yii::$app->controller->module->id);
+        $controller = strtolower(Yii::$app->controller->id);
+        $action = strtolower(Yii::$app->controller->action->id);
 
-		$location = Inflector::slug($module.' '.$controller);
+        $location = Inflector::slug($module.' '.$controller);
 
-		if(parent::beforeSave($insert)) {
-			if($insert || (!$insert && !$this->name)) {
-				$name = new SourceMessage();
-				$name->location = $location.'_title';
-				$name->message = $this->name_i;
-				if($name->save())
-					$this->name = $name->id;
+        if (parent::beforeSave($insert)) {
+            if ($insert || (!$insert && !$this->name)) {
+                $name = new SourceMessage();
+                $name->location = $location.'_title';
+                $name->message = $this->name_i;
+                if ($name->save()) {
+                    $this->name = $name->id;
+                }
 
-			} else {
-				$name = SourceMessage::findOne($this->name);
-				$name->message = $this->name_i;
-				$name->save();
-			}
+            } else {
+                $name = SourceMessage::findOne($this->name);
+                $name->message = $this->name_i;
+                $name->save();
+            }
 
-			if($insert || (!$insert && !$this->desc)) {
-				$desc = new SourceMessage();
-				$desc->location = $location.'_description';
-				$desc->message = $this->desc_i;
-				if($desc->save())
-					$this->desc = $desc->id;
+            if ($insert || (!$insert && !$this->desc)) {
+                $desc = new SourceMessage();
+                $desc->location = $location.'_description';
+                $desc->message = $this->desc_i;
+                if ($desc->save()) {
+                    $this->desc = $desc->id;
+                }
 
-			} else {
-				$desc = SourceMessage::findOne($this->desc);
-				$desc->message = $this->desc_i;
-				$desc->save();
-			}
+            } else {
+                $desc = SourceMessage::findOne($this->desc);
+                $desc->message = $this->desc_i;
+                $desc->save();
+            }
 
-			// if($this->scenario == self::SCENARIO_MESSAGE)
-				$this->message_limit = serialize($this->message_limit);
+            // if ($this->scenario == self::SCENARIO_MESSAGE) {
+                $this->message_limit = serialize($this->message_limit);
 
-			// } else if($this->scenario == self::SCENARIO_USER) {
-				$this->assignment_roles = Json::encode($this->assignment_roles);
-				$this->profile_privacy = serialize($this->profile_privacy);
-				$this->profile_comments = serialize($this->profile_comments);
-				$this->photo_size = serialize($this->photo_size);
-				$this->photo_exts = serialize($this->formatFileType($this->photo_exts));
-			// }
+            // } else if ($this->scenario == self::SCENARIO_USER) {
+                $this->assignment_roles = Json::encode($this->assignment_roles);
+                $this->profile_privacy = serialize($this->profile_privacy);
+                $this->profile_comments = serialize($this->profile_comments);
+                $this->photo_size = serialize($this->photo_size);
+                $this->photo_exts = serialize($this->formatFileType($this->photo_exts));
+            // }
 
-			// user level set to default
-			if($this->default == 1)
-				self::updateAll(['default' => 0], 'level_id <> '.$this->level_id);
-		}
-		return true;
+            // user level set to default
+            if ($this->default == 1) {
+                self::updateAll(['default' => 0], 'level_id <> '.$this->level_id);
+            }
+        }
+        return true;
 	}
 }

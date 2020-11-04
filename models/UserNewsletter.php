@@ -47,7 +47,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 	use \ommu\traits\FileTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['creation_date','modified_date','modifiedDisplayname','updated_date','updated_ip','userDisplayname','','userLevel'];
+	public $gridForbiddenColumn = ['creation_date', 'modified_date', 'modifiedDisplayname', 'updated_date', 'updated_ip', 'userDisplayname', 'userLevel'];
 	public $email_i;
 
 	public $userDisplayname;
@@ -196,11 +196,13 @@ class UserNewsletter extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -304,19 +306,20 @@ class UserNewsletter extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($id, $column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['newsletter_id' => $id])->one();
-			return is_array($column) ? $model : $model->$column;
-			
-		} else {
-			$model = self::findOne($id);
-			return $model;
-		}
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['newsletter_id' => $id])->one();
+            return is_array($column) ? $model : $model->$column;
+
+        } else {
+            $model = self::findOne($id);
+            return $model;
+        }
 	}
 
 	/**
@@ -330,8 +333,9 @@ class UserNewsletter extends \app\components\ActiveRecord
 	public static function insertNewsletter($email, $subscribe_id=null)
 	{
 		$email = strtolower($email);
-		if($subscribe_id === null)
-			$subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+        if ($subscribe_id === null) {
+            $subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+        }
 
 		$newsletter = self::find()
 			->select(['newsletter_id'])
@@ -339,15 +343,16 @@ class UserNewsletter extends \app\components\ActiveRecord
 			->one();
 
 		$condition = 0;
-		if($newsletter == null) {
+        if ($newsletter == null) {
 			$newsletter = new UserNewsletter();
 			$newsletter->scenario = self::SCENARIO_SINGLE_EMAIL;
 			$newsletter->email_i = $email;
 			$newsletter->subscribe_id = $subscribe_id;
-			if($newsletter->save())
-				$condition = 1;
-			else
-				$condition = 2;
+            if ($newsletter->save()) {
+                $condition = 1;
+            } else {
+                $condition = 2;
+            }
 		}
 
 		return $condition;
@@ -358,32 +363,35 @@ class UserNewsletter extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
+        if (parent::beforeValidate()) {
+            if ($this->isNewRecord) {
 				$this->email_i = strtolower($this->email_i);
-				if($this->email_i != '') {
+                if ($this->email_i != '') {
 					$email_i = $this->formatFileType($this->email_i);
-					if(count($email_i) == 1) {
+                    if (count($email_i) == 1) {
 						$this->email = $this->email_i;
 						$newsletter = self::find()
 							->select(['newsletter_id'])
 							->where(['email' => $this->email])
 							->one();
-						if($newsletter != null)
-							$this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar pada newsletter.', ['email'=>$this->email]));
+                        if ($newsletter != null) {
+                            $this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar pada newsletter.', ['email'=>$this->email]));
+                        }
 					}
 				}
-				if($this->subscribe_id == null)
-					$this->subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                if ($this->subscribe_id == null) {
+                    $this->subscribe_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
 
-			} else {
-				if($this->modified_id == null)
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
+            } else {
+                if ($this->modified_id == null) {
+                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
 
-			$this->updated_ip = $_SERVER['REMOTE_ADDR'];
-		}
-		return true;
+            $this->updated_ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return true;
 	}
 
 	/**
@@ -391,22 +399,22 @@ class UserNewsletter extends \app\components\ActiveRecord
 	 */
 	public function beforeSave($insert)
 	{
-		if(parent::beforeSave($insert)) {
+        if (parent::beforeSave($insert)) {
 			$this->email = strtolower($this->email);
-		}
-		return true;
+        }
+        return true;
 	}
 
 	/**
 	 * After save attributes
 	 */
-	public function afterSave($insert, $changedAttributes) 
+	public function afterSave($insert, $changedAttributes)
 	{
-		parent::afterSave($insert, $changedAttributes);
-		
-		if($insert) {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($insert) {
 			// Guest Subscribe
-			if($this->status == 1 && $this->user_id == null && $this->subscribe_id == null) {
+            if ($this->status == 1 && $this->user_id == null && $this->subscribe_id == null) {
 				$displayname = $this->user->displayname ? $this->user->displayname : $this->email;
 				$unsubscribelink = Url::to(['newsletter/subscribe', 'nid'=>$this->newsletter_id, 'status'=>0], true);
 
@@ -434,7 +442,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 				*/
 			}
 		} else {
-			if($this->status == 1) {
+            if ($this->status == 1) {
 				/*
 				Yii::$app->mailer->compose()
 					->setFrom('emailasale@gmail.com')

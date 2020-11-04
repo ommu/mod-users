@@ -80,18 +80,19 @@ class MemberController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new UsersSearch();
-		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new UsersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		$gridColumn = Yii::$app->request->get('GridColumn', null);
-		$cols = [];
-		if($gridColumn != null && count($gridColumn) > 0) {
-			foreach($gridColumn as $key => $val) {
-				if($gridColumn[$key] == 1)
-					$cols[] = $key;
-			}
-		}
-		$columns = $searchModel->getGridColumn($cols);
+        $gridColumn = Yii::$app->request->get('GridColumn', null);
+        $cols = [];
+        if ($gridColumn != null && count($gridColumn) > 0) {
+            foreach ($gridColumn as $key => $val) {
+                if ($gridColumn[$key] == 1) {
+                    $cols[] = $key;
+                }
+            }
+        }
+        $columns = $searchModel->getGridColumn($cols);
 
 		$this->view->title = Yii::t('app', Inflector::pluralize($this->title));
 		$this->view->description = Yii::t('app', 'This page lists all of the users that exist on your social network. For more information about a specific user, click on the "edit" link in its row. Click the "login" link to login as a specific user. Use the filter fields to find specific users based on your criteria. To view all users on your system, leave all the filter fields blank.');
@@ -113,20 +114,21 @@ class MemberController extends Controller
 		$model = new Users();
 		$model->scenario = Users::SCENARIO_ADMIN_CREATE;
 
-		if(Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			// $postData = Yii::$app->request->post();
 			// $model->load($postData);
 			// $model->order = $postData['order'] ? $postData['order'] : 0;
 
-			if($model->save()) {
+            if ($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', '{title} success created.', ['title'=>$this->title]));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
 
-			} else {
-				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+            } else {
+                if (Yii::$app->request->isAjax) {
+                    return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+                }
 			}
 		}
 
@@ -148,21 +150,23 @@ class MemberController extends Controller
 	{
 		$model = $this->findModel($id);
 
-		if(Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 			$postData = Yii::$app->request->post();
 			$model->load($postData);
-			if($postData['password'])
+            if ($postData['password']) {
 				$model->scenario = Users::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD;
+            }
 			$model->isForm = true;
 
-			if($model->save()) {
+            if ($model->save()) {
 				Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
 				return $this->redirect(['index']);
 				//return $this->redirect(['view', 'id'=>$model->user_id]);
 
-			} else {
-				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+            } else {
+                if (Yii::$app->request->isAjax) {
+                    return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+                }
 			}
 		}
 
@@ -218,7 +222,7 @@ class MemberController extends Controller
 		$replace = $model->verified == 1 ? 0 : 1;
 		$model->verified = $replace;
 		
-		if($model->save(false, ['verified','modified_date','modified_id'])) {
+        if ($model->save(false, ['verified', 'modified_date', 'modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
 			return $this->redirect(['index']);
 		}
@@ -236,7 +240,7 @@ class MemberController extends Controller
 		$replace = $model->enabled == 1 ? 0 : 1;
 		$model->enabled = $replace;
 		
-		if($model->save(false, ['enabled','modified_date','modified_id'])) {
+        if ($model->save(false, ['enabled', 'modified_date', 'modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
 			return $this->redirect(['index']);
 		}
@@ -251,8 +255,9 @@ class MemberController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = Users::findOne($id)) !== null)
-			return $model;
+        if (($model = Users::findOne($id)) !== null) {
+            return $model;
+        }
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}

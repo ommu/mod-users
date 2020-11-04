@@ -72,18 +72,19 @@ class InviteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$searchModel = new UserInvitesSearch();
-		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new UserInvitesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		$gridColumn = Yii::$app->request->get('GridColumn', null);
-		$cols = [];
-		if($gridColumn != null && count($gridColumn) > 0) {
-			foreach($gridColumn as $key => $val) {
-				if($gridColumn[$key] == 1)
-					$cols[] = $key;
-			}
-		}
-		$columns = $searchModel->getGridColumn($cols);
+        $gridColumn = Yii::$app->request->get('GridColumn', null);
+        $cols = [];
+        if ($gridColumn != null && count($gridColumn) > 0) {
+            foreach ($gridColumn as $key => $val) {
+                if ($gridColumn[$key] == 1) {
+                    $cols[] = $key;
+                }
+            }
+        }
+        $columns = $searchModel->getGridColumn($cols);
 
 		$this->view->title = Yii::t('app', 'Invites');
 		$this->view->description = '';
@@ -105,38 +106,41 @@ class InviteController extends Controller
 		$model = new UserInvites();
 		$model->scenario = UserInvites::SCENARIO_FORM;
 
-		if(Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 			$model->load(Yii::$app->request->post());
 			
 			$email_i = $this->formatFileType($model->email_i);
-			if(count($email_i) == 1)
+            if (count($email_i) == 1) {
 				$model->scenario = UserInvites::SCENARIO_SINGLE_EMAIL;
+            }
 
 			$result = [];
-			if($model->validate()) {
-				if(count($email_i) > 1) {
+            if ($model->validate()) {
+                if (count($email_i) > 1) {
 					foreach ($email_i as $email) {
 						$condition = UserInvites::insertInvite($email);
-						if($condition == 0)
+                        if ($condition == 0) {
 							$result[] = Yii::t('app', '{email} (skip)', array('email'=>$email));
-						else if($condition == 1)
+                        } else if ($condition == 1) {
 							$result[] = Yii::t('app', '{email} (success)', array('email'=>$email));
-						else if($condition == 2)
+                        } else if ($condition == 2) {
 							$result[] = Yii::t('app', '{email} (error)', array('email'=>$email));
+                        }
 					}
 					Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success created.<br/>{result}', ['result'=>$this->formatFileType($result, false, '<br/>')]));
 					return $this->redirect(['index']);
 					
 				} else {
-					if(UserInvites::insertInvite($model->email_i) == 1) {
+                    if (UserInvites::insertInvite($model->email_i) == 1) {
 						Yii::$app->session->setFlash('success', Yii::t('app', '{email} invite success created.', ['email'=>$model->email_i]));
 						return $this->redirect(['index']);
 					}
 				}
 
-			} else {
-				if(Yii::$app->request->isAjax)
-					return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+            } else {
+                if (Yii::$app->request->isAjax) {
+                    return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
+                }
 			}
 		}
 
@@ -176,7 +180,7 @@ class InviteController extends Controller
 		$model = $this->findModel($id);
 		$model->publish = 2;
 
-		if($model->save(false, ['publish','modified_id'])) {
+        if ($model->save(false, ['publish', 'modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success deleted.'));
 			return $this->redirect(['index']);
 		}
@@ -194,7 +198,7 @@ class InviteController extends Controller
 		$replace = $model->publish == 1 ? 0 : 1;
 		$model->publish = $replace;
 
-		if($model->save(false, ['publish','modified_id'])) {
+        if ($model->save(false, ['publish', 'modified_id'])) {
 			Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success updated.'));
 			return $this->redirect(['index']);
 		}
@@ -209,8 +213,9 @@ class InviteController extends Controller
 	 */
 	protected function findModel($id)
 	{
-		if(($model = UserInvites::findOne($id)) !== null)
-			return $model;
+        if (($model = UserInvites::findOne($id)) !== null) {
+            return $model;
+        }
 
 		throw new \yii\web\NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
 	}

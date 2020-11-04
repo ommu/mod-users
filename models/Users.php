@@ -128,7 +128,7 @@ class Users extends \app\components\ActiveRecord
 			[['email'], 'email'],
 			[['email', 'username'], 'unique'],
 			[['password', 'confirmPassword'], 'safe'],
-			['username', 'match', 'pattern' => '/^[a-zA-Z0-9.]+$/','message' => Yii::t('app','Username can only contain alphanumeric characters and dot')],
+			['username', 'match', 'pattern' => '/^[a-zA-Z0-9.]+$/', 'message' => Yii::t('app', 'Username can only contain alphanumeric characters and dot')],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_RESET_PASSWORD],
 			['password', 'compare', 'compareAttribute' => 'confirmPassword', 'message' => Yii::t('app', 'Passwords don\'t match'), 'on' => self::SCENARIO_CHANGE_PASSWORD],
@@ -350,11 +350,13 @@ class Users extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$controller = isset(Yii::$app->controller) ? strtolower(Yii::$app->controller->id) : '';
 
@@ -363,15 +365,14 @@ class Users extends \app\components\ActiveRecord
 			'class'  => 'app\components\grid\SerialColumn',
 			'contentOptions' => ['class'=>'text-center'],
 		];
-		if($controller == 'admin' && !Yii::$app->request->get('level')) {
-			$this->templateColumns['level_id'] = [
-				'attribute' => 'level_id',
-				'value' => function($model, $key, $index, $column) {
-					return isset($model->level) ? $model->level->name_i : '-';
-				},
-				'filter' => UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member'),
-			];
-		}
+        $this->templateColumns['level_id'] = [
+            'attribute' => 'level_id',
+            'value' => function($model, $key, $index, $column) {
+                return isset($model->level) ? $model->level->name_i : '-';
+            },
+            'filter' => UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member'),
+            'visible' => $controller == 'admin' && !Yii::$app->request->get('level') ? true : false,
+        ];
 		$this->templateColumns['language_id'] = [
 			'attribute' => 'language_id',
 			'value' => function($model, $key, $index, $column) {
@@ -541,19 +542,20 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($id, $column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['user_id' => $id])->one();
-			return is_array($column) ? $model : $model->$column;
-			
-		} else {
-			$model = self::findOne($id);
-			return $model;
-		}
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['user_id' => $id])->one();
+            return is_array($column) ? $model : $model->$column;
+
+        } else {
+            $model = self::findOne($id);
+            return $model;
+        }
 	}
 
 	/**
@@ -567,10 +569,11 @@ class Users extends \app\components\ActiveRecord
 			'2' => Yii::t('app', 'Blocked'),
 		);
 
-		if($value !== null)
-			return $items[$value];
-		else
-			return $items;
+        if ($value !== null) {
+            return $items[$value];
+        } else {
+            return $items;
+        }
 	}
 
 	/**
@@ -606,7 +609,7 @@ class Users extends \app\components\ActiveRecord
 	 * @param returnAlias set true jika ingin kembaliannya path alias atau false jika ingin string
 	 * relative path. default true.
 	 */
-	public static function getUploadPath($returnAlias=true) 
+	public static function getUploadPath($returnAlias=true)
 	{
 		return ($returnAlias ? Yii::getAlias('@public/users') : 'users');
 	}
@@ -630,9 +633,8 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate())
-		{
-			$controller = strtolower(Yii::$app->controller->id);	
+        if (parent::beforeValidate()) {
+			$controller = strtolower(Yii::$app->controller->id);
 			$isSocialMedia = Yii::$app->isSocialMedia();
 			$passwordFunction = in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD]) ? true : false;
 			$setting = CoreSettings::find()
@@ -640,7 +642,7 @@ class Users extends \app\components\ActiveRecord
 				->where(['id' => 1])
 				->one();
 
-			if($this->isNewRecord) {
+            if ($this->isNewRecord) {
 				/**
 				 * Created Users
 				 *
@@ -651,13 +653,13 @@ class Users extends \app\components\ActiveRecord
 
 				// User Reference
 				$this->reference_id_i = null;
-				if($this->email != '') {
+                if ($this->email != '') {
 					$settingUser = UserSetting::find()
 						->select(['invite_order'])
 						->where(['id' => 1])
 						->one();
 					$invite = UserInvites::getInvite($this->email);
-					if($invite != null && $invite->newsletter->user_id == null) {
+                    if ($invite != null && $invite->newsletter->user_id == null) {
 						$reference_id_i = $settingUser->invite_order == 'asc' ? 
 							$invite->newsletter->view->first_invite_user_id : 
 							$invite->newsletter->view->last_invite_user_id;
@@ -665,18 +667,21 @@ class Users extends \app\components\ActiveRecord
 					}
 				}
 
-				if($this->scenario == self::SCENARIO_ADMIN_CREATE) {
+                if ($this->scenario == self::SCENARIO_ADMIN_CREATE) {
 					// Auto Approve Users
-					if($setting->signup_approve == 1)
-						$this->enabled = 1;
+                    if ($setting->signup_approve == 1) {
+                        $this->enabled = 1;
+                    }
 
 					// Auto Verified Email User
-					if($setting->signup_verifyemail == 0)
-						$this->verified = 1;
+                    if ($setting->signup_verifyemail == 0) {
+                        $this->verified = 1;
+                    }
 
 					// Generate user by admin
-					if($this->modified_id == null)
-						$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                    if ($this->modified_id == null) {
+                        $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                    }
 
 				} else {
 					$this->level_id = UserLevel::getDefault();
@@ -684,42 +689,45 @@ class Users extends \app\components\ActiveRecord
 					$this->verified = $setting->signup_verifyemail == 1 ? 0 : 1;
 
 					// Signup by Invite (Admin or User)
-					if($isSocialMedia && $setting->signup_inviteonly != 0) {
-						if($this->email != '') {
-							if($invite != null) {
-								if($invite->newsletter->user_id != null)
-									$this->addError('email', Yii::t('app', '{email} sudah terdaftar, silahkan login.', ['email'=>$this->email]));
+                    if ($isSocialMedia && $setting->signup_inviteonly != 0) {
+                        if ($this->email != '') {
+                            if ($invite != null) {
+                                if ($invite->newsletter->user_id != null) {
+                                    $this->addError('email', Yii::t('app', '{email} sudah terdaftar, silahkan login.', ['email'=>$this->email]));
 
-								else {
-									if($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user')
-										$this->addError('email', Yii::t('app', 'Invite hanya bisa dilakukan oleh admin'));
+                                } else {
+                                    if ($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user') {
+                                        $this->addError('email', Yii::t('app', 'Invite hanya bisa dilakukan oleh admin'));
 
-									else {
-										if($setting->signup_checkemail == 1) {
+                                    } else {
+                                        if ($setting->signup_checkemail == 1) {
 											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->inviteCode);
-											if($inviteCode == null)
-												$this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('inviteCode'), 'invite-code-i'=>$this->inviteCode]));
-											else {
-												if($inviteCode->view->expired)
-													$this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} expired', ['attribute'=>$this->getAttributeLabel('inviteCode'), 'invite-code-i'=>$this->inviteCode]));
-												else
-													$this->reference_id_i = $inviteCode->invite->inviter_id;
+                                            if ($inviteCode == null) {
+                                                $this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('inviteCode'), 'invite-code-i'=>$this->inviteCode]));
+                                            } else {
+                                                if ($inviteCode->view->expired) {
+                                                    $this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} expired', ['attribute'=>$this->getAttributeLabel('inviteCode'), 'invite-code-i'=>$this->inviteCode]));
+                                                } else {
+                                                    $this->reference_id_i = $inviteCode->invite->inviter_id;
+                                                }
 											}
 										}
 									}
 								}
-							} else
-								$this->addError('email', Yii::t('app', '{email} belum ada dalam daftar invite.', ['email'=>$this->email]));
+							} else {
+                                $this->addError('email', Yii::t('app', '{email} belum ada dalam daftar invite.', ['email'=>$this->email]));
+                            }
 
 						} else {
-							if($setting->signup_checkemail == 1)
-								$this->addError('inviteCode', Yii::t('app', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('inviteCode')]));
+                            if ($setting->signup_checkemail == 1) {
+                                $this->addError('inviteCode', Yii::t('app', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('inviteCode')]));
+                            }
 						}
 					}
 				}
 
 				// Random password
-				if($setting->signup_random == 1) {
+                if ($setting->signup_random == 1) {
 					$this->password = Yii::$app->security->generateRandomString(8);
 					$this->verified = 1;
 				}
@@ -735,25 +743,28 @@ class Users extends \app\components\ActiveRecord
 				 */
 				
 				// Admin modify member
-				if(in_array($controller, ['member', 'admin'])) {
+                if (in_array($controller, ['member', 'admin'])) {
 					$this->modified_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
-					if($this->modified_id == null)
-						$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                    if ($this->modified_id == null) {
+                        $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                    }
 
 				} else {
 					// User modify
-					if(!$passwordFunction)
-						$this->update_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
+                    if (!$passwordFunction) {
+                        $this->update_date = Yii::$app->formatter->asDate('now', 'php:Y-m-d H:i:s');
+                    }
 					$this->update_ip = $_SERVER['REMOTE_ADDR'];
 				}
 			}
 
-			if(Yii::$app->id != 'back3nd' && !$passwordFunction && $setting->signup_username == 1) {
-				if($this->username == '')
-					$this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
-			}
-		}
-		return true;
+            if (Yii::$app->id != 'back3nd' && !$passwordFunction && $setting->signup_username == 1) {
+                if ($this->username == '') {
+                    $this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
+                }
+            }
+        }
+        return true;
 	}
 
 	/**
@@ -764,28 +775,31 @@ class Users extends \app\components\ActiveRecord
 		$setting = CoreSettings::find()
 			->select(['signup_random'])
 			->where(['id' => 1])
-			->one();
+            ->one();
 
-		if(parent::beforeSave($insert)) {
+        if (parent::beforeSave($insert)) {
 			$this->email = strtolower($this->email);
 
-			if($this->isNewRecord) {
+            if ($this->isNewRecord) {
 				$this->setPassword($this->password);
 				$this->generateAuthKey();
-				if($setting->signup_random == 1)
-					$this->password_send_i = $this->password;
+                if ($setting->signup_random == 1) {
+                    $this->password_send_i = $this->password;
+                }
 
 			} else {
-				if($this->isForm && $this->password)
-					$this->setPassword($this->password);
-				else
-					$this->password = $this->password_i;
+                if ($this->isForm && $this->password) {
+                    $this->setPassword($this->password);
+                } else {
+                    $this->password = $this->password_i;
+                }
 
-				if(!$this->auth_key)
-					$this->generateAuthKey();
-			}
-		}
-		return true;
+                if (!$this->auth_key) {
+                    $this->generateAuthKey();
+                }
+            }
+        }
+        return true;
 	}
 
 	/**
@@ -793,15 +807,15 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function afterSave($insert, $changedAttributes)
 	{
-		parent::afterSave($insert, $changedAttributes);
+        parent::afterSave($insert, $changedAttributes);
 
 		$isSocialMedia = Yii::$app->isSocialMedia();
 		$setting = CoreSettings::find()
 			->select(['signup_welcome', 'signup_adminemail'])
 			->where(['id' => 1])
-			->one();
+            ->one();
 
-		if($insert) {
+        if ($insert) {
 			/**
 			 * Created Users
 			 * 
@@ -820,19 +834,19 @@ class Users extends \app\components\ActiveRecord
 			 */
 
 			// Generate verification code
-			if ($this->verified == 0) {
+            if ($this->verified == 0) {
 				$verify = new UserVerify;
 				$verify->user_id = $this->user_id;
 				$verify->save();
 			}
 
 			// Update referensi newsletter
-			if($isSocialMedia && $this->reference_id_i != null) {
+            if ($isSocialMedia && $this->reference_id_i != null) {
 				$newsletter = UserNewsletter::find()
 					->select(['newsletter_id', 'user_id', 'reference_id'])
 					->where(['email' => $this->email])
 					->one();
-				if($newsletter != null && $newsletter->user_id != null && $newsletter->reference_id == null) {
+                if ($newsletter != null && $newsletter->user_id != null && $newsletter->reference_id == null) {
 					$newsletter->reference_id = $this->reference_id_i;
 					$newsletter->save(false, ['reference_id']);
 				}
@@ -861,7 +875,7 @@ class Users extends \app\components\ActiveRecord
 				->send();
 
 			// Send welcome email
-			if($setting->signup_welcome == 1) {
+            if ($setting->signup_welcome == 1) {
 				$template = 'signup-welcome';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
 				$emailSubject = $this->parseMailSubject($template, 'user');
@@ -878,7 +892,7 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Send new account to email administrator
-			if($setting->signup_adminemail == 1) {
+            if ($setting->signup_adminemail == 1) {
 				$template = 'signup-member-info';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
 				$emailSubject = $this->parseMailSubject($template, 'user');
@@ -897,21 +911,21 @@ class Users extends \app\components\ActiveRecord
 
 		} else {
 			// Generate verification code
-			if ($this->verified != $this->verified_i && $this->verified == 0) {
+            if ($this->verified != $this->verified_i && $this->verified == 0) {
 				$verify = new UserVerify;
 				$verify->user_id = $this->user_id;
 				$verify->save();
 			}
 
 			// Trigger after update assignment
-			if(array_key_exists('level_id', $changedAttributes) && $changedAttributes['level_id'] != $this->level_id) {
+            if (array_key_exists('level_id', $changedAttributes) && $changedAttributes['level_id'] != $this->level_id) {
 				// $event = new Event(['sender' => $this]);
 				// Event::trigger(self::className(), self::EVENT_AFTER_UPDATE_USERS, $event);
 				$this->changeAssignmentRoleWithLevel($this);
 			}
 
 			// Send new account information
-			if(in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD])) {
+            if (in_array($this->scenario, [self::SCENARIO_RESET_PASSWORD, self::SCENARIO_CHANGE_PASSWORD])) {
 				$template = 'account-change-password';
 				$displayname = $this->displayname ? $this->displayname : $this->email;
 				$emailSubject = $this->parseMailSubject($template, 'user');
@@ -929,7 +943,7 @@ class Users extends \app\components\ActiveRecord
 			}
 
 			// Send success email verification
-			if ($this->verified != $this->verified_i && $this->verified == 1) {
+            if ($this->verified != $this->verified_i && $this->verified == 1) {
 				$verified = 1;
 			}
 		}
@@ -940,7 +954,7 @@ class Users extends \app\components\ActiveRecord
 	 */
 	public function afterDelete()
 	{
-		parent::afterDelete();
+        parent::afterDelete();
 
 		// Trigger after create users
 		// $event = new Event(['sender' => $this]);

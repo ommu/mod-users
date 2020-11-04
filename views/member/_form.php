@@ -41,7 +41,7 @@ use kartik\password\PasswordInput;
 <?php 
 $controller = strtolower(Yii::$app->controller->id);
 $level = UserLevel::getLevel($controller == 'admin' ? 'admin' : 'member');
-if(count($level) == 1) {
+if (count($level) == 1) {
 	$model->level_id = key($level);
 	echo $form->field($model, 'level_id', ['template' => '{input}', 'options'=>['tag' => null]])
 		->hiddenInput();
@@ -55,7 +55,7 @@ if(count($level) == 1) {
 	->textInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('displayname')); ?>
 
-<?php if($setting->signup_username == 1) {
+<?php if ($setting->signup_username == 1) {
 	echo $form->field($model, 'username')
 		->textInput(['maxlength'=>true])
 		->label($model->getAttributeLabel('username'));
@@ -65,29 +65,30 @@ if(count($level) == 1) {
 	->textInput(['type'=>'email', 'maxlength'=>true])
 	->label($model->getAttributeLabel('email')); ?>
 
-<?php if(($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {
-if(!$model->isNewRecord && !$model->getErrors())
-	$model->password = '';
-echo $form->field($model, 'password')
-	// ->passwordInput(['maxlength'=>true])
-	->widget(PasswordInput::classname(), ['pluginOptions' => ['showMeter'=>false]])
-	->label($model->getAttributeLabel('password'));
+<?php if (($model->isNewRecord && $setting->signup_random == 0) || !$model->isNewRecord) {
+    if (!$model->isNewRecord && !$model->getErrors()) {
+        $model->password = '';
+    }
+    echo $form->field($model, 'password')
+        // ->passwordInput(['maxlength'=>true])
+        ->widget(PasswordInput::classname(), ['pluginOptions' => ['showMeter'=>false]])
+        ->label($model->getAttributeLabel('password'));
 } ?>
 
-<?php if(!$model->isNewRecord) {
+<?php if (!$model->isNewRecord) {
 echo $form->field($model, 'confirmPassword')
 	->passwordInput(['maxlength'=>true])
 	->label($model->getAttributeLabel('confirmPassword'));
 } ?>
 
-<?php if(($model->isNewRecord && $setting->signup_approve == 0) || !$model->isNewRecord) {
+<?php if (($model->isNewRecord && $setting->signup_approve == 0) || !$model->isNewRecord) {
 $enabled = Users::getEnabled();
 echo $form->field($model, 'enabled')
 	->dropDownList($enabled, ['prompt'=>''])
 	->label($model->getAttributeLabel('enabled'));
 } ?>
 
-<?php if(($model->isNewRecord && $setting->signup_verifyemail == 1) || !$model->isNewRecord) {
+<?php if (($model->isNewRecord && $setting->signup_verifyemail == 1) || !$model->isNewRecord) {
 echo $form->field($model, 'verified')
 	->checkbox()
 	->label($model->getAttributeLabel('verified'));

@@ -43,8 +43,10 @@ use app\components\widgets\ActiveForm;
 	->checkbox()
 	->label($model->getAttributeLabel('verified')); ?>
 
-<?php if($model->isNewRecord && !$model->getErrors())
-	$model->publish = 1;
+<?php 
+if ($model->isNewRecord && !$model->getErrors()) {
+    $model->publish = 1;
+}
 echo $form->field($model, 'publish')
 	->checkbox()
 	->label($model->getAttributeLabel('publish')); ?>

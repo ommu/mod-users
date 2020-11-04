@@ -41,7 +41,7 @@ class UserForgot extends \app\components\ActiveRecord
 	use \ommu\traits\UtilityTrait;
 	use \ommu\mailer\components\traits\MailTrait;
 
-	public $gridForbiddenColumn = ['code','forgot_date','forgot_ip','expired_date','modified_date','modifiedDisplayname','deleted_date'];
+	public $gridForbiddenColumn = ['code', 'forgot_date', 'forgot_ip', 'expired_date', 'modified_date', 'modifiedDisplayname', 'deleted_date'];
 	public $email_i;
 
 	public $userDisplayname;
@@ -81,7 +81,7 @@ class UserForgot extends \app\components\ActiveRecord
 	public function scenarios()
 	{
 		$scenarios = parent::scenarios();
-		$scenarios[self::SCENARIO_WITH_FORM] = ['user_id','email_i'];
+		$scenarios[self::SCENARIO_WITH_FORM] = ['user_id', 'email_i'];
 		return $scenarios;
 	}
 
@@ -141,11 +141,13 @@ class UserForgot extends \app\components\ActiveRecord
 	{
 		parent::init();
 
-		if(!(Yii::$app instanceof \app\components\Application))
-			return;
+        if (!(Yii::$app instanceof \app\components\Application)) {
+            return;
+        }
 
-		if(!$this->hasMethod('search'))
-			return;
+        if (!$this->hasMethod('search')) {
+            return;
+        }
 
 		$this->templateColumns['_no'] = [
 			'header' => '#',
@@ -250,19 +252,20 @@ class UserForgot extends \app\components\ActiveRecord
 	 */
 	public static function getInfo($id, $column=null)
 	{
-		if($column != null) {
-			$model = self::find();
-			if(is_array($column))
-				$model->select($column);
-			else
-				$model->select([$column]);
-			$model = $model->where(['forgot_id' => $id])->one();
-			return is_array($column) ? $model : $model->$column;
-			
-		} else {
-			$model = self::findOne($id);
-			return $model;
-		}
+        if ($column != null) {
+            $model = self::find();
+            if (is_array($column)) {
+                $model->select($column);
+            } else {
+                $model->select([$column]);
+            }
+            $model = $model->where(['forgot_id' => $id])->one();
+            return is_array($column) ? $model : $model->$column;
+
+        } else {
+            $model = self::findOne($id);
+            return $model;
+        }
 	}
 
 	/**
@@ -270,11 +273,13 @@ class UserForgot extends \app\components\ActiveRecord
 	 */
 	public function getExpiredStatus()
 	{
-		if($this->publish != 1)
-			return true;
+        if ($this->publish != 1) {
+            return true;
+        }
 
-		if($this->publish == 1 && $this->expired_date <= TimeHelper::getTime())
-			return true;
+        if ($this->publish == 1 && $this->expired_date <= TimeHelper::getTime()) {
+            return true;
+        }
 
 		return false;
 	}
@@ -294,38 +299,40 @@ class UserForgot extends \app\components\ActiveRecord
 	 */
 	public function beforeValidate()
 	{
-		if(parent::beforeValidate()) {
-			if($this->isNewRecord) {
+        if (parent::beforeValidate()) {
+            if ($this->isNewRecord) {
 				$validator = new \yii\validators\EmailValidator();
-				if($this->scenario == self::SCENARIO_WITH_FORM && $validator->validate($this->email_i) === true && $this->user_id == null) {
+                if ($this->scenario == self::SCENARIO_WITH_FORM && $validator->validate($this->email_i) === true && $this->user_id == null) {
 					$user = Users::find()
 						->select(['user_id'])
 						->where(['email' => $this->email_i])
 						->one();
-					if($user === null)
-						$this->addError('email_i', Yii::t('app', '{attribute} {email-i} belum terdaftar sebagai member.', ['attribute'=>$this->getAttributeLabel('email_i'), 'email-i'=>$this->email_i]));
-					else
-						$this->user_id = $user->user_id;
+                    if ($user === null) {
+                        $this->addError('email_i', Yii::t('app', '{attribute} {email-i} belum terdaftar sebagai member.', ['attribute'=>$this->getAttributeLabel('email_i'), 'email-i'=>$this->email_i]));
+                    } else {
+                        $this->user_id = $user->user_id;
+                    }
 				}
 				$this->code = Yii::$app->security->generateRandomString(64);
 				$this->forgot_ip = $_SERVER['REMOTE_ADDR'];
 
-			} else {
-				if($this->modified_id == null)
-					$this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
-			}
-		}
-		return true;
+            } else {
+                if ($this->modified_id == null) {
+                    $this->modified_id = !Yii::$app->user->isGuest ? Yii::$app->user->id : null;
+                }
+            }
+        }
+        return true;
 	}
 
 	/**
 	 * After save attributes
 	 */
-	public function afterSave($insert, $changedAttributes) 
+	public function afterSave($insert, $changedAttributes)
 	{
-		parent::afterSave($insert, $changedAttributes);
+        parent::afterSave($insert, $changedAttributes);
 
-		if($insert) {
+        if ($insert) {
 			$template = 'forgot-password';
 			$displayname = $this->user->displayname ? $this->user->displayname : $this->user->email;
 			$emailSubject = $this->parseMailSubject($template, 'user');

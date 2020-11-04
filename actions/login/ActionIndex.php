@@ -40,17 +40,18 @@ class ActionIndex extends \app\components\api\Action
 		$model->is_api = true;
 		$validator = new EmailValidator();
 		$email = '';
-		if($validator->validate($model->username) === true) {
+        if ($validator->validate($model->username) === true) {
 			$email = $model->username;
 			$model->setByEmail(true);
 		}
 		
-		if($model->validate() && $model->login()) {
+        if ($model->validate() && $model->login()) {
 			$claims = unserialize($model->getUser()->jwt_claims);
 			$token  = $this->buildJwtTokenFromClaim($claims, $model->getUser()->getId());
 			$_token = Yii::$app->jwt->getParser()->parse((string) $token);
-			if(!Yii::$app->jwt->validateToken($_token))
-				$token = $model->getUser()->refreshToken($model->getUser()->getId());
+            if (!Yii::$app->jwt->validateToken($_token)) {
+                $token = $model->getUser()->refreshToken($model->getUser()->getId());
+            }
 			
 			$result['token']   = (string)$token;
 			$result['error']   = 0;
@@ -68,7 +69,7 @@ class ActionIndex extends \app\components\api\Action
 
 	private function parseError($errors)
 	{
-		foreach($errors as $attribute => $errVal) {
+        foreach ($errors as $attribute => $errVal) {
 			$this->_listErr[$attribute]['error']       = $errVal;
 			$this->_listErr[$attribute]['error_count'] = count($errVal);
 			$this->_shortErr[]                         = implode('', $errVal);
