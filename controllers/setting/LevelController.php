@@ -56,19 +56,19 @@ class LevelController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
 					'default' => ['POST'],
 					'signup' => ['POST'],
-				],
-			],
-		];
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -108,24 +108,24 @@ class LevelController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new UserLevel();
+        $model = new UserLevel();
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success created.'));
-				return $this->redirect(['update', 'id'=>$model->level_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'User level success created.'));
+                return $this->redirect(['update', 'id'=>$model->level_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Create User Level');
 		$this->view->description = Yii::t('app', 'To create this user level, complete the following form.');
@@ -146,21 +146,21 @@ class LevelController extends Controller
 		$model = $this->findModel($id);
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-				return $this->redirect(['update', 'id'=>$model->level_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
+                return $this->redirect(['update', 'id'=>$model->level_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Update User Level: {name}', ['name' => $model->title->message]);
 		$this->view->description = Yii::t('app', 'You are currently editing this user level\'s settings. Remember, these settings only apply to the users that belong to this user level. When you\'re finished, you can edit the other levels here.');
@@ -177,7 +177,7 @@ class LevelController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 
 		$this->view->title = Yii::t('app', 'Detail User Level: {name}', ['name' => $model->title->message]);
 		$this->view->description = '';
@@ -250,14 +250,14 @@ class LevelController extends Controller
 		$model->scenario = UserLevel::SCENARIO_USER;
 		
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-				return $this->redirect(['user', 'id'=>$model->level_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
+                return $this->redirect(['user', 'id'=>$model->level_id]);
 			}
 		}
 	
@@ -281,14 +281,14 @@ class LevelController extends Controller
 		$model->scenario = UserLevel::SCENARIO_MESSAGE;
 		
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-				return $this->redirect(['message', 'id'=>$model->level_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
+                return $this->redirect(['message', 'id'=>$model->level_id]);
 			}
 		}
 	

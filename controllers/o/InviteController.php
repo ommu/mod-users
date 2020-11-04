@@ -43,8 +43,9 @@ class InviteController extends Controller
 	 */
 	public function init()
 	{
-		parent::init();
-		$this->subMenu = $this->module->params['data_submenu'];
+        parent::init();
+
+        $this->subMenu = $this->module->params['data_submenu'];
 	}
 
 	/**
@@ -52,18 +53,18 @@ class InviteController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-					'publish' => ['POST'],
-				],
-			],
-		];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                    'publish' => ['POST'],
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -103,11 +104,11 @@ class InviteController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new UserInvites();
+        $model = new UserInvites();
 		$model->scenario = UserInvites::SCENARIO_FORM;
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
+            $model->load(Yii::$app->request->post());
 			
 			$email_i = $this->formatFileType($model->email_i);
             if (count($email_i) == 1) {
@@ -141,8 +142,8 @@ class InviteController extends Controller
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Create Invite');
 		$this->view->description = '';
@@ -159,7 +160,7 @@ class InviteController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 
 		$this->view->title = Yii::t('app', 'Detail Invite: {displayname}', ['displayname' => $model->displayname]);
 		$this->view->description = '';

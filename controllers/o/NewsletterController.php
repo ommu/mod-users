@@ -42,8 +42,9 @@ class NewsletterController extends Controller
 	 */
 	public function init()
 	{
-		parent::init();
-		$this->subMenu = $this->module->params['data_submenu'];
+        parent::init();
+
+        $this->subMenu = $this->module->params['data_submenu'];
 	}
 
 	/**
@@ -51,18 +52,18 @@ class NewsletterController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
 					'status' => ['POST'],
-				],
-			],
-		];
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -102,10 +103,10 @@ class NewsletterController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new UserNewsletter();
+        $model = new UserNewsletter();
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
+            $model->load(Yii::$app->request->post());
 
 			$email_i = $this->formatFileType($model->email_i);
             if (count($email_i) == 1) {
@@ -139,8 +140,8 @@ class NewsletterController extends Controller
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Create Newsletter');
 		$this->view->description = '';
@@ -157,7 +158,7 @@ class NewsletterController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 
 		$this->view->title = Yii::t('app', 'Detail Newsletter: {user-id}', ['user-id' => $model->email]);
 		$this->view->description = '';

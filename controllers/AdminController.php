@@ -77,24 +77,24 @@ class AdminController extends MemberController
 		$model = $this->findModel($id);
 
         if (Yii::$app->request->isPost) {
-			$postData = Yii::$app->request->post();
-			$model->load($postData);
+            $postData = Yii::$app->request->post();
+            $model->load($postData);
             if ($postData['password']) {
-				$model->scenario = Users::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD;
+                $model->scenario = Users::SCENARIO_ADMIN_UPDATE_WITH_PASSWORD;
             }
-			$model->isForm = true;
+            $model->isForm = true;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id'=>$model->user_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
+                return $this->redirect(['index']);
+                //return $this->redirect(['view', 'id'=>$model->user_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Update {title}: {displayname}', ['title'=>$this->title, 'displayname'=>$model->displayname]);
 		$this->view->description = Yii::t('app', 'Complete the form below to add/edit this admin account. Note that normal admins will not be able to delete or modify the superadmin account. If you want to change this admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');

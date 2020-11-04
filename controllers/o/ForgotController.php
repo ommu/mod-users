@@ -41,8 +41,9 @@ class ForgotController extends Controller
 	 */
 	public function init()
 	{
-		parent::init();
-		$this->subMenu = $this->module->params['data_submenu'];
+        parent::init();
+
+        $this->subMenu = $this->module->params['data_submenu'];
 	}
 
 	/**
@@ -50,18 +51,18 @@ class ForgotController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-					'publish' => ['POST'],
-				],
-			],
-		];
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                    'publish' => ['POST'],
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -101,26 +102,26 @@ class ForgotController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model = new UserForgot();
+        $model = new UserForgot();
 		$model->scenario = UserForgot::SCENARIO_WITH_FORM;
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success created.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id'=>$model->forgot_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success created.'));
+                return $this->redirect(['index']);
+                //return $this->redirect(['view', 'id'=>$model->forgot_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Create Forgot');
 		$this->view->description = '';
@@ -137,7 +138,7 @@ class ForgotController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 
 		$this->view->title = Yii::t('app', 'Detail Forgot: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';

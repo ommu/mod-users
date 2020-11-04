@@ -43,19 +43,19 @@ class PhoneController extends Controller
 	 */
 	public function behaviors()
 	{
-		return [
-			'access' => [
-				'class' => AccessControl::className(),
-			],
-			'verbs' => [
-				'class' => VerbFilter::className(),
-				'actions' => [
-					'delete' => ['POST'],
-					'publish' => ['POST'],
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                    'publish' => ['POST'],
 					'verified' => ['POST'],
-				],
-			],
-		];
+                ],
+            ],
+        ];
 	}
 
 	/**
@@ -103,20 +103,20 @@ class PhoneController extends Controller
 		$model = new UserPhones();
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			$model->user_id = $user;
+            $model->load(Yii::$app->request->post());
+            $model->user_id = $user;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User phone success created.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id'=>$model->phone_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'User phone success created.'));
+                return $this->redirect(['index']);
+                //return $this->redirect(['view', 'id'=>$model->phone_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Create Phone');
 		$this->view->description = '';
@@ -137,22 +137,22 @@ class PhoneController extends Controller
 		$model = $this->findModel($id);
 
         if (Yii::$app->request->isPost) {
-			$model->load(Yii::$app->request->post());
-			// $postData = Yii::$app->request->post();
-			// $model->load($postData);
-			// $model->order = $postData['order'] ? $postData['order'] : 0;
+            $model->load(Yii::$app->request->post());
+            // $postData = Yii::$app->request->post();
+            // $model->load($postData);
+            // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-				Yii::$app->session->setFlash('success', Yii::t('app', 'User phone success updated.'));
-				return $this->redirect(['index']);
-				//return $this->redirect(['view', 'id'=>$model->phone_id]);
+                Yii::$app->session->setFlash('success', Yii::t('app', 'User phone success updated.'));
+                return $this->redirect(['index']);
+                //return $this->redirect(['view', 'id'=>$model->phone_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
                     return \yii\helpers\Json::encode(\app\components\widgets\ActiveForm::validate($model));
                 }
-			}
-		}
+            }
+        }
 
 		$this->view->title = Yii::t('app', 'Update Phone: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';
@@ -169,7 +169,7 @@ class PhoneController extends Controller
 	 */
 	public function actionView($id)
 	{
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
 
 		$this->view->title = Yii::t('app', 'Detail Phone: {user-id}', ['user-id' => $model->user->displayname]);
 		$this->view->description = '';
