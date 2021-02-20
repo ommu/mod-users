@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $model->title->message;
 <?php echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => [
 		'level_id',
@@ -42,12 +42,12 @@ $this->params['breadcrumbs'][] = $model->title->message;
 		],
 		[
 			'attribute' => 'default',
-			'value' => $model->quickAction(Url::to(['default', 'id'=>$model->primaryKey]), $model->default, 'Default,No', true),
+			'value' => $model->quickAction(Url::to(['default', 'id' => $model->primaryKey]), $model->default, 'Default,No', true),
 			'format' => 'raw',
 		],
 		[
 			'attribute' => 'signup',
-			'value' => $model->quickAction(Url::to(['signup', 'id'=>$model->primaryKey]), $model->default, 'Enable,Disable'),
+			'value' => $model->quickAction(Url::to(['signup', 'id' => $model->primaryKey]), $model->default, 'Enable,Disable'),
 			'format' => 'raw',
 		],
 		[

@@ -119,19 +119,19 @@ class NewsletterController extends Controller
 					foreach ($email_i as $email) {
 						$condition = UserNewsletter::insertNewsletter($email);
                         if ($condition == 0) {
-							$result[] = Yii::t('app', '{email} (skip)', array('email'=>$email));
+							$result[] = Yii::t('app', '{email} (skip)', array('email' => $email));
                         } else if ($condition == 1) {
-							$result[] = Yii::t('app', '{email} (success)', array('email'=>$email));
+							$result[] = Yii::t('app', '{email} (success)', array('email' => $email));
                         } else if ($condition == 2) {
-							$result[] = Yii::t('app', '{email} (error)', array('email'=>$email));
+							$result[] = Yii::t('app', '{email} (error)', array('email' => $email));
                         }
 					}
-					Yii::$app->session->setFlash('success', Yii::t('app', 'Newsletter success created.<br/>{result}', ['result'=>$this->formatFileType($result, false, '<br/>')]));
+					Yii::$app->session->setFlash('success', Yii::t('app', 'Newsletter success created.<br/>{result}', ['result' => $this->formatFileType($result, false, '<br/>')]));
 					return $this->redirect(['index']);
 
 				} else {
                     if ($model->save()) {
-						Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter {email} success created.', ['email'=>$model->email]));
+						Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter {email} success created.', ['email' => $model->email]));
 						return $this->redirect(['index']);
 					}
 				}

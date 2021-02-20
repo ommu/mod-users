@@ -118,7 +118,7 @@ class LevelController extends Controller
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'User level success created.'));
-                return $this->redirect(['update', 'id'=>$model->level_id]);
+                return $this->redirect(['update', 'id' => $model->level_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -153,7 +153,7 @@ class LevelController extends Controller
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-                return $this->redirect(['update', 'id'=>$model->level_id]);
+                return $this->redirect(['update', 'id' => $model->level_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -257,7 +257,7 @@ class LevelController extends Controller
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-                return $this->redirect(['user', 'id'=>$model->level_id]);
+                return $this->redirect(['user', 'id' => $model->level_id]);
 			}
 		}
 	
@@ -288,7 +288,7 @@ class LevelController extends Controller
 
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'User level success updated.'));
-                return $this->redirect(['message', 'id'=>$model->level_id]);
+                return $this->redirect(['message', 'id' => $model->level_id]);
 			}
 		}
 	

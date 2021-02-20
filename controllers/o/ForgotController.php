@@ -114,7 +114,7 @@ class ForgotController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'User forgot success created.'));
                 return $this->redirect(['index']);
-                //return $this->redirect(['view', 'id'=>$model->forgot_id]);
+                //return $this->redirect(['view', 'id' => $model->forgot_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {

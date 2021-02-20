@@ -70,14 +70,15 @@ class UserVerify extends UserVerifyModel
 			'user user', 
 			'modified modified',
 			'user.level.title level', 
-		])
-		->groupBy(['verify_id']);
+		]);
 
-		// add conditions that should always apply here
+		$query->groupBy(['verify_id']);
+
+        // add conditions that should always apply here
 		$dataParams = [
 			'query' => $query,
 		];
-		// disable pagination agar data pada api tampil semua
+        // disable pagination agar data pada api tampil semua
         if (isset($params['pagination']) && $params['pagination'] == 0) {
             $dataParams['pagination'] = false;
         }
@@ -108,10 +109,10 @@ class UserVerify extends UserVerifyModel
 		$this->load($params);
 
         if (!$this->validate()) {
-			// uncomment the following line if you do not want to return any records when validation fails
-			// $query->where('0=1');
-			return $dataProvider;
-		}
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
 
 		// grid filtering conditions
 		$query->andFilterWhere([
@@ -133,7 +134,7 @@ class UserVerify extends UserVerifyModel
             } else {
                 $query->andFilterWhere(['t.publish' => $this->publish]);
             }
-		}
+        }
 
         if (isset($params['expired']) && $params['expired'] != '') {
             if ($this->expired == 1) {

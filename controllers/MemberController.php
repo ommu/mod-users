@@ -95,7 +95,10 @@ class MemberController extends Controller
         $columns = $searchModel->getGridColumn($cols);
 
 		$this->view->title = Yii::t('app', Inflector::pluralize($this->title));
-		$this->view->description = Yii::t('app', 'This page lists all of the users that exist on your social network. For more information about a specific user, click on the "edit" link in its row. Click the "login" link to login as a specific user. Use the filter fields to find specific users based on your criteria. To view all users on your system, leave all the filter fields blank.');
+        $this->view->description = Yii::t('app', 'This page lists all of the users that exist on your social network. 
+            For more information about a specific user, click on the "edit" link in its row. Click the "login" link to 
+            login as a specific user. Use the filter fields to find specific users based on your criteria. To view all 
+            users on your system, leave all the filter fields blank.');
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
@@ -121,9 +124,11 @@ class MemberController extends Controller
             // $model->order = $postData['order'] ? $postData['order'] : 0;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', '{title} success created.', ['title'=>$this->title]));
+                Yii::$app->session->setFlash('success', Yii::t('app', '{title} success created.', [
+                    'title' => $this->title,
+                ]));
                 return $this->redirect(['index']);
-                //return $this->redirect(['view', 'id'=>$model->user_id]);
+                //return $this->redirect(['view', 'id' => $model->user_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -132,7 +137,9 @@ class MemberController extends Controller
             }
         }
 
-		$this->view->title = Yii::t('app', 'Create {title}', ['title'=>$this->title]);
+		$this->view->title = Yii::t('app', 'Create {title}', [
+            'title' => $this->title,
+        ]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_create', [
@@ -159,9 +166,11 @@ class MemberController extends Controller
             $model->isForm = true;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
+                Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', [
+                    'title' => $this->title,
+                ]));
                 return $this->redirect(['index']);
-                //return $this->redirect(['view', 'id'=>$model->user_id]);
+                //return $this->redirect(['view', 'id' => $model->user_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -170,8 +179,12 @@ class MemberController extends Controller
             }
         }
 
-		$this->view->title = Yii::t('app', 'Update {title}: {displayname}', ['title'=>$this->title, 'displayname'=>$model->displayname]);
-		$this->view->description = Yii::t('app', 'To edit this users\'s account, make changes to the form below. If you want to temporarily prevent this user from logging in, you can set the user account to "disabled" below.');
+		$this->view->title = Yii::t('app', 'Update {title}: {displayname}', [
+            'title' => $this->title, 
+            'displayname' => $model->displayname,
+        ]);
+        $this->view->description = Yii::t('app', 'To edit this users\'s account, make changes to the form below. If you 
+            want to temporarily prevent this user from logging in, you can set the user account to "disabled" below.');
 		$this->view->keywords = '';
 		return $this->oRender('admin_update', [
 			'model' => $model,
@@ -187,7 +200,10 @@ class MemberController extends Controller
 	{
         $model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail {title}: {displayname}', ['title'=>$this->title, 'displayname'=>$model->displayname]);
+		$this->view->title = Yii::t('app', 'Detail {title}: {displayname}', [
+            'title' => $this->title, 
+            'displayname' => $model->displayname,
+        ]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -206,7 +222,9 @@ class MemberController extends Controller
 		$model = $this->findModel($id);
 		$model->delete();
 
-		Yii::$app->session->setFlash('success', Yii::t('app', '{title} success deleted.', ['title'=>$this->title]));
+		Yii::$app->session->setFlash('success', Yii::t('app', '{title} success deleted.', [
+            'title' => $this->title,
+        ]));
 		return $this->redirect(['index']);
 	}
 
@@ -223,7 +241,9 @@ class MemberController extends Controller
 		$model->verified = $replace;
 		
         if ($model->save(false, ['verified', 'modified_date', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
+			Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', [
+                'title' => $this->title,
+            ]));
 			return $this->redirect(['index']);
 		}
 	}
@@ -241,7 +261,9 @@ class MemberController extends Controller
 		$model->enabled = $replace;
 		
         if ($model->save(false, ['enabled', 'modified_date', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
+			Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', [
+                'title' => $this->title,
+            ]));
 			return $this->redirect(['index']);
 		}
 	}

@@ -19,7 +19,7 @@ use yii\helpers\Url;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => Url::to(['setting/admin/index'])];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title->message, 'url' => ['view', 'id'=>$model->level_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->title->message, 'url' => ['view', 'id' => $model->level_id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Info');
 ?>
 

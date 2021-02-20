@@ -22,7 +22,7 @@ use app\components\widgets\ActiveForm;
 <div class="user-newsletter-form">
 
 <?php $form = ActiveForm::begin([
-	'options' => ['class'=>'form-horizontal form-label-left'],
+	'options' => ['class' => 'form-horizontal form-label-left'],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
@@ -36,7 +36,7 @@ use app\components\widgets\ActiveForm;
 <?php //echo $form->errorSummary($model);?>
 
 <?php echo $form->field($model, 'email_i')
-	->textarea(['rows'=>6, 'cols'=>50])
+	->textarea(['rows' => 6, 'cols' => 50])
 	->label($model->getAttributeLabel('email_i')); ?>
 
 <hr/>

@@ -114,7 +114,7 @@ class VerifyController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'User verify success created.'));
                 return $this->redirect(['index']);
-                //return $this->redirect(['view', 'id'=>$model->verify_id]);
+                //return $this->redirect(['view', 'id' => $model->verify_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {

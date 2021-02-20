@@ -71,14 +71,15 @@ class Users extends UsersModel
 			'languageRltn languageRltn', 
 			'modified modified', 
 			// 'member member', 
-		])
-		->groupBy(['user_id']);
+		]);
 
-		// add conditions that should always apply here
+		$query->groupBy(['user_id']);
+
+        // add conditions that should always apply here
 		$dataParams = [
 			'query' => $query,
 		];
-		// disable pagination agar data pada api tampil semua
+        // disable pagination agar data pada api tampil semua
         if (isset($params['pagination']) && $params['pagination'] == 0) {
             $dataParams['pagination'] = false;
         }
@@ -105,10 +106,10 @@ class Users extends UsersModel
 		$this->load($params);
 
         if (!$this->validate()) {
-			// uncomment the following line if you do not want to return any records when validation fails
-			// $query->where('0=1');
-			return $dataProvider;
-		}
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
 
 		// grid filtering conditions
 		$query->andFilterWhere([
@@ -139,7 +140,7 @@ class Users extends UsersModel
 			} else {
                 $query->andFilterWhere(['t.level_id' => $this->level_id]);
             }
-		}
+        }
 
 		$query->andFilterWhere(['like', 't.email', $this->email])
 			->andFilterWhere(['like', 't.username', $this->username])

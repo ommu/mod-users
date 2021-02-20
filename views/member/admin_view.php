@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $model->displayname;
 
 if (!$small) {
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->user_id]), 'htmlOptions' => ['class'=>'modal-btn'], 'icon' => 'pencil', 'htmlOptions' => ['class'=>'btn btn-primary']],
-        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->user_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
+        ['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->user_id]), 'htmlOptions' => ['class' => 'modal-btn'], 'icon' => 'pencil', 'htmlOptions' => ['class' => 'btn btn-primary']],
+        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->user_id]), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
     ];
 } ?>
 
@@ -44,7 +44,7 @@ $attributes = [
 	],
 	[
 		'attribute' => 'verified',
-		'value' => $model->quickAction(Url::to(['verified', 'id'=>$model->primaryKey]), $model->verified, 'Verified,Unverified'),
+		'value' => $model->quickAction(Url::to(['verified', 'id' => $model->primaryKey]), $model->verified, 'Verified,Unverified'),
 		'format' => 'raw',
 		'visible' => !$small,
 	],
@@ -166,7 +166,7 @@ $attributes = [
 echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => $attributes,
 ]); ?>

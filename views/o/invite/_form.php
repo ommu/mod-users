@@ -23,7 +23,7 @@ use ommu\users\models\UserLevel;
 <div class="user-invites-form">
 
 <?php $form = ActiveForm::begin([
-	'options' => ['class'=>'form-horizontal form-label-left'],
+	'options' => ['class' => 'form-horizontal form-label-left'],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
@@ -37,21 +37,22 @@ use ommu\users\models\UserLevel;
 <?php //echo $form->errorSummary($model);?>
 
 <?php echo $form->field($model, 'email_i')
-	->textarea(['rows'=>6, 'cols'=>50])
+	->textarea(['rows' => 6, 'cols' => 50])
 	->label($model->getAttributeLabel('email_i')); ?>
 
 <?php if (!Yii::$app->isSocialMedia()) {
 	$level = UserLevel::getLevel();
     if (count($level) == 1) {
 		$model->level_id = key($level);
-		echo $form->field($model, 'level_id', ['template' => '{input}', 'options'=>['tag' => null]])
+		echo $form->field($model, 'level_id', ['template' => '{input}', 'options' => ['tag' => null]])
 			->hiddenInput();
 	} else {
 		echo $form->field($model, 'level_id')
-			->dropDownList($level, ['prompt'=>''])
+			->dropDownList($level, ['prompt' => ''])
 			->label($model->getAttributeLabel('level_id'));
 	}
-} ?>
+}
+ ?>
 
 <hr/>
 

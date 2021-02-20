@@ -363,7 +363,7 @@ class Users extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class'  => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
         $this->templateColumns['level_id'] = [
             'attribute' => 'level_id',
@@ -476,11 +476,11 @@ class Users extends \app\components\ActiveRecord
 		$this->templateColumns['deactivate'] = [
 			'attribute' => 'deactivate',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['deactivate', 'id'=>$model->primaryKey]);
+				$url = Url::to(['deactivate', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->deactivate, 'Active,Deactivate');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['search'] = [
@@ -489,7 +489,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->search);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['invisible'] = [
 			'attribute' => 'invisible',
@@ -497,7 +497,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->invisible);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['privacy'] = [
 			'attribute' => 'privacy',
@@ -505,7 +505,7 @@ class Users extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->privacy);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['comments'] = [
 			'attribute' => 'comments',
@@ -513,26 +513,26 @@ class Users extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->comments);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['enabled'] = [
 			'attribute' => 'enabled',
 			'filter' => self::getEnabled(),
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['enabled', 'id'=>$model->primaryKey]);
+				$url = Url::to(['enabled', 'id' => $model->primaryKey]);
 				return $model->enabled == 2 ? Yii::t('app', 'Block') : $this->quickAction($url, $model->enabled, 'Enable,Disable');
 			},
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['verified'] = [
 			'attribute' => 'verified',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['verified', 'id'=>$model->primaryKey]);
+				$url = Url::to(['verified', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->verified, 'Verified,Unverified');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 	}
@@ -693,7 +693,7 @@ class Users extends \app\components\ActiveRecord
                         if ($this->email != '') {
                             if ($invite != null) {
                                 if ($invite->newsletter->user_id != null) {
-                                    $this->addError('email', Yii::t('app', '{email} sudah terdaftar, silahkan login.', ['email'=>$this->email]));
+                                    $this->addError('email', Yii::t('app', '{email} sudah terdaftar, silahkan login.', ['email' => $this->email]));
 
                                 } else {
                                     if ($setting->signup_inviteonly == 1 && $invite->newsletter->view->invite_by == 'user') {
@@ -703,10 +703,10 @@ class Users extends \app\components\ActiveRecord
                                         if ($setting->signup_checkemail == 1) {
 											$inviteCode = UserInvites::getInviteWithCode($this->email, $this->inviteCode);
                                             if ($inviteCode == null) {
-                                                $this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} tidak terdaftar dalam sistem.', ['attribute'=>$this->getAttributeLabel('inviteCode'), 'invite-code-i'=>$this->inviteCode]));
+                                                $this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} tidak terdaftar dalam sistem.', ['attribute' => $this->getAttributeLabel('inviteCode'), 'invite-code-i' => $this->inviteCode]));
                                             } else {
                                                 if ($inviteCode->view->expired) {
-                                                    $this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} expired', ['attribute'=>$this->getAttributeLabel('inviteCode'), 'invite-code-i'=>$this->inviteCode]));
+                                                    $this->addError('inviteCode', Yii::t('app', '{attribute} {invite-code-i} expired', ['attribute' => $this->getAttributeLabel('inviteCode'), 'invite-code-i' => $this->inviteCode]));
                                                 } else {
                                                     $this->reference_id_i = $inviteCode->invite->inviter_id;
                                                 }
@@ -715,12 +715,12 @@ class Users extends \app\components\ActiveRecord
 									}
 								}
 							} else {
-                                $this->addError('email', Yii::t('app', '{email} belum ada dalam daftar invite.', ['email'=>$this->email]));
+                                $this->addError('email', Yii::t('app', '{email} belum ada dalam daftar invite.', ['email' => $this->email]));
                             }
 
 						} else {
                             if ($setting->signup_checkemail == 1) {
-                                $this->addError('inviteCode', Yii::t('app', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute'=>$this->getAttributeLabel('inviteCode')]));
+                                $this->addError('inviteCode', Yii::t('app', '{attribute} yang and masukan salah, silahkan lengkapi input email', ['attribute' => $this->getAttributeLabel('inviteCode')]));
                             }
 						}
 					}
@@ -760,7 +760,7 @@ class Users extends \app\components\ActiveRecord
 
             if (Yii::$app->id != 'back3nd' && !$passwordFunction && $setting->signup_username == 1) {
                 if ($this->username == '') {
-                    $this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('username')]));
+                    $this->addError('username', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('username')]));
                 }
             }
         }

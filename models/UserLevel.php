@@ -230,7 +230,7 @@ class UserLevel extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['name_i'] = [
 			'attribute' => 'name_i',
@@ -317,7 +317,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->message_allow);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_block'] = [
 			'attribute' => 'profile_block',
@@ -325,7 +325,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_block);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_search'] = [
 			'attribute' => 'profile_search',
@@ -333,7 +333,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_search);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_style'] = [
 			'attribute' => 'profile_style',
@@ -341,7 +341,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_style);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_style_sample'] = [
 			'attribute' => 'profile_style_sample',
@@ -349,7 +349,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_style_sample);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_status'] = [
 			'attribute' => 'profile_status',
@@ -357,7 +357,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_status);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_invisible'] = [
 			'attribute' => 'profile_invisible',
@@ -365,7 +365,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_invisible);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_views'] = [
 			'attribute' => 'profile_views',
@@ -373,7 +373,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_views);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_change'] = [
 			'attribute' => 'profile_change',
@@ -381,7 +381,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_change);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['profile_delete'] = [
 			'attribute' => 'profile_delete',
@@ -389,7 +389,7 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->profile_delete);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['photo_allow'] = [
 			'attribute' => 'photo_allow',
@@ -397,71 +397,71 @@ class UserLevel extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->photo_allow);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['user_active'] = [
 			'attribute' => 'view.user_active',
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->view->user_active, ['member/index', 'level'=>$model->primaryKey, 'status'=>'active']);
+				return Html::a($model->view->user_active, ['member/index', 'level' => $model->primaryKey, 'status' => 'active']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_pending'] = [
 			'attribute' => 'view.user_pending',
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->view->user_pending, ['member/index', 'level'=>$model->primaryKey, 'status'=>'pending']);
+				return Html::a($model->view->user_pending, ['member/index', 'level' => $model->primaryKey, 'status' => 'pending']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_noverified'] = [
 			'attribute' => 'view.user_noverified',
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->view->user_noverified, ['member/index', 'level'=>$model->primaryKey, 'status'=>'noverified']);
+				return Html::a($model->view->user_noverified, ['member/index', 'level' => $model->primaryKey, 'status' => 'noverified']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_blocked'] = [
 			'attribute' => 'view.user_blocked',
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->view->user_blocked, ['member/index', 'level'=>$model->primaryKey, 'status'=>'blocked']);
+				return Html::a($model->view->user_blocked, ['member/index', 'level' => $model->primaryKey, 'status' => 'blocked']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['user_all'] = [
 			'attribute' => 'view.user_all',
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->view->user_all, ['member/index', 'level'=>$model->primaryKey, 'status'=>'all']);
+				return Html::a($model->view->user_all, ['member/index', 'level' => $model->primaryKey, 'status' => 'all']);
 			},
 			'filter' => false,
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['default'] = [
 			'attribute' => 'default',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['setting/level/default', 'id'=>$model->primaryKey]);
+				$url = Url::to(['setting/level/default', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->default, 'Default,No', true);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['signup'] = [
 			'attribute' => 'signup',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['setting/level/signup', 'id'=>$model->primaryKey]);
+				$url = Url::to(['setting/level/signup', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->signup, 'Enable,Disable');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 	}
@@ -749,7 +749,7 @@ class UserLevel extends \app\components\ActiveRecord
         }
 
         if ($sep == 'li') {
-            return Html::ul($assignmentRoles, ['encode'=>false, 'class'=>'list-boxed']);
+            return Html::ul($assignmentRoles, ['encode' => false, 'class' => 'list-boxed']);
         }
 
 		return implode(', ', $assignmentRoles);
@@ -819,24 +819,24 @@ class UserLevel extends \app\components\ActiveRecord
         if (parent::beforeValidate()) {
             if ($this->scenario == self::SCENARIO_USER) {
                 if ($this->photo_size['width'] == '' && $this->photo_size['height'] == '') {
-                    $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size')]));
+                    $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('photo_size')]));
                 } else {
                     if ($this->photo_size['width'] == '') {
-                        $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[width]')]));
+                        $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('photo_size[width]')]));
                     } else if ($this->photo_size['height'] == '') {
-                        $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('photo_size[height]')]));
+                        $this->addError('photo_size', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('photo_size[height]')]));
                     }
 				}
 			}
 
             if ($this->scenario == self::SCENARIO_MESSAGE) {
                 if ($this->message_limit['inbox'] == '' && $this->message_limit['outbox'] == '') {
-                    $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit')]));
+                    $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('message_limit')]));
                 } else {
                     if ($this->message_limit['inbox'] == '') {
-                        $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[inbox]')]));
+                        $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('message_limit[inbox]')]));
                     } else if ($this->message_limit['outbox'] == '') {
-                        $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('message_limit[outbox]')]));
+                        $this->addError('message_limit', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('message_limit[outbox]')]));
                     }
 				}
 			}

@@ -42,7 +42,7 @@ use ommu\users\models\UserLevel;
 
 		<?php $level = UserLevel::getLevel();
 		echo $form->field($model, 'userLevel')
-			->dropDownList($level, ['prompt'=>'']);?>
+			->dropDownList($level, ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'invite_date')
 			->input('date');?>
@@ -58,7 +58,7 @@ use ommu\users\models\UserLevel;
 			->input('date');?>
 
 		<?php echo $form->field($model, 'publish')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>

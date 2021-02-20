@@ -23,14 +23,14 @@ use ommu\users\models\Assignments;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Settings'), 'url' => Url::to(['setting/admin/index'])];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'User Levels'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id'=>$model->level_id]];
+$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->level_id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'User');
 ?>
 
 <div class="user-level-update-user">
 
 <?php $form = ActiveForm::begin([
-	'options' => ['class'=>'form-horizontal form-label-left'],
+	'options' => ['class' => 'form-horizontal form-label-left'],
 	'enableClientValidation' => false,
 	'enableAjaxValidation' => false,
 	//'enableClientScript' => true,
@@ -56,19 +56,19 @@ echo $form->field($model, 'assignment_roles')
 	->hint(Yii::t('app', '')); ?>
 
 <?php $profileSearch = UserLevel::getProfileSearch();
-echo $form->field($model, 'profile_search', ['template' => '{label}{beginWrapper}<div class="h6 mt-3 mb-3">'.$model->getAttributeLabel('profile_search').'</div>{hint}{input}{error}{endWrapper}'])
+echo $form->field($model, 'profile_search', ['template' => '{label}{beginWrapper}<div class="h6 mt-4 mb-4">'.$model->getAttributeLabel('profile_search').'</div>{hint}{input}{error}{endWrapper}'])
 	->radioList($profileSearch)
 	->label(Yii::t('app', 'Privacy Options'))
 	->hint(Yii::t('app', 'If you enable this feature, users will be able to exclude themselves from search results and the lists of users on the homepage (such as Recent Signups). Otherwise, all users will be included in search results.')); ?>
 
 <?php $profilePrivacy = UserLevel::getProfilePrivacy();
-echo $form->field($model, 'profile_privacy', ['template' => '{beginWrapper}<div class="h6 mt-3 mb-3">'.$model->getAttributeLabel('profile_privacy').'</div>{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-sm-9 col-xs-12 col-sm-offset-3']])
+echo $form->field($model, 'profile_privacy', ['template' => '{beginWrapper}<div class="h6 mt-4 mb-4">'.$model->getAttributeLabel('profile_privacy').'</div>{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper' => 'col-sm-9 col-xs-12 col-sm-offset-3']])
 	->checkboxList($profilePrivacy)
 	->label($model->getAttributeLabel('profile_privacy'))
 	->hint(Yii::t('app', 'Your users can choose from any of the options checked below when they decide who can see their profile. If you do not check any options, everyone will be allowed to view profiles.')); ?>
 
 <?php $profileComments = UserLevel::getProfilePrivacy();
-echo $form->field($model, 'profile_comments', ['template' => '{beginWrapper}<div class="h6 mt-3 mb-3">'.$model->getAttributeLabel('profile_comments').'</div>{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-sm-9 col-xs-12 col-sm-offset-3']])
+echo $form->field($model, 'profile_comments', ['template' => '{beginWrapper}<div class="h6 mt-4 mb-4">'.$model->getAttributeLabel('profile_comments').'</div>{hint}{input}{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper' => 'col-sm-9 col-xs-12 col-sm-offset-3']])
 	->checkboxList($profileComments)
 	->label($model->getAttributeLabel('profile_comments'))
 	->hint(Yii::t('app', 'Your users can choose from any of the options checked below when they decide who can post comments on their profile. If you do not check any options, everyone will be allowed to post comments on profiles.')); ?>
@@ -80,15 +80,15 @@ echo $form->field($model, 'photo_allow', ['template' => '{label}{beginWrapper}{h
 	->hint(Yii::t('app', 'If you enable this feature, users can upload a small photo icon of themselves. This will be shown next to their name/username on their profiles, in search/browse results, next to their private messages, etc.')); ?>
 
 <?php $photo_size_width = $form->field($model, 'photo_size[width]', ['template' => '<div class="col-sm-3">'.Yii::t('app', 'Maximum Width:').'</div><div class="col-sm-3">{input}</div><div class="col-sm-6">in pixels, between 1 and 999</div><div class="clearfix"></div>', 'options' => ['class' => 'row']])
-	->textInput(['type' => 'number', 'min'=>0, 'maxlength' => true])
+	->textInput(['type' => 'number', 'min' => 0, 'maxlength' => true])
 	->label($model->getAttributeLabel('photo_size')); ?>
 
 <?php $photo_size_height = $form->field($model, 'photo_size[height]', ['template' => '<div class="col-sm-3">'.Yii::t('app', 'Maximum Height:').'</div><div class="col-sm-3">{input}</div><div class="col-sm-6">in pixels, between 1 and 999</div><div class="clearfix"></div>', 'options' => ['class' => 'row']])
-	->textInput(['type'=>'number', 'min'=>0,'maxlength' => true])
+	->textInput(['type' => 'number', 'min' => 0,'maxlength' => true])
 	->label($model->getAttributeLabel('photo_size')); ?>
 
 <?php $model->photo_size = serialize($model->photo_size);
-echo $form->field($model, 'photo_size', ['template' => '{beginWrapper}{hint}'.$photo_size_width.$photo_size_height.'{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper'=>'col-sm-9 col-xs-12 col-sm-offset-3']])
+echo $form->field($model, 'photo_size', ['template' => '{beginWrapper}{hint}'.$photo_size_width.$photo_size_height.'{error}{endWrapper}', 'horizontalCssClasses' => ['wrapper' => 'col-sm-9 col-xs-12 col-sm-offset-3']])
 	->label($model->getAttributeLabel('photo_size'))
 	->hint(Yii::t('app', 'If you have selected "Yes" above, please input the maximum dimensions for the user photos. If your users upload a photo that is larger than these dimensions, the server will attempt to scale them down automatically. This feature requires that your PHP server is compiled with support for the GD Libraries.')); ?>
 

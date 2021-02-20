@@ -207,7 +207,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['email'] = [
 			'attribute' => 'email',
@@ -286,17 +286,17 @@ class UserNewsletter extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->view->register);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['status'] = [
 			'attribute' => 'status',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['status', 'id'=>$model->primaryKey]);
+				$url = Url::to(['status', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->status, 'Subscribe,Unsubscribe');
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 	}
@@ -375,7 +375,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 							->where(['email' => $this->email])
 							->one();
                         if ($newsletter != null) {
-                            $this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar pada newsletter.', ['email'=>$this->email]));
+                            $this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar pada newsletter.', ['email' => $this->email]));
                         }
 					}
 				}
@@ -416,13 +416,13 @@ class UserNewsletter extends \app\components\ActiveRecord
 			// Guest Subscribe
             if ($this->status == 1 && $this->user_id == null && $this->subscribe_id == null) {
 				$displayname = $this->user->displayname ? $this->user->displayname : $this->email;
-				$unsubscribelink = Url::to(['newsletter/subscribe', 'nid'=>$this->newsletter_id, 'status'=>0], true);
+				$unsubscribelink = Url::to(['newsletter/subscribe', 'nid' => $this->newsletter_id, 'status' => 0], true);
 
 				$template = 'subscribe';
 				$emailSubject = $this->parseMailSubject($template, 'user');
 				$emailBody = $this->parseMailBody($template, [
-					'displayname'=>$displayname, 
-					'unsubscribe-link'=>$unsubscribelink,
+					'displayname' => $displayname, 
+					'unsubscribe-link' => $unsubscribelink,
 				], 'user');
 
 				Yii::$app->mailer->compose()

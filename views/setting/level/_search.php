@@ -54,43 +54,43 @@ use yii\widgets\ActiveForm;
 		<?php echo $form->field($model, 'modifiedDisplayname');?>
 
 		<?php echo $form->field($model, 'default')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'signup')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'message_allow')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_block')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_search')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_style')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_style_sample')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_status')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_invisible')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_views')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_change')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'profile_delete')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'photo_allow')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>

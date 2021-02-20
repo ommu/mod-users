@@ -34,7 +34,7 @@ use ommu\users\models\UserLevel;
 
 		<?php $level = UserLevel::getLevel();
 		echo $form->field($model, 'userLevel')
-			->dropDownList($level, ['prompt'=>'']);?>
+			->dropDownList($level, ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'email');?>
 

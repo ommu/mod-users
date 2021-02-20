@@ -33,11 +33,11 @@ use app\models\CoreLanguages;
 
 		<?php $level = UserLevel::getLevel();
 		echo $form->field($model, 'level_id')
-			->dropDownList($level, ['prompt'=>'']);?>
+			->dropDownList($level, ['prompt' => '']);?>
 
 		<?php $language = CoreLanguages::getLanguage();
 		echo $form->field($model, 'language_id')
-			->dropDownList($language, ['prompt'=>'']);?>
+			->dropDownList($language, ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'email');?>
 
@@ -75,25 +75,25 @@ use app\models\CoreLanguages;
 
 		<?php $enabled = Users::getEnabled();
 			echo $form->field($model, 'enabled')
-			->dropDownList($enabled, ['prompt'=>'']);?>
+			->dropDownList($enabled, ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'verified')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'deactivate')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'search')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'invisible')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'privacy')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'comments')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>

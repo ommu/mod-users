@@ -57,7 +57,10 @@ class AdminController extends MemberController
         $columns = $searchModel->getGridColumn($cols);
 
 		$this->view->title = Yii::t('app', Inflector::pluralize($this->title));
-		$this->view->description = Yii::t('app', 'Your social network can have more than one administrator. This is useful if you want to have a staff of admins who maintain your social network. However, the first admin to be created (upon installation) is the "superadmin" and cannot be deleted. The superadmin can create and delete other admin accounts. All admin accounts on your system are listed below.');
+        $this->view->description = Yii::t('app', 'Your social network can have more than one administrator. This is 
+            useful if you want to have a staff of admins who maintain your social network. However, the first admin to 
+            be created (upon installation) is the "superadmin" and cannot be deleted. The superadmin can create and 
+            delete other admin accounts. All admin accounts on your system are listed below.');
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
 			'searchModel' => $searchModel,
@@ -85,9 +88,11 @@ class AdminController extends MemberController
             $model->isForm = true;
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', ['title'=>$this->title]));
+                Yii::$app->session->setFlash('success', Yii::t('app', '{title} success updated.', [
+                    'title' => $this->title,
+                ]));
                 return $this->redirect(['index']);
-                //return $this->redirect(['view', 'id'=>$model->user_id]);
+                //return $this->redirect(['view', 'id' => $model->user_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -96,8 +101,13 @@ class AdminController extends MemberController
             }
         }
 
-		$this->view->title = Yii::t('app', 'Update {title}: {displayname}', ['title'=>$this->title, 'displayname'=>$model->displayname]);
-		$this->view->description = Yii::t('app', 'Complete the form below to add/edit this admin account. Note that normal admins will not be able to delete or modify the superadmin account. If you want to change this admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');
+		$this->view->title = Yii::t('app', 'Update {title}: {displayname}', [
+            'title' => $this->title, 
+            'displayname' => $model->displayname,
+        ]);
+        $this->view->description = Yii::t('app', 'Complete the form below to add/edit this admin account. Note that 
+            normal admins will not be able to delete or modify the superadmin account. If you want to change this 
+            admin\'s password, enter both the old and new passwords below - otherwise, leave them both blank.');
 		$this->view->keywords = '';
 		return $this->oRender('admin_update', [
 			'model' => $model,

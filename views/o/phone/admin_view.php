@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $model->user->displayname;
 
 if (!$small) {
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id'=>$model->phone_id]), 'icon' => 'pencil', 'htmlOptions' => ['class'=>'btn btn-primary']],
-        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->phone_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
+        ['label' => Yii::t('app', 'Update'), 'url' => Url::to(['update', 'id' => $model->phone_id]), 'icon' => 'pencil', 'htmlOptions' => ['class' => 'btn btn-primary']],
+        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->phone_id]), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
     ];
 } ?>
 
@@ -33,18 +33,18 @@ if (!$small) {
 <?php echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => [
 		'phone_id',
 		[
 			'attribute' => 'publish',
-			'value' => $model->quickAction(Url::to(['publish', 'id'=>$model->primaryKey]), $model->publish),
+			'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
 			'format' => 'raw',
 		],
 		[
 			'attribute' => 'verified',
-			'value' => $model->quickAction(Url::to(['verified', 'id'=>$model->primaryKey]), $model->verified, 'Verified,Unverified'),
+			'value' => $model->quickAction(Url::to(['verified', 'id' => $model->primaryKey]), $model->verified, 'Verified,Unverified'),
 			'format' => 'raw',
 		],
 		[

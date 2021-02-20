@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $model->email;
 
 if (!$small) {
     $this->params['menu']['content'] = [
-        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id'=>$model->newsletter_id]), 'htmlOptions' => ['data-confirm'=>Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method'=>'post', 'class'=>'btn btn-danger'], 'icon' => 'trash'],
+        ['label' => Yii::t('app', 'Delete'), 'url' => Url::to(['delete', 'id' => $model->newsletter_id]), 'htmlOptions' => ['data-confirm' => Yii::t('app', 'Are you sure you want to delete this item?'), 'data-method' => 'post', 'class' => 'btn btn-danger'], 'icon' => 'trash'],
     ];
 } ?>
 
@@ -31,14 +31,14 @@ if (!$small) {
 <?php echo DetailView::widget([
 	'model' => $model,
 	'options' => [
-		'class'=>'table table-striped detail-view',
+		'class' => 'table table-striped detail-view',
 	],
 	'attributes' => [
 		'newsletter_id',
 		'email:email',
 		[
 			'attribute' => 'status',
-			'value' => $model->quickAction(Url::to(['status', 'id'=>$model->primaryKey]), $model->status, 'Subscribe,Unsubscribe'),
+			'value' => $model->quickAction(Url::to(['status', 'id' => $model->primaryKey]), $model->status, 'Subscribe,Unsubscribe'),
 			'format' => 'raw',
 		],
 		[

@@ -152,7 +152,7 @@ class UserForgot extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['userDisplayname'] = [
 			'attribute' => 'userDisplayname',
@@ -231,17 +231,17 @@ class UserForgot extends \app\components\ActiveRecord
 				return $this->filterYesNo($model->expired);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 		];
 		$this->templateColumns['publish'] = [
 			'attribute' => 'publish',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['publish', 'id'=>$model->primaryKey]);
+				$url = Url::to(['publish', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->publish);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 			'visible' => !Yii::$app->request->get('trash') ? true : false,
 		];
@@ -308,7 +308,7 @@ class UserForgot extends \app\components\ActiveRecord
 						->where(['email' => $this->email_i])
 						->one();
                     if ($user === null) {
-                        $this->addError('email_i', Yii::t('app', '{attribute} {email-i} belum terdaftar sebagai member.', ['attribute'=>$this->getAttributeLabel('email_i'), 'email-i'=>$this->email_i]));
+                        $this->addError('email_i', Yii::t('app', '{attribute} {email-i} belum terdaftar sebagai member.', ['attribute' => $this->getAttributeLabel('email_i'), 'email-i' => $this->email_i]));
                     } else {
                         $this->user_id = $user->user_id;
                     }
@@ -338,7 +338,7 @@ class UserForgot extends \app\components\ActiveRecord
 			$emailSubject = $this->parseMailSubject($template, 'user');
 			$emailBody = $this->parseMailBody($template, [
 				'displayname' => $displayname,
-				'forgot-link' => Url::to(['/user/password/reset', 'cd'=>$this->code], true),
+				'forgot-link' => Url::to(['/user/password/reset', 'cd' => $this->code], true),
 			], 'user');
 
 			Yii::$app->mailer->compose()
@@ -349,7 +349,7 @@ class UserForgot extends \app\components\ActiveRecord
 				->send();
 
 			//Update all forgot password history
-			self::updateAll(['publish' => 0], 'forgot_id <> :forgot_id and publish = :publish and user_id = :user_id',  [':forgot_id'=>$this->forgot_id, ':publish'=>1, ':user_id'=>$this->user_id]);
+			self::updateAll(['publish' => 0], 'forgot_id <> :forgot_id and publish = :publish and user_id = :user_id',  [':forgot_id' => $this->forgot_id, ':publish' => 1, ':user_id' => $this->user_id]);
 		}
 	}
 }

@@ -50,61 +50,61 @@ echo $action.'<br/>';
 
 <?php $level = UserLevel::getLevel();
 echo $form->field($model, 'level_id')
-	->dropDownList($level, ['prompt'=>''])
+	->dropDownList($level, ['prompt' => ''])
 	->label($model->getAttributeLabel('level_id')); ?>
 
 <?php $language = CoreLanguages::getLanguage();
 echo $form->field($model, 'language_id')
-	->dropDownList($language, ['prompt'=>''])
+	->dropDownList($language, ['prompt' => ''])
 	->label($model->getAttributeLabel('language_id')); ?>
 
 <?php echo $form->field($model, 'email')
-	->textInput(['type'=>'email'])
+	->textInput(['type' => 'email'])
 	->label($model->getAttributeLabel('email')); ?>
 
 <?php echo $form->field($model, 'displayname')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('displayname')); ?>
 
 <?php echo $form->field($model, 'password')
-	->passwordInput(['maxlength'=>true])
+	->passwordInput(['maxlength' => true])
 	->label($model->getAttributeLabel('password')); ?>
 
 <?php echo $form->field($model, 'salt')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('salt')); ?>
 
 <?php echo $form->field($model, 'creation_ip')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('creation_ip')); ?>
 
 <?php echo $form->field($model, 'modified_date')
-	->textInput(['type'=>'date'])
+	->textInput(['type' => 'date'])
 	->label($model->getAttributeLabel('modified_date')); ?>
 
 <?php echo $form->field($model, 'lastlogin_date')
-	->textInput(['type'=>'date'])
+	->textInput(['type' => 'date'])
 	->label($model->getAttributeLabel('lastlogin_date')); ?>
 
 <?php echo $form->field($model, 'lastlogin_ip')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('lastlogin_ip')); ?>
 
 <?php echo $form->field($model, 'lastlogin_from')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('lastlogin_from')); ?>
 
 <?php echo $form->field($model, 'update_date')
-	->textInput(['type'=>'date'])
+	->textInput(['type' => 'date'])
 	->label($model->getAttributeLabel('update_date')); ?>
 
 <?php echo $form->field($model, 'update_ip')
-	->textInput(['maxlength'=>true])
+	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('update_ip')); ?>
 
 <?php $enabled = Users::getEnabled();
 echo $form->field($model, 'enabled')
-	->dropDownList($enabled, ['prompt'=>''])
+	->dropDownList($enabled, ['prompt' => ''])
 	->label($model->getAttributeLabel('enabled')); ?>
 
 <?php echo $form->field($model, 'verified')

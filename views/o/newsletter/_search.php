@@ -36,7 +36,7 @@ use ommu\users\models\UserLevel;
 
 		<?php $level = UserLevel::getLevel();
 		echo $form->field($model, 'userLevel')
-			->dropDownList($level, ['prompt'=>'']);?>
+			->dropDownList($level, ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'subscribe_search');?>
 
@@ -56,10 +56,10 @@ use ommu\users\models\UserLevel;
 		<?php echo $form->field($model, 'updated_ip');?>
 
 		<?php echo $form->field($model, 'status')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<?php echo $form->field($model, 'register_search')
-			->dropDownList($model->filterYesNo(), ['prompt'=>'']);?>
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<div class="form-group">
 			<?php echo Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']); ?>

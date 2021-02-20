@@ -194,7 +194,7 @@ class UserInvites extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['displayname'] = [
 			'attribute' => 'displayname',
@@ -277,19 +277,19 @@ class UserInvites extends \app\components\ActiveRecord
 		$this->templateColumns['invites'] = [
 			'attribute' => 'invites',
 			'value' => function($model, $key, $index, $column) {
-				return Html::a($model->invites, ['history/invite/index', 'invite'=>$model->primaryKey]);
+				return Html::a($model->invites, ['history/invite/index', 'invite' => $model->primaryKey]);
 			},
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'html',
 		];
 		$this->templateColumns['publish'] = [
 			'attribute' => 'publish',
 			'value' => function($model, $key, $index, $column) {
-				$url = Url::to(['publish', 'id'=>$model->primaryKey]);
+				$url = Url::to(['publish', 'id' => $model->primaryKey]);
 				return $this->quickAction($url, $model->publish);
 			},
 			'filter' => $this->filterYesNo(),
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 			'format' => 'raw',
 			'visible' => !Yii::$app->request->get('trash') ? true : false,
 		];
@@ -431,7 +431,7 @@ class UserInvites extends \app\components\ActiveRecord
 							->where(['email' => $this->email_i])
 							->one();
                         if ($newsletter != null && $newsletter->user_id != null) {
-                            $this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar sebagai member.', ['email'=>$this->email_i]));
+                            $this->addError('email_i', Yii::t('app', 'Email {email} sudah terdaftar sebagai member.', ['email' => $this->email_i]));
                         }
 					}
 				}
@@ -503,16 +503,16 @@ class UserInvites extends \app\components\ActiveRecord
         if ($this->newsletter->user_id == null) {
 			$displayname = $this->displayname ? $this->displayname : $this->newsletter->email;
 			$inviter = $this->inviter->displayname ? $this->inviter->displayname : $this->inviter->email;
-			$singuplink = $setting->signup_checkemail == 1 ? Url::to(['signup/index', 'code'=>$this->code], true) : Url::to(['signup/index'], true);
+			$singuplink = $setting->signup_checkemail == 1 ? Url::to(['signup/index', 'code' => $this->code], true) : Url::to(['signup/index'], true);
 			
 			// if ($insert) {
 			// 	$template = $setting->signup_checkemail == 1 ? 'invite-code' : 'invite';
 			// 	$emailSubject = $this->parseMailSubject($template, 'user');
 			// 	$emailBody = $this->parseMailBody($template, [
-			// 		'displayname'=>$displayname, 
-			// 		'inviter'=>$inviter, 
-			// 		'singup-link'=>$singuplink, 
-			// 		'invite-code'=>$this->code,
+			// 		'displayname' => $displayname, 
+			// 		'inviter' => $inviter, 
+			// 		'singup-link' => $singuplink, 
+			// 		'invite-code' => $this->code,
 			// 	], 'user');
 
 			// 	Yii::$app->mailer->compose()
@@ -527,11 +527,11 @@ class UserInvites extends \app\components\ActiveRecord
 			// 		$template = $setting->signup_checkemail == 1 ? 'invite-2nd-code' : 'invite-2nd';
 			// 		$emailSubject = $this->parseMailSubject($template, 'user');
 			// 		$emailBody = $this->parseMailBody($template, [
-			// 			'displayname'=>$displayname, 
-			// 			'invites'=>$this->invites, 
-			// 			'inviter'=>$inviter, 
-			// 			'singup-link'=>$singuplink, 
-			// 			'invite-code'=>$this->code,
+			// 			'displayname' => $displayname, 
+			// 			'invites' => $this->invites, 
+			// 			'inviter' => $inviter, 
+			// 			'singup-link' => $singuplink, 
+			// 			'invite-code' => $this->code,
 			// 		], 'user');
 	
 			// 		Yii::$app->mailer->compose()

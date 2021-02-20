@@ -109,7 +109,7 @@ class PhoneController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'User phone success created.'));
                 return $this->redirect(['index']);
-                //return $this->redirect(['view', 'id'=>$model->phone_id]);
+                //return $this->redirect(['view', 'id' => $model->phone_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -145,7 +145,7 @@ class PhoneController extends Controller
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', Yii::t('app', 'User phone success updated.'));
                 return $this->redirect(['index']);
-                //return $this->redirect(['view', 'id'=>$model->phone_id]);
+                //return $this->redirect(['view', 'id' => $model->phone_id]);
 
             } else {
                 if (Yii::$app->request->isAjax) {

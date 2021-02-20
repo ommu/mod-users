@@ -26,7 +26,7 @@ use yii\widgets\DetailView;
 $this->params['breadcrumbs'][] = Yii::t('app', 'User Settings');
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'icon' => 'plus-square', 'htmlOptions' => ['class'=>'btn modal-btn btn-success']],
+	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn modal-btn btn-success']],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],
@@ -56,9 +56,9 @@ $this->params['menu']['option'] = [
 			<div class="x_content">
 <?php Pjax::begin(); ?>
 
-<?php //echo $this->render('/setting/level/_search', ['model'=>$searchModel]); ?>
+<?php //echo $this->render('/setting/level/_search', ['model' => $searchModel]); ?>
 
-<?php echo $this->render('/setting/level/_option_form', ['model'=>$searchModel, 'gridColumns'=>$searchModel->activeDefaultColumns($columns), 'route'=>$this->context->route]); ?>
+<?php echo $this->render('/setting/level/_option_form', ['model' => $searchModel, 'gridColumns' => $searchModel->activeDefaultColumns($columns), 'route' => $this->context->route]); ?>
 
 <?php
 $columnData = $columns;
@@ -67,21 +67,21 @@ array_push($columnData, [
 	'header' => Yii::t('app', 'Option'),
 	'urlCreator' => function($action, $model, $key, $index) {
         if ($action == 'view') {
-            return Url::to(['setting/level/view', 'id'=>$key]);
+            return Url::to(['setting/level/view', 'id' => $key]);
         }
         if ($action == 'update') {
-            return Url::to(['setting/level/update', 'id'=>$key]);
+            return Url::to(['setting/level/update', 'id' => $key]);
         }
         if ($action == 'delete') {
-            return Url::to(['setting/level/delete', 'id'=>$key]);
+            return Url::to(['setting/level/delete', 'id' => $key]);
         }
 	},
 	'buttons' => [
 		'view' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title'=>Yii::t('app', 'Detail'), 'data-pjax'=>0]);
+			return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, ['title' => Yii::t('app', 'Detail'), 'data-pjax' => 0]);
 		},
 		'update' => function ($url, $model, $key) {
-			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title'=>Yii::t('app', 'Update'), 'data-pjax'=>0]);
+			return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update'), 'data-pjax' => 0]);
 		},
 		'delete' => function ($url, $model, $key) {
 			return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
@@ -108,7 +108,7 @@ echo GridView::widget([
 
 <div class="row">
 	<div class="col-md-12 col-sm-12 col-xs-12">
-		<?php echo \app\components\widgets\Alert::widget(['closeButton'=>false]); ?>
+		<?php echo \app\components\widgets\Alert::widget(['closeButton' => false]); ?>
 
 		<div class="x_panel">
 			<div class="x_title">
@@ -124,7 +124,7 @@ echo GridView::widget([
 	echo DetailView::widget([
 		'model' => $model,
 		'options' => [
-			'class'=>'table table-striped detail-view',
+			'class' => 'table table-striped detail-view',
 		],
 		'attributes' => [
 			'id',

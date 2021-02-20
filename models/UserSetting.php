@@ -134,7 +134,7 @@ class UserSetting extends \app\components\ActiveRecord
 		$this->templateColumns['_no'] = [
 			'header' => '#',
 			'class' => 'app\components\grid\SerialColumn',
-			'contentOptions' => ['class'=>'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		];
 		$this->templateColumns['license'] = [
 			'attribute' => 'license',
@@ -252,8 +252,8 @@ class UserSetting extends \app\components\ActiveRecord
         }
 
 		$items = array(
-			1 => Yii::t('app', 'Yes, the public can view {module} unless they are made private.', ['module'=>$moduleName]),
-			0 => Yii::t('app', 'No, the public cannot view {module}.', ['module'=>$moduleName]),
+			1 => Yii::t('app', 'Yes, the public can view {module} unless they are made private.', ['module' => $moduleName]),
+			0 => Yii::t('app', 'No, the public cannot view {module}.', ['module' => $moduleName]),
 		);
 
         if ($value !== null) {
@@ -305,17 +305,17 @@ class UserSetting extends \app\components\ActiveRecord
         if (parent::beforeValidate()) {
             if ($this->forgot_difference != '') {
                 if ($this->forgot_diff_type == '') {
-                    $this->addError('forgot_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('forgot_diff_type')]));
+                    $this->addError('forgot_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('forgot_diff_type')]));
                 }
 			}
             if ($this->verify_difference != '') {
                 if ($this->verify_diff_type == '') {
-                    $this->addError('verify_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('verify_diff_type')]));
+                    $this->addError('verify_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('verify_diff_type')]));
                 }
 			}
             if ($this->invite_difference != '') {
                 if ($this->invite_diff_type == '') {
-                    $this->addError('invite_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute'=>$this->getAttributeLabel('invite_diff_type')]));
+                    $this->addError('invite_difference', Yii::t('app', '{attribute} cannot be blank.', ['attribute' => $this->getAttributeLabel('invite_diff_type')]));
                 }
 			}
 			

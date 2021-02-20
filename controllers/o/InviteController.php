@@ -121,19 +121,19 @@ class InviteController extends Controller
 					foreach ($email_i as $email) {
 						$condition = UserInvites::insertInvite($email);
                         if ($condition == 0) {
-							$result[] = Yii::t('app', '{email} (skip)', array('email'=>$email));
+							$result[] = Yii::t('app', '{email} (skip)', array('email' => $email));
                         } else if ($condition == 1) {
-							$result[] = Yii::t('app', '{email} (success)', array('email'=>$email));
+							$result[] = Yii::t('app', '{email} (success)', array('email' => $email));
                         } else if ($condition == 2) {
-							$result[] = Yii::t('app', '{email} (error)', array('email'=>$email));
+							$result[] = Yii::t('app', '{email} (error)', array('email' => $email));
                         }
 					}
-					Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success created.<br/>{result}', ['result'=>$this->formatFileType($result, false, '<br/>')]));
+					Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success created.<br/>{result}', ['result' => $this->formatFileType($result, false, '<br/>')]));
 					return $this->redirect(['index']);
 					
 				} else {
                     if (UserInvites::insertInvite($model->email_i) == 1) {
-						Yii::$app->session->setFlash('success', Yii::t('app', '{email} invite success created.', ['email'=>$model->email_i]));
+						Yii::$app->session->setFlash('success', Yii::t('app', '{email} invite success created.', ['email' => $model->email_i]));
 						return $this->redirect(['index']);
 					}
 				}
