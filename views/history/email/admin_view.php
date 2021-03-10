@@ -28,27 +28,30 @@ if (!$small) {
 
 <div class="user-history-email-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+    'id',
+    [
+        'attribute' => 'userLevel',
+        'value' => isset($model->user) ? $model->user->level->title->message : '-',
+    ],
+    [
+        'attribute' => 'userDisplayname',
+        'value' => isset($model->user) ? $model->user->displayname : '-',
+    ],
+    'email:email',
+    [
+        'attribute' => 'update_date',
+        'value' => Yii::$app->formatter->asDatetime($model->update_date, 'medium'),
+    ],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class' => 'table table-striped detail-view',
 	],
-	'attributes' => [
-		'id',
-		[
-			'attribute' => 'userLevel',
-			'value' => isset($model->user) ? $model->user->level->title->message : '-',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
-		],
-		'email:email',
-		[
-			'attribute' => 'update_date',
-			'value' => Yii::$app->formatter->asDatetime($model->update_date, 'medium'),
-		],
-	],
+	'attributes' => $attributes,
 ]); ?>
 
 </div>

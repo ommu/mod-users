@@ -28,33 +28,36 @@ if (!$small) {
 
 <div class="user-history-login-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+    'id',
+    [
+        'attribute' => 'userLevel',
+        'value' => isset($model->user) ? $model->user->level->title->message : '-',
+    ],
+    [
+        'attribute' => 'userDisplayname',
+        'value' => isset($model->user) ? $model->user->displayname : '-',
+    ],
+    [
+        'attribute' => 'email_search',
+        'value' => isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-',
+        'format' => 'html',
+    ],
+    [
+        'attribute' => 'lastlogin_date',
+        'value' => Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium'),
+    ],
+    'lastlogin_ip',
+    'lastlogin_from',
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class' => 'table table-striped detail-view',
 	],
-	'attributes' => [
-		'id',
-		[
-			'attribute' => 'userLevel',
-			'value' => isset($model->user) ? $model->user->level->title->message : '-',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
-		],
-		[
-			'attribute' => 'email_search',
-			'value' => isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-',
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'lastlogin_date',
-			'value' => Yii::$app->formatter->asDatetime($model->lastlogin_date, 'medium'),
-		],
-		'lastlogin_ip',
-		'lastlogin_from',
-	],
+	'attributes' => $attributes,
 ]); ?>
 
 </div>

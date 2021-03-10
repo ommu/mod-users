@@ -28,53 +28,56 @@ if (!$small) {
 
 <div class="user-invite-history-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+    'id',
+    [
+        'attribute' => 'email_search',
+        'value' => isset($model->invite->newsletter) ? Yii::$app->formatter->asEmail($model->invite->newsletter->email) : '-',
+        'format' => 'html',
+    ],
+    [
+        'attribute' => 'displayname_search',
+        'value' => isset($model->invite) ? $model->invite->displayname : '-',
+    ],
+    [
+        'attribute' => 'inviter_search',
+        'value' => isset($model->invite->inviter) ? $model->invite->inviter->displayname : '-',
+    ],
+    [
+        'attribute' => 'userLevel',
+        'value' => isset($model->invite->inviter->level) ? $model->invite->inviter->level->title->message : '-',
+    ],
+    'code',
+    [
+        'attribute' => 'invite_date',
+        'value' => Yii::$app->formatter->asDatetime($model->invite_date, 'medium'),
+    ],
+    'invite_ip',
+    [
+        'attribute' => 'expired_date',
+        'value' => Yii::$app->formatter->asDatetime($model->expired_date, 'medium'),
+    ],
+    [
+        'attribute' => 'view.expired',
+        'value' => $this->filterYesNo($model->view->expired),
+    ],
+    [
+        'attribute' => 'view.verify_day_left',
+        'value' => isset($model->view) ? $model->view->verify_day_left : '-',
+    ],
+    [
+        'attribute' => 'view.verify_hour_left',
+        'value' => isset($model->view) ? $model->view->verify_hour_left : '-',
+    ],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class' => 'table table-striped detail-view',
 	],
-	'attributes' => [
-		'id',
-		[
-			'attribute' => 'email_search',
-			'value' => isset($model->invite->newsletter) ? Yii::$app->formatter->asEmail($model->invite->newsletter->email) : '-',
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'displayname_search',
-			'value' => isset($model->invite) ? $model->invite->displayname : '-',
-		],
-		[
-			'attribute' => 'inviter_search',
-			'value' => isset($model->invite->inviter) ? $model->invite->inviter->displayname : '-',
-		],
-		[
-			'attribute' => 'userLevel',
-			'value' => isset($model->invite->inviter->level) ? $model->invite->inviter->level->title->message : '-',
-		],
-		'code',
-		[
-			'attribute' => 'invite_date',
-			'value' => Yii::$app->formatter->asDatetime($model->invite_date, 'medium'),
-		],
-		'invite_ip',
-		[
-			'attribute' => 'expired_date',
-			'value' => Yii::$app->formatter->asDatetime($model->expired_date, 'medium'),
-		],
-		[
-			'attribute' => 'view.expired',
-			'value' => $this->filterYesNo($model->view->expired),
-		],
-		[
-			'attribute' => 'view.verify_day_left',
-			'value' => isset($model->view) ? $model->view->verify_day_left : '-',
-		],
-		[
-			'attribute' => 'view.verify_hour_left',
-			'value' => isset($model->view) ? $model->view->verify_hour_left : '-',
-		],
-	],
+	'attributes' => $attributes,
 ]); ?>
 
 </div>

@@ -30,60 +30,63 @@ if (!$small) {
 
 <div class="user-phones-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+    'phone_id',
+    [
+        'attribute' => 'publish',
+        'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
+        'format' => 'raw',
+    ],
+    [
+        'attribute' => 'verified',
+        'value' => $model->quickAction(Url::to(['verified', 'id' => $model->primaryKey]), $model->verified, 'Verified,Unverified'),
+        'format' => 'raw',
+    ],
+    [
+        'attribute' => 'userDisplayname',
+        'value' => isset($model->user) ? $model->user->displayname : '-',
+    ],
+    [
+        'attribute' => 'userLevel',
+        'value' => isset($model->user->level) ? $model->user->level->title->message : '-',
+    ],
+    'phone_number',
+    [
+        'attribute' => 'verified_date',
+        'value' => Yii::$app->formatter->asDatetime($model->verified_date, 'medium'),
+    ],
+    [
+        'attribute' => 'creation_date',
+        'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
+        'visible' => !$small,
+    ],
+    [
+        'attribute' => 'creationDisplayname',
+        'value' => isset($model->creation) ? $model->creation->displayname : '-',
+    ],
+    [
+        'attribute' => 'modified_date',
+        'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+        'visible' => !$small,
+    ],
+    [
+        'attribute' => 'modifiedDisplayname',
+        'value' => isset($model->modified) ? $model->modified->displayname : '-',
+    ],
+    [
+        'attribute' => 'updated_date',
+        'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+        'visible' => !$small,
+    ],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class' => 'table table-striped detail-view',
 	],
-	'attributes' => [
-		'phone_id',
-		[
-			'attribute' => 'publish',
-			'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
-			'format' => 'raw',
-		],
-		[
-			'attribute' => 'verified',
-			'value' => $model->quickAction(Url::to(['verified', 'id' => $model->primaryKey]), $model->verified, 'Verified,Unverified'),
-			'format' => 'raw',
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->user) ? $model->user->displayname : '-',
-		],
-		[
-			'attribute' => 'userLevel',
-			'value' => isset($model->user->level) ? $model->user->level->title->message : '-',
-		],
-		'phone_number',
-		[
-			'attribute' => 'verified_date',
-			'value' => Yii::$app->formatter->asDatetime($model->verified_date, 'medium'),
-		],
-		[
-			'attribute' => 'creation_date',
-			'value' => Yii::$app->formatter->asDatetime($model->creation_date, 'medium'),
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'creationDisplayname',
-			'value' => isset($model->creation) ? $model->creation->displayname : '-',
-		],
-		[
-			'attribute' => 'modified_date',
-			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'modifiedDisplayname',
-			'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		],
-		[
-			'attribute' => 'updated_date',
-			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-			'visible' => !$small,
-		],
-	],
+	'attributes' => $attributes,
 ]); ?>
 
 </div>

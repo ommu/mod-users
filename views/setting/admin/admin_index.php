@@ -26,7 +26,7 @@ use yii\widgets\DetailView;
 $this->params['breadcrumbs'][] = Yii::t('app', 'User Settings');
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn modal-btn btn-success']],
+	['label' => Yii::t('app', 'Add Level'), 'url' => Url::to(['setting/level/create']), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn btn-primary modal-btn']],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],

@@ -28,54 +28,57 @@ if (!$small) {
 
 <div class="user-invites-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+    'id',
+    [
+        'attribute' => 'publish',
+        'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
+        'format' => 'raw',
+    ],
+    'displayname',
+    [
+        'attribute' => 'email_search',
+        'value' => isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-',
+        'format' => 'html',
+    ],
+    'code',
+    'invites',
+    [
+        'attribute' => 'inviter_search',
+        'value' => isset($model->inviter) ? $model->inviter->displayname : '-',
+    ],
+    [
+        'attribute' => 'userLevel',
+        'value' => isset($model->inviter->level) ? $model->inviter->level->title->message : '-',
+    ],
+    [
+        'attribute' => 'invite_date',
+        'value' => Yii::$app->formatter->asDatetime($model->invite_date, 'medium'),
+    ],
+    'invite_ip',
+    [
+        'attribute' => 'modified_date',
+        'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
+        'visible' => !$small,
+    ],
+    [
+        'attribute' => 'modifiedDisplayname',
+        'value' => isset($model->modified) ? $model->modified->displayname : '-',
+    ],
+    [
+        'attribute' => 'updated_date',
+        'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+        'visible' => !$small,
+    ],
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class' => 'table table-striped detail-view',
 	],
-	'attributes' => [
-		'id',
-		[
-			'attribute' => 'publish',
-			'value' => $model->quickAction(Url::to(['publish', 'id' => $model->primaryKey]), $model->publish),
-			'format' => 'raw',
-		],
-		'displayname',
-		[
-			'attribute' => 'email_search',
-			'value' => isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-',
-			'format' => 'html',
-		],
-		'code',
-		'invites',
-		[
-			'attribute' => 'inviter_search',
-			'value' => isset($model->inviter) ? $model->inviter->displayname : '-',
-		],
-		[
-			'attribute' => 'userLevel',
-			'value' => isset($model->inviter->level) ? $model->inviter->level->title->message : '-',
-		],
-		[
-			'attribute' => 'invite_date',
-			'value' => Yii::$app->formatter->asDatetime($model->invite_date, 'medium'),
-		],
-		'invite_ip',
-		[
-			'attribute' => 'modified_date',
-			'value' => Yii::$app->formatter->asDatetime($model->modified_date, 'medium'),
-			'visible' => !$small,
-		],
-		[
-			'attribute' => 'modifiedDisplayname',
-			'value' => isset($model->modified) ? $model->modified->displayname : '-',
-		],
-		[
-			'attribute' => 'updated_date',
-			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-			'visible' => !$small,
-		],
-	],
+	'attributes' => $attributes,
 ]); ?>
 
 </div>

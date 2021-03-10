@@ -24,7 +24,7 @@ $context = $this->context;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Add {title}', ['title' => $context->title]), 'url' => Url::to(['create']), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn modal-btn btn-success']],
+	['label' => Yii::t('app', 'Add {title}', ['title' => $context->title]), 'url' => Url::to(['create']), 'icon' => 'plus-square', 'htmlOptions' => ['class' => 'btn btn-primary modal-btn']],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],

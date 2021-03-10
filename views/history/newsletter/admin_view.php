@@ -28,41 +28,44 @@ if (!$small) {
 
 <div class="user-newsletter-history-view">
 
-<?php echo DetailView::widget([
+<?php
+$attributes = [
+    'id',
+    [
+        'attribute' => 'status',
+        'value' => $model->status == 1 ? Yii::t('app', 'Subscribe') : Yii::t('app', 'Unsubscribe'),
+    ],
+    [
+        'attribute' => 'email_search',
+        'value' => isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-',
+        'format' => 'html',
+    ],
+    [
+        'attribute' => 'register_search',
+        'value' => $this->filterYesNo($model->newsletter->view->register),
+    ],
+    [
+        'attribute' => 'userDisplayname',
+        'value' => isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-',
+    ],
+    [
+        'attribute' => 'userLevel',
+        'value' => isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-',
+    ],
+    [
+        'attribute' => 'updated_date',
+        'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
+        'visible' => !$small,
+    ],
+    'updated_ip',
+];
+
+echo DetailView::widget([
 	'model' => $model,
 	'options' => [
 		'class' => 'table table-striped detail-view',
 	],
-	'attributes' => [
-		'id',
-		[
-			'attribute' => 'status',
-			'value' => $model->status == 1 ? Yii::t('app', 'Subscribe') : Yii::t('app', 'Unsubscribe'),
-		],
-		[
-			'attribute' => 'email_search',
-			'value' => isset($model->newsletter) ? Yii::$app->formatter->asEmail($model->newsletter->email) : '-',
-			'format' => 'html',
-		],
-		[
-			'attribute' => 'register_search',
-			'value' => $this->filterYesNo($model->newsletter->view->register),
-		],
-		[
-			'attribute' => 'userDisplayname',
-			'value' => isset($model->newsletter->user) ? $model->newsletter->user->displayname : '-',
-		],
-		[
-			'attribute' => 'userLevel',
-			'value' => isset($model->newsletter->user->level) ? $model->newsletter->user->level->title->message : '-',
-		],
-		[
-			'attribute' => 'updated_date',
-			'value' => Yii::$app->formatter->asDatetime($model->updated_date, 'medium'),
-			'visible' => !$small,
-		],
-		'updated_ip',
-	],
+	'attributes' => $attributes,
 ]); ?>
 
 </div>

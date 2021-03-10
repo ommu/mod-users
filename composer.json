@@ -33,7 +33,6 @@
 	},
 	"require": {
 		"php": "~7.0",
-		"yiisoft/yii2": "~2.0.13",
 		"kartik-v/yii2-password": "@dev"
 	},
 	"autoload": {
