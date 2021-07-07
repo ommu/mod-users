@@ -12,20 +12,22 @@
 
 use Yii;
 use app\models\Menu;
+use mdm\admin\components\Configs;
 
 class m190320_120101_users_module_insert_menu extends \yii\db\Migration
 {
 	public function up()
 	{
-		$tableName = Yii::$app->db->tablePrefix . 'ommu_core_menus';
+        $menuTable = Configs::instance()->menuTable;
+		$tableName = Yii::$app->db->tablePrefix . $menuTable;
         if (Yii::$app->db->getTableSchema($tableName, true)) {
-			$this->batchInsert('ommu_core_menus', ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
+			$this->batchInsert($tableName, ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
 				['Users', 'users', 'fa-user-circle-o', null, '/#', null, null],
 			]);
 		}
 
         if (Yii::$app->db->getTableSchema($tableName, true)) {
-			$this->batchInsert('ommu_core_menus', ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
+			$this->batchInsert($tableName, ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
 				['Administrator', 'users', null, Menu::getParentId('Users#users'), '/users/admin/index', null, null],
 				['Member', 'users', null, Menu::getParentId('Users#users'), '/users/member/index', null, null],
 				['Invite, Forgot & Subscribe', 'users', null, Menu::getParentId('Users#users'), '/users/o/invite/index', null, null],
