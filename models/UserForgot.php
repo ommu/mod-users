@@ -35,6 +35,7 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\helpers\TimeHelper;
+use yii\validators\EmailValidator;
 
 class UserForgot extends \app\components\ActiveRecord
 {
@@ -301,7 +302,7 @@ class UserForgot extends \app\components\ActiveRecord
 	{
         if (parent::beforeValidate()) {
             if ($this->isNewRecord) {
-				$validator = new \yii\validators\EmailValidator();
+				$validator = new EmailValidator();
                 if ($this->scenario == self::SCENARIO_WITH_FORM && $validator->validate($this->email_i) === true && $this->user_id == null) {
 					$user = Users::find()
 						->select(['user_id'])
