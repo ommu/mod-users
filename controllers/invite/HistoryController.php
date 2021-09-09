@@ -1,10 +1,10 @@
 <?php
 /**
- * InviteController
- * @var $this ommu\users\controllers\history\InviteController
+ * HistoryController
+ * @var $this ommu\users\controllers\invite\HistoryController
  * @var $model ommu\users\models\UserInviteHistory
  *
- * InviteController implements the CRUD actions for UserInviteHistory model.
+ * HistoryController implements the CRUD actions for UserInviteHistory model.
  * Reference start
  * TOC :
  *	Index
@@ -22,7 +22,7 @@
  *
  */
 
-namespace ommu\users\controllers\history;
+namespace ommu\users\controllers\invite;
 
 use Yii;
 use app\components\Controller;
@@ -31,7 +31,7 @@ use yii\filters\VerbFilter;
 use ommu\users\models\UserInviteHistory;
 use ommu\users\models\search\UserInviteHistory as UserInviteHistorySearch;
 
-class InviteController extends Controller
+class HistoryController extends Controller
 {
 	/**
 	 * {@inheritdoc}

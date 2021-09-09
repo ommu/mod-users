@@ -2,7 +2,7 @@
 /**
  * User Newsletters (user-newsletter)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\o\NewsletterController
+ * @var $this ommu\users\controllers\newsletter\AdminController
  * @var $model ommu\users\models\UserNewsletter
  * @var $searchModel ommu\users\models\search\UserNewsletter
  *

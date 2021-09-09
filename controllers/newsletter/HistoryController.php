@@ -1,10 +1,10 @@
 <?php
 /**
- * NewsletterController
- * @var $this ommu\users\controllers\history\NewsletterController
+ * HistoryController
+ * @var $this ommu\users\controllers\newsletter\HistoryController
  * @var $model ommu\users\models\UserNewsletterHistory
  *
- * NewsletterController implements the CRUD actions for UserNewsletterHistory model.
+ * HistoryController implements the CRUD actions for UserNewsletterHistory model.
  * Reference start
  * TOC :
  *	Index
@@ -22,7 +22,7 @@
  *
  */
 
-namespace ommu\users\controllers\history;
+namespace ommu\users\controllers\newsletter;
 
 use Yii;
 use app\components\Controller;
@@ -31,7 +31,7 @@ use yii\filters\VerbFilter;
 use ommu\users\models\UserNewsletterHistory;
 use ommu\users\models\search\UserNewsletterHistory as UserNewsletterHistorySearch;
 
-class NewsletterController extends Controller
+class HistoryController extends Controller
 {
 	/**
 	 * {@inheritdoc}

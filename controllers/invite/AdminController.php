@@ -1,39 +1,40 @@
 <?php
 /**
- * NewsletterController
- * @var $this ommu\users\controllers\o\NewsletterController
- * @var $model ommu\users\models\UserNewsletter
+ * AdminController
+ * @var $this ommu\users\controllers\invite\AdminController
+ * @var $model ommu\users\models\UserInvites
  *
- * NewsletterController implements the CRUD actions for UserNewsletter model.
+ * AdminController implements the CRUD actions for UserInvites model.
  * Reference start
  * TOC :
  *	Index
  *	Create
  *	View
  *	Delete
- *	Status
+ *	RunAction
+ *	Publish
  *
  *	findModel
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 23 October 2017, 08:28 WIB
- * @modified date 14 November 2018, 01:24 WIB
+ * @created date 23 October 2017, 08:27 WIB
+ * @modified date 13 November 2018, 13:27 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
-namespace ommu\users\controllers\o;
+namespace ommu\users\controllers\invite;
 
 use Yii;
 use app\components\Controller;
 use mdm\admin\components\AccessControl;
 use yii\filters\VerbFilter;
-use ommu\users\models\UserNewsletter;
-use ommu\users\models\search\UserNewsletter as UserNewsletterSearch;
+use ommu\users\models\UserInvites;
+use ommu\users\models\search\UserInvites as UserInvitesSearch;
 
-class NewsletterController extends Controller
+class AdminController extends Controller
 {
 	use \ommu\traits\FileTrait;
 
@@ -60,19 +61,19 @@ class NewsletterController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-					'status' => ['POST'],
+                    'publish' => ['POST'],
                 ],
             ],
         ];
 	}
 
 	/**
-	 * Lists all UserNewsletter models.
+	 * Lists all UserInvites models.
 	 * @return mixed
 	 */
 	public function actionIndex()
 	{
-        $searchModel = new UserNewsletterSearch();
+        $searchModel = new UserInvitesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $gridColumn = Yii::$app->request->get('GridColumn', null);
@@ -86,7 +87,7 @@ class NewsletterController extends Controller
         }
         $columns = $searchModel->getGridColumn($cols);
 
-		$this->view->title = Yii::t('app', 'Newsletters');
+		$this->view->title = Yii::t('app', 'Invites');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->render('admin_index', [
@@ -97,27 +98,28 @@ class NewsletterController extends Controller
 	}
 
 	/**
-	 * Creates a new UserNewsletter model.
+	 * Creates a new UserInvites model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 * @return mixed
 	 */
 	public function actionCreate()
 	{
-        $model = new UserNewsletter();
+        $model = new UserInvites();
+		$model->scenario = UserInvites::SCENARIO_FORM;
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
-
+			
 			$email_i = $this->formatFileType($model->email_i);
             if (count($email_i) == 1) {
-				$model->scenario = UserNewsletter::SCENARIO_SINGLE_EMAIL;
+				$model->scenario = UserInvites::SCENARIO_SINGLE_EMAIL;
             }
 
 			$result = [];
             if ($model->validate()) {
                 if (count($email_i) > 1) {
 					foreach ($email_i as $email) {
-						$condition = UserNewsletter::insertNewsletter($email);
+						$condition = UserInvites::insertInvite($email);
                         if ($condition == 0) {
 							$result[] = Yii::t('app', '{email} (skip)', array('email' => $email));
                         } else if ($condition == 1) {
@@ -126,12 +128,12 @@ class NewsletterController extends Controller
 							$result[] = Yii::t('app', '{email} (error)', array('email' => $email));
                         }
 					}
-					Yii::$app->session->setFlash('success', Yii::t('app', 'Newsletter success created.<br/>{result}', ['result' => $this->formatFileType($result, false, '<br/>')]));
+					Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success created.<br/>{result}', ['result' => $this->formatFileType($result, false, '<br/>')]));
 					return $this->redirect(['index']);
-
+					
 				} else {
-                    if ($model->save()) {
-						Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter {email} success created.', ['email' => $model->email]));
+                    if (UserInvites::insertInvite($model->email_i) == 1) {
+						Yii::$app->session->setFlash('success', Yii::t('app', '{email} invite success created.', ['email' => $model->email_i]));
 						return $this->redirect(['index']);
 					}
 				}
@@ -143,7 +145,7 @@ class NewsletterController extends Controller
             }
         }
 
-		$this->view->title = Yii::t('app', 'Create Newsletter');
+		$this->view->title = Yii::t('app', 'Create Invite');
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_create', [
@@ -152,7 +154,7 @@ class NewsletterController extends Controller
 	}
 
 	/**
-	 * Displays a single UserNewsletter model.
+	 * Displays a single UserInvites model.
 	 * @param integer $id
 	 * @return mixed
 	 */
@@ -160,7 +162,7 @@ class NewsletterController extends Controller
 	{
         $model = $this->findModel($id);
 
-		$this->view->title = Yii::t('app', 'Detail Newsletter: {user-id}', ['user-id' => $model->email]);
+		$this->view->title = Yii::t('app', 'Detail Invite: {displayname}', ['displayname' => $model->displayname]);
 		$this->view->description = '';
 		$this->view->keywords = '';
 		return $this->oRender('admin_view', [
@@ -169,7 +171,7 @@ class NewsletterController extends Controller
 	}
 
 	/**
-	 * Deletes an existing UserNewsletter model.
+	 * Deletes an existing UserInvites model.
 	 * If deletion is successful, the browser will be redirected to the 'index' page.
 	 * @param integer $id
 	 * @return mixed
@@ -177,40 +179,42 @@ class NewsletterController extends Controller
 	public function actionDelete($id)
 	{
 		$model = $this->findModel($id);
-		$model->delete();
+		$model->publish = 2;
 
-		Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter success deleted.'));
-		return $this->redirect(['index']);
-	}
-
-	/**
-	 * actionStatus an existing UserNewsletter model.
-	 * If status is successful, the browser will be redirected to the 'index' page.
-	 * @param integer $id
-	 * @return mixed
-	 */
-	public function actionStatus($id)
-	{
-		$model = $this->findModel($id);
-		$replace = $model->status == 1 ? 0 : 1;
-		$model->status = $replace;
-		
-        if ($model->save(false, ['status', 'modified_id'])) {
-			Yii::$app->session->setFlash('success', Yii::t('app', 'User newsletter success updated.'));
+        if ($model->save(false, ['publish', 'modified_id'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success deleted.'));
 			return $this->redirect(['index']);
 		}
 	}
 
 	/**
-	 * Finds the UserNewsletter model based on its primary key value.
+	 * actionPublish an existing UserInvites model.
+	 * If publish is successful, the browser will be redirected to the 'index' page.
+	 * @param integer $id
+	 * @return mixed
+	 */
+	public function actionPublish($id)
+	{
+		$model = $this->findModel($id);
+		$replace = $model->publish == 1 ? 0 : 1;
+		$model->publish = $replace;
+
+        if ($model->save(false, ['publish', 'modified_id'])) {
+			Yii::$app->session->setFlash('success', Yii::t('app', 'User invite success updated.'));
+			return $this->redirect(['index']);
+		}
+	}
+
+	/**
+	 * Finds the UserInvites model based on its primary key value.
 	 * If the model is not found, a 404 HTTP exception will be thrown.
 	 * @param integer $id
-	 * @return UserNewsletter the loaded model
+	 * @return UserInvites the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel($id)
 	{
-        if (($model = UserNewsletter::findOne($id)) !== null) {
+        if (($model = UserInvites::findOne($id)) !== null) {
             return $model;
         }
 

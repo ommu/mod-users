@@ -1,16 +1,16 @@
 <?php
 /**
- * User Invites (user-invites)
+ * User Newsletters (user-newsletter)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\o\InviteController
- * @var $model ommu\users\models\search\UserInvites
+ * @var $this ommu\users\controllers\newsletter\AdminController
+ * @var $model ommu\users\models\search\UserNewsletter
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 23 October 2017, 08:27 WIB
- * @modified date 13 November 2018, 13:27 WIB
+ * @created date 23 October 2017, 08:28 WIB
+ * @modified date 14 November 2018, 01:24 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 use ommu\users\models\UserLevel;
 ?>
 
-<div class="user-invites-search search-form">
+<div class="user-newsletter-search search-form">
 
 	<?php $form = ActiveForm::begin([
 		'action' => ['index'],
@@ -30,24 +30,20 @@ use ommu\users\models\UserLevel;
 		],
 	]); ?>
 
-		<?php echo $form->field($model, 'displayname');?>
+		<?php echo $form->field($model, 'email');?>
 
-		<?php echo $form->field($model, 'email_search');?>
-
-		<?php echo $form->field($model, 'code');?>
-
-		<?php echo $form->field($model, 'invites');?>
-
-		<?php echo $form->field($model, 'inviter_search');?>
+		<?php echo $form->field($model, 'userDisplayname');?>
 
 		<?php $level = UserLevel::getLevel();
 		echo $form->field($model, 'userLevel')
 			->dropDownList($level, ['prompt' => '']);?>
 
-		<?php echo $form->field($model, 'invite_date')
-			->input('date');?>
+		<?php echo $form->field($model, 'subscribe_search');?>
 
-		<?php echo $form->field($model, 'invite_ip');?>
+		<?php echo $form->field($model, 'reference_search');?>
+
+		<?php echo $form->field($model, 'creation_date')
+			->input('date');?>
 
 		<?php echo $form->field($model, 'modified_date')
 			->input('date');?>
@@ -57,7 +53,12 @@ use ommu\users\models\UserLevel;
 		<?php echo $form->field($model, 'updated_date')
 			->input('date');?>
 
-		<?php echo $form->field($model, 'publish')
+		<?php echo $form->field($model, 'updated_ip');?>
+
+		<?php echo $form->field($model, 'status')
+			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
+
+		<?php echo $form->field($model, 'register_search')
 			->dropDownList($model->filterYesNo(), ['prompt' => '']);?>
 
 		<div class="form-group">

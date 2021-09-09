@@ -2,7 +2,7 @@
 /**
  * User Invite Histories (user-invite-history)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\history\InviteController
+ * @var $this ommu\users\controllers\invite\HistoryController
  * @var $model ommu\users\models\search\UserInviteHistory
  * @var $form yii\widgets\ActiveForm
  *

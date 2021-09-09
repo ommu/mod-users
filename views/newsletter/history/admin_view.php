@@ -2,7 +2,7 @@
 /**
  * User Newsletter Histories (user-newsletter-history)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\history\NewsletterController
+ * @var $this ommu\users\controllers\newsletter\HistoryController
  * @var $model ommu\users\models\UserNewsletterHistory
  *
  * @author Putra Sudaryanto <putra@ommu.id>

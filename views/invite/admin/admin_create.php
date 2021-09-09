@@ -2,7 +2,7 @@
 /**
  * User Invites (user-invites)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\o\InviteController
+ * @var $this ommu\users\controllers\invite\AdminController
  * @var $model ommu\users\models\UserInvites
  * @var $form app\components\widgets\ActiveForm
  *

@@ -2,7 +2,7 @@
 /**
  * User Newsletter Histories (user-newsletter-history)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\history\NewsletterController
+ * @var $this ommu\users\controllers\newsletter\HistoryController
  * @var $model ommu\users\models\UserNewsletterHistory
  * @var $searchModel ommu\users\models\search\UserNewsletterHistory
  *
@@ -23,7 +23,7 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Newsletters'), 'url' => Url::to(['o/newsletter/index']), 'icon' => 'table'],
+	['label' => Yii::t('app', 'Back To Newsletters'), 'url' => Url::to(['newsletter/admin/index']), 'icon' => 'table'],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],

@@ -1,16 +1,16 @@
 <?php
 /**
- * User Invites (user-invites)
+ * User Newsletters (user-newsletter)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\o\InviteController
- * @var $model ommu\users\models\search\UserInvites
+ * @var $this ommu\users\controllers\newsletter\AdminController
+ * @var $model ommu\users\models\search\UserNewsletter
  * @var $form yii\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 23 October 2017, 08:27 WIB
- * @modified date 8 May 2018, 00:41 WIB
+ * @created date 23 October 2017, 08:28 WIB
+ * @modified date 7 May 2018, 15:59 WIB
  * @link https://github.com/ommu/mod-users
  *
  */

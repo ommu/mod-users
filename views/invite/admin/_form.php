@@ -1,25 +1,26 @@
 <?php
 /**
- * User Newsletters (user-newsletter)
+ * User Invites (user-invites)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\o\NewsletterController
- * @var $model ommu\users\models\UserNewsletter
+ * @var $this ommu\users\controllers\invite\AdminController
+ * @var $model ommu\users\models\UserInvites
  * @var $form app\components\widgets\ActiveForm
  *
  * @author Putra Sudaryanto <putra@ommu.id>
  * @contact (+62)856-299-4114
  * @copyright Copyright (c) 2017 OMMU (www.ommu.id)
- * @created date 23 October 2017, 08:28 WIB
- * @modified date 14 November 2018, 01:24 WIB
+ * @created date 23 October 2017, 08:27 WIB
+ * @modified date 13 November 2018, 13:27 WIB
  * @link https://github.com/ommu/mod-users
  *
  */
 
 use yii\helpers\Html;
 use app\components\widgets\ActiveForm;
+use ommu\users\models\UserLevel;
 ?>
 
-<div class="user-newsletter-form">
+<div class="user-invites-form">
 
 <?php $form = ActiveForm::begin([
 	'options' => ['class' => 'form-horizontal form-label-left'],
@@ -38,6 +39,20 @@ use app\components\widgets\ActiveForm;
 <?php echo $form->field($model, 'email_i')
 	->textarea(['rows' => 6, 'cols' => 50])
 	->label($model->getAttributeLabel('email_i')); ?>
+
+<?php if (!Yii::$app->isSocialMedia()) {
+	$level = UserLevel::getLevel();
+    if (count($level) == 1) {
+		$model->level_id = key($level);
+		echo $form->field($model, 'level_id', ['template' => '{input}', 'options' => ['tag' => null]])
+			->hiddenInput();
+	} else {
+		echo $form->field($model, 'level_id')
+			->dropDownList($level, ['prompt' => ''])
+			->label($model->getAttributeLabel('level_id'));
+	}
+}
+ ?>
 
 <hr/>
 

@@ -2,7 +2,7 @@
 /**
  * User Invite Histories (user-invite-history)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\history\InviteController
+ * @var $this ommu\users\controllers\invite\HistoryController
  * @var $model ommu\users\models\UserInviteHistory
  * @var $searchModel ommu\users\models\search\UserInviteHistory
  *
@@ -23,7 +23,7 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->params['menu']['content'] = [
-	['label' => Yii::t('app', 'Back To Invites'), 'url' => Url::to(['o/invite/index']), 'icon' => 'table'],
+	['label' => Yii::t('app', 'Back To Invites'), 'url' => Url::to(['invite/admin/index']), 'icon' => 'table'],
 ];
 $this->params['menu']['option'] = [
 	//['label' => Yii::t('app', 'Search'), 'url' => 'javascript:void(0);'],

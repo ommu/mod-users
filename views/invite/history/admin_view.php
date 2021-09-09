@@ -2,7 +2,7 @@
 /**
  * User Invite Histories (user-invite-history)
  * @var $this app\components\View
- * @var $this ommu\users\controllers\history\InviteController
+ * @var $this ommu\users\controllers\invite\HistoryController
  * @var $model ommu\users\models\UserInviteHistory
  *
  * @author Putra Sudaryanto <putra@ommu.id>
