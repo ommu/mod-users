@@ -58,6 +58,12 @@ class m210909_203212_users_module_create_table_level extends \yii\db\Migration
                 $tableName,
                 ['name']
             );
+
+			$this->batchInsert($tableName, ['name', 'desc', 'default', 'signup', 'assignment_roles', 'message_limit', 'profile_privacy', 'profile_comments', 'photo_size', 'photo_exts'], [
+				[SourceMessage::setMessage('Administrator', 'users level title'), SourceMessage::setMessage('Administrators', 'users level description'), '0', '0', '["userAdmin","userMember"]', 'a:2:{s:5:"inbox";s:3:"500";s:6:"outbox";s:3:"500";}', 'a:1:{i:0;s:1:"1";}', 'a:1:{i:0;s:1:"1";}', 'a:2:{s:5:"width";s:3:"100";s:6:"height";s:3:"100";}', 'a:4:{i:0;s:3:"jpg";i:1;s:4:"jpeg";i:2;s:3:"gif";i:3;s:3:"png";}'],
+				[SourceMessage::setMessage('Moderator', 'users level title'), SourceMessage::setMessage('Moderators', 'users level description'), '0', '0', '["userMember","userModerator"]', 'a:2:{s:5:"inbox";s:3:"500";s:6:"outbox";s:3:"500";}', 'a:1:{i:0;s:1:"1";}', 'a:1:{i:0;s:1:"1";}', 'a:2:{s:5:"width";s:3:"100";s:6:"height";s:3:"100";}', 'a:4:{i:0;s:3:"jpg";i:1;s:4:"jpeg";i:2;s:3:"gif";i:3;s:3:"png";}'],
+				[SourceMessage::setMessage('Member', 'users level title'), SourceMessage::setMessage('Members', 'users level description'), '1', '1', '["userMember"]', 'a:2:{s:5:"inbox";s:3:"500";s:6:"outbox";s:3:"500";}', 'a:1:{i:0;s:1:"1";}', 'a:1:{i:0;s:1:"1";}', 'a:2:{s:5:"width";s:3:"100";s:6:"height";s:3:"100";}', 'a:4:{i:0;s:3:"jpg";i:1;s:4:"jpeg";i:2;s:3:"gif";i:3;s:3:"png";}'],
+			]);
 		}
 	}
 
