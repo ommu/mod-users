@@ -1,11 +1,11 @@
 data_submenu:
   invite:
     label: Invites
-    url: ['o/invite']
+    url: ['invite/admin']
     select: controller
   subscribe:
     label: Subscribes
-    url: ['o/newsletter']
+    url: ['newsletter/admin']
     select: controller
   forgot:
     label: Forgot(s) Password

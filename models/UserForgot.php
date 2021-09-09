@@ -103,7 +103,7 @@ class UserForgot extends \app\components\ActiveRecord
 			'modified_id' => Yii::t('app', 'Modified'),
 			'deleted_date' => Yii::t('app', 'Deleted Date'),
 			'email_i' => Yii::t('app', 'Email'),
-			'userDisplayname' => Yii::t('app', 'User'),
+			'userDisplayname' => Yii::t('app', 'Name'),
 			'modifiedDisplayname' => Yii::t('app', 'Modified'),
 			'userLevel' => Yii::t('app', 'Level'),
 			'expired' => Yii::t('app', 'Expired'),
@@ -162,20 +162,20 @@ class UserForgot extends \app\components\ActiveRecord
 			},
 			'visible' => !Yii::$app->request->get('user') ? true : false,
 		];
-		$this->templateColumns['userLevel'] = [
-			'attribute' => 'userLevel',
-			'value' => function($model, $key, $index, $column) {
-				return isset($model->user->level) ? $model->user->level->title->message : '-';
-			},
-			'filter' => UserLevel::getLevel(),
-			'visible' => !Yii::$app->request->get('user') ? true : false,
-		];
 		$this->templateColumns['email_i'] = [
 			'attribute' => 'email_i',
 			'value' => function($model, $key, $index, $column) {
 				return isset($model->user) ? Yii::$app->formatter->asEmail($model->user->email) : '-';
 			},
 			'format' => 'html',
+			'visible' => !Yii::$app->request->get('user') ? true : false,
+		];
+		$this->templateColumns['userLevel'] = [
+			'attribute' => 'userLevel',
+			'value' => function($model, $key, $index, $column) {
+				return isset($model->user->level) ? $model->user->level->title->message : '-';
+			},
+			'filter' => UserLevel::getLevel(),
 			'visible' => !Yii::$app->request->get('user') ? true : false,
 		];
 		$this->templateColumns['code'] = [
