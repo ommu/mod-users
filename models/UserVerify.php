@@ -40,7 +40,7 @@ use yii\validators\EmailValidator;
 class UserVerify extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
-	use \ommu\mailer\components\traits\MailTrait;
+	use \ommu\mailer\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['code', 'verify_date', 'verify_ip', 'expired_date', 'modified_date', 'modifiedDisplayname', 'deleted_date'];
 	public $email_i;

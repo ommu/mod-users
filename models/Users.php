@@ -72,7 +72,7 @@ class Users extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
-	use \ommu\mailer\components\traits\MailTrait;
+	use \ommu\mailer\traits\MailTrait;
 	use \ommu\users\traits\AssignmentTrait;
 
 	public $gridForbiddenColumn = ['language_id', 'password', 'salt', 'deactivate', 'search', 'invisible', 'privacy', 'comments', 'creation_ip', 'modified_date', 'modifiedDisplayname', 'lastlogin_ip', 'lastlogin_from', 'update_date', 'update_ip', 'auth_key', 'jwt_claims'];

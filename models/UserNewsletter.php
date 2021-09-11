@@ -45,7 +45,7 @@ class UserNewsletter extends \app\components\ActiveRecord
 {
 	use \ommu\traits\UtilityTrait;
 	use \ommu\traits\FileTrait;
-	use \ommu\mailer\components\traits\MailTrait;
+	use \ommu\mailer\traits\MailTrait;
 
 	public $gridForbiddenColumn = ['creation_date', 'modified_date', 'modifiedDisplayname', 'updated_date', 'updated_ip', 'userDisplayname', 'userLevel'];
 	public $email_i;
