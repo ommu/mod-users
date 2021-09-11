@@ -36,7 +36,7 @@ class m210909_202933_users_module_create_table_setting extends \yii\db\Migration
 				'invite_diff_type' => Schema::TYPE_STRING . ' NOT NULL COMMENT \'"0=day,1=hour"\'',
 				'invite_difference' => Schema::TYPE_TINYINT . '(2) NOT NULL',
 				'invite_order' => Schema::TYPE_STRING,
-				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'trigger\'',
+				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'trigger,on_update\'',
 				'modified_id' => Schema::TYPE_INTEGER . '(11) UNSIGNED',
 				'PRIMARY KEY ([[id]])',
 			], $tableOptions);

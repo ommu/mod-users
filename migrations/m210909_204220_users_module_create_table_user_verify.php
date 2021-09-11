@@ -31,7 +31,7 @@ class m210909_204220_users_module_create_table_user_verify extends \yii\db\Migra
 				'verify_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'trigger\'',
 				'verify_ip' => Schema::TYPE_STRING . '(20) NOT NULL',
 				'expired_date' => Schema::TYPE_DATETIME . ' NOT NULL DEFAULT \'0000-00-00 00:00:00\' COMMENT \'trigger[insert]\'',
-				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'trigger\'',
+				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'trigger,on_update\'',
 				'modified_id' => Schema::TYPE_INTEGER . '(11) UNSIGNED',
 				'deleted_date' => Schema::TYPE_DATETIME . ' NOT NULL DEFAULT \'0000-00-00 00:00:00\' COMMENT \'trigger\'',
 				'PRIMARY KEY ([[verify_id]])',

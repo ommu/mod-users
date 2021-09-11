@@ -48,7 +48,7 @@ class m210909_203212_users_module_create_table_level extends \yii\db\Migration
 				'photo_exts' => Schema::TYPE_TEXT . ' NOT NULL COMMENT \'serialize\'',
 				'creation_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'trigger\'',
 				'creation_id' => Schema::TYPE_INTEGER . '(11) UNSIGNED',
-				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'trigger\'',
+				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'trigger,on_update\'',
 				'modified_id' => Schema::TYPE_INTEGER . '(11) UNSIGNED',
 				'PRIMARY KEY ([[level_id]])',
 			], $tableOptions);

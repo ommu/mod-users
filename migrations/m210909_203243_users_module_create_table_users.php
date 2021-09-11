@@ -44,7 +44,7 @@ class m210909_203243_users_module_create_table_users extends \yii\db\Migration
 				'comments' => Schema::TYPE_TINYINT . '(1) NOT NULL DEFAULT \'1\'',
 				'creation_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'trigger\'',
 				'creation_ip' => Schema::TYPE_STRING . '(20) NOT NULL',
-				'modified_date' => Schema::TYPE_DATETIME . ' NOT NULL DEFAULT \'0000-00-00 00:00:00\'',
+				'modified_date' => Schema::TYPE_TIMESTAMP . ' NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'trigger,on_update\'',
 				'modified_id' => Schema::TYPE_INTEGER . '(11) UNSIGNED',
 				'lastlogin_date' => Schema::TYPE_DATETIME . ' NOT NULL DEFAULT \'0000-00-00 00:00:00\'',
 				'lastlogin_ip' => Schema::TYPE_STRING . '(20) NOT NULL',
