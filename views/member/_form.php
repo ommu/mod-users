@@ -55,11 +55,9 @@ if (count($level) == 1) {
 	->textInput(['maxlength' => true])
 	->label($model->getAttributeLabel('displayname')); ?>
 
-<?php if ($setting->signup_username == 1) {
-	echo $form->field($model, 'username')
-		->textInput(['maxlength' => true])
-		->label($model->getAttributeLabel('username'));
-} ?>
+<?php echo $form->field($model, 'username')
+    ->textInput(['maxlength' => true])
+    ->label($model->getAttributeLabel('username')); ?>
 
 <?php echo $form->field($model, 'email')
 	->textInput(['type' => 'email', 'maxlength' => true])
