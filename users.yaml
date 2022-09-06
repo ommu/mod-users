@@ -17,7 +17,7 @@ data_submenu:
     select: controller
 userlevel_submenu:
   view:
-    label: Info
+    label: Detail
     url:
       0: 'setting/level/view'
       id: $_GET*id
