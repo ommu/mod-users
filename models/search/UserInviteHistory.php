@@ -64,7 +64,8 @@ class UserInviteHistory extends UserInviteHistoryModel
         if (!($column && is_array($column))) {
             $query = UserInviteHistoryModel::find()->alias('t');
         } else {
-            $query = UserInviteHistoryModel::find()->alias('t')->select($column);
+            $query = UserInviteHistoryModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'invite invite',

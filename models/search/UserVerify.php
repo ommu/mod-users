@@ -64,7 +64,8 @@ class UserVerify extends UserVerifyModel
         if (!($column && is_array($column))) {
             $query = UserVerifyModel::find()->alias('t');
         } else {
-            $query = UserVerifyModel::find()->alias('t')->select($column);
+            $query = UserVerifyModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'user user', 

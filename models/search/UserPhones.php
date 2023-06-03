@@ -63,7 +63,8 @@ class UserPhones extends UserPhonesModel
         if (!($column && is_array($column))) {
             $query = UserPhonesModel::find()->alias('t');
         } else {
-            $query = UserPhonesModel::find()->alias('t')->select($column);
+            $query = UserPhonesModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'user user', 

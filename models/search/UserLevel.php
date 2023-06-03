@@ -64,7 +64,8 @@ class UserLevel extends UserLevelModel
         if (!($column && is_array($column))) {
             $query = UserLevelModel::find()->alias('t');
         } else {
-            $query = UserLevelModel::find()->alias('t')->select($column);
+            $query = UserLevelModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'title title', 

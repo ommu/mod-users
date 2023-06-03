@@ -64,7 +64,8 @@ class UserForgot extends UserForgotModel
         if (!($column && is_array($column))) {
             $query = UserForgotModel::find()->alias('t');
         } else {
-            $query = UserForgotModel::find()->alias('t')->select($column);
+            $query = UserForgotModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'user user', 

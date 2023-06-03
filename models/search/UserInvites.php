@@ -64,7 +64,8 @@ class UserInvites extends UserInvitesModel
         if (!($column && is_array($column))) {
             $query = UserInvitesModel::find()->alias('t');
         } else {
-            $query = UserInvitesModel::find()->alias('t')->select($column);
+            $query = UserInvitesModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'newsletter newsletter', 
