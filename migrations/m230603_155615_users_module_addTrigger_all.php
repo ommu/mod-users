@@ -219,8 +219,8 @@ SQL;
 CREATE
     TRIGGER `userAfterInsertInvites` AFTER INSERT ON `ommu_user_invites` 
     FOR EACH ROW BEGIN
-		DECLARE forgot_difference_hours_tr INT;
-		DECLARE verify_difference_hours_tr INT;
+	DECLARE forgot_difference_hours_tr INT;
+	DECLARE verify_difference_hours_tr INT;
 	DECLARE invite_difference_hours_tr INT;
 	DECLARE expired_date_tr DATETIME;
 	
@@ -263,8 +263,8 @@ SQL;
 CREATE
     TRIGGER `userAfterUpdateInvites` AFTER UPDATE ON `ommu_user_invites` 
     FOR EACH ROW BEGIN
-		DECLARE forgot_difference_hours_tr INT;
-		DECLARE verify_difference_hours_tr INT;
+	DECLARE forgot_difference_hours_tr INT;
+	DECLARE verify_difference_hours_tr INT;
 	DECLARE invite_difference_hours_tr INT;
 	DECLARE expired_date_tr DATETIME;
 	
@@ -331,9 +331,9 @@ SQL;
 CREATE
     TRIGGER `userBeforeInsertVerify` BEFORE INSERT ON `ommu_user_verify` 
     FOR EACH ROW BEGIN
-		DECLARE forgot_difference_hours_tr INT;
+	DECLARE forgot_difference_hours_tr INT;
 	DECLARE verify_difference_hours_tr INT;
-		DECLARE invite_difference_hours_tr INT;
+	DECLARE invite_difference_hours_tr INT;
 	DECLARE expired_date_tr DATETIME;
 	
 	IF (NEW.verify_date IS NULL OR NEW.verify_date = '') THEN
@@ -373,8 +373,8 @@ CREATE
     TRIGGER `userBeforeInsertForgot` BEFORE INSERT ON `ommu_user_forgot` 
     FOR EACH ROW BEGIN
 	DECLARE forgot_difference_hours_tr INT;
-		DECLARE verify_difference_hours_tr INT;
-		DECLARE invite_difference_hours_tr INT;
+	DECLARE verify_difference_hours_tr INT;
+	DECLARE invite_difference_hours_tr INT;
 	DECLARE expired_date_tr DATETIME;
 	
 	IF (NEW.forgot_date IS NULL OR NEW.forgot_date = '') THEN
