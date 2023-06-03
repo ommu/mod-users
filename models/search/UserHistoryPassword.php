@@ -64,7 +64,8 @@ class UserHistoryPassword extends UserHistoryPasswordModel
         if (!($column && is_array($column))) {
             $query = UserHistoryPasswordModel::find()->alias('t');
         } else {
-            $query = UserHistoryPasswordModel::find()->alias('t')->select($column);
+            $query = UserHistoryPasswordModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'user user',

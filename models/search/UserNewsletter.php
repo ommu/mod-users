@@ -64,7 +64,8 @@ class UserNewsletter extends UserNewsletterModel
         if (!($column && is_array($column))) {
             $query = UserNewsletterModel::find()->alias('t');
         } else {
-            $query = UserNewsletterModel::find()->alias('t')->select($column);
+            $query = UserNewsletterModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'user user', 

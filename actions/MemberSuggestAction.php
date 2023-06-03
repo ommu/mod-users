@@ -56,11 +56,11 @@ class MemberSuggestAction extends \yii\base\Action
         foreach ($model as $val) {
 			$result[$val->user_id] = [
 				'id' => $val->user_id, 
-				'email' => $val->email,
-				'photo' => $val->photos,
+				'email' => trim($val->email),
+				'photo' => trim($val->photos),
 			];
             if ($val->displayname) {
-				$result[$val->user_id]['name'] = $val->displayname;
+				$result[$val->user_id]['name'] = trim($val->displayname);
             }
 		}
 		return array_values($result);

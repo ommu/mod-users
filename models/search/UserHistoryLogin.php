@@ -64,7 +64,8 @@ class UserHistoryLogin extends UserHistoryLoginModel
         if (!($column && is_array($column))) {
             $query = UserHistoryLoginModel::find()->alias('t');
         } else {
-            $query = UserHistoryLoginModel::find()->alias('t')->select($column);
+            $query = UserHistoryLoginModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'user user',

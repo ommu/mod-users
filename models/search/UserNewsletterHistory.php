@@ -64,7 +64,8 @@ class UserNewsletterHistory extends UserNewsletterHistoryModel
         if (!($column && is_array($column))) {
             $query = UserNewsletterHistoryModel::find()->alias('t');
         } else {
-            $query = UserNewsletterHistoryModel::find()->alias('t')->select($column);
+            $query = UserNewsletterHistoryModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'newsletter newsletter', 

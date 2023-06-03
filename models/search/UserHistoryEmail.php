@@ -64,7 +64,8 @@ class UserHistoryEmail extends UserHistoryEmailModel
         if (!($column && is_array($column))) {
             $query = UserHistoryEmailModel::find()->alias('t');
         } else {
-            $query = UserHistoryEmailModel::find()->alias('t')->select($column);
+            $query = UserHistoryEmailModel::find()->alias('t')
+                ->select($column);
         }
 		$query->joinWith([
 			'user user',
