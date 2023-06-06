@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210909_204602_users_module_create_table_user_history_username extends \yii\db\Migration

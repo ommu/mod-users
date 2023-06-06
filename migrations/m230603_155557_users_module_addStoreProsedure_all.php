@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m230603_155557_users_module_addStoreProsedure_all extends \yii\db\Migration

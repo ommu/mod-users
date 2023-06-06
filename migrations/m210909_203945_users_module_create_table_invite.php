@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210909_203945_users_module_create_table_invite extends \yii\db\Migration

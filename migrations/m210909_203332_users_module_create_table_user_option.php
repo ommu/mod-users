@@ -10,7 +10,6 @@
  *
  */
 
-use Yii;
 use yii\db\Schema;
 
 class m210909_203332_users_module_create_table_user_option extends \yii\db\Migration
