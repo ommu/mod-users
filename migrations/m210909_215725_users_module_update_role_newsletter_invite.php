@@ -60,7 +60,7 @@ class m210909_215725_users_module_update_role_newsletter_invite extends \yii\db\
         if (Yii::$app->db->getTableSchema($tableName, true)) {
             $this->update($tableName, ['name' => 'Invites', 'route' => '/users/invite/admin/index'], ['module' => 'users', 'route' => '/users/o/invite/index']);
 			$this->batchInsert($tableName, ['name', 'module', 'icon', 'parent', 'route', 'order', 'data'], [
-				['Subscribes', 'users', null, Menu::getParentId('Users#users'), '/users/newsletter/admin/index', null, null],
+				['Subscribes', 'users', null, Menu::getParentId('Users#users'), '/users/newsletter/admin/index', 4, null],
 			]);
         }
 	}
