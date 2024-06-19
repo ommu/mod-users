@@ -3,7 +3,7 @@
  * m210909_204536_users_module_create_table_user_history_password
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
  * @created date 9 September 2021, 20:45 WIB
  * @link https://github.com/ommu/mod-users

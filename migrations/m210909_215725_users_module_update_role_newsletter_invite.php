@@ -3,7 +3,7 @@
  * m210909_215725_users_module_update_role_newsletter_invite
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2021 OMMU (www.ommu.id)
  * @created date 9 September 2021, 21:58 WIB
  * @link https://github.com/ommu/mod-users

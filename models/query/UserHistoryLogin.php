@@ -6,7 +6,7 @@
  * @see \ommu\users\models\UserHistoryLogin
  * 
  * @author Putra Sudaryanto <putra@ommu.id>
- * @contact (+62)856-299-4114
+ * @contact (+62)811-2540-432
  * @copyright Copyright (c) 2018 OMMU (www.ommu.id)
  * @created date 12 November 2018, 23:53 WIB
  * @link https://github.com/ommu/mod-users
