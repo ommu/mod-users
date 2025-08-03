@@ -6,7 +6,6 @@
 		"module",
 		"users",
 		"ommu",
-		"ommu-platform",
 		"yii2"
 	],
 	"license": "Apache-2.0",
